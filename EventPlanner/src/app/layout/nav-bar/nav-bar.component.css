@@ -1,0 +1,16 @@
+mat-toolbar {
+    background-color: #5656a1;
+}
+
+div {
+    width: 100%;
+    justify-content: flex-end;
+}
+
+button {
+    margin-right: 10px;
+}
+
+span {
+    color: white
+}
