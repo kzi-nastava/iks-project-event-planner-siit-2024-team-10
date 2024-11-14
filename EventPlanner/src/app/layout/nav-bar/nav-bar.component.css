@@ -1,10 +1,19 @@
 mat-toolbar {
-    background-color: #5656a1;
+    background-color: #5FA3A2;
 }
 
-div {
-    width: 100%;
-    justify-content: flex-end;
+mat-icon{
+  color: white;
+}
+
+.navigation-container{
+  display: flex;
+  justify-content: right;
+  width: 100%;
+}
+.navigation-item{
+  margin: 10px;
+  font-size: larger;
 }
 
 button {
@@ -12,5 +21,6 @@ button {
 }
 
 span {
-    color: white
+  font-family: "Calisto MT", Calisto, "Times New Roman", serif;
+  color: white
 }

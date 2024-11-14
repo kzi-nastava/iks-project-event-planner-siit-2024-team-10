@@ -1,7 +1,11 @@
 <mat-toolbar>
-    <span [routerLink]="['home']">Wine Application</span>
-    <div>
-      <button [routerLink]="['wine']" style="float: right" mat-raised-button>Wines</button>
-      <button [routerLink]="['add']" style="float: right" mat-raised-button>Create</button>
+    <span [routerLink]="['home']">Event Planner</span>
+    <div class="navigation-container">
+      <div class="navigation-item">
+        <mat-icon [routerLink]="">account_circle</mat-icon>
+      </div>
+      <div class="navigation-item">
+        <mat-icon>shopping_cart</mat-icon>
+      </div>
     </div>
 </mat-toolbar>
