@@ -1,5 +1,7 @@
 mat-toolbar {
-    background-color: #5FA3A2;
+  background-color: #5FA3A2;
+  position: sticky;
+  z-index: 1;
 }
 
 mat-icon{
