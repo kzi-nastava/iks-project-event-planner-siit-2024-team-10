@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrl: './register-personal.component.css'
 })
 export class RegisterPersonalComponent {
-
+  registerPath:string='';
+  onSelectionChange(event: any): void {
+    this.registerPath = event.value;
+  }
 }
