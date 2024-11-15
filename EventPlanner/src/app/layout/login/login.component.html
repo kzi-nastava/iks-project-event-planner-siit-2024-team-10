@@ -9,6 +9,6 @@
     <mat-label>Password</mat-label>
     <input type="password" matInput>
   </mat-form-field>
-  <button mat-stroked-button>Login</button>
+  <button mat-stroked-button [routerLink]="['/home']">Login</button>
   <p>Don't have account yet? <a [routerLink]="['/register-personal']">Register now!</a></p>
 </form>
