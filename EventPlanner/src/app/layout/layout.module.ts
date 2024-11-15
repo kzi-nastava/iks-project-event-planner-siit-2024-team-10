@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterPersonalComponent } from './register-personal/register-personal.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {FormsModule} from '@angular/forms';
+import { RegisterCompanyComponent } from './register-company/register-company.component';
 
 
 
@@ -18,6 +19,7 @@ import {FormsModule} from '@angular/forms';
     HomeComponent,
     LoginComponent,
     RegisterPersonalComponent,
+    RegisterCompanyComponent,
   ],
   imports: [
     CommonModule,
