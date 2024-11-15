@@ -21,6 +21,14 @@ form{
   top: 0;
 }
 
+form > *{
+  margin:.3em;
+}
+
 mat-form-field{
   width: 70%;
+}
+
+a{
+  color:#5FA3A2;
 }
