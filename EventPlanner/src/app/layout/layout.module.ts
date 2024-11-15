@@ -7,6 +7,7 @@ import { HomeComponent } from './home/home.component';
 import {MatIcon} from "@angular/material/icon";
 import { LoginComponent } from './login/login.component';
 import { RegisterPersonalComponent } from './register-personal/register-personal.component';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 
 
 
@@ -17,12 +18,14 @@ import { RegisterPersonalComponent } from './register-personal/register-personal
     LoginComponent,
     RegisterPersonalComponent,
   ],
-    imports: [
-        CommonModule,
-        MaterialModule,
-        RouterModule,
-        MatIcon
-    ],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    RouterModule,
+    MatIcon,
+    MatRadioButton,
+    MatRadioGroup
+  ],
   exports: [NavBarComponent]
 })
 export class LayoutModule { }

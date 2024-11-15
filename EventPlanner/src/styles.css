@@ -5,4 +5,10 @@ html, body {
   background-color: #F3E8EE;
   color:#475B63;
 }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+h1{
+  color:#5FA3A2;
+}
