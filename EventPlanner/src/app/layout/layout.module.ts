@@ -5,21 +5,25 @@ import { MaterialModule } from '../infrastructure/material/material.module';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import {MatIcon} from "@angular/material/icon";
+import { MatCardModule } from '@angular/material/card';
 import { LoginComponent } from './login/login.component';
-
-
+import {MatButtonModule} from '@angular/material/button';
+import { EventComponent } from './event/event.component';
 
 @NgModule({
   declarations: [
     NavBarComponent,
     HomeComponent,
     LoginComponent,
+    EventComponent,
   ],
     imports: [
         CommonModule,
         MaterialModule,
         RouterModule,
-        MatIcon
+        MatIcon,
+        MatButtonModule,
+        MatCardModule
     ],
   exports: [NavBarComponent]
 })

@@ -1,0 +1,70 @@
+.home-container {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    background-image: url('../../../assets/backdrop.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+  
+  .overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+  }
+  
+  h1 {
+    font-size: 3rem;
+    font-weight: 600;
+  }
+
+  h2{
+    font-size: 2rem;
+    
+  }
+  
+  button[mat-stroked-button] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+  .top-events {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    padding-top: 20px;
+    text-align: center;
+    z-index: 1;
+    box-shadow: 15px 0px 0px rgba(0, 0, 0, 0.2);
+  }
+
+  .top-event-cards {
+    display: grid;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit,minmax(480px,480px));
+  }
+
+  button[mat-stroked-button] {
+    border-radius: 20px;
+    border-color: #475B63 !important;
+    color:#475B63 !important;
+    padding: 10px 20px;
+    border-width: 2px;
+    font-size: 16px;
+  }
+  
+  button[mat-stroked-button]:hover {
+    background-color: #5FA3A2;
+    border-color: #5FA3A2 !important;
+    color: #ffffff !important ;
+  }
+  
+  
