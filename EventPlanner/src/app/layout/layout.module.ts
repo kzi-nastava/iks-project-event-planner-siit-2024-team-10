@@ -9,6 +9,8 @@ import { MatCardModule } from '@angular/material/card';
 import { LoginComponent } from './login/login.component';
 import {MatButtonModule} from '@angular/material/button';
 import { EventComponent } from './event/event.component';
+import {MatInputModule} from '@angular/material/input';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { EventComponent } from './event/event.component';
         RouterModule,
         MatIcon,
         MatButtonModule,
-        MatCardModule
+        MatCardModule,
+        MatInputModule
     ],
   exports: [NavBarComponent]
 })
