@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventsComponent } from './events/events.component';
 import {MatIcon} from "@angular/material/icon";
 import { MatCardModule } from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
-
+import { EventCardComponent } from './event-card/event-card.component';
 
 @NgModule({
   declarations: [
-    EventsComponent,
+    EventCardComponent,
   ],
   imports: [
     CommonModule,
@@ -17,7 +16,7 @@ import {MatButtonModule} from '@angular/material/button';
     MatButtonModule
   ],
   exports:[
-    EventsComponent,
+    EventCardComponent,
   ]
 })
 export class EventModule { }

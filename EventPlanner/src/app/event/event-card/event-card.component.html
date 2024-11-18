@@ -1,8 +1,8 @@
-<mat-card class="event-card" appearance="outlined">
+<mat-card class="event-card" appearance="outlined" (click)="onEventClicked()">
     <mat-card-header>
       <mat-card-title-group>
-        <mat-card-title class="event-name">John And Lily's Wedding</mat-card-title>
-        <mat-card-subtitle class="organizer">Organizer1</mat-card-subtitle>
+        <mat-card-title>{{event.name}}</mat-card-title>
+        <mat-card-subtitle>{{event.organizer}}</mat-card-subtitle>
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>
@@ -11,10 +11,10 @@
           <div class="tags-rating">
             <div class="tags">
               <span class="tag">EVENT</span>
-              <span class="tag">WEDDING</span>
+              <span class="tag">{{event.eventType}}</span>
             </div>
             <div class="rating">
-              <span class="rating-value">4.5★</span>
+              <span class="rating">{{event.rating}}★</span>
             </div>
           </div>
           <div class="add-to-favorite">

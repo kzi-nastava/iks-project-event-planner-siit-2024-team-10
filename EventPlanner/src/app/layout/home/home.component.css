@@ -77,14 +77,11 @@
     border-color: #5FA3A2 !important;
     color: #ffffff !important ;
   }
-
-  .all-events {
-    text-align: center;
-  }
-  
   .event-filter {
     padding:20px;
     background-color: #C9E5DE;
+    text-align: center;
+
   }
 
   .name-search-section {

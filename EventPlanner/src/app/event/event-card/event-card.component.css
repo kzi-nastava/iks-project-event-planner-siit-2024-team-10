@@ -95,7 +95,7 @@
     color:#5FA3A2
   }
   
-  .organizer {
+  mat-card-subtitle {
     text-align: left;
     font-weight: 400;
     font-size: 15px;
@@ -103,7 +103,7 @@
     font-family: 'Fira Sans Condensed', serif !important;
   }
   
-  .event-name {
+  mat-card-title {
     font-weight: 550;
     font-size: 25px;
   }

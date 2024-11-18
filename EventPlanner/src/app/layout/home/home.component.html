@@ -1,138 +1,124 @@
 <div class="home-container">
-    <div class="overlay">
-      <h1>Plan Your Events With Us!</h1>
-      <button mat-stroked-button>JOIN US</button>
-    </div>
+  <div class="overlay">
+    <h1>Plan Your Events With Us!</h1>
+    <button mat-stroked-button>JOIN US</button>
   </div>
-  
-  <div class="top-events">
-    <h2>Top Events In Your Area</h2>
-    <div class="top-event-cards">
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-      </div>
+</div>
+
+<div class="top-events">
+  <h2>Top Events In Your Area</h2>
+  <div class="top-event-cards">
+    <app-event-card *ngFor="let event of topEvents" [event]="event"></app-event-card>
   </div>
-  <div class="all-events">
-    <div class="event-filter">
-    <h2>All Events In Your Area</h2>
-      <div class="event-filter-components">
-        <div class="name-search-section">
-          <input class ="search-field" type="text" placeholder="Event Name">
-         <button mat-stroked-button class="search-button"><mat-icon>search</mat-icon> Search</button>
-        </div>
-        <div class="sort-filter">
-          <div class="sort-section">
-            <select>
-              <option>Sorting Criteria</option>
-            </select>
-            <select>
-              <option>Sorting Direction</option>
-            </select>
-            <button mat-stroked-button>Sort</button>
-          </div>
-          <div class="filter-section">
-            <button mat-stroked-button><mat-icon>filter_list</mat-icon> Filter</button>
-            <button mat-stroked-button class="reset-button">Reset Filters</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="all-events-section">
-      <div class="all-event-cards">
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-        <app-events></app-events>
-      </div>
-      <div class="pagination">
-        <button>&lt;</button>
-        <button>1</button>
-        <button>2</button>
-        <button>...</button>
-        <button>6</button>
-        <button>&gt;</button>
-      </div>
-    </div>
-  </div>
-
-
-
-
-  <!-- OFFERING -->
-
-  <div class="top-events">
-    <h2>Top Offerings In Your Area</h2>
-    <div class="top-event-cards">
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-      </div>
-  </div>
+</div>
 
 <div class="all-events">
+  <div class="event-filter">
+    <h2>All Events In Your Area</h2>
+    <div class="event-filter-components">
+      <div class="name-search-section">
+        <input class="search-field" type="text" placeholder="Event Name">
+        <button mat-stroked-button class="search-button"><mat-icon>search</mat-icon> Search</button>
+      </div>
+      <div class="sort-filter">
+        <div class="sort-section">
+          <select>
+            <option>Sorting Criteria</option>
+          </select>
+          <select>
+            <option>Sorting Direction</option>
+          </select>
+          <button mat-stroked-button>Sort</button>
+        </div>
+        <div class="filter-section">
+          <button mat-stroked-button><mat-icon>filter_list</mat-icon> Filter</button>
+          <button mat-stroked-button class="reset-button">Reset Filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <div class="event-filter">
+  <div class="all-events-section">
+    <div class="all-event-cards">
+      <app-event-card *ngFor="let event of allEvents" [event]="event"></app-event-card>
+    </div>
+    <div class="pagination">
+      <button>&lt;</button>
+      <button>1</button>
+      <button>2</button>
+      <button>...</button>
+      <button>6</button>
+      <button>&gt;</button>
+    </div>
+  </div>
+</div>
+
+<!-- OFFERING -->
+
+<div class="top-events">
+  <h2>Top Offerings In Your Area</h2>
+  <div class="top-event-cards">
+    <app-offerings></app-offerings>
+    <app-offerings></app-offerings>
+    <app-offerings></app-offerings>
+    <app-offerings></app-offerings>
+    <app-offerings></app-offerings>
+  </div>
+</div>
+
+<div class="all-events">
+  <div class="event-filter">
     <h2>All Offerings In Your Area</h2>
     <mat-radio-group>
       <mat-radio-button value="1">Services</mat-radio-button>
       <mat-radio-button value="2">Products</mat-radio-button>
     </mat-radio-group>
-      <div class="event-filter-components">
-        <div class="name-search-section">
-          <input class ="search-field" type="text" placeholder="Event Name">
-         <button mat-stroked-button class="search-button"><mat-icon>search</mat-icon> Search</button>
+    <div class="event-filter-components">
+      <div class="name-search-section">
+        <input class="search-field" type="text" placeholder="Offering Name">
+        <button mat-stroked-button class="search-button"><mat-icon>search</mat-icon> Search</button>
+      </div>
+      <div class="sort-filter">
+        <div class="sort-section">
+          <select>
+            <option>Sorting Criteria</option>
+          </select>
+          <select>
+            <option>Sorting Direction</option>
+          </select>
+          <button mat-stroked-button>Sort</button>
         </div>
-        <div class="sort-filter">
-          <div class="sort-section">
-            <select>
-              <option>Sorting Criteria</option>
-            </select>
-            <select>
-              <option>Sorting Direction</option>
-            </select>
-            <button mat-stroked-button>Sort</button>
-          </div>
-          <div class="filter-section">
-            <button mat-stroked-button><mat-icon>filter_list</mat-icon> Filter</button>
-            <button mat-stroked-button class="reset-button">Reset Filters</button>
-          </div>
+        <div class="filter-section">
+          <button mat-stroked-button><mat-icon>filter_list</mat-icon> Filter</button>
+          <button mat-stroked-button class="reset-button">Reset Filters</button>
         </div>
       </div>
     </div>
-    <div class="all-events-section">
-      <div class="all-event-cards">
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-        <app-offerings></app-offerings>
-      </div>
-      <div class="pagination">
-        <button>&lt;</button>
-        <button>1</button>
-        <button>2</button>
-        <button>...</button>
-        <button>6</button>
-        <button>&gt;</button>
-      </div>
+  </div>
+  <div class="all-events-section">
+    <div class="all-event-cards">
+      <app-offerings></app-offerings>
+      <app-offerings></app-offerings>
+      <app-offerings></app-offerings>
+      <app-offerings></app-offerings>
+      <app-offerings></app-offerings>
+      <app-offerings></app-offerings>
+      <app-offerings></app-offerings>
+      <app-offerings></app-offerings>
+      <app-offerings></app-offerings>
+      <app-offerings></app-offerings>
     </div>
+    <div class="pagination">
+      <button>&lt;</button>
+      <button>1</button>
+      <button>2</button>
+      <button>...</button>
+      <button>6</button>
+      <button>&gt;</button>
+    </div>
+  </div>
 </div>
+
 <footer class="footer">
   <div class="footer-container">
     <div class="footer-info">
