@@ -10,6 +10,11 @@ import { LoginComponent } from './login/login.component';
 import {MatButtonModule} from '@angular/material/button';
 import { EventComponent } from './event/event.component';
 import {MatInputModule} from '@angular/material/input';
+import { RegisterPersonalComponent } from './register-personal/register-personal.component';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {FormsModule} from '@angular/forms';
+import { RegisterCompanyComponent } from './register-company/register-company.component';
+
 
 
 @NgModule({
@@ -18,6 +23,8 @@ import {MatInputModule} from '@angular/material/input';
     HomeComponent,
     LoginComponent,
     EventComponent,
+    RegisterPersonalComponent,
+    RegisterCompanyComponent,
   ],
     imports: [
         CommonModule,
@@ -25,9 +32,10 @@ import {MatInputModule} from '@angular/material/input';
         RouterModule,
         MatIcon,
         MatButtonModule,
-        MatCardModule,
-        MatInputModule
-    ],
+    MatRadioButton,
+    MatRadioGroup,
+    FormsModule
+  ],
   exports: [NavBarComponent]
 })
 export class LayoutModule { }
