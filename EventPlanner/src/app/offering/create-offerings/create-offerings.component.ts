@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
 
 @Component({
   selector: 'app-create-offerings',
@@ -25,6 +26,12 @@ export class CreateOfferingsComponent implements OnInit {
   timeOptions = [1, 2, 3, 4, 5];
 
   constructor(private fb: FormBuilder, private dialog: MatDialog) {}
+
+  openDialog(){
+    this.dialog.open(CreateCategoryDialogComponent,{
+      width:"350px"
+    })
+  }
 
   ngOnInit(): void {
     this.initForm();
