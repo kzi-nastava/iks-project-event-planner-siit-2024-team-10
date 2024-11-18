@@ -7,14 +7,13 @@ import { HomeComponent } from './home/home.component';
 import {MatIcon} from "@angular/material/icon";
 import { MatCardModule } from '@angular/material/card';
 import { LoginComponent } from './login/login.component';
+import {MatButtonModule} from '@angular/material/button';
+import { EventComponent } from './event/event.component';
+import {MatInputModule} from '@angular/material/input';
 import { RegisterPersonalComponent } from './register-personal/register-personal.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {FormsModule} from '@angular/forms';
 import { RegisterCompanyComponent } from './register-company/register-company.component';
-
-import {MatButtonModule} from '@angular/material/button';
-import { EventComponent } from './event/event.component';
-import {MatInputModule} from '@angular/material/input';
 
 
 @NgModule({
@@ -26,15 +25,15 @@ import {MatInputModule} from '@angular/material/input';
     RegisterPersonalComponent,
     RegisterCompanyComponent,
   ],
-  imports: [
-    CommonModule,
-    MaterialModule,
-    RouterModule,
-    MatIcon,
-    MatRadioButton,
-    MatRadioGroup,
-    FormsModule,
-    MatButtonModule,
+    imports: [
+        CommonModule,
+        MaterialModule,
+        RouterModule,
+        MatIcon,
+        MatRadioButton,
+        MatRadioGroup,
+        FormsModule,
+        MatButtonModule,
         MatCardModule,
         MatInputModule
   ],
