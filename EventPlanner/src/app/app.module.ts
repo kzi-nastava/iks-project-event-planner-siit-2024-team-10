@@ -6,10 +6,12 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LayoutModule } from './layout/layout.module';
 import { WineModule } from './wine/wine.module';
+import { DetailsPageComponent } from './details-page/details-page.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DetailsPageComponent
   ],
   imports: [
     BrowserModule,
