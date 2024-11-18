@@ -7,7 +7,7 @@ import { HomeComponent } from './home/home.component';
 import {MatIcon} from "@angular/material/icon";
 import { LoginComponent } from './login/login.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 
 
@@ -26,7 +26,8 @@ import { RegisterComponent } from './register/register.component';
     MatIcon,
     MatRadioButton,
     MatRadioGroup,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [NavBarComponent]
 })
