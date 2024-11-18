@@ -20,7 +20,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon'; 
 import { ManageOfferingsComponent } from './manage-offerings/manage-offerings.component';
 import { CreateOfferingsComponent } from './create-offerings/create-offerings.component';
-
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
