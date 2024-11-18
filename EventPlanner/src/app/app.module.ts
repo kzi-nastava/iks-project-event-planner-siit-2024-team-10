@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LayoutModule } from './layout/layout.module';
+import { OfferingModule } from './offering/offering.module';
 import { WineModule } from './wine/wine.module';
 
 @NgModule({
@@ -15,6 +16,7 @@ import { WineModule } from './wine/wine.module';
     BrowserModule,
     AppRoutingModule,
     LayoutModule,
+    OfferingModule,
     WineModule
   ],
   providers: [
