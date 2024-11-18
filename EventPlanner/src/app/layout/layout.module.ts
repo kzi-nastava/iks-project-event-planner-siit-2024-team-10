@@ -8,7 +8,7 @@ import {MatIcon} from "@angular/material/icon";
 import { MatCardModule } from '@angular/material/card';
 import { LoginComponent } from './login/login.component';
 import {MatButtonModule} from '@angular/material/button';
-import { EventComponent } from './event/event.component';
+import { EventModule } from '../event/event.module';
 import {MatInputModule} from '@angular/material/input';
 import { RegisterPersonalComponent } from './register-personal/register-personal.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
@@ -21,7 +21,6 @@ import { RegisterCompanyComponent } from './register-company/register-company.co
     NavBarComponent,
     HomeComponent,
     LoginComponent,
-    EventComponent,
     RegisterPersonalComponent,
     RegisterCompanyComponent,
   ],
@@ -35,7 +34,8 @@ import { RegisterCompanyComponent } from './register-company/register-company.co
         FormsModule,
         MatButtonModule,
         MatCardModule,
-        MatInputModule
+        MatInputModule,
+        EventModule
   ],
   exports: [NavBarComponent]
 })

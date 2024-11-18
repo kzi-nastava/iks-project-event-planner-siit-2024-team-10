@@ -7,6 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { LayoutModule } from './layout/layout.module';
 import { WineModule } from './wine/wine.module';
 import {MatButtonModule} from '@angular/material/button';
+import { EventModule } from './event/event.module'
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import {MatButtonModule} from '@angular/material/button';
     AppRoutingModule,
     LayoutModule,
     WineModule,
-    MatButtonModule
+    MatButtonModule,
+    EventModule
   ],
   providers: [
     provideAnimationsAsync()
