@@ -15,11 +15,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon'; 
 import { ManageOfferingsComponent } from './manage-offerings/manage-offerings.component';
 import { CreateOfferingsComponent } from './create-offerings/create-offerings.component';
-
+import { CreateCategoryDialogComponent } from './create-category-dialog/create-category-dialog.component';
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
     CreateOfferingsComponent,
+    CreateCategoryDialogComponent
   ],
   imports: [
     CommonModule,
@@ -39,6 +40,7 @@ import { CreateOfferingsComponent } from './create-offerings/create-offerings.co
   exports: [
     ManageOfferingsComponent,
     CreateOfferingsComponent,
+    CreateCategoryDialogComponent
   ]
 })
 export class OfferingModule { }
