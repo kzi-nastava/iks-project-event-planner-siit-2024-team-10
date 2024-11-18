@@ -1,11 +1,11 @@
 mat-toolbar {
-  background-color: #5FA3A2;
+  background-color: #d0cfe1;
   position: sticky;
   z-index: 1;
 }
 
 mat-icon{
-  color: white;
+  color: #252629;
 }
 
 .navigation-container{
@@ -24,5 +24,5 @@ button {
 
 span {
   font-family: "Calisto MT", Calisto, "Times New Roman", serif;
-  color: white
+  color: #252629
 }

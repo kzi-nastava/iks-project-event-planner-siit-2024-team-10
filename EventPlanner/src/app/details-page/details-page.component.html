@@ -1,1 +1,129 @@
-<p>details-page works!</p>
+<!-- manage-offerings.component.html -->
+<div class="container">
+    <div class="card">
+      <!-- Left Side - Image Section -->
+      <div class="image-section">
+        <div class="carousel">
+          <img [src]="images[activeImage]" [alt]="'Image ' + (activeImage + 1)" class="main-image">
+        </div>
+        <div class="thumbnails">
+          <img 
+            *ngFor="let image of images; let i = index"
+            [src]="image"
+            [alt]="'Thumbnail ' + (i + 1)"
+            class="thumbnail"
+            [class.active]="i === activeImage"
+            (click)="setActiveImage(i)"
+          >
+        </div>
+      </div>
+  
+      <!-- Right Side - Details Section -->
+      <div class="details-section">
+        <h1 class="product-title">Bridal Hair and Makeup</h1>
+  
+        <div class="price-availability">
+          <span class="price">500€</span>
+          <span class="availability">Available</span>
+        </div>
+  
+        <div class="discount">
+          <span>Discount: 10%</span>
+        </div>
+  
+        <div class="rating">
+          <span class="stars">★★★★☆</span>
+          <span class="rating-number">(4.5)</span>
+        </div>
+  
+        <div class="product-description">
+          <p>Expert makeup and hair artists provide personalized beauty services to ensure the bride and bridal party look stunning on the big day.</p>
+        </div>
+  
+        <mat-accordion>
+          <mat-expansion-panel class="blue-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Specification</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>Bridal makeup services include a personalized consultation and a trial session to determine the perfect look tailored to the bride's style and skin type.</p>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel class="yellow-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Reservation Deadline</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>3 months</p>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel class="pink-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Cancellation Deadline</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>3 months</p>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel class="gray-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Service Duration</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>This service lasts 3 hours.</p>
+          </mat-expansion-panel>
+        </mat-accordion>
+  
+        <button class="learn-more-btn">Learn More</button>
+      </div>
+    </div>
+  
+    <!-- Comments Section -->
+    <div class="comments-section">
+      <h2>Customer Reviews</h2>
+      
+      <!-- New Comment Form -->
+      <div class="comment-form">
+        <h3>Leave a Review</h3>
+        <div class="rating-input">
+          <span>Your Rating:</span>
+          <div class="stars-input">
+            <span 
+              *ngFor="let star of getStarArray(5); let i = index"
+              (click)="setRating(i + 1)"
+              [class.filled]="i < userRating"
+              class="star-icon"
+            >★</span>
+          </div>
+        </div>
+        <input 
+          type="text" 
+          [(ngModel)]="newComment.userName" 
+          placeholder="Your Name"
+          class="input-field"
+        >
+        <textarea 
+          [(ngModel)]="newComment.text" 
+          placeholder="Your Review"
+          class="input-field"
+        ></textarea>
+        <button 
+          (click)="submitComment()"
+          class="submit-btn"
+          [disabled]="!newComment.userName || !newComment.text || !newComment.rating"
+        >Submit Review</button>
+      </div>
+  
+      <!-- Existing Comments -->
+      <div class="comments-list">
+        <div *ngFor="let comment of comments" class="comment-card">
+          <div class="comment-header">
+            <span class="user-name">{{ comment.userName }}</span>
+            <div class="stars">
+              <span *ngFor="let star of getStarArray(comment.rating)">
+                {{ star ? '★' : '☆' }}
+              </span>
+            </div>
+          </div>
+          <p class="comment-text">{{ comment.text }}</p>
+          <span class="comment-date">{{ comment.date | date }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
