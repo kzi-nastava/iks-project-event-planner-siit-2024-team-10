@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ManageOfferingsComponent } from './manage-offerings/manage-offerings.component';
-import { OfferingsComponent } from './offerings/offerings.component';
+import { OfferingCardComponent } from './offering-card/offering-card.component';
 import {MatIcon} from "@angular/material/icon";
 import { MatCardModule } from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
@@ -10,7 +10,7 @@ import {MatButtonModule} from '@angular/material/button';
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
-    OfferingsComponent
+    OfferingCardComponent
   ],
   imports: [
     CommonModule,
@@ -19,7 +19,7 @@ import {MatButtonModule} from '@angular/material/button';
     MatButtonModule
   ],
   exports:[
-    OfferingsComponent
+    OfferingCardComponent
   ]
 })
 export class OfferingModule { }

@@ -58,11 +58,7 @@
 <div class="top-events">
   <h2>Top Offerings In Your Area</h2>
   <div class="top-event-cards">
-    <app-offerings></app-offerings>
-    <app-offerings></app-offerings>
-    <app-offerings></app-offerings>
-    <app-offerings></app-offerings>
-    <app-offerings></app-offerings>
+    <app-offering-card *ngFor="let offering of topOfferings" [offering]="offering"></app-offering-card>
   </div>
 </div>
 
@@ -97,16 +93,8 @@
   </div>
   <div class="all-events-section">
     <div class="all-event-cards">
-      <app-offerings></app-offerings>
-      <app-offerings></app-offerings>
-      <app-offerings></app-offerings>
-      <app-offerings></app-offerings>
-      <app-offerings></app-offerings>
-      <app-offerings></app-offerings>
-      <app-offerings></app-offerings>
-      <app-offerings></app-offerings>
-      <app-offerings></app-offerings>
-      <app-offerings></app-offerings>
+      <app-offering-card *ngFor="let offering of allOfferings" [offering]="offering"></app-offering-card>
+
     </div>
     <div class="pagination">
       <button>&lt;</button>
