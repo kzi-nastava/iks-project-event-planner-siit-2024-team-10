@@ -1,0 +1,34 @@
+img{
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 0;
+}
+form{
+  width: 50vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-right: 0;
+  margin-left: auto;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+form > *{
+  margin:.3em;
+}
+
+mat-form-field{
+  width: 70%;
+}
+
+a{
+  color:#5FA3A2;
+}
