@@ -2,8 +2,8 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background: #fff; /* Removed gradient for a single background color */
   border-radius: 10px;
+  background-color: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
