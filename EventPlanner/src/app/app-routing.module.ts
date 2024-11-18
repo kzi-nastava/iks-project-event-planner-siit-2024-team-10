@@ -8,6 +8,7 @@ import {RegisterCompanyComponent} from './layout/register-company/register-compa
 import {CreateOfferingsComponent} from './offering/create-offerings/create-offerings.component';
 
 const routes: Routes = [
+  { path: '', component: HomeComponent },
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
   {path:'manage-offerings',component:ManageOfferingsComponent},

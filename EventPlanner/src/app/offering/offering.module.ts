@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ManageOfferingsComponent } from './manage-offerings/manage-offerings.component';
+import { OfferingCardComponent } from './offering-card/offering-card.component';
+import {MatIcon} from "@angular/material/icon";
+import { MatCardModule } from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -15,14 +20,16 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon'; 
 import { ManageOfferingsComponent } from './manage-offerings/manage-offerings.component';
 import { CreateOfferingsComponent } from './create-offerings/create-offerings.component';
-
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
+    OfferingCardComponent,
     CreateOfferingsComponent,
   ],
   imports: [
     CommonModule,
+    MatIcon,
+    MatCardModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
@@ -39,6 +46,7 @@ import { CreateOfferingsComponent } from './create-offerings/create-offerings.co
   exports: [
     ManageOfferingsComponent,
     CreateOfferingsComponent,
+    OfferingCardComponent
   ]
 })
 export class OfferingModule { }

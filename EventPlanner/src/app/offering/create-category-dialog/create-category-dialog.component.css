@@ -1,0 +1,57 @@
+mat-dialog-content {
+    background-color: #ebe3e5;
+    padding: 24px;
+    border-radius: 8px;
+    color: #252629;
+  }
+  
+  mat-dialog-content header h1 {
+    font-size: 1.8em;
+    margin: 0 0 16px 0;
+    text-align: center;
+    color: #252629;
+  }
+  
+  mat-dialog-content p {
+    margin: 16px 0;
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  mat-form-field input {
+    color: #252629;
+  }
+  
+  mat-dialog-actions {
+    padding: 16px;
+    text-align: center;
+  }
+  
+  button[mat-raised-button] {
+    margin: 0 8px;
+    padding: 8px 24px;
+    border-radius: 4px;
+  }
+  
+  button[mat-raised-button][color="primary"] {
+    background-color: #f8adbb;
+    color: #252629;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  button[mat-raised-button][color="primary"]:hover {
+    background-color: #e097a8;
+  }
+  
+  button[mat-raised-button][color="warn"] {
+    background-color: #252629;
+    color: #ebe3e5;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  button[mat-raised-button][color="warn"]:hover {
+    background-color: #1e1e20;
+  }
+  
