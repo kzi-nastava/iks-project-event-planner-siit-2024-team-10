@@ -104,6 +104,14 @@
   color: white;
 }
 
+.subtle-text a {
+  color: #007bff;  
+  text-decoration: underline;  
+}
+.subtle-text a:hover {
+  color: #0056b3; 
+}
+
 .toggle-container {
   display: flex;
   justify-content: space-between;
