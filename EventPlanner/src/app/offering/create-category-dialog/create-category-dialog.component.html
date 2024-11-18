@@ -1,1 +1,15 @@
-<p>create-category-dialog works!</p>
+<mat-dialog-content>
+    <header>
+        <h1>Create new category</h1>
+    </header>
+    <p>
+        <mat-form-field appearance="fill">
+            <mat-label>Category Name</mat-label>
+            <input matInput placeholder="Enter category name" />
+        </mat-form-field>          
+    </p>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button mat-raised-button color="primary" matDialogSave>Save</button>
+    <button mat-raised-button color="warn" matDialogClose>Cancel</button>
+</mat-dialog-actions>
