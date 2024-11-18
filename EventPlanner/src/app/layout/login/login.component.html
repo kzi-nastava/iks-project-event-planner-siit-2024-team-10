@@ -1,1 +1,14 @@
-<p>login works!</p>
+<img src="https://i.ibb.co/SdjqS78/backgound.jpg" alt="login-img">
+<form>
+  <h1>Login</h1>
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Password</mat-label>
+    <input type="password" matInput>
+  </mat-form-field>
+  <button mat-stroked-button [routerLink]="['/home']">Login</button>
+  <p>Don't have account yet? <a [routerLink]="['/register-personal']">Register now!</a></p>
+</form>
