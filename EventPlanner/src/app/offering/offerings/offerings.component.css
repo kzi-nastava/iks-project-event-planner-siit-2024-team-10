@@ -51,12 +51,13 @@
 .bottom-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items:flex-end;
 }
 
 .tags-rating {
   display: flex;
   gap: 10px;
+  margin-bottom:0px;
 }
 
 .rating {
@@ -79,9 +80,40 @@
   text-transform: uppercase;
 }
 
-.see-more {
-  text-align: right;
+.add-to-favorite {
+  text-align: center;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
 }
+.add-to-favorite button{
+  display: flex;
+  align-items: center;
+  padding: 0;
+  justify-content: center;
+  border-radius: 50%;
+  min-width:46px;
+  min-height:46px;
+}
+
+.add-to-favorite mat-icon {
+  margin: 0;
+  padding: 0;
+  display: flex;  
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  color: #5FA3A2;
+  font-size: 27px;
+  height: 27px;
+  width: 27px;
+}
+
+
 
 button[mat-stroked-button] {
   border-radius: 20px;

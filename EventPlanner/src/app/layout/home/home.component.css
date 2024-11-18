@@ -240,4 +240,24 @@
   .custom-icon:hover {
     filter: brightness(85%);
   }
+
+  .add-to-favorite {
+    text-align: center;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+  }
+  .add-to-favorite button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    height: 64px;
+    width: 48px;
+  }
+  
   
