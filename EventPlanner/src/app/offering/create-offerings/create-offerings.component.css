@@ -1,0 +1,120 @@
+.offering-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff; /* Removed gradient for a single background color */
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.elegant-form {
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-header h1 {
+  font-size: 26px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.form-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+.form-section {
+  margin-bottom: 20px;
+}
+
+.category-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-dropdown {
+  width: 100%;
+}
+
+.subtle-text {
+  font-size: 12px;
+  color: #888;
+  text-align: center;
+}
+
+.subtle-text a {
+  color: #007bff; /* Link color */
+  text-decoration: none; /* Remove underline */
+}
+
+.subtle-text a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+.details-grid mat-form-field {
+  width: 100%;
+}
+
+.price-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.photo-upload .upload-area {
+  background: #e0e0e0;
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  background: #d3d3d3;
+}
+
+.small-subtitle {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.selected-labels {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.clickable-label {
+  background-color: transparent;
+  color: #007bff;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.selected-label {
+  background-color: #007bff;
+  color: white;
+}
+
+.toggle-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.submit-section {
+  text-align: center;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
