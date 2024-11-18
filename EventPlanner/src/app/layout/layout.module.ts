@@ -6,6 +6,10 @@ import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import {MatIcon} from "@angular/material/icon";
 import { LoginComponent } from './login/login.component';
+import { RegisterPersonalComponent } from './register-personal/register-personal.component';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {FormsModule} from '@angular/forms';
+import { RegisterCompanyComponent } from './register-company/register-company.component';
 
 
 
@@ -14,13 +18,18 @@ import { LoginComponent } from './login/login.component';
     NavBarComponent,
     HomeComponent,
     LoginComponent,
+    RegisterPersonalComponent,
+    RegisterCompanyComponent,
   ],
-    imports: [
-        CommonModule,
-        MaterialModule,
-        RouterModule,
-        MatIcon
-    ],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    RouterModule,
+    MatIcon,
+    MatRadioButton,
+    MatRadioGroup,
+    FormsModule
+  ],
   exports: [NavBarComponent]
 })
 export class LayoutModule { }
