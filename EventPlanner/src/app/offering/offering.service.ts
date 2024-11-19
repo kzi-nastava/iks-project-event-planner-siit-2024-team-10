@@ -15,6 +15,8 @@ const PRODUCTS: Product[] = [
     rating: '4.7',
     eventTypes: ['Concert', 'Conference'],
     isProduct: true,
+    description: "this is description",
+
   },
   {
     id: 2,
@@ -26,6 +28,8 @@ const PRODUCTS: Product[] = [
     rating: '4.5',
     eventTypes: ['Festival', 'Exhibition'],
     isProduct: true,
+    description: "this is description",
+
 
   },
   {
@@ -38,6 +42,8 @@ const PRODUCTS: Product[] = [
     rating: '4.8',
     eventTypes: ['Concert', 'Conference', 'Seminar'],
     isProduct: true,
+    description: "this is description",
+
   },
   {
     id: 4,
@@ -49,6 +55,7 @@ const PRODUCTS: Product[] = [
     rating: '4.6',
     eventTypes: ['Outdoor Wedding', 'Festival', 'Exhibition'],
     isProduct: true,
+    description: "this is description",
 
   },
   {
@@ -61,13 +68,14 @@ const PRODUCTS: Product[] = [
     rating: '4.9',
     eventTypes: ['Conference', 'Seminar'],
     isProduct: true,
+    description: "this is description",
+
 
   }
 ];
-
 const SERVICES: Service[] = [
   {
-    id: 1,
+    id: 6,
     name: 'Catering Service',
     category: 'Food & Beverage',
     picture: 'makeup.jpg',  
@@ -75,10 +83,17 @@ const SERVICES: Service[] = [
     price: 500,
     rating: '5.0',
     isProduct: false,
+    specification: 'Full-service catering for events including appetizers, main course, and desserts.',
+    minDuration: 2,
+    maxDuration: 5,
+    cancellationPeriod: 48,  // hours
+    reservationPeriod: 72,   // hours
+    autoConfirm: true,
+    description: "this is description",
 
   },
   {
-    id: 2,
+    id: 7,
     name: 'Event Photography',
     category: 'Photography',
     picture: 'makeup.jpg', 
@@ -86,10 +101,16 @@ const SERVICES: Service[] = [
     price: 800,
     rating: '4.8',
     isProduct: false,
-
+    specification: 'Professional event photography including candid and posed shots.',
+    minDuration: 3,
+    maxDuration: 8,
+    cancellationPeriod: 24,  // hours
+    reservationPeriod: 48,   // hours
+    autoConfirm: false,    
+    description: "this is description",
   },
   {
-    id: 3,
+    id: 8,
     name: 'Venue Setup',
     category: 'Event Management',
     picture: 'makeup.jpg',  
@@ -97,10 +118,16 @@ const SERVICES: Service[] = [
     price: 1000,
     rating: '4.6',
     isProduct: false,
-
+    specification: 'Complete venue setup including seating, decor, and lighting arrangements.',
+    minDuration: 4,   
+    description: "this is description",
+    maxDuration: 12,
+    cancellationPeriod: 72,  // hours
+    reservationPeriod: 96,   // hours
+    autoConfirm: false,
   },
   {
-    id: 4,
+    id: 9,
     name: 'Audio/Visual Setup',
     category: 'Audio/Visual',
     picture: 'makeup.jpg',
@@ -108,10 +135,16 @@ const SERVICES: Service[] = [
     price: 600,
     rating: '4.7',
     isProduct: false,
-
+    description: "this is description",
+    specification: 'Audio/Visual equipment setup for conferences, seminars, and presentations.',
+    minDuration: 3,
+    maxDuration: 6,
+    cancellationPeriod: 48,  // hours
+    reservationPeriod: 48,   // hours
+    autoConfirm: true,
   },
   {
-    id: 5,
+    id: 10,
     name: 'Event Security',
     category: 'Security Services',
     picture: 'makeup.jpg',
@@ -119,7 +152,13 @@ const SERVICES: Service[] = [
     price: 700,
     rating: '4.9',
     isProduct: false,
-
+    description: "this is description",
+    specification: 'Security personnel for events, ensuring safety and crowd management.',
+    minDuration: 4,
+    maxDuration: 8,
+    cancellationPeriod: 48,  // hours
+    reservationPeriod: 72,   // hours
+    autoConfirm: true,
   }
 ];
 
@@ -142,6 +181,7 @@ export class OfferingService {
         price: productObj.price,
         rating: productObj.rating,
         isProduct: productObj.isProduct,
+        description: productObj.description
       };
       this.productList.push(product);
     }
@@ -154,7 +194,11 @@ export class OfferingService {
         provider: serviceObj.provider,
         price: serviceObj.price,
         rating: serviceObj.rating,
-        isProduct: serviceObj.isProduct
+        isProduct: serviceObj.isProduct,
+        specification:serviceObj.specification,
+        reservationPeriod:serviceObj.reservationPeriod,
+        cancellationPeriod:serviceObj.cancellationPeriod,
+        description:serviceObj.description,
       };
       this.serviceList.push(service);
     }

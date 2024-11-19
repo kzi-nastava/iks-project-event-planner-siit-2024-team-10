@@ -26,8 +26,24 @@
         <span class="availability">Available</span>
       </div>
 
-      <div class="provider">
-        <span>Provider: {{offering.provider}}</span>
+      <!-- Provider Card -->
+      <div class="provider-card">
+        <div class="provider-header">
+          <img src="image2.png" alt="Provider" class="provider-image">
+          <div class="provider-info">
+            <h3>name</h3>
+            <p>email</p>
+            <div class="provider-rating">
+              <span class="stars">★★★★☆</span>
+              <span>4
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="provider-actions">
+          <button class="view-provider-btn">View Profile</button>
+          <button class="report-provider-btn">Report Provider</button>
+        </div>
       </div>
 
       <div class="rating">
@@ -35,15 +51,36 @@
         <span class="rating-number">({{offering.rating}})</span>
       </div>
 
-      <mat-accordion>
-        <mat-expansion-panel class="blue-panel">
+      <mat-accordion class="panels-container">
+        <mat-expansion-panel class="custom-panel">
           <mat-expansion-panel-header>
             <mat-panel-title>Category</mat-panel-title>
           </mat-expansion-panel-header>
           <p>{{offering.category}}</p>
         </mat-expansion-panel>
 
-        <mat-expansion-panel class="yellow-panel" *ngIf="offering.isProduct">
+        <mat-expansion-panel class="custom-panel" *ngIf="isService(offering)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Specification</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>{{offering.specification}}</p>
+        </mat-expansion-panel>
+        
+        <mat-expansion-panel class="custom-panel" *ngIf="isService(offering)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Cancellation deadline</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>{{offering.cancellationPeriod}}</p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="custom-panel" *ngIf="isService(offering)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Reservation deadline</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>{{offering.reservationPeriod}}</p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="custom-panel" *ngIf="offering.isProduct">
           <mat-expansion-panel-header>
             <mat-panel-title>Event Types</mat-panel-title>
           </mat-expansion-panel-header>
@@ -51,7 +88,15 @@
         </mat-expansion-panel>
       </mat-accordion>
 
-      <button class="learn-more-btn">Book Now</button>
+      <div class="action-buttons">
+        <button class="book-now-btn">
+          <span class="btn-icon">📅</span>
+          Book Now
+        </button>
+        <button class="favorite-btn" [class.active]="isFavorite" (click)="toggleFavorite()">
+          <span class="heart-icon">{{isFavorite ? '❤️' : '🤍'}}</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -106,5 +151,5 @@
         <span class="comment-date">{{ comment.date | date }}</span>
       </div>
     </div>
-  </div>
+  </div>  
 </div>

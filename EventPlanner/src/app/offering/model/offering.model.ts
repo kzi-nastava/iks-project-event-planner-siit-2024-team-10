@@ -2,7 +2,7 @@ export interface Offering {
     id: number;
     name: string;
     category: string;
-    description?: string;
+    description: string;
     discount?: number;
     picture: string;
     provider: string;
