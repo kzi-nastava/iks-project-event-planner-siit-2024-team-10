@@ -1,7 +1,8 @@
 .event-card {
     margin: 10px;
     width: 430px;
-    height: 180px;
+    min-height: 180px;
+    height: fit-content;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
@@ -12,6 +13,11 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+  }
+  .location-time {
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 5px;
   }
   
   .card-footer {
@@ -103,6 +109,11 @@
   mat-card-title {
     font-weight: 550;
     font-size: 25px;
+  }
+  mat-card-title-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   button[mat-stroked-button] {
