@@ -21,14 +21,22 @@
           <div class="sort-section">
             <mat-form-field appearance="outline">
               <mat-label>Sorting Criteria</mat-label>
-                <mat-select></mat-select>
-              </mat-form-field>
-              <mat-form-field appearance="outline">
+              <mat-select [(ngModel)]="selectedEventSortingCriteria">
+                <mat-option *ngFor="let criteria of eventSortingCriteria" [value]="criteria">
+                  {{ criteria }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
               <mat-label>Sorting Direction</mat-label>
-                <mat-select></mat-select>
-              </mat-form-field>
-            <button mat-stroked-button>Sort</button>
-          </div>
+              <mat-select [(ngModel)]="selectedSortingDirection">
+                <mat-option *ngFor="let direction of sortingDirections" [value]="direction">
+                  {{ direction }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-stroked-button (click)="applySorting('event')">Sort</button>          </div>
           <div class="filter-section">
             <button mat-stroked-button><mat-icon>filter_list</mat-icon> Filter</button>
             <button mat-stroked-button class="reset-button">Reset Filters</button>
@@ -77,15 +85,24 @@
         </div>
         <div class="sort-filter">
           <div class="sort-section">
-          <mat-form-field appearance="outline">
-            <mat-label>Sorting Criteria</mat-label>
-              <mat-select></mat-select>
-            </mat-form-field>
             <mat-form-field appearance="outline">
-            <mat-label>Sorting Direction</mat-label>
-              <mat-select></mat-select>
+              <mat-label>Sorting Criteria</mat-label>
+              <mat-select [(ngModel)]="selectedOfferingSortingCriteria">
+                <mat-option *ngFor="let criteria of offeringSortingCriteria" [value]="criteria">
+                  {{ criteria }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
-            <button mat-stroked-button>Sort</button>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Sorting Direction</mat-label>
+              <mat-select [(ngModel)]="selectedSortingDirection">
+                <mat-option *ngFor="let direction of sortingDirections" [value]="direction">
+                  {{ direction }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-stroked-button (click)="applySorting('offering')">Sort</button>
           </div>
           <div class="filter-section">
             <button mat-stroked-button><mat-icon>filter_list</mat-icon> Filter</button>
