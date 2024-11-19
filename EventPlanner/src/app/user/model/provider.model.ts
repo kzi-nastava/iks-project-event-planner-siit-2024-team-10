@@ -10,4 +10,13 @@ export interface Provider {
   street: string;
   houseNumber: string;
   phone: string;
+  companyEmail: string;
+  companyName: string;
+  companyCountry: string;
+  companyCity: string;
+  companyStreet: string;
+  companyHouseNumber: string;
+  companyPhone: string;
+  companyDescription: string;
+  companyPhotos: string;
 }
