@@ -2,13 +2,20 @@
 
 html, body {
   height: 100%;
-  background-color: #ebe3e5;
+  font-family: 'Fira Sans Condensed', serif !important;
   color:#475B63;
+  margin: 0;
 }
-body {
-  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+h1, h2{
+  font-family: 'Fira Sans Condensed', serif !important;
+  font-weight: 500 !important;
+}
+h1{
+  color:#5FA3A2
+}
+h2{
+  color:#475B63
 }
 
-h1{
-  color:#252629;
-}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
