@@ -7,7 +7,7 @@ import {RegisterPersonalComponent} from './layout/register-personal/register-per
 import {RegisterCompanyComponent} from './layout/register-company/register-company.component';
 import {CreateOfferingsComponent} from './offering/create-offerings/create-offerings.component';
 import { EditServiceComponent } from './offering/edit-service/edit-service.component';
-
+import { DetailsPageComponent } from './offering/details-page/details-page.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {path: 'home', component: HomeComponent},
@@ -16,8 +16,8 @@ const routes: Routes = [
   {path:'register-personal',component:RegisterPersonalComponent},
   {path:'register-company',component:RegisterCompanyComponent},
   {path:'create-offering',component:CreateOfferingsComponent},
-  {path:'edit-service',component:EditServiceComponent}
-
+  {path:'edit-service',component:EditServiceComponent},
+  {path:'offering/:id',component:DetailsPageComponent}
 ];
 
 @NgModule({
