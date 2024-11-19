@@ -182,4 +182,10 @@ export class OfferingService {
   getServices(): Observable<Service[]> {
     return of(this.serviceList);
   }
+
+  getOfferingById(id: number): Observable<Offering | undefined> {
+    const allOfferings = [...this.productList, ...this.serviceList];
+    const offering = allOfferings.find(o => o.id === id);
+    return of(offering);
+  }
 }
