@@ -19,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon'; 
 import { CreateOfferingsComponent } from './create-offerings/create-offerings.component';
 import { EditServiceComponent } from './edit-service/edit-service.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { EditServiceComponent } from './edit-service/edit-service.component';
     MatRadioModule,
     MatSlideToggleModule,
     MatDialogModule,
-    MatIconModule  
+    MatIconModule,
+    MatButtonToggleModule
   ],
   exports: [
     ManageOfferingsComponent,
