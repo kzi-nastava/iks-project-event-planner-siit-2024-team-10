@@ -1,0 +1,46 @@
+.filter-dialog {
+  display: flex;
+    padding: 20px;
+    text-align: center;
+    justify-content: center;
+  }
+  
+  h1 {
+    margin-bottom: 10px;
+  }
+  
+  .subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .form-field {
+    width: 100%;
+  }
+  
+  .date-range {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .date-range .form-field {
+    flex: 1;
+  }
+  
+  .rating-label {
+    font-size: 14px;
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+  }
+  
+  .filter-btn {
+    margin-top: 20px;
+  }
