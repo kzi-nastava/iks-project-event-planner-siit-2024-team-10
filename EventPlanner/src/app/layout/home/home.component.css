@@ -23,7 +23,7 @@
     padding-bottom:20px;
     text-align: center;
     z-index: 1;
-    box-shadow: 15px 0px 0px rgba(0, 0, 0, 0.4);
+
   }
 
   .top-event-cards {
@@ -32,6 +32,7 @@
     flex-wrap: wrap;
     justify-content: center;
     grid-template-columns: repeat(auto-fit,minmax(450px,450px));
+    
   }
 
   .event-bg button[mat-stroked-button]{
@@ -46,6 +47,13 @@
     background-color: #b5b3c9;
     border-color: #d0cfe1 !important;
     color: #ffffff !important ;
+  }
+  .mat-mdc-radio-button.mat-accent{
+    --mdc-radio-selected-icon-color:#935bd4;
+    --mat-radio-checked-ripple-color: #935bd4;
+    --mdc-radio-selected-focus-icon-color: #935bd4;
+    --mdc-radio-selected-hover-icon-color: #935bd4;
+    --mdc-radio-selected-icon-color: #935bd4;
   }
 
   .offering-bg button[mat-stroked-button]{
@@ -121,8 +129,8 @@
 
   .all-events-section{
     padding-bottom: 20px;
-    background-color: #eceaeb;
-
+    background-color: #dddddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
    }
   
   .all-event-cards {
@@ -152,7 +160,7 @@
     padding: 10px 15px;
     color: #545283;
     border: 1px solid #ddd;
-    background-color: #fff;
+    background-color: #f2eef6;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
@@ -201,7 +209,6 @@
   
   .footer-social .social-icons mat-icon {
     cursor: pointer;
-    margin-right: 15px;
   }
   
   .custom-icon {
