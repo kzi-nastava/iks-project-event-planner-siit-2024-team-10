@@ -7,6 +7,10 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
+.outer-container {
+  padding: 2em;
+}
+
 form{
   margin:0;
   width: 100%;

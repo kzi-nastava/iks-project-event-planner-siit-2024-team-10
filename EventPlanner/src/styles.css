@@ -17,5 +17,8 @@ h2{
   color:#475B63
 }
 
-html, body { height: 100%; }
+html, body {
+  height: 100%;
+  background-color: #ECEAEA;
+}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
