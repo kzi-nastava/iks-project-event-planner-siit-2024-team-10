@@ -1,6 +1,6 @@
 .event-card {
     margin: 10px;
-    width: 450px;
+    width: 430px;
     height: 180px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -68,11 +68,15 @@
   .add-to-favorite button{
     display: flex;
     align-items: center;
-    justify-content: center;
     padding: 0;
+    justify-content: center;
     border-radius: 50%;
     min-width:46px;
+    transition: background-color 0.3s ease-in-out;
     min-height:46px;
+  }
+  .add-to-favorite button:hover{
+    background-color: #dac8c8;
   }
   
   .add-to-favorite mat-icon {
@@ -82,17 +86,10 @@
     align-items: center;
     justify-content: center;
     vertical-align: middle;
-    color: #5FA3A2;
+    color: #721a1a;
     font-size: 27px;
     height: 27px;
     width: 27px;
-  }
-
-  
-  button[mat-stroked-button] {
-    font-size: 14px;
-    padding: 5px 15px;
-    color:#5FA3A2
   }
   
   mat-card-subtitle {

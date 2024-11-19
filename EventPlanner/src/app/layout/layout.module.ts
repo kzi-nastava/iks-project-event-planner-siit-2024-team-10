@@ -15,6 +15,7 @@ import { RegisterPersonalComponent } from './register-personal/register-personal
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {FormsModule} from '@angular/forms';
 import { RegisterCompanyComponent } from './register-company/register-company.component';
+import {MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { RegisterCompanyComponent } from './register-company/register-company.co
         MatCardModule,
         MatInputModule,
         EventModule,
-        OfferingModule
+        OfferingModule,
+        MatSelectModule
   ],
   exports: [NavBarComponent]
 })
