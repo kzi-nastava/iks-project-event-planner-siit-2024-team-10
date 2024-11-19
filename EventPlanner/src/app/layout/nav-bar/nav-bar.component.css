@@ -2,6 +2,10 @@ mat-toolbar {
   background-color: #d0cfe1;
   position: sticky;
   z-index: 1;
+}
+
+mat-icon{
+  color: #252629;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   color:#3a2d30;
 }

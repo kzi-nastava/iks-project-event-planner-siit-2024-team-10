@@ -1,10 +1,12 @@
 import { Offering } from "./offering.model";
 
 export interface Service extends Offering{
-    specification?: string;
+    specification: string;
     minDuration?: number;
     maxDuration?: number;
-    cancelationPeriod?: number;
-    reservationPeriod?: number;
+    cancellationPeriod: number;
+    reservationPeriod: number;
     autoConfirm?: boolean;
+    timeType?:string,
+    fixedTime?:number
 }

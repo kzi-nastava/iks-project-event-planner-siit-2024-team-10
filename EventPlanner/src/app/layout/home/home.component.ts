@@ -57,6 +57,8 @@ export class HomeComponent implements OnInit {
     });
 
     this.topOfferings = this.allOfferings.slice(0, 5);
+
+    
   }
   applySorting(type: 'event' | 'offering') {
     if (type === 'event') {
