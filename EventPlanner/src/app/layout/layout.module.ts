@@ -12,7 +12,6 @@ import { EventModule } from '../event/event.module';
 import { OfferingModule } from '../offering/offering.module';
 import {MatInputModule} from '@angular/material/input';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import { RegisterCompanyComponent } from './register-company/register-company.component';
 import {MatSelectModule} from '@angular/material/select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
