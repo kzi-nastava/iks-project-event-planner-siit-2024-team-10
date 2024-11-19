@@ -11,10 +11,10 @@ import {MatButtonModule} from '@angular/material/button';
 import { EventModule } from '../event/event.module';
 import { OfferingModule } from '../offering/offering.module';
 import {MatInputModule} from '@angular/material/input';
-import { RegisterPersonalComponent } from './register-personal/register-personal.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import {FormsModule} from '@angular/forms';
-import { RegisterCompanyComponent } from './register-company/register-company.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { RegisterComponent } from './register/register.component';
+
 
 
 @NgModule({
@@ -22,22 +22,22 @@ import { RegisterCompanyComponent } from './register-company/register-company.co
     NavBarComponent,
     HomeComponent,
     LoginComponent,
-    RegisterPersonalComponent,
-    RegisterCompanyComponent,
+    RegisterComponent,
   ],
-    imports: [
-        CommonModule,
-        MaterialModule,
-        RouterModule,
-        MatIcon,
-        MatRadioButton,
-        MatRadioGroup,
-        FormsModule,
-        MatButtonModule,
-        MatCardModule,
-        MatInputModule,
-        EventModule,
-        OfferingModule
+  imports: [
+    CommonModule,
+    MaterialModule,
+    RouterModule,
+    MatIcon,
+    MatRadioButton,
+    MatRadioGroup,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatInputModule,
+    EventModule,
+    OfferingModule
   ],
   exports: [NavBarComponent]
 })

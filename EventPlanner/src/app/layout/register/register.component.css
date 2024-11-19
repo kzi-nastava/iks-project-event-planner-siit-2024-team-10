@@ -29,6 +29,14 @@ form{
   z-index: 1;
 }
 
+form > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 form > *{
   margin:.3em;
 }
