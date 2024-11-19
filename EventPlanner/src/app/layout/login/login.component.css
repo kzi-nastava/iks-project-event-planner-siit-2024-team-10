@@ -60,16 +60,9 @@ h1{
   font-size: 16px;
   margin-top: 20px;
   border-radius: 5px;
-  background-color: #d0cfe1;
-  color: #3a2d30;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
-
-.login-button:hover {
-  background-color: #d0cfe1;
-  opacity: 0.9;
 }
 
 p{
@@ -80,17 +73,4 @@ a{
   color: #d0cfe1;
   text-decoration: none;
   font-weight: 500;
-}
-
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-  color: #3a2d30;
-}
-
-::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-  color: #d0cfe1;
-}
-
-::ng-deep .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
-  color: #3a2d30;
-  opacity: 0.8;
 }
