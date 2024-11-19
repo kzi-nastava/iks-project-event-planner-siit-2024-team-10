@@ -47,18 +47,7 @@ form > div {
   width: 50%;
   padding: 10px;
   font-size: 16px;
-  background-color: #f8adbb;
-  color: #252629;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.submit-btn:hover {
-  background-color: #bb9d98;
-}
-
-::ng-deep .mat-form-field-suffix {
-  top: 0 !important;
 }

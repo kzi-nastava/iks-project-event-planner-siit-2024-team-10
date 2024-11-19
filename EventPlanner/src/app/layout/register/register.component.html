@@ -49,9 +49,9 @@
         <input matInput formControlName="phone" name="phone">
       </mat-form-field>
       <p>Select role:</p>
-      <mat-radio-group aria-label="Select role" formControlName="role" name="role">
-        <mat-radio-button value="organizer">Event organizer</mat-radio-button>
-        <mat-radio-button value="provider">Product/service provider</mat-radio-button>
+      <mat-radio-group color="primary" aria-label="Select role" formControlName="role" name="role">
+        <mat-radio-button color="primary" value="organizer">Event organizer</mat-radio-button>
+        <mat-radio-button color="primary" value="provider">Product/service provider</mat-radio-button>
       </mat-radio-group>
       <div *ngIf=this.companyInfoRequired()>
         <div class="form-header">
@@ -94,7 +94,7 @@
           <input matInput formControlName="companyPhotos" name="companyPhotos">
         </mat-form-field>
       </div>
-      <button mat-raised-button color="primary" type="submit" class="submit-btn"  (click)="register()">
+      <button mat-flat-button class="submit-btn"  (click)="register()">
         Register
       </button>
     </form>
