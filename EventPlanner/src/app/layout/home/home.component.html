@@ -11,7 +11,7 @@
       <h2>All Events In Your Area</h2>
       <div class="event-filter-components">
         <div class="name-search-section">
-          <mat-form-field appearance="outline" class="search-field">
+          <mat-form-field class="search-field">
             <mat-label>Event Name</mat-label>
             <input matInput>
           </mat-form-field>
@@ -42,10 +42,10 @@
     <div class="all-event-cards">
       <app-event-card *ngFor="let event of allEvents" [event]="event"></app-event-card>
     </div>
-    <div class="pagination-event">
-      <button mat-stroked-button>&lt; Previous Page</button>
+    <div class="pagination">
+      <button mat-stroked-button>&lt; Next</button>
       <p>Page 1 of 10</p>
-      <button mat-stroked-button>Next Page &gt;</button>
+      <button mat-stroked-button>Next &gt;</button>
     </div>
   </div>
 </div>
@@ -69,7 +69,7 @@
       </mat-radio-group>
       <div class="event-filter-components">
         <div class="name-search-section">
-          <mat-form-field appearance="outline" class="search-field">
+          <mat-form-field  class="search-field">
             <mat-label>Service/Product Name</mat-label>
             <input matInput>
           </mat-form-field>
@@ -100,10 +100,10 @@
       <app-offering-card *ngFor="let offering of allOfferings" [offering]="offering"></app-offering-card>
 
     </div>
-    <div class="pagination-offering">
-      <button mat-stroked-button>&lt; Previous Page</button>
+    <div class="pagination">
+      <button mat-stroked-button>&lt; Back</button>
       <p>Page 1 of 10</p>
-      <button mat-stroked-button>Next Page &gt;</button>
+      <button mat-stroked-button>Next &gt;</button>
     </div>
   </div>
 </div>

@@ -4,6 +4,7 @@ html, body {
   height: 100%;
   font-family: 'Fira Sans Condensed', serif !important;
   color:#231212;
+  background-color: #f6f6f6;
   margin: 0;
 }
 h1, h2{

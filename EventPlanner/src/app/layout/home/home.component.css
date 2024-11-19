@@ -47,6 +47,20 @@
     border-color: #d0cfe1 !important;
     color: #ffffff !important ;
   }
+
+  .offering-bg button[mat-stroked-button]{
+    border-radius: 20px;
+    border-color: #9c9ac9 !important;
+    color: #241212 !important;
+    padding: 10px 20px;
+    border-width: 3px;
+    font-size: 16px;
+  }
+  .offering-bg button[mat-stroked-button]:hover{
+    background-color: #b5b3c9;
+    border-color: #d0cfe1 !important;
+    color: #ffffff !important ;
+  }
   
   .event-filter {
     padding:20px;
@@ -96,19 +110,7 @@
     margin-left:30px;
   }
 
-  .offering-bg button[mat-stroked-button]{
-    border-radius: 20px;
-    border-color: #b0b39b !important;
-    color: #241212 !important;
-    padding: 10px 20px;
-    border-width: 3px;
-    font-size: 16px;
-  }
-  .offering-bg button[mat-stroked-button]:hover{
-    background-color: #d6ddad;
-    border-color: #e3e6d1 !important;
-    color: #ffffff !important ;
-  }
+  
 
   .reset-button{
     margin-left: 10px;
@@ -116,11 +118,6 @@
     border:none;
   }
 
-  .offering-bg .reset-button{
-    margin-left: 10px;
-    background-color: #d5dd94 !important;
-    border:none;
-  }
 
   .all-events-section{
     padding-bottom: 20px;
@@ -139,19 +136,19 @@
 
   }
   
-  .pagination-event {
+  .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
   }
-  .pagination-event p{
+  .pagination p{
     margin:0;
     color: gray;
     font-family: 'Roboto','serif';
   }
   
-  .pagination-event button {
+  .pagination button {
     padding: 10px 15px;
     color: #545283;
     border: 1px solid #ddd;
@@ -161,41 +158,14 @@
     cursor: pointer;
   }
   
-  .pagination-event button:hover {
+  .pagination button:hover {
     background-color: #9c9ac9;
-    color: #fff;
-  }
-
-  .pagination-offering {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-  }
-  .pagination-offering p{
-    margin:0;
-    color: gray;
-    font-family: 'Roboto','serif';
-  }
-  
-  .pagination-offering button {
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    color:#8b906a;
-    background-color: #fff;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .pagination-offering button:hover {
-    background-color: #cbd1a1;
     color: #fff;
   }
 
   .footer {
     background-color: #d0cfe1;
-    color: white;
+    color: #3A2D30;
     padding: 20px 0;
   }
   
@@ -212,7 +182,7 @@
   .footer-social h1 {
     font-size: 2em;
     margin-bottom: 10px;
-    color:white;
+    color:#3A2D30;
   }
   
   .footer-info p, 
@@ -226,7 +196,7 @@
   .footer-social .social-icons mat-icon {
     margin-right: 10px;
     font-size: 1.5em;
-    color: white;
+    color: #3A2D30;
   }
   
   .footer-social .social-icons mat-icon {
@@ -234,9 +204,6 @@
     margin-right: 15px;
   }
   
-  .footer-social .social-icons mat-icon:hover {
-    color: #ccc;
-  }
   .custom-icon {
     width: 24px;
     height: 24px;
@@ -272,5 +239,5 @@
   }
 
   .offering-bg{
-    background-color: #e3e6d1;
+    background-color: #d0cfe1;
   }
