@@ -65,7 +65,9 @@
   display: flex;
   justify-content: space-between;
 }
-
+.price-section mat-form-field {
+  width: 100%;
+}
 .photo-upload .upload-area {
   background: #c0bfbf;
   border: 2px dashed #9c555d;
@@ -130,3 +132,12 @@
   background-color: #bb9d98;
 }
 
+::ng-deep .currency-suffix {
+  display: flex;
+  align-items: center;
+  padding-right: 5px;
+}
+
+::ng-deep .mat-form-field-suffix {
+  top: 0 !important;
+}
