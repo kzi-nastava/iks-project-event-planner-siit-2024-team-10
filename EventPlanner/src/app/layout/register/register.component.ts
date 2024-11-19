@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UserService} from '../../user/user.service';
+import {Provider} from '../../user/model/provider.model'
+import {Organizer} from '../../user/model/organizer.model';
 
 @Component({
   selector: 'app-register',
@@ -31,8 +34,66 @@ export class RegisterComponent {
     companyPhotos: new FormControl('')
   });
 
+  constructor(private userService: UserService) {}
+
   companyInfoRequired(): boolean {
     return this.registerForm.get('role')?.value === 'provider';
   }
 
+  register() {
+    if(this.companyInfoRequired()){
+      if(!this.registerForm.valid)
+        return;
+      const provider:Provider ={
+        _id: Math.random(),
+        email: this.registerForm.value.email,
+        password: this.registerForm.value.password,
+        firstName: this.registerForm.value.firstName,
+        lastName: this.registerForm.value.lastName,
+        profilePhoto: this.registerForm.value.profilePhoto,
+        country: this.registerForm.value.country,
+        city: this.registerForm.value.city,
+        street: this.registerForm.value.street,
+        houseNumber: this.registerForm.value.houseNumber,
+        phone: this.registerForm.value.phone,
+        companyEmail: this.registerForm.value.companyEmail,
+        companyName: this.registerForm.value.companyName,
+        companyCountry: this.registerForm.value.companyCountry,
+        companyCity: this.registerForm.value.companyCity,
+        companyStreet: this.registerForm.value.companyStreet,
+        companyHouseNumber: this.registerForm.value.companyHouseNumber,
+        companyPhone: this.registerForm.value.companyPhone,
+        companyDescription: this.registerForm.value.companyDescription,
+        companyPhotos: this.registerForm.value.companyPhotos
+      };
+      this.userService.registerProvider(provider);
+    }
+    else{
+      if(!this.isOrganizerFormValid())
+        return;
+      const organizer:Organizer ={
+        _id: Math.random(),
+        email: this.registerForm.value.email,
+        password: this.registerForm.value.password,
+        firstName: this.registerForm.value.firstName,
+        lastName: this.registerForm.value.lastName,
+        profilePhoto: this.registerForm.value.profilePhoto,
+        country: this.registerForm.value.country,
+        city: this.registerForm.value.city,
+        street: this.registerForm.value.street,
+        houseNumber: this.registerForm.value.houseNumber,
+        phone: this.registerForm.value.phone,
+      };
+      this.userService.registerOrganizer(organizer);
+    }
+  }
+
+  isOrganizerFormValid():boolean{
+    const fieldNames:string[]=['email','password','firstName','lastName','profilePhoto','country','city','street'];
+    for(let fieldName of fieldNames){
+      if(!this.registerForm.get(fieldName).valid)
+        return false;
+    }
+    return true;
+  }
 }
