@@ -37,7 +37,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     BrowserAnimationsModule
   ],
   providers: [
-    // You can add services here if needed in the future
   ],
   bootstrap: [AppComponent]
 })

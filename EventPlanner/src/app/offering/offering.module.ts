@@ -18,11 +18,14 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon'; 
 import { CreateOfferingsComponent } from './create-offerings/create-offerings.component';
+import { EditServiceComponent } from './edit-service/edit-service.component';
+
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
     OfferingCardComponent,
     CreateOfferingsComponent,
+    EditServiceComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +47,8 @@ import { CreateOfferingsComponent } from './create-offerings/create-offerings.co
   exports: [
     ManageOfferingsComponent,
     CreateOfferingsComponent,
-    OfferingCardComponent
+    OfferingCardComponent,
+    EditServiceComponent
   ]
 })
 export class OfferingModule { }
