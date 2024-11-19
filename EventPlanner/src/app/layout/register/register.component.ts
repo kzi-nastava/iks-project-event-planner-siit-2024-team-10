@@ -31,7 +31,7 @@ export class RegisterComponent {
     companyPhotos: new FormControl('')
   });
 
-  comanyInfoRequired(): boolean {
+  companyInfoRequired(): boolean {
     return this.registerForm.get('role')?.value === 'provider';
   }
 
