@@ -3,3 +3,87 @@
       <button class="fab">+</button>
     </a>
   </div>
+  <div class="all-events">
+    <div class="offering-bg">
+      <div class="event-filter">
+        <h2>Your Services And Products</h2>
+        <mat-radio-group>
+          <mat-radio-button value="1">Services</mat-radio-button>
+          <mat-radio-button value="2">Products</mat-radio-button>
+        </mat-radio-group>
+        <div class="event-filter-components">
+          <div class="name-search-section">
+            <mat-form-field class="search-field">
+              <mat-label>Service/Product Name</mat-label>
+              <input matInput />
+            </mat-form-field>
+            <button mat-stroked-button class="search-button">
+              <mat-icon>search</mat-icon> Search
+            </button>
+          </div>
+          <div class="sort-filter">
+            <div class="sort-section">
+              <mat-form-field appearance="outline">
+                <mat-label>Sorting Criteria</mat-label>
+                <mat-select [(ngModel)]="selectedOfferingSortingCriteria">
+                  <mat-option *ngFor="let criteria of offeringSortingCriteria" [value]="criteria">
+                    {{ criteria }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline">
+                <mat-label>Sorting Direction</mat-label>
+                <mat-select [(ngModel)]="selectedSortingDirection">
+                  <mat-option *ngFor="let direction of sortingDirections" [value]="direction">
+                    {{ direction }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button mat-stroked-button (click)="applySorting('offering')">Sort</button>
+            </div>
+            <div class="filter-section">
+              <button mat-stroked-button>
+                <mat-icon>filter_list</mat-icon> Filter
+              </button>
+              <button mat-stroked-button class="reset-button">Reset Filters</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="all-events-section">
+      <div class="all-event-cards">
+        <app-offering-card *ngFor="let offering of allOfferings" [offering]="offering"></app-offering-card>
+      </div>
+      <div class="pagination">
+        <button mat-stroked-button>&lt; Back</button>
+        <p>Page 1 of 10</p>
+        <button mat-stroked-button>Next &gt;</button>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-info">
+        <h1>Event Planner</h1>
+        <p><mat-icon>phone_in_talk</mat-icon> +381 65 123 4567</p>
+        <p><mat-icon>mail</mat-icon> eventplanner&#64;gmail.com</p>
+        <p>
+          <mat-icon>location_on</mat-icon> 123 Maple Street<br />
+          Springfield, USA 12345
+        </p>
+      </div>
+      <div class="footer-social">
+        <h1>Find us on:</h1>
+        <div class="social-icons">
+          <mat-icon>facebook</mat-icon>
+          <img src="icons8-instagram.svg" alt="Instagram" class="custom-icon" />
+          <img src="icons8-twitter.svg" alt="Twitter" class="custom-icon" />
+          <img src="icons8-youtube.svg" alt="YouTube" class="custom-icon" />
+        </div>
+      </div>
+    </div>
+  </footer>
+  

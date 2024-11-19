@@ -1,10 +1,73 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Event } from '../../event/model/event.model';
+import { EventService } from '../../event/event.service';
+import { OfferingService } from '../../offering/offering.service';
+import { Offering } from '../../offering/model/offering.model';
 
 @Component({
   selector: 'app-manage-offerings',
   templateUrl: './manage-offerings.component.html',
-  styleUrl: './manage-offerings.component.css'
+  styleUrls: ['./manage-offerings.component.css','../../layout/home/home.component.css']
 })
 export class ManageOfferingsComponent {
 
+  allEvents: Event[] = [];
+  topEvents: Event[] = [];
+  topOfferings: Offering[] = [];
+  allOfferings: Offering[] = [];
+  clickedEvent: string;
+
+  sortingDirections = ['Ascending', 'Descending'];
+
+  eventSortingCriteria = ['None', 'Name', 'Date and Time', 'Rating', 'City'];
+
+  offeringSortingCriteria = ['None', 'Name', 'Rating', 'City', 'Price'];
+
+  selectedSortingDirection: string = 'Ascending';
+  selectedEventSortingCriteria: string = 'None';
+  selectedOfferingSortingCriteria: string = 'None';
+
+  constructor(private service: EventService, private offeringService: OfferingService) {}
+
+  ngOnInit(): void {
+    this.service.getAll().subscribe({
+      next: (event: Event[]) => {
+        this.allEvents = event;
+      },
+      error: (err) => {
+        console.error('Error fetching events:', err);
+      }
+    });
+
+    this.service.getTop().subscribe({
+      next: (events: Event[]) => {
+        this.topEvents = events;
+      },
+      error: (err) => {
+        console.error('Error fetching events:', err);
+      }
+    });
+
+    this.offeringService.getAll().subscribe({
+      next: (offering: Offering[]) => {
+        this.allOfferings = offering;
+      },
+      error: (err) => {
+        console.error('Error fetching events:', err);
+      }
+    });
+
+    this.topOfferings = this.allOfferings.slice(0, 5);
+
+    
+  }
+  applySorting(type: 'event' | 'offering') {
+    if (type === 'event') {
+      console.log(`Sorting Events by ${this.selectedEventSortingCriteria} in ${this.selectedSortingDirection} order.`);
+
+    } else {
+      console.log(`Sorting Offerings by ${this.selectedOfferingSortingCriteria} in ${this.selectedSortingDirection} order.`);
+    }
+  }
 }
+

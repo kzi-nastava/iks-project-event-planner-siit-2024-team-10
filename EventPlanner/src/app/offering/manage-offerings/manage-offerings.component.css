@@ -8,7 +8,7 @@
     width: 60px;
     height: 60px;
     border-radius: 50%; 
-    background-color: #007bff; 
+    background-color: #d0cfe1; 
     color: white;
     font-size: 30px;
     border: none;
@@ -21,6 +21,6 @@
   }
   
   .fab:hover {
-    background-color: #0056b3; 
+    background-color: #a9a6e2; 
   }
   
