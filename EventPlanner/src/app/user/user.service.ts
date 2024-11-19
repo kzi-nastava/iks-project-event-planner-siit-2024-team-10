@@ -16,4 +16,9 @@ export class UserService {
   registerProvider(provider: Provider) : void {
     console.log(provider);
   }
+
+  login(email:string, password:string) : void {
+    console.log(email);
+    console.log(password);
+  }
 }
