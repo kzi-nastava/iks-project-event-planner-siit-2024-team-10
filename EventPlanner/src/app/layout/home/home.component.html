@@ -1,1 +1,128 @@
-<p>home works!</p>
+<div class="home-container">
+  <div class="overlay">
+    <h1>Plan Your Events With Us!</h1>
+    <button mat-stroked-button>JOIN US</button>
+  </div>
+</div>
+
+<div class="top-events">
+  <h2>Top Events In Your Area</h2>
+  <div class="top-event-cards">
+    <app-event-card *ngFor="let event of topEvents" [event]="event"></app-event-card>
+  </div>
+</div>
+
+<div class="all-events">
+  <div class="event-filter">
+    <h2>All Events In Your Area</h2>
+    <div class="event-filter-components">
+      <div class="name-search-section">
+        <input class="search-field" type="text" placeholder="Event Name">
+        <button mat-stroked-button class="search-button"><mat-icon>search</mat-icon> Search</button>
+      </div>
+      <div class="sort-filter">
+        <div class="sort-section">
+          <select>
+            <option>Sorting Criteria</option>
+          </select>
+          <select>
+            <option>Sorting Direction</option>
+          </select>
+          <button mat-stroked-button>Sort</button>
+        </div>
+        <div class="filter-section">
+          <button mat-stroked-button><mat-icon>filter_list</mat-icon> Filter</button>
+          <button mat-stroked-button class="reset-button">Reset Filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="all-events-section">
+    <div class="all-event-cards">
+      <app-event-card *ngFor="let event of allEvents" [event]="event"></app-event-card>
+    </div>
+    <div class="pagination">
+      <button>&lt;</button>
+      <button>1</button>
+      <button>2</button>
+      <button>...</button>
+      <button>6</button>
+      <button>&gt;</button>
+    </div>
+  </div>
+</div>
+
+<!-- OFFERING -->
+
+<div class="top-events">
+  <h2>Top Offerings In Your Area</h2>
+  <div class="top-event-cards">
+    <app-offering-card *ngFor="let offering of topOfferings" [offering]="offering"></app-offering-card>
+  </div>
+</div>
+
+<div class="all-events">
+  <div class="event-filter">
+    <h2>All Offerings In Your Area</h2>
+    <mat-radio-group>
+      <mat-radio-button value="1">Services</mat-radio-button>
+      <mat-radio-button value="2">Products</mat-radio-button>
+    </mat-radio-group>
+    <div class="event-filter-components">
+      <div class="name-search-section">
+        <input class="search-field" type="text" placeholder="Offering Name">
+        <button mat-stroked-button class="search-button"><mat-icon>search</mat-icon> Search</button>
+      </div>
+      <div class="sort-filter">
+        <div class="sort-section">
+          <select>
+            <option>Sorting Criteria</option>
+          </select>
+          <select>
+            <option>Sorting Direction</option>
+          </select>
+          <button mat-stroked-button>Sort</button>
+        </div>
+        <div class="filter-section">
+          <button mat-stroked-button><mat-icon>filter_list</mat-icon> Filter</button>
+          <button mat-stroked-button class="reset-button">Reset Filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="all-events-section">
+    <div class="all-event-cards">
+      <app-offering-card *ngFor="let offering of allOfferings" [offering]="offering"></app-offering-card>
+
+    </div>
+    <div class="pagination">
+      <button>&lt;</button>
+      <button>1</button>
+      <button>2</button>
+      <button>...</button>
+      <button>6</button>
+      <button>&gt;</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-info">
+      <h1>Event Planner</h1>
+      <p><mat-icon>phone_in_talk</mat-icon> +381 65 123 4567</p>
+      <p><mat-icon>mail</mat-icon> eventplanner&#64;gmail.com</p>
+      <p><mat-icon>location_on</mat-icon> 123 Maple Street<br>Springfield, USA 12345</p>
+    </div>
+    <div class="footer-social">
+      <h1>Find us on:</h1>
+      <div class="social-icons">
+        <mat-icon>facebook</mat-icon>
+        <img src="icons8-instagram.svg" alt="Instagram" class="custom-icon" />
+        <img src="icons8-twitter.svg" alt="Twitter" class="custom-icon" />
+        <img src="icons8-youtube.svg" alt="YouTube" class="custom-icon" />
+      </div>
+    </div>
+  </div>
+</footer>

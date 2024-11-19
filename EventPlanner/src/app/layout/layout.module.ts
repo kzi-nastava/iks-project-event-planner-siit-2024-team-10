@@ -5,7 +5,12 @@ import { MaterialModule } from '../infrastructure/material/material.module';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import {MatIcon} from "@angular/material/icon";
+import { MatCardModule } from '@angular/material/card';
 import { LoginComponent } from './login/login.component';
+import {MatButtonModule} from '@angular/material/button';
+import { EventModule } from '../event/event.module';
+import { OfferingModule } from '../offering/offering.module';
+import {MatInputModule} from '@angular/material/input';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
@@ -27,7 +32,12 @@ import { RegisterComponent } from './register/register.component';
     MatRadioButton,
     MatRadioGroup,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatInputModule,
+    EventModule,
+    OfferingModule
   ],
   exports: [NavBarComponent]
 })

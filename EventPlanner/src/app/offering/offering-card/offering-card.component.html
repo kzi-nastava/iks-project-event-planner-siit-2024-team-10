@@ -1,0 +1,29 @@
+<mat-card class="offering-card" appearance="outlined" (click)="onOfferingClicked()">
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title>{{offering.name}}</mat-card-title>
+      <mat-card-subtitle>{{offering.provider}}</mat-card-subtitle>
+      <p class="price">{{offering.price}}€</p>
+    </mat-card-title-group>
+    <picture><img [src]="offering.picture" alt="{{offering.name}}"></picture>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="card-footer">
+      <div class="bottom-row">
+        <div class="tags-rating">
+          <div class="tags">
+            <span class="tag" *ngIf="isProduct(offering)">PRODUCT</span>
+            <span class="tag" *ngIf="isService(offering)">SERVICE</span>
+            <span class="tag">{{offering.category}}</span>
+          </div>
+          <div class="rating">
+            <span>{{offering.rating}}★</span>
+          </div>
+        </div>
+        <div class="add-to-favorite">
+          <button mat-button><mat-icon>favorite_border</mat-icon></button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
