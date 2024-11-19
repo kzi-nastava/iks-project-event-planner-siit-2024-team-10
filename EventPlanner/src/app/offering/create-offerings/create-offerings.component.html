@@ -1,3 +1,4 @@
+<div style="background-color: #d0cfe1;">
 <div class="offering-container">
   <form [formGroup]="offeringForm" (ngSubmit)="onSubmit()" class="elegant-form">
     <div class="form-header">
@@ -36,16 +37,16 @@
       </mat-form-field>
 
       <div class="price-section">
-        <mat-form-field appearance="outline" class="price-input">
-          <mat-label>Price</mat-label>
-          <input matInput type="number" formControlName="price" placeholder="0.00">
-          <span matPrefix>$&nbsp;</span>
-        </mat-form-field>
+        <mat-form-field style="padding-right: 10px;" appearance="outline">
+            <mat-label>Price</mat-label>
+            <input matInput type="number" formControlName="price" placeholder="0.00">
+            <span matSuffix class="currency-suffix">$</span>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="discount-input">
+        <mat-form-field style="padding-left: 10px;" appearance="outline">
           <mat-label>Discount</mat-label>
           <input matInput type="number" formControlName="discount" placeholder="0">
-          <span matSuffix>%</span>
+          <span matSuffix class="currency-suffix">%</span>
         </mat-form-field>
       </div>
     </div>
@@ -89,13 +90,13 @@
         </mat-form-field>
       </div>
 
-      <div *ngIf="offeringForm.get('timeType')?.value === 'flexible'" class="flexible-duration">
-        <mat-form-field appearance="outline">
+      <div *ngIf="offeringForm.get('timeType')?.value === 'flexible'" class="price-section">
+        <mat-form-field style="padding-right: 20px;" appearance="outline">
           <mat-label>Minimum Hours</mat-label>
           <input matInput type="number" formControlName="minTime">
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>Maximum Hours</mat-label>
+          <mat-label style="padding-left: 20px;" >Maximum Hours</mat-label>
           <input matInput type="number" formControlName="maxTime">
         </mat-form-field>
       </div>
@@ -103,8 +104,8 @@
 
     <div class="form-section deadlines">
       <h3 class="small-subtitle">Deadlines</h3>
-      <div class="deadline-grid">
-        <mat-form-field appearance="outline">
+      <div class="price-section">
+        <mat-form-field style="padding-right: 10px;" appearance="outline">
           <mat-label>Reservation Deadline</mat-label>
           <mat-select formControlName="reservationDeadline">
             <mat-option value="1day">1 Day Before</mat-option>
@@ -113,7 +114,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field style="padding-left: 10px;" appearance="outline">
           <mat-label>Cancellation Deadline</mat-label>
           <mat-select formControlName="cancellationDeadline">
             <mat-option value="1day">1 Day Before</mat-option>
@@ -134,8 +135,9 @@
 
     <div class="form-section submit-section">
       <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="!offeringForm.valid">
-        Create Premium Offering
+        Create Service
       </button>
     </div>
   </form>
+</div>
 </div>

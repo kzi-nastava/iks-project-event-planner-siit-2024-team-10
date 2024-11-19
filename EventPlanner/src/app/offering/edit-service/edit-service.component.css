@@ -1,0 +1,143 @@
+.offering-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .elegant-form {
+    padding: 30px;
+    border-radius: 10px;
+  }
+  
+  .form-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-header h1 {
+    font-size: 26px;
+    color: #252629;
+    margin-bottom: 5px;
+  }
+  
+  .form-header p {
+    color: #908f8c;
+    font-size: 14px;
+  }
+  
+  .form-section {
+    margin-bottom: 20px;
+  }
+  
+  .category-section {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .category-dropdown {
+    width: 100%;
+  }
+  
+  .subtle-text {
+    font-size: 12px;
+    color: #a88957;
+    text-align: center;
+  }
+  
+  .subtle-text a {
+    color: #9c555d;
+    text-decoration: none;
+  }
+  
+  .subtle-text a:hover {
+    text-decoration: underline;
+    color: #bb9d98;
+  }
+  
+  .details-grid mat-form-field {
+    width: 100%;
+  }
+  
+  .price-section {
+    display: flex;
+    justify-content: space-between;
+  }
+  .price-section mat-form-field {
+    width: 100%;
+  }
+  .photo-upload .upload-area {
+    background: #c0bfbf;
+    border: 2px dashed #9c555d;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .upload-area:hover {
+    background: #bb9d98;
+  }
+  
+  .small-subtitle {
+    font-size: 16px;
+    color: #252629;
+    margin-bottom: 10px;
+  }
+  
+  .selected-labels {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .clickable-label {
+    background-color: transparent;
+    color: #9c555d;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .selected-label {
+    background-color: #9c555d;
+    color: #ebe3e5;
+  }
+  
+  .toggle-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .submit-section {
+    text-align: center;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #f8adbb;
+    color: #252629;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-btn:hover {
+    background-color: #bb9d98;
+  }
+  
+  ::ng-deep .currency-suffix {
+    display: flex;
+    align-items: center;
+    padding-right: 5px;
+  }
+  
+  ::ng-deep .mat-form-field-suffix {
+    top: 0 !important;
+  }
