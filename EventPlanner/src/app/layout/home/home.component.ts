@@ -16,6 +16,16 @@ export class HomeComponent implements OnInit {
   allOfferings: Offering[] = [];
   clickedEvent: string;
 
+  sortingDirections = ['Ascending', 'Descending'];
+
+  eventSortingCriteria = ['None', 'Name', 'Date and Time', 'Rating', 'City'];
+
+  offeringSortingCriteria = ['None', 'Name', 'Rating', 'City', 'Price'];
+
+  selectedSortingDirection: string = 'Ascending';
+  selectedEventSortingCriteria: string = 'None';
+  selectedOfferingSortingCriteria: string = 'None';
+
   constructor(private service: EventService, private offeringService: OfferingService) {}
 
   ngOnInit(): void {
@@ -49,6 +59,14 @@ export class HomeComponent implements OnInit {
     this.topOfferings = this.allOfferings.slice(0, 5);
 
     
+  }
+  applySorting(type: 'event' | 'offering') {
+    if (type === 'event') {
+      console.log(`Sorting Events by ${this.selectedEventSortingCriteria} in ${this.selectedSortingDirection} order.`);
+
+    } else {
+      console.log(`Sorting Offerings by ${this.selectedOfferingSortingCriteria} in ${this.selectedSortingDirection} order.`);
+    }
   }
 }
 

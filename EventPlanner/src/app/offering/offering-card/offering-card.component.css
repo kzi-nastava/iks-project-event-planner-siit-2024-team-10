@@ -1,7 +1,8 @@
 .offering-card {
   margin: 10px;
-  width: 450px;
-  height: auto;
+  width: 430px;
+  min-height: 180px;
+  height: fit-content;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -97,7 +98,11 @@ mat-card-subtitle {
   justify-content: center;
   border-radius: 50%;
   min-width:46px;
+  transition: background-color 0.3s ease-in-out;
   min-height:46px;
+}
+.add-to-favorite button:hover{
+  background-color: #dac8c8;
 }
 
 .add-to-favorite mat-icon {
@@ -107,7 +112,7 @@ mat-card-subtitle {
   align-items: center;
   justify-content: center;
   vertical-align: middle;
-  color: #5FA3A2;
+  color: #721a1a;
   font-size: 27px;
   height: 27px;
   width: 27px;
