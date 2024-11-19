@@ -1,94 +1,102 @@
-<img class="img-left" src="https://i.ibb.co/SdjqS78/backgound.jpg" alt="register-img">
-<img class="img-right" src="https://i.ibb.co/SdjqS78/backgound.jpg" alt="register-img">
-<form [formGroup]="registerForm">
-  <h1>Register</h1>
-  <mat-form-field appearance="outline">
-    <mat-label>Email</mat-label>
-    <input matInput formControlName="email" name="email">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Password</mat-label>
-    <input type="password" matInput formControlName="password" name="password">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Password again</mat-label>
-    <input type="password" matInput formControlName="confirmPassword" name="confirmPassword">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>First name</mat-label>
-    <input matInput formControlName="firstName" name="firstName">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Last name</mat-label>
-    <input matInput formControlName="lastName" name="lastName">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Profile photo</mat-label>
-    <input matInput formControlName="profilePhoto" name="profilePhoto">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Country</mat-label>
-    <input matInput formControlName="country" name="country">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>City</mat-label>
-    <input matInput formControlName="city" name="city">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Street</mat-label>
-    <input matInput formControlName="street" name="street">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>House number</mat-label>
-    <input matInput formControlName="houseNumber" name="houseNumber">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Phone</mat-label>
-    <input matInput formControlName="phone" name="phone">
-  </mat-form-field>
-  <p>Select role:</p>
-  <mat-radio-group aria-label="Select role" formControlName="role" name="role">
-    <mat-radio-button value="organizer">Event organizer</mat-radio-button>
-    <mat-radio-button value="provider">Product/service provider</mat-radio-button>
-  </mat-radio-group>
-  <div *ngIf=this.companyInfoRequired()>
-    <h1>Enter company info</h1>
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="companyEmail" name="companyEmail">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="companyName" name="companyName">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Country</mat-label>
-      <input matInput formControlName="companyCountry" name="companyCountry">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>City</mat-label>
-      <input matInput formControlName="companyCity" name="companyCity">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Street</mat-label>
-      <input matInput formControlName="companyStreet" name="companyStreet">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>House number</mat-label>
-      <input matInput formControlName="companyHouseNumber" name="companyHouseNumber">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Phone</mat-label>
-      <input matInput formControlName="companyPhone" name="companyPhone">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Description</mat-label>
-      <textarea matInput rows="4" placeholder="Enter description" formControlName="companyDescription" name="companyDescription"></textarea>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Photos (optional)</mat-label>
-      <input matInput formControlName="companyPhotos" name="companyPhotos">
-    </mat-form-field>
+<div class="outer-container">
+  <div class="register-container">
+    <form [formGroup]="registerForm" class="elegant-form">
+      <div class="form-header">
+        <h1>Register</h1>
+      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" name="email">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput formControlName="password" name="password">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Password again</mat-label>
+        <input type="password" matInput formControlName="confirmPassword" name="confirmPassword">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>First name</mat-label>
+        <input matInput formControlName="firstName" name="firstName">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Last name</mat-label>
+        <input matInput formControlName="lastName" name="lastName">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Profile photo</mat-label>
+        <input matInput formControlName="profilePhoto" name="profilePhoto">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Country</mat-label>
+        <input matInput formControlName="country" name="country">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input matInput formControlName="city" name="city">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Street</mat-label>
+        <input matInput formControlName="street" name="street">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>House number</mat-label>
+        <input matInput formControlName="houseNumber" name="houseNumber">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone" name="phone">
+      </mat-form-field>
+      <p>Select role:</p>
+      <mat-radio-group color="primary" aria-label="Select role" formControlName="role" name="role">
+        <mat-radio-button color="primary" value="organizer">Event organizer</mat-radio-button>
+        <mat-radio-button color="primary" value="provider">Product/service provider</mat-radio-button>
+      </mat-radio-group>
+      <div *ngIf=this.companyInfoRequired()>
+        <div class="form-header">
+          <h1>Enter company info</h1>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="companyEmail" name="companyEmail">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="companyName" name="companyName">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
+          <input matInput formControlName="companyCountry" name="companyCountry">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="companyCity" name="companyCity">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Street</mat-label>
+          <input matInput formControlName="companyStreet" name="companyStreet">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>House number</mat-label>
+          <input matInput formControlName="companyHouseNumber" name="companyHouseNumber">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Phone</mat-label>
+          <input matInput formControlName="companyPhone" name="companyPhone">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <textarea matInput rows="4" placeholder="Enter description" formControlName="companyDescription" name="companyDescription"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Photos (optional)</mat-label>
+          <input matInput formControlName="companyPhotos" name="companyPhotos">
+        </mat-form-field>
+      </div>
+      <button mat-flat-button class="submit-btn"  (click)="register()">
+        Register
+      </button>
+    </form>
   </div>
-  <button mat-stroked-button (click)="register()">Register</button>
-</form>
+</div>

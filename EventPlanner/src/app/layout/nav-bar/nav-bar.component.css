@@ -2,10 +2,8 @@ mat-toolbar {
   background-color: #d0cfe1;
   position: sticky;
   z-index: 1;
-}
-
-mat-icon{
-  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color:#3a2d30;
 }
 
 .navigation-container{
@@ -23,6 +21,5 @@ button {
 }
 
 span {
-  font-family: "Calisto MT", Calisto, "Times New Roman", serif;
-  color: white
+  font-family: 'Fira Sans Condensed', serif
 }
