@@ -120,24 +120,27 @@ export class DetailsPageComponent implements OnInit {
     this.isFavorite = !this.isFavorite;
 }
 navigateToEdit(): void {
-  const prefilledData = {
-    serviceCategory: 'Default Category',
-    name: 'Sample Service',
-    description: 'A brief description of the service',
-    specification: 'Detailed specifications',
-    price: 100,
-    discount: 10,
-    timeType: 'fixed',
-    fixedTime: 2,
-    minTime: '',
-    maxTime: '',
-    reservationDeadline: '1day',
-    cancellationDeadline: '3days',
-    isAvailable: true,
-    isVisible: true
-  };
+  if (this.offering) {
+    const prefilledData = {
+      serviceCategory: this.offering.category || 'Default Category',
+      name: this.offering.name || '',
+      description: this.offering.description || '',
+      specification: this.isService(this.offering) ? this.offering.specification || '' : '',
+      price: this.offering.price || 0,
+      discount: this.offering.discount || 0,
+      timeType: this.isService(this.offering) ? this.offering.timeType || 'fixed' : 'fixed',
+      fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
+      minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
+      maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
+      reservationDeadline: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
+      cancellationDeadline: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
+      isAvailable: this.offering.isAvailable || false,
+      isVisible: this.offering.isVisible || false
+    };
 
-  // navigate to 'edit-service' and pass data (adjust routing if necessary)
-  this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+    // Navigate to 'edit-service' page with the prefilled data
+    this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+  }
 }
+
 }

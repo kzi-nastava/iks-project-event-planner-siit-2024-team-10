@@ -442,3 +442,24 @@
     height: 48px;
   }
 }
+.edit-fab {
+  position: fixed; /* Or absolute, depending on your needs */
+  bottom: 16px;
+  right: 16px;
+  background-color: #d0cfe1; /* Choose a color that fits your theme */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.edit-fab:hover {
+  background-color: #bebce6; /* Slightly darker shade on hover */
+}

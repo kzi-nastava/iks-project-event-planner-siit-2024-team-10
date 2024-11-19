@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
 import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
 
 @Component({
@@ -19,16 +20,20 @@ export class EditServiceComponent implements OnInit {
   selectedEventTypes: Set<string> = new Set();
   timeOptions = [1, 2, 3, 4, 5];
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog) {}
-
-  openDialog(){
-    this.dialog.open(CreateCategoryDialogComponent,{
-      width:"350px"
-    })
-  }
+  constructor(
+    private fb: FormBuilder, 
+    private dialog: MatDialog, 
+    private route: ActivatedRoute // Inject ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
+
+    // Get state data and prefill the form if data exists
+    const stateData = history.state.data; // Retrieve the state data passed during navigation
+    if (stateData) {
+      this.prefillForm(stateData);
+    }
   }
 
   initForm(): void {
@@ -48,6 +53,32 @@ export class EditServiceComponent implements OnInit {
       cancellationDeadline: [''],
       isAvailable: [true],
       isVisible: [true]
+    });
+  }
+
+  // Method to prefill the form
+  prefillForm(data: any): void {
+    this.offeringForm.patchValue({
+      serviceCategory: data.serviceCategory || '',
+      name: data.name || '',
+      description: data.description || '',
+      specification: data.specification || '',
+      price: data.price || 0,
+      discount: data.discount || 0,
+      timeType: data.timeType || 'fixed',
+      fixedTime: data.fixedTime || '',
+      minTime: data.minTime || '',
+      maxTime: data.maxTime || '',
+      reservationDeadline: data.reservationDeadline || '',
+      cancellationDeadline: data.cancellationDeadline || '',
+      isAvailable: data.isAvailable || false,
+      isVisible: data.isVisible || false
+    });
+  }
+
+  openDialog(): void {
+    this.dialog.open(CreateCategoryDialogComponent, {
+      width: '350px'
     });
   }
 
@@ -77,5 +108,4 @@ export class EditServiceComponent implements OnInit {
       // Add submission logic
     }
   }
-  
 }
