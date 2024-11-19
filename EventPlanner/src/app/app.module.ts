@@ -7,10 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from './layout/layout.module';
 import { OfferingModule } from './offering/offering.module';
 import { WineModule } from './wine/wine.module';
-import {MatButtonModule} from '@angular/material/button';
-import { EventModule } from './event/event.module'
-import { CreateCategoryDialogComponent } from './offering/create-category-dialog/create-category-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
+import { EventModule } from './event/event.module';
+import { CreateCategoryDialogComponent } from './offering/create-category-dialog/create-category-dialog.component';
 import { MatIconModule } from '@angular/material/icon'; 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -28,20 +27,16 @@ import { MatDialogModule } from '@angular/material/dialog';
     LayoutModule,
     WineModule,
     MatButtonModule,
-    EventModule
+    EventModule,
     OfferingModule,
-  ],
-  providers: [
-    provideAnimationsAsync(),
-    WineModule,
-    RouterModule,
-    BrowserAnimationsModule, 
-    MatButtonModule,
     MatIconModule, 
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    BrowserAnimationsModule
+  ],
+  providers: [
   ],
   bootstrap: [AppComponent]
 })
