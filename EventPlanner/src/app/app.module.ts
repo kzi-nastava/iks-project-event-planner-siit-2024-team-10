@@ -21,11 +21,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
-    CreateCategoryDialogComponent
+    CreateCategoryDialogComponent,
   ],
   imports: [
     BrowserModule,
