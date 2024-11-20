@@ -15,6 +15,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { ReactiveFormsModule } from '@angular/forms';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+
+
 
 @NgModule({
   declarations: [
@@ -34,7 +40,11 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatInputModule,
     FormsModule,
     MatDialogModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatSelectModule,
+    MatSliderModule,
+    ReactiveFormsModule,
+    MatDatepickerModule
   ],
   providers: [
   ],
