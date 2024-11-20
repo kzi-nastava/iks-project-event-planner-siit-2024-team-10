@@ -135,10 +135,12 @@ navigateToEdit(): void {
       fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
       minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
       maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
-      reservationDeadline: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
-      cancellationDeadline: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
+      reservationPeriod: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
+      cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
       isAvailable: this.offering.isAvailable || false,
-      isVisible: this.offering.isVisible || false
+      isVisible: this.offering.isVisible || false,
+      autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,    
+      eventTypes:this.offering.eventTypes
     };
 
     this.router.navigate(['/edit-service'], { state: { data: prefilledData } });

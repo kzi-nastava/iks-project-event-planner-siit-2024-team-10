@@ -10,7 +10,7 @@ export interface Offering {
     price: number;
     rating: string;
     eventTypes?: string[];
-    isAvailable?: boolean;
-    isVisible?: boolean;
+    isAvailable: boolean;
+    isVisible: boolean;
     isProduct: boolean;
 }

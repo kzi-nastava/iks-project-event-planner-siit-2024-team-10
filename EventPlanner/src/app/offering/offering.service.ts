@@ -39,7 +39,8 @@ const PRODUCTS: Product[] = [
     rating: '4.7',
     eventTypes: ['Concert', 'Conference'],
     isProduct: true,
-    description: "this is description",
+    description: "this is description",  isVisible: true, isAvailable:true
+
   },
   {
     id: 2,
@@ -51,7 +52,8 @@ const PRODUCTS: Product[] = [
     rating: '4.5',
     eventTypes: ['Festival', 'Exhibition'],
     isProduct: true,
-    description: "this is description",
+    description: "this is description",  isVisible: true,
+    isAvailable:true
   },
   {
     id: 3,
@@ -63,7 +65,10 @@ const PRODUCTS: Product[] = [
     rating: '4.8',
     eventTypes: ['Concert', 'Conference', 'Seminar'],
     isProduct: true,
-    description: "this is description",
+    description: "this is description",  
+    isVisible: true,
+    isAvailable:true
+
   },
   {
     id: 4,
@@ -75,7 +80,10 @@ const PRODUCTS: Product[] = [
     rating: '4.6',
     eventTypes: ['Outdoor Wedding', 'Festival', 'Exhibition'],
     isProduct: true,
-    description: "this is description",
+    description: "this is description",  
+    isVisible: true,
+    isAvailable:true
+
   },
   {
     id: 5,
@@ -87,7 +95,10 @@ const PRODUCTS: Product[] = [
     rating: '4.9',
     eventTypes: ['Conference', 'Seminar'],
     isProduct: true,
-    description: "this is description",
+    description: "this is description",  
+    isVisible: true,
+    isAvailable:true
+
   }
 ];
 
@@ -110,7 +121,10 @@ const SERVICES: Service[] = [
     description: "this is description",
     discount:5,
     eventTypes:["Wedding","Graduation"],
-    fixedTime:false
+    fixedTime:false,  
+    isVisible: true,
+    isAvailable:true
+
   },
   {
     id: 7,
@@ -130,7 +144,9 @@ const SERVICES: Service[] = [
     description: "this is description",
     discount:10,
     eventTypes:["Wedding","Graduation"],
-    fixedTime:false
+    fixedTime:false,
+    isVisible: true,
+    isAvailable:true
 
   },
   {
@@ -151,7 +167,10 @@ const SERVICES: Service[] = [
     autoConfirm: false,
     discount:15,
     eventTypes:["Wedding","Graduation"],
-    fixedTime:false
+    fixedTime:false,  
+    isVisible: true,
+    isAvailable:true
+
 
   },
   {
@@ -172,7 +191,10 @@ const SERVICES: Service[] = [
     autoConfirm: true,
     discount:20,
     eventTypes:["Wedding","Graduation"],
-    fixedTime:false
+    fixedTime:false,  
+    isVisible: true,
+    isAvailable:true
+
   },
   {
     id: 10,
@@ -192,8 +214,9 @@ const SERVICES: Service[] = [
     autoConfirm: true,
     discount:15,
     eventTypes:["Wedding","Graduation"],
-    fixedTime:false
-
+    fixedTime:false,
+    isVisible: true,
+    isAvailable:true
   }
 ];
 

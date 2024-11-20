@@ -50,12 +50,15 @@
         <div class="form-section event-types">
           <h3 class="small-subtitle">Select Applicable Event Types</h3>
           <div class="selected-labels">
-            <span *ngFor="let type of eventTypes" 
-                  [ngClass]="{'selected-label': isSelected(type)}" 
-                  (click)="toggleSelection(type)"
-                  class="clickable-label">{{type}}</span>
+            <span 
+              *ngFor="let type of eventTypes" 
+              [ngClass]="{'selected-label': isSelected(type)}" 
+              (click)="toggleSelection(type)"
+              class="clickable-label">
+              {{type}}
+            </span>
           </div>
-        </div>
+        </div>        
     
         <div class="form-section time-selection">
           <h3 class="small-subtitle">Service Duration</h3>
@@ -88,39 +91,34 @@
         </div>
     
         <div class="form-section deadlines">
-          <h3 class="small-subtitle">Deadlines</h3>
-          <div class="price-section">
-            <mat-form-field style="padding-right: 10px;" appearance="outline">
-              <mat-label>Reservation Deadline</mat-label>
-              <mat-select formControlName="reservationDeadline">
-                <mat-option value="1day">1 Day Before</mat-option>
-                <mat-option value="3days">3 Days Before</mat-option>
-                <mat-option value="1week">1 Week Before</mat-option>
-              </mat-select>
-            </mat-form-field>
-    
-            <mat-form-field style="padding-left: 10px;" appearance="outline">
-              <mat-label>Cancellation Deadline</mat-label>
-              <mat-select formControlName="cancellationDeadline">
-                <mat-option value="1day">1 Day Before</mat-option>
-                <mat-option value="3days">3 Days Before</mat-option>
-                <mat-option value="1week">1 Week Before</mat-option>
-              </mat-select>
-            </mat-form-field>
+          <h3 class="small-subtitle">Deadlines (in days)</h3>
+            <div class="price-section">
+              <mat-form-field style="padding-right: 10px;" appearance="outline">
+                <mat-label>Reservation Deadline</mat-label>
+                <input matInput formControlName="reservationDeadline" type="number" min="0">
+              </mat-form-field>
+        
+              <mat-form-field style="padding-left: 10px;" appearance="outline">
+                <mat-label>Cancellation Deadline</mat-label>
+                <input matInput formControlName="cancellationDeadline" type="number" min="0">
+              </mat-form-field>
           </div>
-        </div>
+        </div>        
     
         <div class="form-section toggles">
           <h3 class="small-subtitle">Service Availability</h3>
           <div class="toggle-container">
-            <mat-slide-toggle formControlName="isAvailable" color="primary">Service Available</mat-slide-toggle>
+            <mat-slide-toggle 
+            formControlName="isAvailable" 
+            color="primary"
+            [checked]="offeringForm.get('isAvailable')?.value">Service Available</mat-slide-toggle>
             <mat-slide-toggle formControlName="isVisible" color="accent">Service Visible</mat-slide-toggle>
           </div>
         </div>
     
         <div class="form-section submit-section">
           <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="!offeringForm.valid">
-            Create Service
+            Edit Service
           </button>
         </div>
       </form>

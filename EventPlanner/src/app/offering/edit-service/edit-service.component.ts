@@ -1,36 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
+import { ActivatedRoute } from '@angular/router';
 import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
 
 @Component({
   selector: 'app-edit-service',
   templateUrl: './edit-service.component.html',
-  styleUrl: './edit-service.component.css'
+  styleUrls: ['./edit-service.component.css']
 })
 export class EditServiceComponent implements OnInit {
   offeringForm: FormGroup;
   eventTypes = [
-    'Wedding', 
-    'Birthday', 
-    'Corporate', 
+    'Wedding',
+    'Birthday',
+    'Corporate',
     'Anniversary'
   ];
   selectedEventTypes: Set<string> = new Set();
   timeOptions = [1, 2, 3, 4, 5];
 
   constructor(
-    private fb: FormBuilder, 
-    private dialog: MatDialog, 
-    private route: ActivatedRoute // Inject ActivatedRoute
+    private fb: FormBuilder,
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.initForm();
-
-    // Get state data and prefill the form if data exists
-    const stateData = history.state.data; // Retrieve the state data passed during navigation
+    const stateData = history.state.data;
     if (stateData) {
       this.prefillForm(stateData);
     }
@@ -45,7 +43,7 @@ export class EditServiceComponent implements OnInit {
       price: ['', [Validators.required, Validators.min(0)]],
       discount: ['', [Validators.min(0), Validators.max(100)]],
       photos: [[]],
-      timeType: ['fixed'],
+      timeType: ['fixed'], // Dodato polje za tip vremena
       fixedTime: [''],
       minTime: [''],
       maxTime: [''],
@@ -56,8 +54,8 @@ export class EditServiceComponent implements OnInit {
     });
   }
 
-  // Method to prefill the form
   prefillForm(data: any): void {
+    const timeType = data.fixedTime ? 'fixed' : 'flexible';
     this.offeringForm.patchValue({
       serviceCategory: data.serviceCategory || '',
       name: data.name || '',
@@ -65,16 +63,22 @@ export class EditServiceComponent implements OnInit {
       specification: data.specification || '',
       price: data.price || 0,
       discount: data.discount || 0,
-      timeType: data.timeType || 'fixed',
-      fixedTime: data.fixedTime || '',
-      minTime: data.minTime || '',
-      maxTime: data.maxTime || '',
-      reservationDeadline: data.reservationDeadline || '',
-      cancellationDeadline: data.cancellationDeadline || '',
-      isAvailable: data.isAvailable || false,
-      isVisible: data.isVisible || false
+      timeType,
+      fixedTime: timeType === 'fixed' ? data.fixedTime : '',
+      minTime: timeType === 'flexible' ? data.minTime : '',
+      maxTime: timeType === 'flexible' ? data.maxTime : '',
+      reservationDeadline: data.reservationPeriod || 0, 
+      cancellationDeadline: data.cancellationPeriod || 0, 
+      isAvailable: data.isAvailable !== undefined ? data.isAvailable : true,
+      isVisible: data.isVisible !== undefined ? data.isVisible : true,
     });
-  }
+  
+    // labels for events
+    if (data.eventTypes) {
+      data.eventTypes.forEach((type: string) => this.selectedEventTypes.add(type));
+    }
+  }  
+  
 
   openDialog(): void {
     this.dialog.open(CreateCategoryDialogComponent, {
@@ -105,7 +109,7 @@ export class EditServiceComponent implements OnInit {
   onSubmit(): void {
     if (this.offeringForm.valid) {
       console.log(this.offeringForm.value);
-      // Add submission logic
+      // Dodaj logiku za čuvanje ili slanje podataka
     }
   }
 }
