@@ -13,9 +13,9 @@
         <div class="name-search-section">
           <mat-form-field class="search-field">
             <mat-label>Event Name</mat-label>
-            <input matInput>
+            <input matInput [(ngModel)]="searchEventQuery">
           </mat-form-field>
-          <button mat-stroked-button class="search-button"><mat-icon>search</mat-icon> Search</button>
+          <button mat-stroked-button class="search-button" (click)="searchEvent()"><mat-icon>search</mat-icon> Search</button>
         </div>
         <div class="sort-filter">
           <div class="sort-section">
@@ -79,9 +79,9 @@
         <div class="name-search-section">
           <mat-form-field  class="search-field">
             <mat-label>Service/Product Name</mat-label>
-            <input matInput>
+            <input matInput [(ngModel)]="searchOfferingQuery">
           </mat-form-field>
-          <button mat-stroked-button class="search-button"><mat-icon>search</mat-icon> Search</button>
+          <button mat-stroked-button class="search-button" (click)="searchOffering()"><mat-icon>search</mat-icon> Search</button>
         </div>
         <div class="sort-filter">
           <div class="sort-section">

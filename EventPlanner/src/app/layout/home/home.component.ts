@@ -35,6 +35,9 @@ export class HomeComponent implements OnInit {
 
   selectedOfferingType: 'services' | 'products' | null = null;
 
+  searchEventQuery: string = '';
+  searchOfferingQuery: string = '';
+
   constructor(private service: EventService, private offeringService: OfferingService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -117,6 +120,13 @@ export class HomeComponent implements OnInit {
   toggleOfferingType(type: 'services' | 'products') {
     this.selectedOfferingType = type;
     this.filterOfferings();
+  }
+  searchEvent() {
+    console.log('Search Query:', this.searchEventQuery);
+  }
+
+  searchOffering() {
+    console.log('Search Query:', this.searchOfferingQuery);
   }
 }
 
