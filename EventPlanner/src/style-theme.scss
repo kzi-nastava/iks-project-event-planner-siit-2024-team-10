@@ -1,0 +1,13 @@
+@use '@angular/material' as mat;
+@use 'srcm3-theme' as theme;
+
+@include mat.core();
+
+html {
+  // Apply the light theme by default
+  @include mat.core-theme(theme.$light-theme);
+  @include mat.button-theme(theme.$light-theme);
+
+  @include mat.system-level-colors(theme.$light-theme);
+  @include mat.system-level-typography(theme.$light-theme);
+}

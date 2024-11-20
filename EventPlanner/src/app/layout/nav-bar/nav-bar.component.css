@@ -1,10 +1,23 @@
 mat-toolbar {
-    background-color: #5656a1;
+  background-color: #d0cfe1;
+  position: sticky;
+  z-index: 1;
 }
 
-div {
-    width: 100%;
-    justify-content: flex-end;
+mat-icon{
+  color: #252629;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color:#3a2d30;
+}
+
+.navigation-container{
+  display: flex;
+  justify-content: right;
+  width: 100%;
+}
+.navigation-item{
+  margin: 10px;
+  font-size: larger;
 }
 
 button {
@@ -12,5 +25,5 @@ button {
 }
 
 span {
-    color: white
+  font-family: 'Fira Sans Condensed', serif
 }

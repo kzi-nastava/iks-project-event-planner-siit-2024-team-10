@@ -1,0 +1,135 @@
+<div style="background-color: #f6f6f6;">
+<div class="offering-container">
+  <form [formGroup]="offeringForm" (ngSubmit)="onSubmit()" class="elegant-form">
+    <div class="form-header">
+      <h1>Create Your Service</h1>
+      <p>Craft a compelling service that stands out in the market</p>
+    </div>
+
+    <div class="form-section category-section">
+      <div class="category-selector">
+        <mat-form-field appearance="outline" class="category-dropdown">
+          <mat-label>Service Category</mat-label>
+          <mat-select formControlName="serviceCategory" class="category-select">
+            <mat-option *ngFor="let category of serviceCategories" [value]="category">
+              {{category}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <p class="subtle-text">Can't find the perfect category? <a id="openDialog" (click)="openDialog()">Create new</a> now!</p>
+      </div>
+
+    <div class="form-section details-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Service Name</mat-label>
+        <input matInput formControlName="name" placeholder="Memorable & Catchy Name">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="4" placeholder="Tell your story in a compelling way"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Specification</mat-label>
+        <input matInput formControlName="specification" placeholder="Unique Service Details">
+      </mat-form-field>
+
+      <div class="price-section">
+        <mat-form-field style="padding-right: 10px;" appearance="outline">
+            <mat-label>Price</mat-label>
+            <input matInput type="number" formControlName="price" placeholder="0.00">
+            <span matSuffix class="currency-suffix">$</span>
+          </mat-form-field>
+
+        <mat-form-field style="padding-left: 10px;" appearance="outline">
+          <mat-label>Discount</mat-label>
+          <input matInput type="number" formControlName="discount" placeholder="0">
+          <span matSuffix class="currency-suffix">%</span>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-section photo-upload">
+      <div class="upload-container">
+        <input type="file" #fileInput multiple (change)="onPhotoUpload($event)" accept="image/*" class="file-input">
+        <div class="upload-area" (click)="fileInput.click()">
+          <mat-icon class="upload-icon">cloud_upload</mat-icon>
+          <p>Drag & Drop or Click to Upload Photos</p>
+          <small>Maximum 5 images, PNG or JPEG</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section event-types">
+      <h3 class="small-subtitle">Select Applicable Event Types</h3>
+      <div class="selected-labels">
+        <span *ngFor="let type of eventTypes" 
+              [ngClass]="{'selected-label': isSelected(type)}" 
+              (click)="toggleSelection(type)"
+              class="clickable-label">{{type}}</span>
+      </div>
+    </div>
+
+    <div class="form-section time-selection">
+      <h3 class="small-subtitle">Service Duration</h3>
+      <mat-radio-group formControlName="timeType" class="duration-radio">
+        <mat-radio-button value="fixed">Fixed Duration</mat-radio-button>
+        <mat-radio-button value="flexible">Flexible Time</mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="offeringForm.get('timeType')?.value === 'fixed'" class="fixed-duration">
+        <mat-form-field appearance="outline">
+          <mat-label>Select Duration</mat-label>
+          <mat-select formControlName="fixedTime">
+            <mat-option *ngFor="let time of timeOptions" [value]="time">
+              {{time}} Hour{{time > 1 ? 's' : ''}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="offeringForm.get('timeType')?.value === 'flexible'" class="price-section">
+        <mat-form-field style="padding-right: 20px;" appearance="outline">
+          <mat-label>Minimum Hours</mat-label>
+          <input matInput type="number" formControlName="minTime">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label style="padding-left: 20px;" >Maximum Hours</mat-label>
+          <input matInput type="number" formControlName="maxTime">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-section deadlines">
+      <h3 class="small-subtitle">Deadlines</h3>
+      <div class="price-section">
+        <mat-form-field style="padding-right: 10px;" appearance="outline">
+          <mat-label>Reservation deadline</mat-label>
+          <input matInput type="number" formControlName="reservationDeadline" placeholder="0.00">
+        </mat-form-field>
+
+      <mat-form-field style="padding-left: 10px;" appearance="outline">
+        <mat-label>Cancellation deadline</mat-label>
+        <input matInput type="number" formControlName="cancelldationDeadline" placeholder="0">
+      </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-section toggles">
+      <h3 class="small-subtitle">Service Availability</h3>
+      <div class="toggle-container">
+        <mat-slide-toggle formControlName="isAvailable" color="primary">Service Available</mat-slide-toggle>
+        <mat-slide-toggle formControlName="isVisible" color="accent">Service Visible</mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="form-section submit-section">
+      <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="!offeringForm.valid">
+        Create Service
+      </button>
+    </div>
+  </form>
+</div>
+</div>
