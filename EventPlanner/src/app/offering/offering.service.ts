@@ -3,6 +3,30 @@ import { Product } from './model/product.model';
 import { Service } from './model/service.model';
 import { Observable, of } from 'rxjs';
 import { Offering } from './model/offering.model';
+import { Provider } from '../user/model/provider.model';
+
+const SAMPLE_PROVIDER: Provider = {
+  _id: 1,
+  email: "john.smith@eventpro.com",
+  password: "hashedPassword123",
+  firstName: "John",
+  lastName: "Smith",
+  profilePhoto: "profile.jpg",
+  country: "United States",
+  city: "New York",
+  street: "Broadway",
+  houseNumber: "123",
+  phone: "+1-555-0123",
+  companyEmail: "contact@eventpro.com",
+  companyName: "EventPro Solutions",
+  companyCountry: "United States",
+  companyCity: "New York",
+  companyStreet: "Broadway",
+  companyHouseNumber: "123",
+  companyPhone: "+1-555-0124",
+  companyDescription: "Premium event equipment and services provider with over 10 years of experience.",
+  companyPhotos: "company.jpg"
+};
 
 const PRODUCTS: Product[] = [
   {
@@ -10,102 +34,95 @@ const PRODUCTS: Product[] = [
     name: 'LED Stage Lights',
     category: 'Audio/Visual Equipment',
     picture: 'flowers.jpg',  
-    provider: 'EventTech Supplies',
+    provider: SAMPLE_PROVIDER,
     price: 300,
     rating: '4.7',
     eventTypes: ['Concert', 'Conference'],
     isProduct: true,
     description: "this is description",
-
   },
   {
     id: 2,
     name: 'Portable Stage',
     category: 'Event Infrastructure',
     picture: 'flowers.jpg',  
-    provider: 'EventRentals',
+    provider: SAMPLE_PROVIDER,
     price: 1500,
     rating: '4.5',
     eventTypes: ['Festival', 'Exhibition'],
     isProduct: true,
     description: "this is description",
-
-
   },
   {
     id: 3,
     name: 'Sound System Package',
     category: 'Audio/Visual Equipment',
     picture: 'flowers.jpg',  
-    provider: 'SoundMasters',
+    provider: SAMPLE_PROVIDER,
     price: 700,
     rating: '4.8',
     eventTypes: ['Concert', 'Conference', 'Seminar'],
     isProduct: true,
     description: "this is description",
-
   },
   {
     id: 4,
     name: 'Event Tents',
     category: 'Event Infrastructure',
     picture: 'flowers.jpg',  
-    provider: 'TentMasters',
+    provider: SAMPLE_PROVIDER,
     price: 1200,
     rating: '4.6',
     eventTypes: ['Outdoor Wedding', 'Festival', 'Exhibition'],
     isProduct: true,
     description: "this is description",
-
   },
   {
     id: 5,
     name: 'Conference Seating',
     category: 'Event Furniture',
     picture: 'flowers.jpg',  
-    provider: 'Furniture Rentals',
+    provider: SAMPLE_PROVIDER,
     price: 500,
     rating: '4.9',
     eventTypes: ['Conference', 'Seminar'],
     isProduct: true,
     description: "this is description",
-
-
   }
 ];
+
 const SERVICES: Service[] = [
   {
     id: 6,
     name: 'Catering Service',
     category: 'Food & Beverage',
     picture: 'makeup.jpg',  
-    provider: 'Gourmet Catering',
+    provider: SAMPLE_PROVIDER,
     price: 500,
     rating: '5.0',
     isProduct: false,
     specification: 'Full-service catering for events including appetizers, main course, and desserts.',
     minDuration: 2,
     maxDuration: 5,
-    cancellationPeriod: 48,  // hours
-    reservationPeriod: 72,   // hours
+    cancellationPeriod: 48,
+    reservationPeriod: 72,
     autoConfirm: true,
     description: "this is description",
-
   },
   {
     id: 7,
     name: 'Event Photography',
     category: 'Photography',
     picture: 'makeup.jpg', 
-    provider: 'CaptureIt Photography',
+    provider: SAMPLE_PROVIDER,
     price: 800,
     rating: '4.8',
     isProduct: false,
     specification: 'Professional event photography including candid and posed shots.',
     minDuration: 3,
     maxDuration: 8,
-    cancellationPeriod: 24,  // hours
-    reservationPeriod: 48,   // hours
+    cancellationPeriod: 24,
+    reservationPeriod: 48,
     autoConfirm: false,    
     description: "this is description",
   },
@@ -114,7 +131,7 @@ const SERVICES: Service[] = [
     name: 'Venue Setup',
     category: 'Event Management',
     picture: 'makeup.jpg',  
-    provider: 'Perfect Venue Services',
+    provider: SAMPLE_PROVIDER,
     price: 1000,
     rating: '4.6',
     isProduct: false,
@@ -122,8 +139,8 @@ const SERVICES: Service[] = [
     minDuration: 4,   
     description: "this is description",
     maxDuration: 12,
-    cancellationPeriod: 72,  // hours
-    reservationPeriod: 96,   // hours
+    cancellationPeriod: 72,
+    reservationPeriod: 96,
     autoConfirm: false,
   },
   {
@@ -131,7 +148,7 @@ const SERVICES: Service[] = [
     name: 'Audio/Visual Setup',
     category: 'Audio/Visual',
     picture: 'makeup.jpg',
-    provider: 'TechVision',
+    provider: SAMPLE_PROVIDER,
     price: 600,
     rating: '4.7',
     isProduct: false,
@@ -139,8 +156,8 @@ const SERVICES: Service[] = [
     specification: 'Audio/Visual equipment setup for conferences, seminars, and presentations.',
     minDuration: 3,
     maxDuration: 6,
-    cancellationPeriod: 48,  // hours
-    reservationPeriod: 48,   // hours
+    cancellationPeriod: 48,
+    reservationPeriod: 48,
     autoConfirm: true,
   },
   {
@@ -148,7 +165,7 @@ const SERVICES: Service[] = [
     name: 'Event Security',
     category: 'Security Services',
     picture: 'makeup.jpg',
-    provider: 'SafeGuard Security',
+    provider: SAMPLE_PROVIDER,
     price: 700,
     rating: '4.9',
     isProduct: false,
@@ -156,8 +173,8 @@ const SERVICES: Service[] = [
     specification: 'Security personnel for events, ensuring safety and crowd management.',
     minDuration: 4,
     maxDuration: 8,
-    cancellationPeriod: 48,  // hours
-    reservationPeriod: 72,   // hours
+    cancellationPeriod: 48,
+    reservationPeriod: 72,
     autoConfirm: true,
   }
 ];
@@ -166,50 +183,18 @@ const SERVICES: Service[] = [
   providedIn: 'root'
 })
 export class OfferingService {
-
   private productList: Product[] = [];
   private serviceList: Service[] = [];
 
   constructor() {
-    for (let productObj of PRODUCTS){
-      const product: Product = {
-        id: productObj.id,
-        name: productObj.name,
-        category: productObj.category,
-        picture: productObj.picture,
-        provider: productObj.provider,
-        price: productObj.price,
-        rating: productObj.rating,
-        isProduct: productObj.isProduct,
-        description: productObj.description
-      };
-      this.productList.push(product);
-    }
-    for (let serviceObj of SERVICES){
-      const service: Service = {
-        id: serviceObj.id,
-        name: serviceObj.name,
-        category: serviceObj.category,
-        picture: serviceObj.picture,
-        provider: serviceObj.provider,
-        price: serviceObj.price,
-        rating: serviceObj.rating,
-        isProduct: serviceObj.isProduct,
-        specification:serviceObj.specification,
-        reservationPeriod:serviceObj.reservationPeriod,
-        cancellationPeriod:serviceObj.cancellationPeriod,
-        description:serviceObj.description,
-      };
-      this.serviceList.push(service);
-    }
+    this.productList = PRODUCTS;
+    this.serviceList = SERVICES;
   }
 
-  // Function to shuffle the offerings
   private shuffleArray(offerings: Offering[]): Offering[] {
-    // Fisher-Yates shuffle algorithm
     for (let i = offerings.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [offerings[i], offerings[j]] = [offerings[j], offerings[i]]; // swap elements
+      [offerings[i], offerings[j]] = [offerings[j], offerings[i]];
     }
     return offerings;
   }

@@ -1,3 +1,4 @@
+import { Provider } from "../../user/model/provider.model";
 export interface Offering {
     id: number;
     name: string;
@@ -5,7 +6,7 @@ export interface Offering {
     description: string;
     discount?: number;
     picture: string;
-    provider: string;
+    provider: Provider ;
     price: number;
     rating: string;
     eventTypes?: string[];
