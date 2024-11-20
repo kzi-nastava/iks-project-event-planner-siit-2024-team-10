@@ -56,15 +56,9 @@
   .rating-section p {
     padding-right: 20px;
     padding-top: 10px;
-    width: 10px;
+    width: 100px;
     text-align: right; 
   }
-  
-
   mat-slider{
-    width: 300px;;
-  }
-
-  mat-slide-toggle{
-    margin-top: 50px !important;
+    width:200px;
   }

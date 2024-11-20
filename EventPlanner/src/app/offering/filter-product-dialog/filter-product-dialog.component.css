@@ -53,11 +53,12 @@
     justify-content: center;
   }
 
-  .rating-section p{
-    padding-right:20px;
-    padding-top:10px;
+  .rating-section p {
+    padding-right: 20px;
+    padding-top: 10px;
+    width: 100px;
+    text-align: right; 
   }
-
   mat-slider{
     width:200px;
   }

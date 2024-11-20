@@ -10,9 +10,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class FilterEventsDialogComponent {
   filterForm: FormGroup;
 
-  eventTypes = ['None', 'Conferention','Wedding','Meetup','Concert'];
+  eventTypes = ['Any', 'Conferention','Wedding','Meetup','Concert'];
 
-  selectedEventType: string = 'None';
+  selectedEventType: string = 'Any';
 
   constructor(
     private fb: FormBuilder,
@@ -35,13 +35,7 @@ export class FilterEventsDialogComponent {
 
   applyFilters() {
     const filters = this.filterForm.value;
-
-    const startDate = filters.range.start;
-    const endDate = filters.range.end;
-
     console.log('Filters:', filters);
-    console.log('Start Date:', startDate);
-    console.log('End Date:', endDate);
 
     this.dialogRef.close(filters);
   }
