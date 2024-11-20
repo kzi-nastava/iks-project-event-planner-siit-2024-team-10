@@ -20,7 +20,6 @@ import { MatSliderModule } from '@angular/material/slider';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
-
 @NgModule({
   declarations: [
     AppComponent,
