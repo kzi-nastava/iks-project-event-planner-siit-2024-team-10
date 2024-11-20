@@ -3,7 +3,8 @@ import { Event } from '../../event/model/event.model';
 import { EventService } from '../../event/event.service';
 import { OfferingService } from '../../offering/offering.service';
 import { Offering } from '../../offering/model/offering.model';
-
+import { MatDialog } from '@angular/material/dialog';
+import { FilterProvidersOfferingsDialogComponent } from '../filter-providers-offerings-dialog/filter-providers-offerings-dialog.component';
 @Component({
   selector: 'app-manage-offerings',
   templateUrl: './manage-offerings.component.html',
@@ -37,7 +38,8 @@ export class ManageOfferingsComponent implements OnInit {
   isAvailable: boolean = false; // Availability filter
 
   constructor(
-    private offeringService: OfferingService
+    private offeringService: OfferingService,
+    private dialog : MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -102,5 +104,15 @@ export class ManageOfferingsComponent implements OnInit {
     this.filterOfferings();
   }
 
-  // Methods for updating filters can be added here, such as selecting a category, event type, etc.
+  openFilterDialog():void{
+    const dialogRef = this.dialog.open(FilterProvidersOfferingsDialogComponent, {
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((filters) => {
+      if (filters) {
+        console.log('Applied Filters:', filters);
+      }
+    });
+  }
 }

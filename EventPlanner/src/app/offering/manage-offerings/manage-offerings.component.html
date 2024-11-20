@@ -55,7 +55,7 @@
             <button mat-stroked-button>Sort</button>
           </div>
           <div class="filter-section">
-            <button mat-stroked-button>
+            <button (click)="openFilterDialog()" mat-stroked-button>
               <mat-icon>filter_list</mat-icon> Filter
             </button>
             <button mat-stroked-button class="reset-button">Reset Filters</button>

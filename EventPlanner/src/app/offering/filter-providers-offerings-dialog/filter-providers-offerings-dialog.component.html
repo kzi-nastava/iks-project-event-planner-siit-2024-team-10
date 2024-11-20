@@ -1,0 +1,46 @@
+<div class="outer-container">
+    <div>
+      <h1 class="form-header">Event Filter</h1>
+      <p class="subtext">Search by an optional number of parameters</p>
+    </div>
+    <mat-dialog-content>
+      <form [formGroup]="filterForm">
+        <!-- Event Type -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Event Type</mat-label>
+          <mat-select matInput formControlName="type">
+            <mat-option *ngFor="let eventType of eventTypes" [value]="eventType">
+              {{ eventType }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <!-- Availability -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Availability</mat-label>
+          <mat-select matInput formControlName="availability">
+            <mat-option value="available">Available</mat-option>
+            <mat-option value="not-available">Not Available</mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <!-- Min Price -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Min Price</mat-label>
+          <input matInput type="number" formControlName="minPrice" placeholder="Minimum Price">
+        </mat-form-field>
+  
+        <!-- Max Price -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Max Price</mat-label>
+          <input matInput type="number" formControlName="maxPrice" placeholder="Maximum Price">
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+  
+    <mat-dialog-actions>
+      <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+      <button mat-raised-button color="primary" (click)="applyFilters()">Apply</button>
+    </mat-dialog-actions>
+  </div>
+  

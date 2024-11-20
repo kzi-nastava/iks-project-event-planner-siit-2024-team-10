@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
+import { FilterProvidersOfferingsDialogComponent } from './filter-providers-offerings-dialog/filter-providers-offerings-dialog.component';
 // Material Imports
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -20,13 +20,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { CreateOfferingsComponent } from './create-offerings/create-offerings.component';
 import { EditServiceComponent } from './edit-service/edit-service.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
     OfferingCardComponent,
     CreateOfferingsComponent,
-    EditServiceComponent
+    EditServiceComponent,
+    FilterProvidersOfferingsDialogComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +50,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     ManageOfferingsComponent,
     CreateOfferingsComponent,
     OfferingCardComponent,
-    EditServiceComponent
+    EditServiceComponent,
+    FilterProvidersOfferingsDialogComponent
   ]
 })
 export class OfferingModule { }
