@@ -5,6 +5,10 @@ import { OfferingService } from '../../offering/offering.service';
 import { Offering } from '../../offering/model/offering.model';
 import { FilterEventsDialogComponent } from '../../event/filter-events-dialog/filter-events-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FilterServiceDialogComponent } from '../../offering/filter-service-dialog/filter-service-dialog.component';
+import { FilterProductDialogComponent } from '../../offering/filter-product-dialog/filter-product-dialog.component';
+import { OfferingWarningDialogComponent } from '../offering-warning-dialog/offering-warning-dialog.component';
+
 
 @Component({
   selector: 'app-home',
@@ -16,6 +20,7 @@ export class HomeComponent implements OnInit {
   topEvents: Event[] = [];
   topOfferings: Offering[] = [];
   allOfferings: Offering[] = [];
+  filteredOfferings: Offering[] = [];
   clickedEvent: string;
 
   sortingDirections = ['Ascending', 'Descending'];
@@ -27,6 +32,8 @@ export class HomeComponent implements OnInit {
   selectedSortingDirection: string = 'Ascending';
   selectedEventSortingCriteria: string = 'None';
   selectedOfferingSortingCriteria: string = 'None';
+
+  selectedOfferingType: 'services' | 'products' | null = null;
 
   constructor(private service: EventService, private offeringService: OfferingService, private dialog: MatDialog) {}
 
@@ -50,11 +57,12 @@ export class HomeComponent implements OnInit {
     });
 
     this.offeringService.getAll().subscribe({
-      next: (offering: Offering[]) => {
-        this.allOfferings = offering;
+      next: (offerings: Offering[]) => {
+        this.allOfferings = offerings;
+        this.filteredOfferings = offerings;
       },
       error: (err) => {
-        console.error('Error fetching events:', err);
+        console.error('Error fetching offerings:', err);
       }
     });
 
@@ -70,6 +78,22 @@ export class HomeComponent implements OnInit {
       console.log(`Sorting Offerings by ${this.selectedOfferingSortingCriteria} in ${this.selectedSortingDirection} order.`);
     }
   }
+  openFilterDialog(): void {
+    if (this.selectedOfferingType === 'services') {
+      this.dialog.open(FilterServiceDialogComponent, {
+        width: '600px',
+      });
+    } else if (this.selectedOfferingType === 'products') {
+      this.dialog.open(FilterProductDialogComponent, {
+        width: '600px',
+      });
+    } else {
+      this.dialog.open(OfferingWarningDialogComponent, {
+        width: '400px',
+      });
+    }
+  }
+
   openEventFilterDialog() {
     const dialogRef = this.dialog.open(FilterEventsDialogComponent, {
       width: '600px',
@@ -80,6 +104,19 @@ export class HomeComponent implements OnInit {
         console.log('Applied Filters:', filters);
       }
     });
+  }
+
+  filterOfferings() {
+    this.filteredOfferings = this.allOfferings.filter(offering => 
+      this.selectedOfferingType === 'services' 
+        ? !offering.isProduct 
+        : offering.isProduct
+    );
+  }
+
+  toggleOfferingType(type: 'services' | 'products') {
+    this.selectedOfferingType = type;
+    this.filterOfferings();
   }
 }
 

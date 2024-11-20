@@ -42,7 +42,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MatSelectModule,
     MatSliderModule,
     ReactiveFormsModule,
-    MatDatepickerModule
+    MatDatepickerModule,
   ],
   providers: [
   ],

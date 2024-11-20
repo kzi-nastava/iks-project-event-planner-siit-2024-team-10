@@ -72,8 +72,8 @@
     <div class="event-filter">
       <h2>All Offerings In Your Area</h2>
       <mat-radio-group>
-        <mat-radio-button value="1">Services</mat-radio-button>
-        <mat-radio-button value="2">Products</mat-radio-button>
+        <mat-radio-button value="1" (click)="toggleOfferingType('services')">Services</mat-radio-button>
+        <mat-radio-button value="2" (click)="toggleOfferingType('products')">Products</mat-radio-button>
       </mat-radio-group>
       <div class="event-filter-components">
         <div class="name-search-section">
@@ -105,7 +105,7 @@
             <button mat-stroked-button (click)="applySorting('offering')">Sort</button>
           </div>
           <div class="filter-section">
-            <button mat-stroked-button><mat-icon>filter_list</mat-icon> Filter</button>
+            <button mat-stroked-button (click)="openFilterDialog()"><mat-icon>filter_list</mat-icon> Filter</button>
             <button mat-stroked-button class="reset-button">Reset Filters</button>
           </div>
         </div>
@@ -114,7 +114,7 @@
   </div>
   <div class="all-events-section">
     <div class="all-event-cards">
-      <app-offering-card *ngFor="let offering of allOfferings" [offering]="offering"></app-offering-card>
+      <app-offering-card *ngFor="let offering of filteredOfferings" [offering]="offering"></app-offering-card>
 
     </div>
     <div class="pagination">
