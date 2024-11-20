@@ -258,4 +258,10 @@ export class OfferingService {
     const offering = allOfferings.find(o => o.id === id);
     return of(offering);
   }
+  createService(data: any): void {
+    console.log('Service data received:', data);
+  }
+  editService(data: any): void {
+    console.log('Service data received:', data);
+  }
 }

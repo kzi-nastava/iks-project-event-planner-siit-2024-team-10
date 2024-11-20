@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
+import { OfferingService } from '../offering.service';
 
 @Component({
   selector: 'app-edit-service',
@@ -11,6 +12,7 @@ import { CreateCategoryDialogComponent } from '../create-category-dialog/create-
 })
 export class EditServiceComponent implements OnInit {
   offeringForm: FormGroup;
+  // ovo ce se drugacije ucitavati kasnije, trenutno je ovako jer eventovi nisu kreirani
   eventTypes = [
     'Wedding',
     'Birthday',
@@ -23,7 +25,8 @@ export class EditServiceComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private offeringService: OfferingService
   ) {}
 
   ngOnInit(): void {
@@ -108,8 +111,18 @@ export class EditServiceComponent implements OnInit {
 
   onSubmit(): void {
     if (this.offeringForm.valid) {
-      console.log(this.offeringForm.value);
-      // Dodaj logiku za čuvanje ili slanje podataka
+      const formData = {
+        ...this.offeringForm.value,
+        eventTypes: Array.from(this.selectedEventTypes), 
+      };
+  
+      this.offeringService.editService(formData);
+  
+      this.offeringForm.reset();
+      this.selectedEventTypes.clear();
+      alert('Form data edited successfully!');
+    } else {
+      alert('Please fill in all required fields correctly.');
     }
   }
 }

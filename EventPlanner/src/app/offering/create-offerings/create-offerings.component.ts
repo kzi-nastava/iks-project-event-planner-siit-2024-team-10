@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
+import { OfferingService } from '../offering.service';
 
 @Component({
   selector: 'app-create-offerings',
@@ -25,7 +26,7 @@ export class CreateOfferingsComponent implements OnInit {
   selectedEventTypes: Set<string> = new Set();
   timeOptions = [1, 2, 3, 4, 5];
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog) {}
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private offeringService: OfferingService) {}
 
   openDialog(){
     this.dialog.open(CreateCategoryDialogComponent,{
@@ -79,8 +80,19 @@ export class CreateOfferingsComponent implements OnInit {
 
   onSubmit(): void {
     if (this.offeringForm.valid) {
-      console.log(this.offeringForm.value);
-      // Add submission logic
+      const formData = {
+        ...this.offeringForm.value,
+        eventTypes: Array.from(this.selectedEventTypes), 
+      };
+  
+      this.offeringService.createService(formData);
+  
+      this.offeringForm.reset();
+      this.selectedEventTypes.clear();
+      alert('Form data logged successfully!');
+    } else {
+      alert('Please fill in all required fields correctly.');
     }
   }
+  
 }
