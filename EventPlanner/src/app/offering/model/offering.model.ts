@@ -5,7 +5,7 @@ export interface Offering {
     category: string;
     description: string;
     discount?: number;
-    picture: string;
+    picture: string[];
     provider: Provider ;
     price: number;
     rating: string;

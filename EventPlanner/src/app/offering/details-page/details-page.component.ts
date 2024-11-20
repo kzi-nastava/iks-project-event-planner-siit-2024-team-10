@@ -55,20 +55,23 @@ export class DetailsPageComponent implements OnInit {
       })
     ).subscribe(offering => {
       this.offering = offering;
-      console.log('Offering:', this.offering);  // Check if specification exists
+      console.log('Offering:', this.offering); 
       if (this.offering) {
-        this.images = [this.offering.picture];
+        // da li je niz slika
+        this.images = Array.isArray(this.offering.picture) ? this.offering.picture : [this.offering.picture];
         this.loadComments();
       }
     });
-  }
+  }  
   
+  // za prikaz podataka koje ima usluga a nema proizvod
   isService(offering: Product | Service): offering is Service {
     const isService = (offering as Service).specification !== undefined;
-    console.log('Is service:', isService);  // Check the result of the check
+    console.log('Is service:', isService);  
     return isService;
   }
 
+  // ucitavanje komentara iz servisa
   private loadComments(): void {
     if (this.offering) {
       this.commentService.getCommentsByOfferingId(this.offering.id)
@@ -100,7 +103,6 @@ export class DetailsPageComponent implements OnInit {
       this.commentService.addComment(newComment)
         .subscribe(() => {
           this.loadComments();
-          // Reset form
           this.newComment = {
             userName: '',
             rating: 0,
@@ -119,6 +121,8 @@ export class DetailsPageComponent implements OnInit {
   toggleFavorite() {
     this.isFavorite = !this.isFavorite;
 }
+
+// prefill podatke za edit
 navigateToEdit(): void {
   if (this.offering) {
     const prefilledData = {
@@ -128,7 +132,6 @@ navigateToEdit(): void {
       specification: this.isService(this.offering) ? this.offering.specification || '' : '',
       price: this.offering.price || 0,
       discount: this.offering.discount || 0,
-      timeType: this.isService(this.offering) ? this.offering.timeType || 'fixed' : 'fixed',
       fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
       minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
       maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
@@ -138,9 +141,17 @@ navigateToEdit(): void {
       isVisible: this.offering.isVisible || false
     };
 
-    // Navigate to 'edit-service' page with the prefilled data
     this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+    }
   }
-}
+  deleteOffering():void{
+    console.log('Pop up for deleting...');
+  }
+  viewProviderProfile() {
+    console.log('Viewing provider profile...');
+  }
 
+  reportProvider() {
+    console.log('Reporting provider...');
+  }
 }

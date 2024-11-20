@@ -1,96 +1,59 @@
-<div class="container" *ngIf="offering">
-  <div class="card">
-    <!-- Left Side - Image Section -->
-    <div class="image-section">
-      <div class="carousel">
-        <img [src]="images[activeImage]" [alt]="'Image ' + (activeImage + 1)" class="main-image">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<div class="main-container">
+  <!-- Carousel Section -->
+  <div class="carousel-section">
+    <div class="carousel-container">
+      <div class="main-image-wrapper">
+        <img [src]="images[activeImage]" [alt]="offering?.name" class="main-image">
+        
+        <!-- Navigation Arrows -->
+        <button class="carousel-nav prev" (click)="setActiveImage((activeImage - 1 + images.length) % images.length)" 
+                *ngIf="images.length > 1">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="carousel-nav next" (click)="setActiveImage((activeImage + 1) % images.length)"
+                *ngIf="images.length > 1">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
-      <div class="thumbnails">
-        <img 
-          *ngFor="let image of images; let i = index"
-          [src]="image"
-          [alt]="'Thumbnail ' + (i + 1)"
-          class="thumbnail"
-          [class.active]="i === activeImage"
-          (click)="setActiveImage(i)"
-        >
+      
+      <!-- Thumbnails -->
+      <div class="thumbnails" *ngIf="images.length > 1">
+        <div class="thumbnail-container">
+          <div class="thumbnail-wrapper" *ngFor="let image of images; let i = index"
+               [class.active]="i === activeImage"
+               (click)="setActiveImage(i)">
+            <img [src]="image" [alt]="offering?.name" class="thumbnail-image">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content-section">
+    <!-- Header Info -->
+    <div class="header-info">
+      <h1 class="title">{{offering?.name}}</h1>
+      <div class="meta-info">
+        <span class="category">{{offering?.category}}</span>
+        <div class="availability" [class.available]="offering?.isAvailable">
+          {{offering?.isAvailable ? 'Available' : 'Not Available'}}
+        </div>
       </div>
     </div>
 
-    <!-- Right Side - Details Section -->
-    <div class="details-section">
-      <h1 class="product-title">{{offering.name}}</h1>
-
-      <div class="price-availability">
-        <span class="price">{{offering.price}}€</span>
-        <span class="availability">Available</span>
+    <!-- Price Section -->
+    <div class="price-section">
+      <div class="price-container">
+        <span class="price">{{offering?.price | currency}}</span>
+        <span class="discount" *ngIf="offering?.discount">
+          -{{offering?.discount}}% OFF
+        </span>
       </div>
-
-      <!-- Provider Card -->
-      <div class="provider-card">
-        <div class="provider-header">
-          <img src="image2.png" alt="Provider" class="provider-image">
-          <div class="provider-info">
-            <h3>name</h3>
-            <p>email</p>
-            <div class="provider-rating">
-              <span class="stars">★★★★☆</span>
-              <span>4
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="provider-actions">
-          <button class="view-provider-btn">View Profile</button>
-          <button class="report-provider-btn">Report Provider</button>
-        </div>
-      </div>
-
-      <div class="rating">
-        <span class="stars">★★★★☆</span>
-        <span class="rating-number">({{offering.rating}})</span>
-      </div>
-
-      <mat-accordion class="panels-container">
-        <mat-expansion-panel class="custom-panel">
-          <mat-expansion-panel-header>
-            <mat-panel-title>Category</mat-panel-title>
-          </mat-expansion-panel-header>
-          <p>{{offering.category}}</p>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel class="custom-panel" *ngIf="isService(offering)">
-          <mat-expansion-panel-header>
-            <mat-panel-title>Specification</mat-panel-title>
-          </mat-expansion-panel-header>
-          <p>{{offering.specification}}</p>
-        </mat-expansion-panel>
-        
-        <mat-expansion-panel class="custom-panel" *ngIf="isService(offering)">
-          <mat-expansion-panel-header>
-            <mat-panel-title>Cancellation deadline</mat-panel-title>
-          </mat-expansion-panel-header>
-          <p>{{offering.cancellationPeriod}}</p>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel class="custom-panel" *ngIf="isService(offering)">
-          <mat-expansion-panel-header>
-            <mat-panel-title>Reservation deadline</mat-panel-title>
-          </mat-expansion-panel-header>
-          <p>{{offering.reservationPeriod}}</p>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel class="custom-panel" *ngIf="offering.isProduct">
-          <mat-expansion-panel-header>
-            <mat-panel-title>Event Types</mat-panel-title>
-          </mat-expansion-panel-header>
-          <p>{{offering.eventTypes?.join(', ')}}</p>
-        </mat-expansion-panel>
-      </mat-accordion>
-
       <div class="action-buttons">
-        <button style="padding-bottom: 20px;" class="view-provider-btn">
-          <span class="btn-icon">📅</span>
+        <button class="book-now-btn" [disabled]="!offering?.isAvailable">
+          <i class="fas fa-calendar-check"></i>
           Book Now
         </button>
         <button class="favorite-btn" [class.active]="isFavorite" (click)="toggleFavorite()">
@@ -98,62 +61,144 @@
         </button>
       </div>
     </div>
-  </div>
 
-  <!-- Comments Section -->
-  <div class="comments-section">
-    <h2>Customer Reviews</h2>
-    
-    <!-- New Comment Form -->
-    <div class="comment-form">
-      <h3>Leave a Review</h3>
-      <div class="rating-input">
-        <span>Your Rating:</span>
-        <div class="stars-input">
-          <span 
-            *ngFor="let star of getStarArray(5); let i = index"
-            (click)="setRating(i + 1)"
-            [class.filled]="i < userRating"
-            class="star-icon"
-          >★</span>
-        </div>
-      </div>
-      <input 
-        type="text" 
-        [(ngModel)]="newComment.userName" 
-        placeholder="Your Name"
-        class="input-field"
-      >
-      <textarea 
-        [(ngModel)]="newComment.text" 
-        placeholder="Your Review"
-        class="input-field"
-      ></textarea>
-      <button 
-        (click)="submitComment()"
-        class="submit-btn"
-        [disabled]="!newComment.userName || !newComment.text || !newComment.rating"
-      >Submit Review</button>
+    <!-- Description -->
+    <div class="description-section">
+      <h2>Description</h2>
+      <p class="description">{{offering?.description}}</p>
     </div>
 
-    <!-- Existing Comments -->
-    <div class="comments-list">
-      <div *ngFor="let comment of comments" class="comment-card">
-        <div class="comment-header">
-          <span class="user-name">{{ comment.userName }}</span>
-          <div class="stars">
-            <span *ngFor="let star of getStarArray(comment.rating)">
-              {{ star ? '★' : '☆' }}
-            </span>
+    <!-- Specifications for Services -->
+    <div class="specifications-section" *ngIf="isService(offering)">
+      <h2>Service Details</h2>
+      <div class="specs-grid">
+        <div class="spec-item">
+          <span class="spec-label">Duration:</span>
+          <span class="spec-value">{{offering?.fixedTime || offering?.minDuration + ' - ' + offering?.maxDuration}} hours</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Reservation Period:</span>
+          <span class="spec-value">{{offering?.reservationPeriod}} hours in advance</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Cancellation Period:</span>
+          <span class="spec-value">{{offering?.cancellationPeriod}} hours before</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Specification:</span>
+          <span class="spec-value">{{offering?.specification}} hours before</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Event types:</span>
+          <span class="spec-value">{{offering?.eventTypes}}</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Confirmation:</span>
+          <span class="spec-value">
+            {{ offering?.autoConfirm ? 'Automatic' : 'Manual' }}
+          </span>
+        </div>        
+      </div>
+    </div>
+
+    <!-- Provider Section -->
+    <div class="provider-section">
+      <div class="provider-card">
+        <div class="provider-info">
+          <img [src]="offering.provider.profilePhoto" alt="Provider" class="provider-avatar">
+          <div class="provider-details">
+            <h3>{{offering.provider.companyName}}</h3>
+            <div class="rating">
+              <span class="stars">★★★★☆</span>
+              <span class="rating-number">({{offering.rating}})</span>
+            </div>
+            <p class="provider-location">
+              <i class="fas fa-location">📍</i>
+              {{ offering.provider.companyCity }}, {{ offering.provider.companyCountry }}
+            </p>
+            <div class="provider-contact">
+              <p class="contact-item">
+                <i class="fas fa-email">📧</i>
+                {{ offering.provider.companyEmail }}
+              </p>
+              <p class="contact-item">
+                <i class="fas fa-phone"></i>
+                {{ offering.provider.companyPhone }}
+              </p>
+            </div>
           </div>
         </div>
-        <p class="comment-text">{{ comment.text }}</p>
-        <span class="comment-date">{{ comment.date | date }}</span>
+        <div class="provider-actions">
+          <button class="view-profile-btn" (click)="viewProviderProfile()">
+            <i class="fas fa-user"></i>
+            View Profile
+          </button>
+          <button class="report-btn" (click)="reportProvider()">
+            <i class="fas fa-flag"></i>
+            Report
+          </button>
+        </div>
       </div>
     </div>
-  </div>  
-<button class="edit-fab" (click)="navigateToEdit()">
-  ✏️
-</button>
 
-</div>
+    <!-- Comments Section -->
+    <div class="comments-section">
+      <h2>Customer Reviews</h2>
+      
+      <!-- Add Comment Form -->
+      <div class="comment-form">
+        <h3>Leave a Review</h3>
+        <div class="rating-input">
+          <span>Your Rating:</span>
+          <div class="stars-input">
+            <span 
+              *ngFor="let star of getStarArray(5); let i = index"
+              (click)="setRating(i + 1)"
+              [class.filled]="i < userRating"
+              class="star-icon"
+            >★</span>
+          </div>
+        </div>
+        <input 
+          type="text" 
+          [(ngModel)]="newComment.userName" 
+          placeholder="Your Name"
+          class="input-field"
+        >
+        <textarea 
+          [(ngModel)]="newComment.text" 
+          placeholder="Your Review"
+          class="input-field"
+        ></textarea>
+        <button 
+          (click)="submitComment()"
+          class="submit-btn"
+          [disabled]="!newComment.userName || !newComment.text || !newComment.rating"
+        >Submit Review</button>
+      </div>
+  
+      <!-- Existing Comments -->
+      <div class="comments-list">
+        <div *ngFor="let comment of comments" class="comment-card">
+          <div class="comment-header">
+            <span class="user-name">{{ comment.userName }}</span>
+            <div class="stars">
+              <span *ngFor="let star of getStarArray(comment.rating)">
+                {{ star ? '★' : '☆' }}
+              </span>
+            </div>
+          </div>
+          <p class="comment-text">{{ comment.text }}</p>
+          <span class="comment-date">{{ comment.date | date }}</span>
+        </div>
+      </div>
+    </div>  
+    <div class="fab-container" *ngIf="offering">
+      <button class="edit-fab" (click)="navigateToEdit()">
+        <i class="fas fa-edit"></i> 
+      </button>
+      <button class="edit-fab" style="margin-bottom:70px;" (click)="deleteOffering()">
+        <i class="fas fa-trash"></i> 
+      </button>
+    </div>
+    
