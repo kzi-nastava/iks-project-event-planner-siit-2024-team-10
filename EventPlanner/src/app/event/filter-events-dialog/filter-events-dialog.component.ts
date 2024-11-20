@@ -19,16 +19,30 @@ export class FilterEventsDialogComponent {
     private dialogRef: MatDialogRef<FilterEventsDialogComponent>
   ) {
     this.filterForm = this.fb.group({
-      description: [''],
       type: [''],
       location: [''],
       maxParticipants: [''],
-      minRating: [1]
+      minRating: [1],
+      range: this.fb.group({
+        start: [null],
+        end: [null],
+      }),
     });
+  }
+  get rangeGroup(): FormGroup {
+    return this.filterForm.get('range') as FormGroup;
   }
 
   applyFilters() {
     const filters = this.filterForm.value;
+
+    const startDate = filters.range.start;
+    const endDate = filters.range.end;
+
+    console.log('Filters:', filters);
+    console.log('Start Date:', startDate);
+    console.log('End Date:', endDate);
+
     this.dialogRef.close(filters);
   }
 

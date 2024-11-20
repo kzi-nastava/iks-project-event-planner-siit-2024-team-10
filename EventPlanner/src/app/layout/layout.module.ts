@@ -15,6 +15,8 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {MatSelectModule} from '@angular/material/select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { RegisterComponent } from './register/register.component';
         MatInputModule,
         EventModule,
         OfferingModule,
-        MatSelectModule
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule
   ],
   exports: [NavBarComponent]
 })

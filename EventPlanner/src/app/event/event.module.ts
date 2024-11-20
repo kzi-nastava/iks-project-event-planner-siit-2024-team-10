@@ -11,6 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+
 
 
 @NgModule({
@@ -28,7 +30,8 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatSelectModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatDatepickerModule
   ],
   exports: [
     EventCardComponent,

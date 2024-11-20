@@ -6,7 +6,6 @@ import { Offering } from '../../offering/model/offering.model';
 import { FilterEventsDialogComponent } from '../../event/filter-events-dialog/filter-events-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -71,7 +70,7 @@ export class HomeComponent implements OnInit {
   }
   openEventFilterDialog() {
     const dialogRef = this.dialog.open(FilterEventsDialogComponent, {
-      width: '400px',
+      width: '600px',
     });
 
     dialogRef.afterClosed().subscribe((filters) => {

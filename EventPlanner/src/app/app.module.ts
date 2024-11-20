@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 
 
@@ -42,7 +43,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     MatSelectModule,
     MatSliderModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDatepickerModule
   ],
   providers: [
   ],
