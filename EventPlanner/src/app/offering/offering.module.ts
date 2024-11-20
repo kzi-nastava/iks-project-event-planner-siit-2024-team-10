@@ -34,7 +34,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     CreateOfferingsComponent,
     EditServiceComponent,
     FilterServiceDialogComponent,
-    FilterProductDialogComponent
+    FilterProductDialogComponent,
     FilterProvidersOfferingsDialogComponent
   ],
   imports: [
@@ -56,7 +56,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioButton, MatRadioGroup,
-    MatSliderModule
+    MatSliderModule,
     MatButtonToggleModule
   ],
   exports: [
