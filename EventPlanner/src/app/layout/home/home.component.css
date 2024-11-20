@@ -37,15 +37,16 @@
 
   .event-bg button[mat-stroked-button]{
     border-radius: 20px;
-    border-color: #9c9ac9 !important;
+    border-color: #b5b3c9 !important;
+    background-color: #b5b3c9;
     color: #241212 !important;
     padding: 10px 20px;
     border-width: 3px;
     font-size: 16px;
   }
   .event-bg button[mat-stroked-button]:hover{
-    background-color: #b5b3c9;
-    border-color: #d0cfe1 !important;
+    background-color: #9c9ac9;
+    border-color: #9c9ac9 !important;
     color: #ffffff !important ;
   }
   .mat-mdc-radio-button.mat-accent{
@@ -58,15 +59,16 @@
 
   .offering-bg button[mat-stroked-button]{
     border-radius: 20px;
-    border-color: #9c9ac9 !important;
+    border-color: #b5b3c9 !important;
+    background-color: #b5b3c9;
     color: #241212 !important;
     padding: 10px 20px;
     border-width: 3px;
     font-size: 16px;
   }
   .offering-bg button[mat-stroked-button]:hover{
-    background-color: #b5b3c9;
-    border-color: #d0cfe1 !important;
+    background-color: #9c9ac9;
+    border-color: #9c9ac9 !important;
     color: #ffffff !important ;
   }
   

@@ -17,6 +17,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import { OfferingWarningDialogComponent } from './offering-warning-dialog/offering-warning-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -25,6 +27,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     HomeComponent,
     LoginComponent,
     RegisterComponent,
+    OfferingWarningDialogComponent,
   ],
     imports: [
         CommonModule,
@@ -42,7 +45,8 @@ import {MatNativeDateModule} from '@angular/material/core';
         OfferingModule,
         MatSelectModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        MatDialogModule
   ],
   exports: [NavBarComponent]
 })

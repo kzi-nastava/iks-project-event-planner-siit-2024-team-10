@@ -19,13 +19,21 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon'; 
 import { CreateOfferingsComponent } from './create-offerings/create-offerings.component';
 import { EditServiceComponent } from './edit-service/edit-service.component';
+import { FilterServiceDialogComponent } from './filter-service-dialog/filter-service-dialog.component';
+import { FilterProductDialogComponent } from './filter-product-dialog/filter-product-dialog.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
     OfferingCardComponent,
     CreateOfferingsComponent,
-    EditServiceComponent
+    EditServiceComponent,
+    FilterServiceDialogComponent,
+    FilterProductDialogComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +50,11 @@ import { EditServiceComponent } from './edit-service/edit-service.component';
     MatRadioModule,
     MatSlideToggleModule,
     MatDialogModule,
-    MatIconModule  
+    MatIconModule  ,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRadioButton, MatRadioGroup,
+    MatSliderModule
   ],
   exports: [
     ManageOfferingsComponent,
