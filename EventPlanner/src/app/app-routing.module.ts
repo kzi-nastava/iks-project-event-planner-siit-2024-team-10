@@ -15,7 +15,7 @@ const routes: Routes = [
   {path:'manage-offerings',component:ManageOfferingsComponent},
   {path:'create-offering',component:CreateOfferingsComponent},
   {path:'edit-service',component:EditServiceComponent},
-  {path:'offering/:id',component:DetailsPageComponent}
+  {path:'offering/:id',component:DetailsPageComponent},
   {path:'register',component: RegisterComponent},
 ];
 

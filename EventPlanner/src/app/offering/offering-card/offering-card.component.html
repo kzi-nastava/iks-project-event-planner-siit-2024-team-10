@@ -2,10 +2,10 @@
   <mat-card-header>
     <mat-card-title-group>
       <mat-card-title>{{offering.name}}</mat-card-title>
-      <mat-card-subtitle>{{offering.provider}}</mat-card-subtitle>
+      <mat-card-subtitle>{{offering.provider.companyName}}</mat-card-subtitle>
       <p class="price">{{offering.price}}€</p>
     </mat-card-title-group>
-    <picture><img [src]="offering.picture" alt="{{offering.name}}"></picture>
+    <picture><img [src]="offering.picture[0]" alt="{{offering.name}}"></picture>
   </mat-card-header>
   <mat-card-content>
     <div class="card-footer">
