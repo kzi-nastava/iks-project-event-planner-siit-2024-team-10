@@ -10,30 +10,43 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class FilterProvidersOfferingsDialogComponent {
   filterForm: FormGroup;
 
-  eventTypes = ['None', 'Conference', 'Wedding', 'Meetup', 'Concert'];
+  eventTypes = ['Any', 'Conferention','Wedding','Meetup','Concert'];
+  serviceCategories = ['Any', 'Decoration', 'Catering', 'Band'];
+
+  selectedEventType: string = 'Any';
+  selectedServiceCategory: string = 'Any';
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<FilterProvidersOfferingsDialogComponent>
   ) {
     this.filterForm = this.fb.group({
-      type: [''],             // Event Type
-      availability: [''],     // Available/Not Available
-      minPrice: [''],         // Minimum Price
-      maxPrice: [''],         // Maximum Price
+      category: [''],
+      type: [''],             
+      availability: [''],     
+      priceRange: this.fb.group({
+        startPrice: [0],
+        endPrice: [1000],
+      }),
     });
   }
 
+  get priceRangeGroup(): FormGroup {
+    return this.filterForm.get('priceRange') as FormGroup;
+  }
+
+
   applyFilters() {
     const filters = this.filterForm.value;
-
     console.log('Filters:', filters);
 
-    // Pass filters back to the parent component or service
     this.dialogRef.close(filters);
   }
 
   closeDialog() {
     this.dialogRef.close();
+  }
+  formatLabel(value: number): string {
+    return `${value}`;
   }
 }
