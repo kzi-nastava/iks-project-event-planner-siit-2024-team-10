@@ -1,4 +1,4 @@
-<div style="background-color: #d0cfe1;">
+<div style="background-color: #f6f6f6;">
 <div class="offering-container">
   <form [formGroup]="offeringForm" (ngSubmit)="onSubmit()" class="elegant-form">
     <div class="form-header">
@@ -106,22 +106,14 @@
       <h3 class="small-subtitle">Deadlines</h3>
       <div class="price-section">
         <mat-form-field style="padding-right: 10px;" appearance="outline">
-          <mat-label>Reservation Deadline</mat-label>
-          <mat-select formControlName="reservationDeadline">
-            <mat-option value="1day">1 Day Before</mat-option>
-            <mat-option value="3days">3 Days Before</mat-option>
-            <mat-option value="1week">1 Week Before</mat-option>
-          </mat-select>
+          <mat-label>Reservation deadline</mat-label>
+          <input matInput type="number" formControlName="reservationDeadline" placeholder="0.00">
         </mat-form-field>
 
-        <mat-form-field style="padding-left: 10px;" appearance="outline">
-          <mat-label>Cancellation Deadline</mat-label>
-          <mat-select formControlName="cancellationDeadline">
-            <mat-option value="1day">1 Day Before</mat-option>
-            <mat-option value="3days">3 Days Before</mat-option>
-            <mat-option value="1week">1 Week Before</mat-option>
-          </mat-select>
-        </mat-form-field>
+      <mat-form-field style="padding-left: 10px;" appearance="outline">
+        <mat-label>Cancellation deadline</mat-label>
+        <input matInput type="number" formControlName="cancelldationDeadline" placeholder="0">
+      </mat-form-field>
       </div>
     </div>
 

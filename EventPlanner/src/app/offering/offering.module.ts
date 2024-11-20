@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
+import { FilterProvidersOfferingsDialogComponent } from './filter-providers-offerings-dialog/filter-providers-offerings-dialog.component';
 // Material Imports
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -25,6 +25,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { MatSliderModule } from '@angular/material/slider';
     EditServiceComponent,
     FilterServiceDialogComponent,
     FilterProductDialogComponent
+    FilterProvidersOfferingsDialogComponent
   ],
   imports: [
     CommonModule,
@@ -55,12 +57,14 @@ import { MatSliderModule } from '@angular/material/slider';
     MatNativeDateModule,
     MatRadioButton, MatRadioGroup,
     MatSliderModule
+    MatButtonToggleModule
   ],
   exports: [
     ManageOfferingsComponent,
     CreateOfferingsComponent,
     OfferingCardComponent,
-    EditServiceComponent
+    EditServiceComponent,
+    FilterProvidersOfferingsDialogComponent
   ]
 })
 export class OfferingModule { }
