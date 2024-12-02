@@ -1,28 +1,33 @@
 .notification-card {
-    margin: 10px 0;
+    margin: 2px 0;
     width: 100%;
-    min-height: 100px;
+    min-height: 80px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
   
     .card-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
   
       p {
         margin: 0;
         font-size: 14px;
         color: #555;
+        flex-grow: 1;
+        text-align: left;
       }
   
       .read-icon {
+        position: absolute; 
+        bottom: 8px; 
+        right: 8px;
         background-color: transparent;
         border: none;
-        cursor: pointer;
       }
     }
   
@@ -30,4 +35,8 @@
       background-color: #f0f0f0;
     }
   }
-      
+
+  mat-card-header{
+    padding-top: 0;
+    margin: 0;
+  }
