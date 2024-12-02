@@ -6,6 +6,7 @@
     margin: auto;
     font-family: 'Roboto', sans-serif;
     background-color: #F6F6F6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 30px;
   
     .notifications-header {
