@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { NotificationModule } from './notification/notification.module';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MatSliderModule,
     ReactiveFormsModule,
     MatDatepickerModule,
+    NotificationModule
   ],
   providers: [
   ],

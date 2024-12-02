@@ -1,0 +1,15 @@
+<div class="notifications-page">
+    <div class="notifications-header">
+      <h1>Notifications</h1>
+      <mat-slide-toggle class="push-toggle">Push notifications</mat-slide-toggle>
+    </div>
+  
+    <div class="notifications-list">
+      <app-notification-card
+        *ngFor="let notification of notifications"
+        [notification]="notification"
+        class="notification-item"
+      ></app-notification-card>
+    </div>
+  </div>
+  

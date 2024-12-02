@@ -1,0 +1,34 @@
+.notifications-page {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    font-family: 'Roboto', sans-serif;
+  
+    .notifications-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+  
+      h1 {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+      }
+  
+      .push-toggle {
+        font-size: 16px;
+      }
+    }
+  
+    .notifications-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  
+  .notification-item {
+    display: block;
+  }
+  
