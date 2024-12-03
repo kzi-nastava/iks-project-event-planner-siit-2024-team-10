@@ -35,6 +35,10 @@ const TOP_EVENTS: Event[] = [
       houseNumber: '456',
     },
     rating: 4.8,
+    agenda:[
+      {id:1,name:'Ceremony',description:'The official wedding ceremony where the couple exchanges vows.',startTime:'2:00 PM',endTime:'3:00 PM',location:'Rose Garden'},
+      {id:2,name:'Cocktail hour',description:'A relaxed gathering with drinks and appetizers for guests to mingle before the reception.',startTime:'3:00 PM',endTime:'4:00 PM',location:'Garden Terrace'}
+    ]
   },
   {
     id: 2,
@@ -68,6 +72,10 @@ const TOP_EVENTS: Event[] = [
       houseNumber: '22',
     },
     rating: 4.7,
+    agenda: [
+      { id: 1, name: 'Opening Keynote', description: 'Welcoming speech by the organizer.', startTime: '9:00 AM', endTime: '10:00 AM', location: 'Main Hall' },
+      { id: 2, name: 'Panel Discussion', description: 'Experts discuss emerging trends in technology.', startTime: '10:30 AM', endTime: '12:00 PM', location: 'Conference Room A' },
+    ]
   },
   {
     id: 3,
@@ -101,6 +109,10 @@ const TOP_EVENTS: Event[] = [
       houseNumber: '99',
     },
     rating: 4.9,
+    agenda: [
+      { id: 1, name: 'Registration & Breakfast', description: 'Guests register and network over breakfast.', startTime: '8:00 AM', endTime: '9:00 AM', location: 'Lobby' },
+      { id: 2, name: 'Keynote: Innovations in Global Health', description: 'Discussion on breakthroughs in healthcare.', startTime: '9:30 AM', endTime: '11:00 AM', location: 'Auditorium' },
+    ],
   },
   {
     id: 4,
@@ -134,6 +146,10 @@ const TOP_EVENTS: Event[] = [
       houseNumber: '12',
     },
     rating: 4.5,
+    agenda: [
+      { id: 1, name: 'Opening Act', description: 'A performance by a rising star.', startTime: '12:00 PM', endTime: '1:00 PM', location: 'Main Stage' },
+      { id: 2, name: 'Headline Performance', description: 'A concert by the main artist of the evening.', startTime: '8:00 PM', endTime: '10:00 PM', location: 'Main Stage' },
+    ],
   },
   {
     id: 5,
@@ -167,7 +183,11 @@ const TOP_EVENTS: Event[] = [
       houseNumber: '25',
     },
     rating: 4.8,
-  }
+    agenda: [
+      { id: 1, name: 'Registration & Breakfast', description: 'Guests register and network over breakfast.', startTime: '8:00 AM', endTime: '9:00 AM', location: 'Lobby' },
+      { id: 2, name: 'Keynote: Innovations in Global Health', description: 'Discussion on breakthroughs in healthcare.', startTime: '9:30 AM', endTime: '11:00 AM', location: 'Auditorium' },
+    ],
+  },
 ];
 
 const EVENTS: Event[] = [
@@ -203,6 +223,10 @@ const EVENTS: Event[] = [
       houseNumber: '456',
     },
     rating: 4.8,
+    agenda:[
+      {id:1,name:'Ceremony',description:'The official wedding ceremony where the couple exchanges vows.',startTime:'2:00 PM',endTime:'3:00 PM',location:'Rose Garden'},
+      {id:2,name:'Cocktail hour',description:'A relaxed gathering with drinks and appetizers for guests to mingle before the reception.',startTime:'3:00 PM',endTime:'4:00 PM',location:'Garden Terrace'}
+    ]
   },
   {
     id: 2,
@@ -236,6 +260,10 @@ const EVENTS: Event[] = [
       houseNumber: '22',
     },
     rating: 4.7,
+    agenda: [
+      { id: 1, name: 'Opening Keynote', description: 'Welcoming speech by the organizer.', startTime: '9:00 AM', endTime: '10:00 AM', location: 'Main Hall' },
+      { id: 2, name: 'Panel Discussion', description: 'Experts discuss emerging trends in technology.', startTime: '10:30 AM', endTime: '12:00 PM', location: 'Conference Room A' },
+    ]
   },
   {
     id: 3,
@@ -269,6 +297,10 @@ const EVENTS: Event[] = [
       houseNumber: '99',
     },
     rating: 4.9,
+    agenda: [
+      { id: 1, name: 'Registration & Breakfast', description: 'Guests register and network over breakfast.', startTime: '8:00 AM', endTime: '9:00 AM', location: 'Lobby' },
+      { id: 2, name: 'Keynote: Innovations in Global Health', description: 'Discussion on breakthroughs in healthcare.', startTime: '9:30 AM', endTime: '11:00 AM', location: 'Auditorium' },
+    ],
   },
   {
     id: 4,
@@ -302,6 +334,10 @@ const EVENTS: Event[] = [
       houseNumber: '12',
     },
     rating: 4.5,
+    agenda: [
+      { id: 1, name: 'Opening Act', description: 'A performance by a rising star.', startTime: '12:00 PM', endTime: '1:00 PM', location: 'Main Stage' },
+      { id: 2, name: 'Headline Performance', description: 'A concert by the main artist of the evening.', startTime: '8:00 PM', endTime: '10:00 PM', location: 'Main Stage' },
+    ],
   },
   {
     id: 5,
@@ -335,6 +371,10 @@ const EVENTS: Event[] = [
       houseNumber: '25',
     },
     rating: 4.8,
+    agenda: [
+      { id: 1, name: 'Registration & Breakfast', description: 'Guests register and network over breakfast.', startTime: '8:00 AM', endTime: '9:00 AM', location: 'Lobby' },
+      { id: 2, name: 'Keynote: Innovations in Global Health', description: 'Discussion on breakthroughs in healthcare.', startTime: '9:30 AM', endTime: '11:00 AM', location: 'Auditorium' },
+    ],
   },
   {
     id: 6,
@@ -368,6 +408,10 @@ const EVENTS: Event[] = [
       houseNumber: '22',
     },
     rating: 5.0,
+    agenda: [
+      { id: 1, name: 'Opening Keynote', description: 'Welcoming speech by the organizer.', startTime: '9:00 AM', endTime: '10:00 AM', location: 'Main Hall' },
+      { id: 2, name: 'Panel Discussion', description: 'Experts discuss emerging trends in technology.', startTime: '10:30 AM', endTime: '12:00 PM', location: 'Conference Room A' },
+    ],
   },
   {
     id: 7,
@@ -401,6 +445,10 @@ const EVENTS: Event[] = [
       houseNumber: '18',
     },
     rating: 4.6,
+    agenda: [
+      { id: 1, name: 'Opening Keynote', description: 'Welcoming speech by the organizer.', startTime: '9:00 AM', endTime: '10:00 AM', location: 'Main Hall' },
+      { id: 2, name: 'Panel Discussion', description: 'Experts discuss emerging trends in technology.', startTime: '10:30 AM', endTime: '12:00 PM', location: 'Conference Room A' },
+    ],
   },
   {
     id: 8,
@@ -434,6 +482,10 @@ const EVENTS: Event[] = [
       houseNumber: '12',
     },
     rating: 4.9,
+    agenda: [
+      { id: 1, name: 'Astronomy Panel', description: 'Discussion with top astronomers.', startTime: '9:00 AM', endTime: '11:00 AM', location: 'Galaxy Room' },
+      { id: 2, name: 'Future of Space Missions', description: 'Exploration of next-gen spacecraft technologies.', startTime: '1:00 PM', endTime: '3:00 PM', location: 'Mission Hall' },
+    ],
   },
   {
     id: 9,
@@ -467,6 +519,10 @@ const EVENTS: Event[] = [
       houseNumber: '44',
     },
     rating: 4.7,
+    agenda: [
+      { id: 1, name: 'Astronomy Panel', description: 'Discussion with top astronomers.', startTime: '9:00 AM', endTime: '11:00 AM', location: 'Galaxy Room' },
+      { id: 2, name: 'Future of Space Missions', description: 'Exploration of next-gen spacecraft technologies.', startTime: '1:00 PM', endTime: '3:00 PM', location: 'Mission Hall' },
+    ],
   },
   {
     id: 10,
@@ -500,6 +556,10 @@ const EVENTS: Event[] = [
       houseNumber: '25',
     },
     rating: 4.8,
+    agenda: [
+      { id: 1, name: 'AI Basics in Medicine', description: 'Introduction to AI concepts and applications in healthcare.', startTime: '9:00 AM', endTime: '11:00 AM', location: 'Room A' },
+      { id: 2, name: 'Hands-on Session', description: 'Participants develop basic AI models.', startTime: '11:30 AM', endTime: '1:30 PM', location: 'Lab 1' },
+    ],
   },
 ];
 
@@ -523,7 +583,8 @@ export class EventService {
         isOpen: eventObj.isOpen,
         date: eventObj.date,
         location: eventObj.location,
-        rating: eventObj.rating
+        rating: eventObj.rating,
+        agenda:eventObj.agenda
       };
       this.eventList.push(event);
     }
@@ -538,7 +599,8 @@ export class EventService {
         isOpen: eventObj.isOpen,
         date: eventObj.date,
         location: eventObj.location,
-        rating: eventObj.rating
+        rating: eventObj.rating,
+        agenda:eventObj.agenda
       };
       this.topEventList.push(event);
     }
@@ -550,5 +612,9 @@ export class EventService {
 
   getTop(): Observable<Event[]> {
     return of(this.topEventList);
+  }
+
+  getEvent(id:number): Event {
+    return this.eventList.at(id);
   }
 }
