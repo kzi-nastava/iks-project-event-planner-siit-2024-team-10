@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <div class="main-container">
   <!-- Carousel Section -->
-  <div class="carousel-section">
-    <div class="carousel-container">
+  <div class="map-section">
+    <div class="map-container">
       <img src="map.png" class="map">
     </div>
   </div>
@@ -30,35 +30,34 @@
     </div>
 
     <!-- Specifications for Services -->
-    <div class="specifications-section">
+    <div class="agenda-section">
       <h2>Agenda</h2>
-      <div class="specs-grid" >
-        <div class="spec-item"*ngFor="let agendaItem of event.agenda">
+      <div class="agenda-grid" >
+        <div class="agenda-item"*ngFor="let agendaItem of event.agenda">
           <div>
-            <span class="spec-label">Name: </span>
-            <span class="spec-value">{{ agendaItem.name }}</span>
+            <span class="agenda-label">Name: </span>
+            <span class="agenda-value">{{ agendaItem.name }}</span>
           </div>
           <div>
-            <span class="spec-label">Description: </span>
-            <span class="spec-value">{{ agendaItem.description }}</span>
+            <span class="agenda-label">Description: </span>
+            <span class="agenda-value">{{ agendaItem.description }}</span>
           </div>
           <div>
-            <span class="spec-label">Start: </span>
-            <span class="spec-value">{{ agendaItem.startTime }}</span>
+            <span class="agenda-label">Start: </span>
+            <span class="agenda-value">{{ agendaItem.startTime }}</span>
           </div>
           <div>
-            <span class="spec-label">End: </span>
-            <span class="spec-value">{{ agendaItem.endTime }}</span>
+            <span class="agenda-label">End: </span>
+            <span class="agenda-value">{{ agendaItem.endTime }}</span>
           </div>
           <div>
-            <span class="spec-label">Location: </span>
-            <span class="spec-value">{{ agendaItem.location }}</span>
+            <span class="agenda-label">Location: </span>
+            <span class="agenda-value">{{ agendaItem.location }}</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Provider Section -->
     <div class="organizer-section">
       <div class="organizer-card">
         <div class="organizer-info">
