@@ -82,10 +82,41 @@
           </div>
         </div>
     </div>
-
-      <button class="fab" >
-        <i class="fas fa-file-pdf"></i>
-      </button>
 </div>
+    <div class="comments-section">
+      <h2>Customer Reviews</h2>
+
+      <!-- Add Comment Form -->
+      <div class="comment-form">
+        <h3>Leave a Review</h3>
+        <div class="rating-input">
+          <span>Your Rating:</span>
+          <div class="stars-input">
+            <span
+              *ngFor="let star of getStarArray(5); let i = index"
+              (click)="setRating(i + 1)"
+              [class.filled]="i < userRating"
+              class="star-icon"
+            >★</span>
+          </div>
+        </div>
+        <input
+          type="text"
+          placeholder="Your Name"
+          class="input-field"
+        >
+        <textarea
+          placeholder="Your Review"
+          class="input-field"
+        ></textarea>
+        <button
+          class="submit-btn"
+        >Submit Review</button>
+      </div>
+    </div>
+
+    <button class="fab" >
+      <i class="fas fa-file-pdf"></i>
+    </button>
   </div>
 </div>

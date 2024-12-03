@@ -10,8 +10,17 @@ import {Event} from '../model/event.model'
 })
 export class EventDetailsComponent implements OnInit {
   event: Event;
+  userRating:number;
 
   constructor(private route: ActivatedRoute, private eventService:EventService) {
+  }
+
+  getStarArray(rating: number): number[] {
+    return Array(5).fill(0).map((_, index) => index < rating ? 1 : 0);
+  }
+
+  setRating(rating: number): void {
+    this.userRating = rating;
   }
 
   ngOnInit(): void {
