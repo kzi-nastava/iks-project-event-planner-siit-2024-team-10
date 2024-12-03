@@ -615,6 +615,6 @@ export class EventService {
   }
 
   getEvent(id:number): Event {
-    return this.eventList.at(id);
+    return this.eventList.at(id-1);
   }
 }

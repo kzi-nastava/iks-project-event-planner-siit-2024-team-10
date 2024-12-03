@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { EventDetailsComponent } from './event-details/event-details.component';
+import {RouterLink} from '@angular/router';
 
 
 
@@ -33,7 +34,8 @@ import { EventDetailsComponent } from './event-details/event-details.component';
     MatSelectModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    RouterLink
   ],
   exports: [
     EventCardComponent,

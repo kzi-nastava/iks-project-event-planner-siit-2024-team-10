@@ -1,4 +1,4 @@
-<mat-card class="event-card" appearance="outlined" (click)="onEventClicked()">
+<mat-card class="event-card" appearance="outlined"  [routerLink]="['/event',event.id]">
     <mat-card-header>
       <mat-card-title-group>
         <mat-card-title>{{event.name}}</mat-card-title>
@@ -21,3 +21,8 @@
           </div>
           <div class="add-to-favorite">
             <button mat-button><mat-icon>favorite_border</mat-icon></button>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+</mat-card>

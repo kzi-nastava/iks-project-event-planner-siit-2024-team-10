@@ -18,7 +18,7 @@ const routes: Routes = [
   {path:'edit-service',component:EditServiceComponent},
   {path:'offering/:id',component:DetailsPageComponent},
   {path:'register',component: RegisterComponent},
-  {path:'event-details',component:EventDetailsComponent},
+  {path:'event/:id',component:EventDetailsComponent},
 ];
 
 @NgModule({
