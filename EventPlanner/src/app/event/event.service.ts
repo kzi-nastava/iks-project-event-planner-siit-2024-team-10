@@ -20,6 +20,7 @@ const TOP_EVENTS: Event[] = [
       },
       email: 'johndoe@techworld.com',
       phoneNumber: '+123456789',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'An annual gathering of industry leaders discussing the latest in technology, innovation, and startups.',
@@ -52,6 +53,7 @@ const TOP_EVENTS: Event[] = [
       },
       email: 'jane.smith@who.org',
       phoneNumber: '+987654321',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'A global seminar bringing together experts to discuss new health strategies and medical breakthroughs.',
@@ -84,6 +86,7 @@ const TOP_EVENTS: Event[] = [
       },
       email: 'mark.johnson@livenation.com',
       phoneNumber: '+123987654',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'A weekend of live performances featuring top artists from around the world in various music genres.',
@@ -116,6 +119,7 @@ const TOP_EVENTS: Event[] = [
       },
       email: 'emily.brown@foodnetwork.com',
       phoneNumber: '+123111222',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'A food lover’s paradise with the best chefs, restaurants, and food brands showcasing their latest offerings.',
@@ -148,6 +152,7 @@ const TOP_EVENTS: Event[] = [
       },
       email: 'sarah.connor@nasa.com',
       phoneNumber: '+123444555',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'A symposium discussing the latest advancements in space exploration and research.',
@@ -183,6 +188,7 @@ const EVENTS: Event[] = [
       },
       email: 'johndoe@techworld.com',
       phoneNumber: '+123456789',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'An annual gathering of industry leaders discussing the latest in technology, innovation, and startups.',
@@ -215,6 +221,7 @@ const EVENTS: Event[] = [
       },
       email: 'jane.smith@who.org',
       phoneNumber: '+987654321',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'A global seminar bringing together experts to discuss new health strategies and medical breakthroughs.',
@@ -247,6 +254,7 @@ const EVENTS: Event[] = [
       },
       email: 'mark.johnson@livenation.com',
       phoneNumber: '+123987654',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'A weekend of live performances featuring top artists from around the world in various music genres.',
@@ -279,6 +287,7 @@ const EVENTS: Event[] = [
       },
       email: 'emily.brown@foodnetwork.com',
       phoneNumber: '+123111222',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'A food lover’s paradise with the best chefs, restaurants, and food brands showcasing their latest offerings.',
@@ -311,6 +320,7 @@ const EVENTS: Event[] = [
       },
       email: 'sarah.connor@nasa.com',
       phoneNumber: '+123444555',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'A symposium discussing the latest advancements in space exploration and research.',
@@ -343,6 +353,7 @@ const EVENTS: Event[] = [
       },
       email: 'sophia.lemoine@fashionweekparis.com',
       phoneNumber: '+33123456789',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'A world-renowned fashion event showcasing the newest collections from top designers.',
@@ -375,6 +386,7 @@ const EVENTS: Event[] = [
       },
       email: 'alice.miller@cryptoinnovate.com',
       phoneNumber: '+441234567890',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'A summit focused on the future of blockchain technology and its applications in various industries.',
@@ -407,6 +419,7 @@ const EVENTS: Event[] = [
       },
       email: 'francois.dubois@cannesfilmfestival.com',
       phoneNumber: '+33199887766',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'An international film festival showcasing groundbreaking films and performances.',
@@ -439,6 +452,7 @@ const EVENTS: Event[] = [
       },
       email: 'ethan.wright@startupnation.com',
       phoneNumber: '+123777888',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'An expo where entrepreneurs can showcase their startups and find investment opportunities.',
@@ -471,6 +485,7 @@ const EVENTS: Event[] = [
       },
       email: 'laura.gomez@artbiennale.com',
       phoneNumber: '+39123456789',
+      profilePhoto:'https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY='
     },
     description:
       'An international art exhibition highlighting contemporary artworks from around the world.',

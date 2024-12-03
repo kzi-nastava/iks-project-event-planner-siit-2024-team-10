@@ -7,4 +7,5 @@ export interface Organizer {
   location:Location;
   email: string;
   phoneNumber: string;
+  profilePhoto: string;
 }
