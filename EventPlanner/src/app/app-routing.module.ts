@@ -8,6 +8,7 @@ import { EditServiceComponent } from './offering/edit-service/edit-service.compo
 import { DetailsPageComponent } from './offering/details-page/details-page.component';
 import {RegisterComponent} from './layout/register/register.component';
 import {EventDetailsComponent} from './event/event-details/event-details.component';
+import { NotificationsPageComponent } from './notification/notifications-page/notifications-page.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path:'offering/:id',component:DetailsPageComponent},
   {path:'register',component: RegisterComponent},
   {path:'event/:id',component:EventDetailsComponent},
+  {path:'notification-panel',component: NotificationsPageComponent}
 ];
 
 @NgModule({

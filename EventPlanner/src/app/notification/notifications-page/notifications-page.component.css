@@ -1,0 +1,67 @@
+.notifications-page {
+    padding: 20px;
+    max-width: 1000px;
+    margin-top:20px !important;
+    margin-bottom:20px !important;
+    margin: auto;
+    font-family: 'Roboto', sans-serif;
+    background-color: #F6F6F6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+  
+    .notifications-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+  
+      h1 {
+        font-size: 40px;
+        font-weight: bold;
+        color: #333;
+      }
+  
+      .push-toggle {
+        font-size: 16px;
+      }
+    }
+  
+    .notifications-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  
+  .notification-item {
+    display: block;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:20px;
+    gap: 10px;
+  }
+  .pagination p{
+    margin:0;
+    color: gray;
+    font-family: 'Roboto','serif';
+  }
+  
+  .pagination button {
+    padding: 10px 15px;
+    color: #545283;
+    border: 1px solid #ddd;
+    background-color: #f2eef6;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .pagination button:hover {
+    background-color: #9c9ac9;
+    color: #fff;
+  }
+  
