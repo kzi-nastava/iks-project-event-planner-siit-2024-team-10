@@ -1,9 +1,9 @@
-<mat-card class="event-card" appearance="outlined" (click)="onEventClicked()">
+<mat-card class="event-card" appearance="outlined"  [routerLink]="['/event',event.id]">
     <mat-card-header>
       <mat-card-title-group>
         <mat-card-title>{{event.name}}</mat-card-title>
-        <mat-card-subtitle>{{event.organizer}}</mat-card-subtitle>
-        <p class="location-time">  {{ event.location }} at {{ event.date | date: 'dd.MM.yyyy. \'at\' HH:mm' }}
+        <mat-card-subtitle>{{event.organizer.firstName}} {{event.organizer.lastName}}</mat-card-subtitle>
+        <p class="location-time">  {{ event.location.city }}, {{ event.location.country }} at {{ event.date | date: 'dd.MM.yyyy. \'at\' HH:mm' }}
         </p>
       </mat-card-title-group>
     </mat-card-header>
@@ -13,7 +13,7 @@
           <div class="tags-rating">
             <div class="tags">
               <span class="tag">EVENT</span>
-              <span class="tag">{{event.eventType}}</span>
+              <span class="tag">{{event.eventType.name}}</span>
             </div>
             <div class="rating">
               <span class="rating">{{event.rating}}★</span>
@@ -21,4 +21,8 @@
           </div>
           <div class="add-to-favorite">
             <button mat-button><mat-icon>favorite_border</mat-icon></button>
-  
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+</mat-card>

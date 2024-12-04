@@ -12,6 +12,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { EventDetailsComponent } from './event-details/event-details.component';
+import {RouterLink} from '@angular/router';
 
 
 
@@ -19,6 +21,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
   declarations: [
     EventCardComponent,
     FilterEventsDialogComponent,
+    EventDetailsComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +34,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MatSelectModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    RouterLink
   ],
   exports: [
     EventCardComponent,
