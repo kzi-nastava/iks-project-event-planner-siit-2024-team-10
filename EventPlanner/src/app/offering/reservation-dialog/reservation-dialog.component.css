@@ -1,0 +1,62 @@
+.dialog-container {
+    background: #f6f6f6;
+    border-radius: 8px;
+    padding: 24px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  h1{
+    text-align: center;
+    font-size: 3rem;
+  }
+  
+  .content {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  
+  .calendar-container {
+    width: 300px;
+  }
+  
+  .time-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .time-field {
+    flex: 1;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: center;
+  }
+  
+  button[mat-raised-button] {
+    background-color: #9575cd;
+    color: white;
+    font-weight: 500;
+    text-transform: none;
+    align-items: flex-start;
+    padding: 8px 24px;
+  }
+  
+  button[mat-raised-button]:hover {
+    background-color: #7e57c2;
+  }
+  
