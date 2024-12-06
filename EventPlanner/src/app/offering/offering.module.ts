@@ -26,6 +26,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ReservationComponent } from './reservation/reservation.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     EditServiceComponent,
     FilterServiceDialogComponent,
     FilterProductDialogComponent,
-    FilterProvidersOfferingsDialogComponent
+    FilterProvidersOfferingsDialogComponent,
+    ReservationComponent
   ],
   imports: [
     CommonModule,
