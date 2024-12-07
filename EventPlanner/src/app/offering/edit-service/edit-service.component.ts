@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
-import { OfferingService } from '../offering.service';
+import { OfferingService } from '../offering-service/offering.service';
 
 @Component({
   selector: 'app-edit-service',
