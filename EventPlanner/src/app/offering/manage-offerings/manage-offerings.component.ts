@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from '../../event/model/event.model';
 import { EventService } from '../../event/event.service';
-import { OfferingService } from '../../offering/offering.service';
+import { OfferingService } from '../offering-service/offering.service';
 import { Offering } from '../../offering/model/offering.model';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterProvidersOfferingsDialogComponent } from '../filter-providers-offerings-dialog/filter-providers-offerings-dialog.component';

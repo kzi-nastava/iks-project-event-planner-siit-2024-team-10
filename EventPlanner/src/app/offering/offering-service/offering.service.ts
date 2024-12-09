@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Product } from './model/product.model';
-import { Service } from './model/service.model';
+import { Product } from '../model/product.model';
+import { Service } from '../model/service.model';
 import { Observable, of } from 'rxjs';
-import { Offering } from './model/offering.model';
-import { Provider } from '../user/model/provider.model';
+import { Offering } from '../model/offering.model';
+import { Provider } from '../../user/model/provider.model';
 
 const SAMPLE_PROVIDER: Provider = {
   _id: 1,
