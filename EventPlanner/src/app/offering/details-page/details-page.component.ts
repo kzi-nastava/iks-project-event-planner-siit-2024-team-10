@@ -70,7 +70,6 @@ export class DetailsPageComponent implements OnInit {
   // za prikaz podataka koje ima usluga a nema proizvod
   isService(offering: Product | Service): offering is Service {
     const isService = (offering as Service).specification !== undefined;
-    console.log('Is service:', isService);  
     return isService;
   }
 
