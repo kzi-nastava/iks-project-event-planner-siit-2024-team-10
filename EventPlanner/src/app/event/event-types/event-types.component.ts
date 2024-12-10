@@ -9,18 +9,19 @@ import {MatTableDataSource} from '@angular/material/table';
   styleUrl: './event-types.component.css'
 })
 export class EventTypesComponent implements OnInit{
-  eventTypes:EventType[]=[];
   dataSource: MatTableDataSource<EventType>;
   displayedColumns: string[] = ['name', 'description','active','recommendedCategories','actions'];
 
   constructor(private service:EventTypeService) {}
 
   ngOnInit(): void {
+    this.refreshDataSource();
+  }
+
+  private refreshDataSource() {
     this.service.getAll().subscribe({
       next: (eventTypes: EventType[]) => {
-        //  this.eventTypes=eventTypes;
-        console.log(eventTypes);
-        this.dataSource=new MatTableDataSource<EventType>(eventTypes);
+        this.dataSource = new MatTableDataSource<EventType>(eventTypes);
       },
       error: (_) => {
         console.log("Error loading event types")
