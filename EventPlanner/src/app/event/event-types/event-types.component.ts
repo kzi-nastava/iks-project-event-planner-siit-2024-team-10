@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {EventType} from '../model/event-type.model';
 import {EventTypeService} from '../event-type.service';
 import {MatTableDataSource} from '@angular/material/table';
+import {CreateEventTypeComponent} from '../create-event-type/create-event-type.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-event-types',
@@ -12,7 +14,8 @@ export class EventTypesComponent implements OnInit{
   dataSource: MatTableDataSource<EventType>;
   displayedColumns: string[] = ['name', 'description','active','recommendedCategories','actions'];
 
-  constructor(private service:EventTypeService) {}
+  constructor(private service:EventTypeService,
+              private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.refreshDataSource();
@@ -36,6 +39,24 @@ export class EventTypesComponent implements OnInit{
 
   deleteRow(element: EventType): void {
 
+  }
+
+  openAddEventTypeDialog() {
+    const dialogRef = this.dialog.open(CreateEventTypeComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.service.add(result).subscribe({
+          next: (response) => {
+            console.log('Event type added:', response);
+            this.refreshDataSource();
+            },
+          error: (err) => console.error('Error adding event type:', err),
+        });
+      }
+    });
   }
 
   getCategoryNames(eventType:EventType): string {

@@ -9,7 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { EventDetailsComponent } from './event-details/event-details.component';
@@ -26,6 +26,7 @@ import {
   MatRow, MatRowDef, MatTable, MatTableModule
 } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
+import { CreateEventTypeComponent } from './create-event-type/create-event-type.component';
 
 
 
@@ -35,6 +36,11 @@ import {MatPaginator} from '@angular/material/paginator';
     FilterEventsDialogComponent,
     EventDetailsComponent,
     EventTypesComponent,
+    CreateEventTypeComponent,
+  ],
+  exports: [
+    EventCardComponent,
+    MatInputModule
   ],
   imports: [
     CommonModule,
@@ -60,11 +66,8 @@ import {MatPaginator} from '@angular/material/paginator';
     MatRow,
     MatRowDef,
     MatTable,
-    MatTableModule
-  ],
-  exports: [
-    EventCardComponent,
-    MatInputModule
+    MatTableModule,
+    ReactiveFormsModule
   ]
 })
 export class EventModule { }
