@@ -10,6 +10,13 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class ReservationDialogComponent {
   reservationForm: FormGroup;
 
+  dateFilter = (date: Date | null): boolean => {
+    if (!date) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize time to midnight for comparison
+    return date >= today;
+  };
+
   constructor(private fb: FormBuilder,
     private dialogRef: MatDialogRef<ReservationDialogComponent>
   ) {

@@ -11,7 +11,8 @@
       <mat-card class="calendar-container">
         <mat-calendar 
         [(selected)]="reservationForm.controls['selectedDate'].value" 
-        (selectedChange)="onDateChange($event)">
+        (selectedChange)="onDateChange($event)"
+        [dateFilter]="dateFilter">
       </mat-calendar>
             </mat-card>
       <div>
