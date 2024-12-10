@@ -163,11 +163,14 @@ navigateToEdit(): void {
       width: '1000px',
       data: { offering: this.offering }
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Reservation data:', result);
+      } else {
+        console.log('Dialog closed without reservation.');
       }
     });
   }
+  
 }

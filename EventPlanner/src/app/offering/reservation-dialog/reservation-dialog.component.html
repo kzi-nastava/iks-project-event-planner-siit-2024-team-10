@@ -9,8 +9,11 @@
     </div>
     <div class="content">
       <mat-card class="calendar-container">
-        <mat-calendar (selectedChange)="onDateChange($event)"></mat-calendar>
-      </mat-card>
+        <mat-calendar 
+        [(selected)]="reservationForm.controls['selectedDate'].value" 
+        (selectedChange)="onDateChange($event)">
+      </mat-calendar>
+            </mat-card>
       <div>
         <div class="form-group">
           <mat-form-field appearance="fill">
@@ -33,8 +36,9 @@
           </mat-form-field>
         </div>
         <div class="actions">
-          <button mat-raised-button color="primary" [disabled]="!reservationForm.valid">Book</button>
-        </div>
+          <button mat-raised-button color="primary" [disabled]="!reservationForm.valid" (click)="onBook()">Book</button>
+          <button mat-raised-button color="warn" type="button" (click)="onClose()" class="closeBtn">Close</button>
+        </div>        
       </div>
     </div>
   </form>

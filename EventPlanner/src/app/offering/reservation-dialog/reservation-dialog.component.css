@@ -44,7 +44,8 @@
   
   .actions {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    
   }
   
   button[mat-raised-button] {
@@ -58,5 +59,9 @@
   
   button[mat-raised-button]:hover {
     background-color: #7e57c2;
+  }
+  .closeBtn{
+    background-color: grey !important;
+    margin-left: 10px;
   }
   
