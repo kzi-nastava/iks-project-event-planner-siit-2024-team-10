@@ -1,1 +1,50 @@
-<p>event-types works!</p>
+<div class="table-container">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="active">
+            <th mat-header-cell *matHeaderCellDef> Active </th>
+            <td mat-cell *matCellDef="let element">
+                <mat-icon *ngIf="element.active">check_circle_outline</mat-icon>
+                <mat-icon *ngIf="!element.active">block</mat-icon>
+            </td>
+        </ng-container>
+
+        <!-- Description Column -->
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Description </th>
+            <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
+
+        <!-- Recommended Categories Column -->
+        <ng-container matColumnDef="recommendedCategories">
+            <th mat-header-cell *matHeaderCellDef> Recommended Categories </th>
+            <td mat-cell *matCellDef="let element">{{getCategoryNames(element)}}</td>
+        </ng-container>
+
+        Actions Column
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" >
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button *ngIf="!element.active" mat-icon-button color="primary" aria-label="Activate">
+                    <mat-icon>check_circle</mat-icon>
+                </button>
+
+                <button *ngIf="element.active" mat-icon-button color="warn" aria-label="Deactivate">
+                    <mat-icon>block</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>

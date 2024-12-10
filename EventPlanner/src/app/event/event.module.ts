@@ -15,6 +15,17 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { EventDetailsComponent } from './event-details/event-details.component';
 import {RouterLink} from '@angular/router';
 import { EventTypesComponent } from './event-types/event-types.component';
+import { HttpClientModule } from '@angular/common/http';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow, MatRowDef, MatTable, MatTableModule
+} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
 
 
 
@@ -37,7 +48,19 @@ import { EventTypesComponent } from './event-types/event-types.component';
     ReactiveFormsModule,
     MatInputModule,
     MatDatepickerModule,
-    RouterLink
+    RouterLink,
+    HttpClientModule,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatPaginator,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    MatTableModule
   ],
   exports: [
     EventCardComponent,
