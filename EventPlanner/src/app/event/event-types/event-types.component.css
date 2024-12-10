@@ -1,3 +1,14 @@
 .table-container {
   margin: 3em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+.add-button{
+  background-color: #bebce6 !important ;
+  color: white !important;
+  margin:3em;
+}
+

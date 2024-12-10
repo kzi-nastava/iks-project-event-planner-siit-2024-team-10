@@ -47,4 +47,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+  <button mat-raised-button class="add-button" (click)="openAddEventTypeDialog()">
+    <mat-icon>add</mat-icon> Add New Category
+  </button>
 </div>
