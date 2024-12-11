@@ -26,11 +26,11 @@
                 <button mat-icon-button color="primary" (click)="openEditDialog(element)">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button *ngIf="!element.active" mat-icon-button class="activate-button" aria-label="Activate">
+                <button *ngIf="!element.active" mat-icon-button class="activate-button" aria-label="Activate" (click)="activate(element.id)">
                     <mat-icon>check_circle</mat-icon>
                 </button>
 
-                <button *ngIf="element.active" mat-icon-button color="warn" aria-label="Deactivate">
+                <button *ngIf="element.active" mat-icon-button color="warn" aria-label="Deactivate" (click)="deactivate(element.id)">
                     <mat-icon>cancel</mat-icon>
                 </button>
             </td>

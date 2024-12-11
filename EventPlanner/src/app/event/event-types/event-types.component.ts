@@ -30,7 +30,7 @@ export class EventTypesComponent implements OnInit{
         this.dataSource = new MatTableDataSource<EventType>(eventTypes);
       },
       error: (_) => {
-        console.log("Error loading event types")
+        console.error("Error loading event types");
       }
     })
   }
@@ -54,8 +54,24 @@ export class EventTypesComponent implements OnInit{
     });
   }
 
-  deleteRow(element: EventType): void {
+  activate(id:number):void{
+    this.service.activate(id).subscribe({
+      next: (response) => {
+        this.refreshDataSource();
+        this.snackBar.open('Event type activated successfully','OK',{duration:3000});
+      },
+      error: (err) => console.error('Error adding event type:', err),
+    });
+  }
 
+  deactivate(id:number):void{
+    this.service.deactivate(id).subscribe({
+      next: (response) => {
+        this.refreshDataSource();
+        this.snackBar.open('Event type deactivated successfully','OK',{duration:3000});
+      },
+      error: (err) => console.error('Error adding event type:', err),
+    });
   }
 
   openAddEventTypeDialog() {
@@ -67,8 +83,8 @@ export class EventTypesComponent implements OnInit{
       if (result) {
         this.service.add(result).subscribe({
           next: (response) => {
-            console.log('Event type added:', response);
             this.refreshDataSource();
+            this.snackBar.open('Event type created successfully','OK',{duration:3000});
             },
           error: (err) => console.error('Error adding event type:', err),
         });
