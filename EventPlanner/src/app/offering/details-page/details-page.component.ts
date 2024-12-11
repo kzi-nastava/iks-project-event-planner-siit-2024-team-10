@@ -12,6 +12,8 @@ import { switchMap } from 'rxjs/operators';
 import { Service } from '../model/service.model';
 import { Product } from '../model/product.model';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ReservationDialogComponent } from '../reservation-dialog/reservation-dialog.component';
 
 @Component({
   selector: 'app-details-page',
@@ -44,7 +46,8 @@ export class DetailsPageComponent implements OnInit {
     private route: ActivatedRoute,
     private offeringService: OfferingService,
     private commentService: CommentService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -67,7 +70,6 @@ export class DetailsPageComponent implements OnInit {
   // za prikaz podataka koje ima usluga a nema proizvod
   isService(offering: Product | Service): offering is Service {
     const isService = (offering as Service).specification !== undefined;
-    console.log('Is service:', isService);  
     return isService;
   }
 
@@ -156,4 +158,19 @@ navigateToEdit(): void {
   reportProvider() {
     console.log('Reporting provider...');
   }
+  openReservationDialog(): void {
+    const dialogRef = this.dialog.open(ReservationDialogComponent, {
+      width: '1000px',
+      data: { offering: this.offering }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Reservation data:', result);
+      } else {
+        console.log('Dialog closed without reservation.');
+      }
+    });
+  }
+  
 }
