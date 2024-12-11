@@ -28,6 +28,7 @@ import {
 import {MatPaginator} from '@angular/material/paginator';
 import { CreateEventTypeComponent } from './create-event-type/create-event-type.component';
 import { EditEventTypeComponent } from './edit-event-type/edit-event-type.component';
+import {MatSort} from '@angular/material/sort';
 
 
 
@@ -69,7 +70,8 @@ import { EditEventTypeComponent } from './edit-event-type/edit-event-type.compon
     MatRowDef,
     MatTable,
     MatTableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSort
   ]
 })
 export class EventModule { }

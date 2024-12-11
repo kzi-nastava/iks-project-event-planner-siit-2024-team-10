@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, ViewChild} from '@angular/core';
 import {EventType} from '../model/event-type.model';
 import {EventTypeService} from '../event-type.service';
 import {MatTableDataSource} from '@angular/material/table';
@@ -6,6 +6,7 @@ import {CreateEventTypeComponent} from '../create-event-type/create-event-type.c
 import {MatDialog} from '@angular/material/dialog';
 import {EditEventTypeComponent} from '../edit-event-type/edit-event-type.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-event-types',
@@ -16,6 +17,8 @@ export class EventTypesComponent implements OnInit{
   dataSource: MatTableDataSource<EventType>;
   displayedColumns: string[] = ['name', 'description','recommendedCategories','actions'];
   snackBar:MatSnackBar = inject(MatSnackBar);
+  @ViewChild(MatSort) sort!: MatSort;
+
 
   constructor(private service:EventTypeService,
               private dialog: MatDialog) {}
@@ -27,6 +30,7 @@ export class EventTypesComponent implements OnInit{
   private refreshDataSource() {
     this.service.getAll().subscribe({
       next: (eventTypes: EventType[]) => {
+        eventTypes.sort((a, b) => a.name.localeCompare(b.name));
         this.dataSource = new MatTableDataSource<EventType>(eventTypes);
       },
       error: (_) => {
