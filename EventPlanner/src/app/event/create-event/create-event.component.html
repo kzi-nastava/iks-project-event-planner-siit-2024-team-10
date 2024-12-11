@@ -5,8 +5,8 @@
         <h1>Create event</h1>
       </div>
       <mat-form-field>
-        <mat-label>Recommended categories</mat-label>
-        <mat-select multiple formControlName="eventType">
+        <mat-label>Event Type</mat-label>
+        <mat-select formControlName="eventType">
           @for (eventType of allEventTypes; track eventType) {
             <mat-option [value]="eventType">{{eventType.name}}</mat-option>
           }
@@ -24,10 +24,6 @@
         <mat-label>Max participants</mat-label>
         <input matInput formControlName="maxParticipants" name="maxParticipants">
       </mat-form-field>
-      <mat-radio-group color="primary" formControlName="isOpen" name="isOpen">
-        <mat-radio-button color="primary" value="true">Open event</mat-radio-button>
-        <mat-radio-button color="primary" value="false">Closed event</mat-radio-button>
-      </mat-radio-group>
       <mat-form-field appearance="outline">
         <mat-label>Country</mat-label>
         <input matInput formControlName="country" name="country">
@@ -51,6 +47,10 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
+      <mat-button-toggle-group name="eventPublicity" aria-label="Font Style" formControlName="eventPublicity">
+        <mat-button-toggle value="open">Open</mat-button-toggle>
+        <mat-button-toggle value="closed">Closed</mat-button-toggle>
+      </mat-button-toggle-group>
       <button mat-flat-button class="submit-btn"  (click)="save()">
         Submit
       </button>

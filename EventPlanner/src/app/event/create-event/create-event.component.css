@@ -55,3 +55,7 @@ form > div {
   border-radius: 5px;
   cursor: pointer;
 }
+
+mat-button-toggle-group{
+  margin:1em;
+}
