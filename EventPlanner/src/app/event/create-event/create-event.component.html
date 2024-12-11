@@ -4,7 +4,8 @@
       <div class="form-header">
         <h1>Create event</h1>
       </div>
-      <mat-form-field>
+      <mat-checkbox formControlName="noEventType" color="primary">No event types apply</mat-checkbox>
+      <mat-form-field *ngIf="eventTypesDisplayed()">
         <mat-label>Event Type</mat-label>
         <mat-select formControlName="eventType">
           @for (eventType of allEventTypes; track eventType) {

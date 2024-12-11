@@ -12,6 +12,7 @@ import {EventTypeService} from '../event-type.service';
 export class CreateEventComponent implements OnInit{
   createForm: FormGroup = new FormGroup({
     eventType: new FormControl('', [Validators.required]),
+    noEventType: new FormControl('', [Validators.required]),
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     maxParticipants: new FormControl('', [Validators.required]),
@@ -40,5 +41,11 @@ export class CreateEventComponent implements OnInit{
     });
   }
 
-  save():void{}
+  eventTypesDisplayed():boolean{
+    return !this.createForm.value.noEventType;
+  }
+
+  save():void{
+
+  }
 }
