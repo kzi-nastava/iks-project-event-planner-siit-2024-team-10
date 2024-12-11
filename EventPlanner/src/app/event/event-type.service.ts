@@ -25,4 +25,12 @@ export class EventTypeService {
   edit(eventType:EditEventTypeDTO) : Observable<EventType> {
     return this.httpClient.put<EventType>(environment.apiHost + "/event-types/"+eventType.id, eventType);
   }
+
+  deactivate(id:number) : Observable<EventType> {
+    return this.httpClient.delete<EventType>(environment.apiHost + "/event-types/"+id);
+  }
+
+  activate(id:number) : Observable<EventType> {
+    return this.httpClient.put<EventType>(environment.apiHost + "/event-types/"+id+'/activate',null);
+  }
 }
