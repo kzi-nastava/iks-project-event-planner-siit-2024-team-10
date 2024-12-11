@@ -14,6 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { EventDetailsComponent } from './event-details/event-details.component';
 import {RouterLink} from '@angular/router';
+import { CreateEventComponent } from './create-event/create-event.component';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 
 
 
@@ -22,6 +24,7 @@ import {RouterLink} from '@angular/router';
     EventCardComponent,
     FilterEventsDialogComponent,
     EventDetailsComponent,
+    CreateEventComponent,
   ],
   imports: [
     CommonModule,
@@ -35,7 +38,10 @@ import {RouterLink} from '@angular/router';
     ReactiveFormsModule,
     MatInputModule,
     MatDatepickerModule,
-    RouterLink
+    RouterLink,
+    MatRadioButton,
+    MatRadioGroup,
+    MatFormFieldModule
   ],
   exports: [
     EventCardComponent,

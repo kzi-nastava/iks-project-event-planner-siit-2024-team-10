@@ -1,0 +1,59 @@
+<div class="outer-container">
+  <div class="register-container">
+    <form [formGroup]="createForm" class="elegant-form">
+      <div class="form-header">
+        <h1>Create event</h1>
+      </div>
+      <mat-form-field>
+        <mat-label>Recommended categories</mat-label>
+        <mat-select multiple formControlName="eventType">
+          @for (eventType of allEventTypes; track eventType) {
+            <mat-option [value]="eventType">{{eventType.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" name="name">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="3"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Max participants</mat-label>
+        <input matInput formControlName="maxParticipants" name="maxParticipants">
+      </mat-form-field>
+      <mat-radio-group color="primary" formControlName="isOpen" name="isOpen">
+        <mat-radio-button color="primary" value="true">Open event</mat-radio-button>
+        <mat-radio-button color="primary" value="false">Closed event</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field appearance="outline">
+        <mat-label>Country</mat-label>
+        <input matInput formControlName="country" name="country">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input matInput formControlName="city" name="city">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Street</mat-label>
+        <input matInput formControlName="street" name="street">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>House number</mat-label>
+        <input matInput formControlName="houseNumber" name="houseNumber">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <button mat-flat-button class="submit-btn"  (click)="save()">
+        Submit
+      </button>
+    </form>
+  </div>
+</div>

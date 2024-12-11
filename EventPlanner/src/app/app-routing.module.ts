@@ -10,6 +10,7 @@ import {RegisterComponent} from './layout/register/register.component';
 import {EventDetailsComponent} from './event/event-details/event-details.component';
 import { NotificationsPageComponent } from './notification/notifications-page/notifications-page.component';
 import { OfferingCategoryComponent } from './offering/offering-category/offering-category.component';
+import {CreateEventComponent} from './event/create-event/create-event.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {path: 'home', component: HomeComponent},
@@ -21,7 +22,8 @@ const routes: Routes = [
   {path:'register',component: RegisterComponent},
   {path:'event/:id',component:EventDetailsComponent},
   {path:'notification-panel',component: NotificationsPageComponent},
-  {path:'offering-categories',component: OfferingCategoryComponent}
+  {path:'offering-categories',component: OfferingCategoryComponent},
+  {path:'create-event',component:CreateEventComponent}
 ];
 
 @NgModule({
