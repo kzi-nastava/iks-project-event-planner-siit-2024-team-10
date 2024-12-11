@@ -11,6 +11,7 @@ import {EventDetailsComponent} from './event/event-details/event-details.compone
 import { NotificationsPageComponent } from './notification/notifications-page/notifications-page.component';
 import { OfferingCategoryComponent } from './offering/offering-category/offering-category.component';
 import {CreateEventComponent} from './event/create-event/create-event.component';
+import {EventTypesComponent} from './event/event-types/event-types.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {path: 'home', component: HomeComponent},
@@ -23,6 +24,7 @@ const routes: Routes = [
   {path:'event/:id',component:EventDetailsComponent},
   {path:'notification-panel',component: NotificationsPageComponent},
   {path:'offering-categories',component: OfferingCategoryComponent},
+  {path:'event-types',component:EventTypesComponent},
   {path:'create-event',component:CreateEventComponent}
 ];
 

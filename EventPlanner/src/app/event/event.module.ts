@@ -9,11 +9,26 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { EventDetailsComponent } from './event-details/event-details.component';
 import {RouterLink} from '@angular/router';
+import { EventTypesComponent } from './event-types/event-types.component';
+import { HttpClientModule } from '@angular/common/http';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow, MatRowDef, MatTable, MatTableModule
+} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import { CreateEventTypeComponent } from './create-event-type/create-event-type.component';
+import { EditEventTypeComponent } from './edit-event-type/edit-event-type.component';
+import {MatSort} from '@angular/material/sort';
 import { CreateEventComponent } from './create-event/create-event.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 
@@ -25,6 +40,9 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
     FilterEventsDialogComponent,
     EventDetailsComponent,
     CreateEventComponent,
+    EventTypesComponent,
+    CreateEventTypeComponent,
+    EditEventTypeComponent,
   ],
   imports: [
     CommonModule,
@@ -41,7 +59,21 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
     RouterLink,
     MatRadioButton,
     MatRadioGroup,
-    MatFormFieldModule
+    MatFormFieldModule,
+    HttpClientModule,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatPaginator,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    MatTableModule,
+    ReactiveFormsModule,
+    MatSort
   ],
   exports: [
     EventCardComponent,

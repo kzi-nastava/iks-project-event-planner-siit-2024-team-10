@@ -1,0 +1,43 @@
+<h2 mat-dialog-title class="dialog-title">
+  Edit event type
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="editForm">
+    <div class="form-container">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="3"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Recommended categories</mat-label>
+        <mat-select multiple formControlName="recommendedCategories">
+          @for (category of allCategories; track category) {
+            <mat-option [value]="category">{{category.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSave()"
+    [disabled]="editForm.invalid">
+    Save
+  </button>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="onCancel()">
+    Cancel
+  </button>
+</mat-dialog-actions>
