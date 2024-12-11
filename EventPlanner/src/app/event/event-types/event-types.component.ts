@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {EventType} from '../model/event-type.model';
 import {EventTypeService} from '../event-type.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {CreateEventTypeComponent} from '../create-event-type/create-event-type.component';
 import {MatDialog} from '@angular/material/dialog';
+import {EditEventTypeComponent} from '../edit-event-type/edit-event-type.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-event-types',
@@ -12,7 +14,8 @@ import {MatDialog} from '@angular/material/dialog';
 })
 export class EventTypesComponent implements OnInit{
   dataSource: MatTableDataSource<EventType>;
-  displayedColumns: string[] = ['name', 'description','active','recommendedCategories','actions'];
+  displayedColumns: string[] = ['name', 'description','recommendedCategories','actions'];
+  snackBar:MatSnackBar = inject(MatSnackBar);
 
   constructor(private service:EventTypeService,
               private dialog: MatDialog) {}
@@ -32,9 +35,23 @@ export class EventTypesComponent implements OnInit{
     })
   }
 
-  editRow(element: EventType): void {
-    console.log('Edit', element);
-    // Open dialog or navigate to edit page
+  openEditDialog(element: EventType): void {
+    const dialogRef = this.dialog.open(EditEventTypeComponent, {
+      width: '400px',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.service.edit(result).subscribe({
+          next: (response) => {
+            this.refreshDataSource();
+            this.snackBar.open('Event type updated successfully','OK',{duration:3000});
+          },
+          error: (err) => console.error('Error adding event type:', err),
+        });
+      }
+    });
   }
 
   deleteRow(element: EventType): void {

@@ -27,6 +27,7 @@ import {
 } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import { CreateEventTypeComponent } from './create-event-type/create-event-type.component';
+import { EditEventTypeComponent } from './edit-event-type/edit-event-type.component';
 
 
 
@@ -37,6 +38,7 @@ import { CreateEventTypeComponent } from './create-event-type/create-event-type.
     EventDetailsComponent,
     EventTypesComponent,
     CreateEventTypeComponent,
+    EditEventTypeComponent,
   ],
   exports: [
     EventCardComponent,
