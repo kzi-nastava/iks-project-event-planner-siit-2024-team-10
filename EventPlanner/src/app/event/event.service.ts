@@ -4,8 +4,9 @@ import { Event } from './model/event.model';
 import {CreateEventTypeDTO} from './model/create-event-type-dto.model';
 import {EventType} from './model/event-type.model';
 import {environment} from '../../env/environment';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {CreateEventDTO} from './model/create-event-dto.model';
+import { PagedResponse } from './model/paged-response.model';
 
 const TOP_EVENTS: Event[] = [
   {
@@ -612,7 +613,7 @@ export class EventService {
   }
 
   getAll(): Observable<Event[]> {
-    return this.httpClient.get<Event[]>(environment.apiHost+'/events');
+    return this.httpClient.get<Event[]>(environment.apiHost+'/events/all');
   }
 
   getTop(): Observable<Event[]> {
@@ -625,5 +626,23 @@ export class EventService {
 
   add(event:CreateEventDTO) : Observable<Event> {
     return this.httpClient.post<Event>(environment.apiHost + "/events", event);
+  }
+
+  getPaginatedEvents(
+    page: number,
+    pageSize: number,
+    filters: any = {}
+  ): Observable<PagedResponse<Event>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', pageSize.toString());
+
+    Object.keys(filters).forEach((key) => {
+      if (filters[key]) {
+        params = params.set(key, filters[key]);
+      }
+    });
+
+    return this.httpClient.get<PagedResponse<Event>>(environment.apiHost+"/events", { params });
   }
 }

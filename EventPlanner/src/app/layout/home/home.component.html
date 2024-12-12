@@ -51,11 +51,18 @@
       <app-event-card *ngFor="let event of allEvents" [event]="event"></app-event-card>
     </div>
     <div class="pagination">
-      <button mat-stroked-button>&lt; Next</button>
-      <p>Page 1 of 10</p>
-      <button mat-stroked-button>Next &gt;</button>
+      <button mat-stroked-button (click)="previousEventPage()" [disabled]="eventPageProperties.page === 0">
+        &lt;
+      </button>
+      <p>
+        Page {{ eventPageProperties.page + 1 }} of {{ eventPageProperties.totalPages }}
+      </p>
+      <button mat-stroked-button (click)="nextEventPage()" [disabled]="eventPageProperties.page === eventPageProperties.totalPages - 1">
+        &gt;
+      </button>
+      <p>Total elements: {{ eventPageProperties.totalElements }}</p>
     </div>
-  </div>
+  </div>  
 </div>
 
 <!-- OFFERING -->
@@ -118,9 +125,9 @@
 
     </div>
     <div class="pagination">
-      <button mat-stroked-button>&lt; Back</button>
+      <button mat-stroked-button>&lt;</button>
       <p>Page 1 of 10</p>
-      <button mat-stroked-button>Next &gt;</button>
+      <button mat-stroked-button>&gt;</button>
     </div>
   </div>
 </div>

@@ -38,22 +38,28 @@ export class HomeComponent implements OnInit {
   searchEventQuery: string = '';
   searchOfferingQuery: string = '';
 
+  eventPageProperties = {
+    page: 0,
+    pageSize: 5,
+    totalPages: 0,
+    totalElements: 0,
+  };
+
+  offeringPageProperties = {
+    page: 0,
+    pageSize: 2,
+    totalPages: 0,
+    totalElements: 0,
+  };
+
   constructor(private service: EventService, private offeringService: OfferingService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.service.getAll().subscribe({
-      next: (event: Event[]) => {
-        this.allEvents = event;
-      },
-      error: (err) => {
-        console.error('Error fetching events:', err);
-      }
-    });
+    this.fetchPaginatedEvents();
 
     this.service.getTop().subscribe({
       next: (events: Event[]) => {
         this.topEvents = events;
-        console.log('Top Events:', this.topEvents);
       },
       error: (err) => {
         console.error('Error fetching events:', err);
@@ -129,5 +135,36 @@ export class HomeComponent implements OnInit {
   searchOffering() {
     console.log('Search Query:', this.searchOfferingQuery);
   }
+
+  fetchPaginatedEvents(): void {
+    const { page, pageSize } = this.eventPageProperties;
+  
+    this.service.getPaginatedEvents(page, pageSize).subscribe({
+      next: (response) => {
+        this.allEvents = response.content;
+        this.eventPageProperties.totalPages = response.totalPages;
+        this.eventPageProperties.totalElements = response.totalElements;
+      },
+      error: (err) => {
+        console.error('Error fetching paginated events:', err);
+      }
+    });
+  }
+
+  nextEventPage(): void {
+    if (this.eventPageProperties.page < this.eventPageProperties.totalPages - 1) {
+      this.eventPageProperties.page++;
+      this.fetchPaginatedEvents();
+    }
+  }
+  
+  previousEventPage(): void {
+    if (this.eventPageProperties.page > 0) {
+      this.eventPageProperties.page--;
+      this.fetchPaginatedEvents();
+    }
+  }
+  
+  
 }
 
