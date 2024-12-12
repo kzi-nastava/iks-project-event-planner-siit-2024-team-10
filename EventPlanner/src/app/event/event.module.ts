@@ -9,7 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import {FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { EventDetailsComponent } from './event-details/event-details.component';
@@ -31,6 +31,8 @@ import { EditEventTypeComponent } from './edit-event-type/edit-event-type.compon
 import {MatSort} from '@angular/material/sort';
 import { CreateEventComponent } from './create-event/create-event.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {MatCheckbox} from '@angular/material/checkbox';
 
 
 
@@ -73,7 +75,11 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
     MatTable,
     MatTableModule,
     ReactiveFormsModule,
-    MatSort
+    MatSort,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    FormsModule,
+    MatCheckbox
   ],
   exports: [
     EventCardComponent,

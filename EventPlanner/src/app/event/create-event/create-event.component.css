@@ -59,3 +59,16 @@ form > div {
 mat-button-toggle-group{
   margin:1em;
 }
+
+::ng-deep .mat-mdc-button:not(:disabled){
+  background-color: white !important ;
+  color: #000000 !important;
+}
+::ng-deep .mat-mdc-button:not(:disabled):hover{
+  background-color: #bebce6 !important ;
+  color: white !important;
+}
+::ng-deep .mat-mdc-snack-bar-container .mat-mdc-snackbar-surface{
+  background-color: #fff !important; /* Change background color */
+  color: #000000 !important; /* Change text color */
+}
