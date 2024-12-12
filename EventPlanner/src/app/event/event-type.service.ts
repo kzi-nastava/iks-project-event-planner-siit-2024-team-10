@@ -4,6 +4,8 @@ import {EventType} from './model/event-type.model';
 import {Observable} from 'rxjs';
 import {environment} from '../../env/environment';
 import {CreateEventTypeDTO} from './model/create-event-type-dto.model';
+import {EditEventTypeComponent} from './edit-event-type/edit-event-type.component';
+import {EditEventTypeDTO} from './model/edit-event-type-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +20,17 @@ export class EventTypeService {
 
   add(eventType:CreateEventTypeDTO) : Observable<EventType> {
     return this.httpClient.post<EventType>(environment.apiHost + "/event-types", eventType);
+  }
+
+  edit(eventType:EditEventTypeDTO) : Observable<EventType> {
+    return this.httpClient.put<EventType>(environment.apiHost + "/event-types/"+eventType.id, eventType);
+  }
+
+  deactivate(id:number) : Observable<EventType> {
+    return this.httpClient.delete<EventType>(environment.apiHost + "/event-types/"+id);
+  }
+
+  activate(id:number) : Observable<EventType> {
+    return this.httpClient.put<EventType>(environment.apiHost + "/event-types/"+id+'/activate',null);
   }
 }

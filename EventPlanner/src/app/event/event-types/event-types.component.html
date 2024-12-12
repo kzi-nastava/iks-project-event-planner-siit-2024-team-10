@@ -6,15 +6,6 @@
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
-        <!-- ID Column -->
-        <ng-container matColumnDef="active">
-            <th mat-header-cell *matHeaderCellDef> Active </th>
-            <td mat-cell *matCellDef="let element">
-                <mat-icon *ngIf="element.active">check_circle_outline</mat-icon>
-                <mat-icon *ngIf="!element.active">block</mat-icon>
-            </td>
-        </ng-container>
-
         <!-- Description Column -->
         <ng-container matColumnDef="description">
             <th mat-header-cell *matHeaderCellDef> Description </th>
@@ -31,15 +22,15 @@
         <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef> Actions </th>
             <td mat-cell *matCellDef="let element">
-                <button mat-icon-button color="primary" >
+                <button mat-icon-button color="primary" (click)="openEditDialog(element)">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button *ngIf="!element.active" mat-icon-button color="primary" aria-label="Activate">
+                <button *ngIf="!element.active" mat-icon-button class="activate-button" aria-label="Activate" (click)="activate(element.id)">
                     <mat-icon>check_circle</mat-icon>
                 </button>
 
-                <button *ngIf="element.active" mat-icon-button color="warn" aria-label="Deactivate">
-                    <mat-icon>block</mat-icon>
+                <button *ngIf="element.active" mat-icon-button color="warn" aria-label="Deactivate" (click)="deactivate(element.id)">
+                    <mat-icon>cancel</mat-icon>
                 </button>
             </td>
         </ng-container>
@@ -48,6 +39,6 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   <button mat-raised-button class="add-button" (click)="openAddEventTypeDialog()">
-    <mat-icon>add</mat-icon> Add New Category
+    <mat-icon>add</mat-icon> Add New Event Type
   </button>
 </div>

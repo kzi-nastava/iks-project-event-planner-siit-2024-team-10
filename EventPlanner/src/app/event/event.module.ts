@@ -9,7 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import {FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { EventDetailsComponent } from './event-details/event-details.component';
@@ -27,6 +27,12 @@ import {
 } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import { CreateEventTypeComponent } from './create-event-type/create-event-type.component';
+import { EditEventTypeComponent } from './edit-event-type/edit-event-type.component';
+import {MatSort} from '@angular/material/sort';
+import { CreateEventComponent } from './create-event/create-event.component';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {MatCheckbox} from '@angular/material/checkbox';
 
 
 
@@ -35,12 +41,10 @@ import { CreateEventTypeComponent } from './create-event-type/create-event-type.
     EventCardComponent,
     FilterEventsDialogComponent,
     EventDetailsComponent,
+    CreateEventComponent,
     EventTypesComponent,
     CreateEventTypeComponent,
-  ],
-  exports: [
-    EventCardComponent,
-    MatInputModule
+    EditEventTypeComponent,
   ],
   imports: [
     CommonModule,
@@ -55,6 +59,9 @@ import { CreateEventTypeComponent } from './create-event-type/create-event-type.
     MatInputModule,
     MatDatepickerModule,
     RouterLink,
+    MatRadioButton,
+    MatRadioGroup,
+    MatFormFieldModule,
     HttpClientModule,
     MatCell,
     MatCellDef,
@@ -67,7 +74,16 @@ import { CreateEventTypeComponent } from './create-event-type/create-event-type.
     MatRowDef,
     MatTable,
     MatTableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSort,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    FormsModule,
+    MatCheckbox
+  ],
+  exports: [
+    EventCardComponent,
+    MatInputModule
   ]
 })
 export class EventModule { }

@@ -52,7 +52,7 @@
         </span>
       </div>
       <div class="action-buttons">
-        <button class="book-now-btn" [disabled]="!offering?.isAvailable">
+        <button class="book-now-btn" [disabled]="!offering?.isAvailable" (click)="openReservationDialog()">
           <i class="fas fa-calendar-check"></i>
           Book Now
         </button>
