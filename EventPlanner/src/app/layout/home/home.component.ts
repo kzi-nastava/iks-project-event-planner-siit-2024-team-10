@@ -53,6 +53,7 @@ export class HomeComponent implements OnInit {
     this.service.getTop().subscribe({
       next: (events: Event[]) => {
         this.topEvents = events;
+        console.log('Top Events:', this.topEvents);
       },
       error: (err) => {
         console.error('Error fetching events:', err);
