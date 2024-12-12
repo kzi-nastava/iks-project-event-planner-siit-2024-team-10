@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Event } from './model/event.model';
+import {CreateEventTypeDTO} from './model/create-event-type-dto.model';
+import {EventType} from './model/event-type.model';
+import {environment} from '../../env/environment';
+import {HttpClient} from '@angular/common/http';
+import {CreateEventDTO} from './model/create-event-dto.model';
 
 const TOP_EVENTS: Event[] = [
   {
@@ -571,7 +576,7 @@ export class EventService {
   private eventList: Event[] = [];
   private topEventList: Event[] = [];
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
     for (let eventObj of EVENTS){
       const event: Event = {
         id: eventObj.id,
@@ -616,5 +621,9 @@ export class EventService {
 
   getEvent(id:number): Event {
     return this.eventList.at(id-1);
+  }
+
+  add(event:CreateEventDTO) : Observable<Event> {
+    return this.httpClient.post<Event>(environment.apiHost + "/events", event);
   }
 }

@@ -10,6 +10,7 @@ import {RegisterComponent} from './layout/register/register.component';
 import {EventDetailsComponent} from './event/event-details/event-details.component';
 import { NotificationsPageComponent } from './notification/notifications-page/notifications-page.component';
 import { OfferingCategoryComponent } from './offering/offering-category/offering-category.component';
+import {CreateEventComponent} from './event/create-event/create-event.component';
 import {EventTypesComponent} from './event/event-types/event-types.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   {path:'notification-panel',component: NotificationsPageComponent},
   {path:'offering-categories',component: OfferingCategoryComponent},
   {path:'event-types',component:EventTypesComponent},
+  {path:'create-event',component:CreateEventComponent}
 ];
 
 @NgModule({

@@ -9,7 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import {FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { EventDetailsComponent } from './event-details/event-details.component';
@@ -29,6 +29,10 @@ import {MatPaginator} from '@angular/material/paginator';
 import { CreateEventTypeComponent } from './create-event-type/create-event-type.component';
 import { EditEventTypeComponent } from './edit-event-type/edit-event-type.component';
 import {MatSort} from '@angular/material/sort';
+import { CreateEventComponent } from './create-event/create-event.component';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {MatCheckbox} from '@angular/material/checkbox';
 
 
 
@@ -37,13 +41,10 @@ import {MatSort} from '@angular/material/sort';
     EventCardComponent,
     FilterEventsDialogComponent,
     EventDetailsComponent,
+    CreateEventComponent,
     EventTypesComponent,
     CreateEventTypeComponent,
     EditEventTypeComponent,
-  ],
-  exports: [
-    EventCardComponent,
-    MatInputModule
   ],
   imports: [
     CommonModule,
@@ -58,6 +59,9 @@ import {MatSort} from '@angular/material/sort';
     MatInputModule,
     MatDatepickerModule,
     RouterLink,
+    MatRadioButton,
+    MatRadioGroup,
+    MatFormFieldModule,
     HttpClientModule,
     MatCell,
     MatCellDef,
@@ -71,7 +75,15 @@ import {MatSort} from '@angular/material/sort';
     MatTable,
     MatTableModule,
     ReactiveFormsModule,
-    MatSort
+    MatSort,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    FormsModule,
+    MatCheckbox
+  ],
+  exports: [
+    EventCardComponent,
+    MatInputModule
   ]
 })
 export class EventModule { }
