@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import {Category} from '../model/category.model';
 
-// export interface Category {
-//   id: number;
-//   name: string;
-//   description: string;
-// }
+export interface Category {
+  id: number;
+  name: string;
+  description: string;
+}
 
 @Injectable({
   providedIn: 'root'

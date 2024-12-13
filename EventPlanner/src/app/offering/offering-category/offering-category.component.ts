@@ -3,8 +3,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryService } from '../category-service/category.service';
-import { Category } from '../model/category.model';
-import { CategoryDialogComponent } from '../category-dialog/category-dialog.component'; // Ispravi import ovde
+import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
+import {Category} from '../model/category.model'; // Ispravi import ovde
 
 @Component({
   selector: 'app-offering-category',
