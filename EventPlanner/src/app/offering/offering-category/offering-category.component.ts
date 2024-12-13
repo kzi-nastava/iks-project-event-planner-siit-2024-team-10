@@ -14,7 +14,7 @@ import {MatSort} from '@angular/material/sort';
 })
 
 export class OfferingCategoryComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'description', 'offerings', 'approve', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'approve', 'actions'];
   dataSource: MatTableDataSource<Category>;
   snackBar:MatSnackBar = inject(MatSnackBar);
   @ViewChild(MatSort) sort!: MatSort;
@@ -54,7 +54,13 @@ export class OfferingCategoryComponent implements OnInit {
           pending: true,
           deleted: false
         };
-        // this.categoryService.addCategory(newCategory).subscribe();
+        this.categoryService.add(newCategory).subscribe({
+          next: (response) => {
+            this.refreshDataSource();
+            this.snackBar.open('Category added successfully','OK',{duration:3000});
+          },
+          error: (err) => console.error('Error adding category:', err),
+        });
       }
     });
   }
