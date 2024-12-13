@@ -7,6 +7,7 @@ import { CategoryDialogComponent } from '../category-dialog/category-dialog.comp
 import {Category} from '../model/category.model'; 
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
+import { C } from '@angular/cdk/keycodes';
 @Component({
   selector: 'app-offering-category',
   templateUrl: './offering-category.component.html',
@@ -31,14 +32,16 @@ export class OfferingCategoryComponent implements OnInit {
   private refreshDataSource() {
     this.categoryService.getAll().subscribe({
       next: (categories: Category[]) => {
-        categories.sort((a, b) => a.name.localeCompare(b.name));
-        this.dataSource = new MatTableDataSource<Category>(categories);
+        const activeCategories = categories.filter(category => !category.deleted);
+        activeCategories.sort((a, b) => a.name.localeCompare(b.name));
+        this.dataSource = new MatTableDataSource<Category>(activeCategories);
       },
       error: (_) => {
         console.error("Error loading categories");
       }
-    })
+    });
   }
+  
 
   openAddCategoryDialog() {
     const dialogRef = this.dialog.open(CategoryDialogComponent, {
@@ -86,11 +89,15 @@ export class OfferingCategoryComponent implements OnInit {
   }
 
   deleteCategory(category: Category) {
-    // You might want to add a confirmation dialog here
-    // this.categoryService.deleteCategory(category.id).subscribe();
+    this.categoryService.delete(category.id).subscribe({
+      next: (response) => {
+        this.refreshDataSource();
+        this.snackBar.open('Category deleted successfully','OK',{duration:3000});
+      },
+      error: (err) => console.error('Error deleting category:', err),
+    });
   }
 
-  // New method to approve a category
   approveCategory(category: Category) {
     const approvedCategory = { 
       ...category, 
