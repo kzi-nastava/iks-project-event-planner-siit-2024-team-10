@@ -4,9 +4,8 @@ import { Event } from './model/event.model';
 import {CreateEventTypeDTO} from './model/create-event-type-dto.model';
 import {EventType} from './model/event-type.model';
 import {environment} from '../../env/environment';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {CreateEventDTO} from './model/create-event-dto.model';
-import { PagedResponse } from './model/paged-response.model';
 
 const TOP_EVENTS: Event[] = [
   {
@@ -40,7 +39,7 @@ const TOP_EVENTS: Event[] = [
       street: 'Event Street',
       houseNumber: '456',
     },
-    averageRating: 4.8,
+    rating: 4.8,
     agenda:[
       {id:1,name:'Ceremony',description:'The official wedding ceremony where the couple exchanges vows.',startTime:'2:00 PM',endTime:'3:00 PM',location:'Rose Garden'},
       {id:2,name:'Cocktail hour',description:'A relaxed gathering with drinks and appetizers for guests to mingle before the reception.',startTime:'3:00 PM',endTime:'4:00 PM',location:'Garden Terrace'}
@@ -77,7 +76,7 @@ const TOP_EVENTS: Event[] = [
       street: 'Conference Rd',
       houseNumber: '22',
     },
-    averageRating: 4.7,
+    rating: 4.7,
     agenda: [
       { id: 1, name: 'Opening Keynote', description: 'Welcoming speech by the organizer.', startTime: '9:00 AM', endTime: '10:00 AM', location: 'Main Hall' },
       { id: 2, name: 'Panel Discussion', description: 'Experts discuss emerging trends in technology.', startTime: '10:30 AM', endTime: '12:00 PM', location: 'Conference Room A' },
@@ -114,7 +113,7 @@ const TOP_EVENTS: Event[] = [
       street: 'Festival Grounds',
       houseNumber: '99',
     },
-    averageRating: 4.9,
+    rating: 4.9,
     agenda: [
       { id: 1, name: 'Registration & Breakfast', description: 'Guests register and network over breakfast.', startTime: '8:00 AM', endTime: '9:00 AM', location: 'Lobby' },
       { id: 2, name: 'Keynote: Innovations in Global Health', description: 'Discussion on breakthroughs in healthcare.', startTime: '9:30 AM', endTime: '11:00 AM', location: 'Auditorium' },
@@ -151,7 +150,7 @@ const TOP_EVENTS: Event[] = [
       street: 'Expo Blvd',
       houseNumber: '12',
     },
-    averageRating: 4.5,
+    rating: 4.5,
     agenda: [
       { id: 1, name: 'Opening Act', description: 'A performance by a rising star.', startTime: '12:00 PM', endTime: '1:00 PM', location: 'Main Stage' },
       { id: 2, name: 'Headline Performance', description: 'A concert by the main artist of the evening.', startTime: '8:00 PM', endTime: '10:00 PM', location: 'Main Stage' },
@@ -188,7 +187,7 @@ const TOP_EVENTS: Event[] = [
       street: 'Research Dr',
       houseNumber: '25',
     },
-    averageRating: 4.8,
+    rating: 4.8,
     agenda: [
       { id: 1, name: 'Registration & Breakfast', description: 'Guests register and network over breakfast.', startTime: '8:00 AM', endTime: '9:00 AM', location: 'Lobby' },
       { id: 2, name: 'Keynote: Innovations in Global Health', description: 'Discussion on breakthroughs in healthcare.', startTime: '9:30 AM', endTime: '11:00 AM', location: 'Auditorium' },
@@ -228,7 +227,7 @@ const EVENTS: Event[] = [
       street: 'Event Street',
       houseNumber: '456',
     },
-    averageRating: 4.8,
+    rating: 4.8,
     agenda:[
       {id:1,name:'Ceremony',description:'The official wedding ceremony where the couple exchanges vows.',startTime:'2:00 PM',endTime:'3:00 PM',location:'Rose Garden'},
       {id:2,name:'Cocktail hour',description:'A relaxed gathering with drinks and appetizers for guests to mingle before the reception.',startTime:'3:00 PM',endTime:'4:00 PM',location:'Garden Terrace'}
@@ -265,7 +264,7 @@ const EVENTS: Event[] = [
       street: 'Conference Rd',
       houseNumber: '22',
     },
-    averageRating: 4.7,
+    rating: 4.7,
     agenda: [
       { id: 1, name: 'Opening Keynote', description: 'Welcoming speech by the organizer.', startTime: '9:00 AM', endTime: '10:00 AM', location: 'Main Hall' },
       { id: 2, name: 'Panel Discussion', description: 'Experts discuss emerging trends in technology.', startTime: '10:30 AM', endTime: '12:00 PM', location: 'Conference Room A' },
@@ -302,7 +301,7 @@ const EVENTS: Event[] = [
       street: 'Festival Grounds',
       houseNumber: '99',
     },
-    averageRating: 4.9,
+    rating: 4.9,
     agenda: [
       { id: 1, name: 'Registration & Breakfast', description: 'Guests register and network over breakfast.', startTime: '8:00 AM', endTime: '9:00 AM', location: 'Lobby' },
       { id: 2, name: 'Keynote: Innovations in Global Health', description: 'Discussion on breakthroughs in healthcare.', startTime: '9:30 AM', endTime: '11:00 AM', location: 'Auditorium' },
@@ -339,7 +338,7 @@ const EVENTS: Event[] = [
       street: 'Expo Blvd',
       houseNumber: '12',
     },
-    averageRating: 4.5,
+    rating: 4.5,
     agenda: [
       { id: 1, name: 'Opening Act', description: 'A performance by a rising star.', startTime: '12:00 PM', endTime: '1:00 PM', location: 'Main Stage' },
       { id: 2, name: 'Headline Performance', description: 'A concert by the main artist of the evening.', startTime: '8:00 PM', endTime: '10:00 PM', location: 'Main Stage' },
@@ -376,7 +375,7 @@ const EVENTS: Event[] = [
       street: 'Research Dr',
       houseNumber: '25',
     },
-    averageRating: 4.8,
+    rating: 4.8,
     agenda: [
       { id: 1, name: 'Registration & Breakfast', description: 'Guests register and network over breakfast.', startTime: '8:00 AM', endTime: '9:00 AM', location: 'Lobby' },
       { id: 2, name: 'Keynote: Innovations in Global Health', description: 'Discussion on breakthroughs in healthcare.', startTime: '9:30 AM', endTime: '11:00 AM', location: 'Auditorium' },
@@ -413,7 +412,7 @@ const EVENTS: Event[] = [
       street: 'Runway St',
       houseNumber: '22',
     },
-    averageRating: 5.0,
+    rating: 5.0,
     agenda: [
       { id: 1, name: 'Opening Keynote', description: 'Welcoming speech by the organizer.', startTime: '9:00 AM', endTime: '10:00 AM', location: 'Main Hall' },
       { id: 2, name: 'Panel Discussion', description: 'Experts discuss emerging trends in technology.', startTime: '10:30 AM', endTime: '12:00 PM', location: 'Conference Room A' },
@@ -450,7 +449,7 @@ const EVENTS: Event[] = [
       street: 'Summit Rd',
       houseNumber: '18',
     },
-    averageRating: 4.6,
+    rating: 4.6,
     agenda: [
       { id: 1, name: 'Opening Keynote', description: 'Welcoming speech by the organizer.', startTime: '9:00 AM', endTime: '10:00 AM', location: 'Main Hall' },
       { id: 2, name: 'Panel Discussion', description: 'Experts discuss emerging trends in technology.', startTime: '10:30 AM', endTime: '12:00 PM', location: 'Conference Room A' },
@@ -487,7 +486,7 @@ const EVENTS: Event[] = [
       street: 'Cinema Rd',
       houseNumber: '12',
     },
-    averageRating: 4.9,
+    rating: 4.9,
     agenda: [
       { id: 1, name: 'Astronomy Panel', description: 'Discussion with top astronomers.', startTime: '9:00 AM', endTime: '11:00 AM', location: 'Galaxy Room' },
       { id: 2, name: 'Future of Space Missions', description: 'Exploration of next-gen spacecraft technologies.', startTime: '1:00 PM', endTime: '3:00 PM', location: 'Mission Hall' },
@@ -524,7 +523,7 @@ const EVENTS: Event[] = [
       street: 'Expo Center Rd',
       houseNumber: '44',
     },
-    averageRating: 4.7,
+    rating: 4.7,
     agenda: [
       { id: 1, name: 'Astronomy Panel', description: 'Discussion with top astronomers.', startTime: '9:00 AM', endTime: '11:00 AM', location: 'Galaxy Room' },
       { id: 2, name: 'Future of Space Missions', description: 'Exploration of next-gen spacecraft technologies.', startTime: '1:00 PM', endTime: '3:00 PM', location: 'Mission Hall' },
@@ -561,7 +560,7 @@ const EVENTS: Event[] = [
       street: 'Gallery St',
       houseNumber: '25',
     },
-    averageRating: 4.8,
+    rating: 4.8,
     agenda: [
       { id: 1, name: 'AI Basics in Medicine', description: 'Introduction to AI concepts and applications in healthcare.', startTime: '9:00 AM', endTime: '11:00 AM', location: 'Room A' },
       { id: 2, name: 'Hands-on Session', description: 'Participants develop basic AI models.', startTime: '11:30 AM', endTime: '1:30 PM', location: 'Lab 1' },
@@ -589,7 +588,7 @@ export class EventService {
         isOpen: eventObj.isOpen,
         date: eventObj.date,
         location: eventObj.location,
-        averageRating: eventObj.averageRating,
+        rating: eventObj.rating,
         agenda:eventObj.agenda
       };
       this.eventList.push(event);
@@ -605,7 +604,7 @@ export class EventService {
         isOpen: eventObj.isOpen,
         date: eventObj.date,
         location: eventObj.location,
-        averageRating: eventObj.averageRating,
+        rating: eventObj.rating,
         agenda:eventObj.agenda
       };
       this.topEventList.push(event);
@@ -613,11 +612,11 @@ export class EventService {
   }
 
   getAll(): Observable<Event[]> {
-    return this.httpClient.get<Event[]>(environment.apiHost+'/events/all');
+    return of(this.eventList);
   }
 
   getTop(): Observable<Event[]> {
-    return this.httpClient.get<Event[]>(environment.apiHost+'/events/top');
+    return of(this.topEventList);
   }
 
   getEvent(id:number): Event {
@@ -626,23 +625,5 @@ export class EventService {
 
   add(event:CreateEventDTO) : Observable<Event> {
     return this.httpClient.post<Event>(environment.apiHost + "/events", event);
-  }
-
-  getPaginatedEvents(
-    page: number,
-    pageSize: number,
-    filters: any = {}
-  ): Observable<PagedResponse<Event>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', pageSize.toString());
-
-    Object.keys(filters).forEach((key) => {
-      if (filters[key]) {
-        params = params.set(key, filters[key]);
-      }
-    });
-
-    return this.httpClient.get<PagedResponse<Event>>(environment.apiHost+"/events", { params });
   }
 }

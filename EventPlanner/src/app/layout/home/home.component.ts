@@ -22,8 +22,6 @@ export class HomeComponent implements OnInit {
   allOfferings: Offering[] = [];
   filteredOfferings: Offering[] = [];
   clickedEvent: string;
-  noTopEventsMessage: string = '';
-  noEventsMessage: string = '';
 
   sortingDirections = ['Ascending', 'Descending'];
 
@@ -40,37 +38,24 @@ export class HomeComponent implements OnInit {
   searchEventQuery: string = '';
   searchOfferingQuery: string = '';
 
-  eventPageProperties = {
-    page: 0,
-    pageSize: 5,
-    totalPages: 0,
-    totalElements: 0,
-  };
-
-  offeringPageProperties = {
-    page: 0,
-    pageSize: 2,
-    totalPages: 0,
-    totalElements: 0,
-  };
-
   constructor(private service: EventService, private offeringService: OfferingService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.fetchPaginatedEvents();
+    this.service.getAll().subscribe({
+      next: (event: Event[]) => {
+        this.allEvents = event;
+      },
+      error: (err) => {
+        console.error('Error fetching events:', err);
+      }
+    });
 
     this.service.getTop().subscribe({
       next: (events: Event[]) => {
         this.topEvents = events;
-        if (this.topEvents === null || this.topEvents.length === 0) {
-          this.noTopEventsMessage = 'No events found.';
-        } else {
-          this.noTopEventsMessage = '';
-        }
       },
       error: (err) => {
         console.error('Error fetching events:', err);
-        this.noTopEventsMessage = 'An error occurred while fetching events.';
       }
     });
 
@@ -143,42 +128,5 @@ export class HomeComponent implements OnInit {
   searchOffering() {
     console.log('Search Query:', this.searchOfferingQuery);
   }
-
-  fetchPaginatedEvents(): void {
-    const { page, pageSize } = this.eventPageProperties;
-  
-    this.service.getPaginatedEvents(page, pageSize).subscribe({
-      next: (response) => {
-        this.allEvents = response.content;
-        this.eventPageProperties.totalPages = response.totalPages;
-        this.eventPageProperties.totalElements = response.totalElements;
-        if (this.allEvents === null || this.allEvents.length === 0) {
-          this.noEventsMessage = 'No events found.';
-        } else {
-          this.noEventsMessage = '';
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching paginated events:', err);
-        this.noEventsMessage = 'An error occurred while fetching events.';
-      }
-    });
-  }
-
-  nextEventPage(): void {
-    if (this.eventPageProperties.page < this.eventPageProperties.totalPages - 1) {
-      this.eventPageProperties.page++;
-      this.fetchPaginatedEvents();
-    }
-  }
-  
-  previousEventPage(): void {
-    if (this.eventPageProperties.page > 0) {
-      this.eventPageProperties.page--;
-      this.fetchPaginatedEvents();
-    }
-  }
-  
-  
 }
 
