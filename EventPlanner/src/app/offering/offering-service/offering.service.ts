@@ -3,6 +3,7 @@ import { Product } from '../model/product.model';
 import { Service } from '../model/service.model';
 import { Observable, of } from 'rxjs';
 import { Offering } from '../model/offering.model';
+import { Location } from '../../event/model/location.model';
 import { Provider } from '../../user/model/provider.model';
 import { HttpClient } from '@angular/common/http';
 import {environment} from '../../../env/environment';
@@ -30,77 +31,114 @@ const SAMPLE_PROVIDER: Provider = {
   companyPhotos: "company.jpg"
 };
 
+
+const SAMPLE_CATEGORY = {
+  id: 1,
+  name: 'Audio/Visual Equipment'
+};
+
 const PRODUCTS: Product[] = [
   {
     id: 1,
     name: 'LED Stage Lights',
-    category: 'Audio/Visual Equipment',
+    category: SAMPLE_CATEGORY,
     picture: ['flowers.jpg'],  
     provider: SAMPLE_PROVIDER,
     price: 300,
-    rating: '4.7',
+    averageRating: '4.7',
     eventTypes: ['Concert', 'Conference'],
     isProduct: true,
-    description: "this is description",  isVisible: true, isAvailable:true
-
+    description: "this is description",  isVisible: true, isAvailable:true,
+    location: {
+      id: 1,
+      country: 'USA',
+      city: 'San Francisco',
+      street: 'Tech Blvd',
+      houseNumber: '123',
+    },
   },
   {
     id: 2,
     name: 'Portable Stage',
-    category: 'Event Infrastructure',
+    category: SAMPLE_CATEGORY,
     picture: ['flowers.jpg'],  
     provider: SAMPLE_PROVIDER,
     price: 1500,
-    rating: '4.5',
+    averageRating: '4.5',
     eventTypes: ['Festival', 'Exhibition'],
     isProduct: true,
     description: "this is description",  isVisible: true,
-    isAvailable:true
+    isAvailable:true,
+    location: {
+      id: 1,
+      country: 'USA',
+      city: 'San Francisco',
+      street: 'Tech Blvd',
+      houseNumber: '123',
+    },
   },
   {
     id: 3,
     name: 'Sound System Package',
-    category: 'Audio/Visual Equipment',
+    category: SAMPLE_CATEGORY,
     picture: ['flowers.jpg'],  
     provider: SAMPLE_PROVIDER,
     price: 700,
-    rating: '4.8',
+    averageRating: '4.8',
     eventTypes: ['Concert', 'Conference', 'Seminar'],
     isProduct: true,
     description: "this is description",  
     isVisible: true,
-    isAvailable:true
-
+    isAvailable:true,
+    location: {
+      id: 1,
+      country: 'USA',
+      city: 'San Francisco',
+      street: 'Tech Blvd',
+      houseNumber: '123',
+    },
   },
   {
     id: 4,
     name: 'Event Tents',
-    category: 'Event Infrastructure',
+    category: SAMPLE_CATEGORY,
     picture: ['flowers.jpg'],  
     provider: SAMPLE_PROVIDER,
     price: 1200,
-    rating: '4.6',
+    averageRating: '4.6',
     eventTypes: ['Outdoor Wedding', 'Festival', 'Exhibition'],
     isProduct: true,
     description: "this is description",  
     isVisible: true,
-    isAvailable:true
-
+    isAvailable:true,
+    location: {
+      id: 1,
+      country: 'USA',
+      city: 'San Francisco',
+      street: 'Tech Blvd',
+      houseNumber: '123',
+    },
   },
   {
     id: 5,
     name: 'Conference Seating',
-    category: 'Event Furniture',
+    category: SAMPLE_CATEGORY,
     picture: ['flowers.jpg'],  
     provider: SAMPLE_PROVIDER,
     price: 500,
-    rating: '4.9',
+    averageRating: '4.9',
     eventTypes: ['Conference', 'Seminar'],
     isProduct: true,
     description: "this is description",  
     isVisible: true,
-    isAvailable:true
-
+    isAvailable:true,
+    location: {
+      id: 1,
+      country: 'USA',
+      city: 'San Francisco',
+      street: 'Tech Blvd',
+      houseNumber: '123',
+    },
   }
 ];
 
@@ -108,11 +146,11 @@ const SERVICES: Service[] = [
   {
     id: 6,
     name: 'Catering Service',
-    category: 'Food & Beverage',
+    category: SAMPLE_CATEGORY,
     picture: ['makeup.jpg','backdrop.jpg','flowers.jpg'],  
     provider: SAMPLE_PROVIDER,
     price: 500,
-    rating: '5.0',
+    averageRating: '5.0',
     isProduct: false,
     specification: 'Full-service catering for events including appetizers, main course, and desserts.',
     minDuration: 2,
@@ -125,17 +163,24 @@ const SERVICES: Service[] = [
     eventTypes:["Wedding","Graduation"],
     fixedTime:false,  
     isVisible: true,
-    isAvailable:true
+    isAvailable:true,
+    location: {
+      id: 1,
+      country: 'USA',
+      city: 'San Francisco',
+      street: 'Tech Blvd',
+      houseNumber: '123',
+    },
 
   },
   {
     id: 7,
     name: 'Event Photography',
-    category: 'Photography',
+    category: SAMPLE_CATEGORY,
     picture: ['makeup.jpg','backdrop.jpg','flowers.jpg'],  
     provider: SAMPLE_PROVIDER,
     price: 800,
-    rating: '4.8',
+    averageRating: '4.8',
     isProduct: false,
     specification: 'Professional event photography including candid and posed shots.',
     minDuration: 3,
@@ -148,17 +193,24 @@ const SERVICES: Service[] = [
     eventTypes:["Wedding","Graduation"],
     fixedTime:false,
     isVisible: true,
-    isAvailable:true
+    isAvailable:true,
+    location: {
+      id: 1,
+      country: 'USA',
+      city: 'San Francisco',
+      street: 'Tech Blvd',
+      houseNumber: '123',
+    },
 
   },
   {
     id: 8,
     name: 'Venue Setup',
-    category: 'Event Management',
+    category: SAMPLE_CATEGORY,
     picture: ['makeup.jpg','backdrop.jpg','flowers.jpg'],  
     provider: SAMPLE_PROVIDER,
     price: 1000,
-    rating: '4.6',
+    averageRating: '4.6',
     isProduct: false,
     specification: 'Complete venue setup including seating, decor, and lighting arrangements.',
     minDuration: 4,   
@@ -171,18 +223,25 @@ const SERVICES: Service[] = [
     eventTypes:["Wedding","Graduation"],
     fixedTime:false,  
     isVisible: true,
-    isAvailable:true
+    isAvailable:true,
+    location: {
+      id: 1,
+      country: 'USA',
+      city: 'San Francisco',
+      street: 'Tech Blvd',
+      houseNumber: '123',
+    },
 
 
   },
   {
     id: 9,
     name: 'Audio/Visual Setup',
-    category: 'Audio/Visual',
+    category: SAMPLE_CATEGORY,
     picture: ['makeup.jpg','backdrop.jpg','flowers.jpg'],  
     provider: SAMPLE_PROVIDER,
     price: 600,
-    rating: '4.7',
+    averageRating: '4.7',
     isProduct: false,
     description: "this is description",
     specification: 'Audio/Visual equipment setup for conferences, seminars, and presentations.',
@@ -195,17 +254,24 @@ const SERVICES: Service[] = [
     eventTypes:["Wedding","Graduation"],
     fixedTime:false,  
     isVisible: true,
-    isAvailable:true
+    isAvailable:true,
+    location: {
+      id: 1,
+      country: 'USA',
+      city: 'San Francisco',
+      street: 'Tech Blvd',
+      houseNumber: '123',
+    },
 
   },
   {
     id: 10,
     name: 'Event Security',
-    category: 'Security Services',
+    category: SAMPLE_CATEGORY,
     picture: ['makeup.jpg','backdrop.jpg','flowers.jpg'],  
     provider: SAMPLE_PROVIDER,
     price: 700,
-    rating: '4.9',
+    averageRating: '4.9',
     isProduct: false,
     description: "this is description",
     specification: 'Security personnel for events, ensuring safety and crowd management.',
@@ -218,7 +284,14 @@ const SERVICES: Service[] = [
     eventTypes:["Wedding","Graduation"],
     fixedTime:false,
     isVisible: true,
-    isAvailable:true
+    isAvailable:true,
+    location: {
+      id: 1,
+      country: 'USA',
+      city: 'San Francisco',
+      street: 'Tech Blvd',
+      houseNumber: '123',
+    },
   }
 ];
 

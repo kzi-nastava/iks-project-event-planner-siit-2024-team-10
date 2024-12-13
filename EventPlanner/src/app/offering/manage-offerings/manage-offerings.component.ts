@@ -64,7 +64,7 @@ export class ManageOfferingsComponent implements OnInit {
         : offering.isProduct;
 
       // Filtering by category
-      const isCategoryValid = this.selectedCategory ? offering.category === this.selectedCategory : true;
+      const isCategoryValid = this.selectedCategory ? offering.category.name === this.selectedCategory : true;
 
       // Filtering by event type
       const isEventTypeValid = true;
