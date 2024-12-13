@@ -66,6 +66,7 @@ export class OfferingCategoryComponent implements OnInit {
   }
 
   editCategory(category: Category) {
+    // TODO: notifications
     const dialogRef = this.dialog.open(CategoryDialogComponent, {
       width: '400px',
       data: { mode: 'edit', category: { ...category } }
@@ -73,9 +74,15 @@ export class OfferingCategoryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // this.categoryService.updateCategory(result).subscribe();
+        this.categoryService.edit(result).subscribe({
+          next: (response) => {
+            this.refreshDataSource();
+            this.snackBar.open('Category updated successfully','OK',{duration:3000});
+          },
+          error: (err) => console.error('Error updating category:', err),
+        });
       }
-    });
+    });  
   }
 
   deleteCategory(category: Category) {
