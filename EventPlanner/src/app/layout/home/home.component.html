@@ -75,6 +75,10 @@
 
 <div class="top-events">
   <h2>Top Offerings In Your Area</h2>
+
+   <div class="no-events-message" *ngIf="noTopOfferingsMessage">
+      <p>{{ noTopOfferingsMessage }}</p>
+    </div>
   <div class="top-event-cards">
     <app-offering-card *ngFor="let offering of topOfferings" [offering]="offering"></app-offering-card>
   </div>
@@ -126,14 +130,23 @@
     </div>
   </div>
   <div class="all-events-section">
+    <div class="no-events-message" *ngIf="noOfferingsMessage">
+      <p>{{ noOfferingsMessage }}</p>
+    </div>
     <div class="all-event-cards">
       <app-offering-card *ngFor="let offering of filteredOfferings" [offering]="offering"></app-offering-card>
 
     </div>
-    <div class="pagination">
-      <button mat-stroked-button>&lt;</button>
-      <p>Page 1 of 10</p>
-      <button mat-stroked-button>&gt;</button>
+    <div class="pagination" *ngIf="!noOfferingsMessage">
+      <button mat-stroked-button (click)="previousOfferingPage()" [disabled]="offeringPageProperties.page === 0">
+        &lt;
+      </button>
+      <p>
+        Page {{ offeringPageProperties.page + 1 }} of {{ offeringPageProperties.totalPages }}
+      </p>
+      <button mat-stroked-button (click)="nextOfferingPage()" [disabled]="offeringPageProperties.page === offeringPageProperties.totalPages - 1">
+        &gt;
+      </button>
     </div>
   </div>
 </div>

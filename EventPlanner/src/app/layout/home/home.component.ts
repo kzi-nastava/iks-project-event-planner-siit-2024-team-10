@@ -24,6 +24,8 @@ export class HomeComponent implements OnInit {
   clickedEvent: string;
   noTopEventsMessage: string = '';
   noEventsMessage: string = '';
+  noTopOfferingsMessage: string = '';
+  noOfferingsMessage: string = '';
 
   sortingDirections = ['Ascending', 'Descending'];
 
@@ -49,7 +51,7 @@ export class HomeComponent implements OnInit {
 
   offeringPageProperties = {
     page: 0,
-    pageSize: 2,
+    pageSize: 5,
     totalPages: 0,
     totalElements: 0,
   };
@@ -78,9 +80,15 @@ export class HomeComponent implements OnInit {
     this.offeringService.getTop().subscribe({
       next: (offerings: Offering[]) => {
         this.topOfferings = offerings;
+        if (this.topOfferings === null || this.topOfferings.length === 0) {
+          this.noTopOfferingsMessage = 'No events found.';
+        } else {
+          this.noTopOfferingsMessage = '';
+        }
       },
       error: (err) => {
         console.error('Error fetching offerings:', err);
+        this.noTopOfferingsMessage = 'An error occurred while fetching offerings.';
       }
     });
     
@@ -172,9 +180,9 @@ export class HomeComponent implements OnInit {
         this.offeringPageProperties.totalPages = response.totalPages;
         this.offeringPageProperties.totalElements = response.totalElements;
         if (this.allOfferings === null || this.allOfferings.length === 0) {
-          this.noEventsMessage = 'No offerings found.';
+          this.noOfferingsMessage = 'No offerings found.';
         } else {
-          this.noEventsMessage = '';
+          this.noOfferingsMessage = '';
         }
       },
       error: (err) => {
@@ -195,6 +203,20 @@ export class HomeComponent implements OnInit {
     if (this.eventPageProperties.page > 0) {
       this.eventPageProperties.page--;
       this.fetchPaginatedEvents();
+    }
+  }
+
+  nextOfferingPage(): void {
+    if (this.offeringPageProperties.page < this.offeringPageProperties.totalPages - 1) {
+      this.offeringPageProperties.page++;
+      this.fetchPaginatedOfferings();
+    }
+  }
+  
+  previousOfferingPage(): void {
+    if (this.offeringPageProperties.page > 0) {
+      this.offeringPageProperties.page--;
+      this.fetchPaginatedOfferings();
     }
   }
   
