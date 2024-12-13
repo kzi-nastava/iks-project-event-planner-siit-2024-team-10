@@ -1,37 +1,43 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryService } from '../category-service/category.service';
 import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
 import {Category} from '../model/category.model'; 
-
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatSort} from '@angular/material/sort';
 @Component({
   selector: 'app-offering-category',
   templateUrl: './offering-category.component.html',
   styleUrls: ['./offering-category.component.css']
 })
 
-
 export class OfferingCategoryComponent implements OnInit {
   displayedColumns: string[] = ['name', 'description', 'offerings', 'approve', 'actions'];
   dataSource: MatTableDataSource<Category>;
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  snackBar:MatSnackBar = inject(MatSnackBar);
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private categoryService: CategoryService,
     private dialog: MatDialog
   ) {}
 
-  ngOnInit() {
-    this.categoryService.categories$.subscribe(categories => {
-      this.dataSource = new MatTableDataSource(categories);
-      this.dataSource.paginator = this.paginator;
-    });
+  ngOnInit(): void {
+    this.refreshDataSource();
+  }
 
-    // Initial fetch of categories
-    this.categoryService.fetchCategories().subscribe();
+  private refreshDataSource() {
+    this.categoryService.getAll().subscribe({
+      next: (categories: Category[]) => {
+        categories.sort((a, b) => a.name.localeCompare(b.name));
+        this.dataSource = new MatTableDataSource<Category>(categories);
+      },
+      error: (_) => {
+        console.error("Error loading categories");
+      }
+    })
   }
 
   openAddCategoryDialog() {
@@ -48,7 +54,7 @@ export class OfferingCategoryComponent implements OnInit {
           pending: true,
           deleted: false
         };
-        this.categoryService.addCategory(newCategory).subscribe();
+        // this.categoryService.addCategory(newCategory).subscribe();
       }
     });
   }
@@ -61,14 +67,14 @@ export class OfferingCategoryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.categoryService.updateCategory(result).subscribe();
+        // this.categoryService.updateCategory(result).subscribe();
       }
     });
   }
 
   deleteCategory(category: Category) {
     // You might want to add a confirmation dialog here
-    this.categoryService.deleteCategory(category.id).subscribe();
+    // this.categoryService.deleteCategory(category.id).subscribe();
   }
 
   // New method to approve a category
@@ -77,6 +83,6 @@ export class OfferingCategoryComponent implements OnInit {
       ...category, 
       pending: false 
     };
-    this.categoryService.updateCategory(approvedCategory).subscribe();
+    // this.categoryService.updateCategory(approvedCategory).subscribe();
   }
 }

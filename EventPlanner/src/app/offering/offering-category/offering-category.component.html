@@ -54,12 +54,6 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
       
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 20]"
-        showFirstLastButtons
-        aria-label="Select page of category elements">
-      </mat-paginator>
-      
       <div class="button-container">
         <button mat-raised-button class="manage-proposals-button" (click)="openAddCategoryDialog()">
           <mat-icon>add</mat-icon> Add New Category

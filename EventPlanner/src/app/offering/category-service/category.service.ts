@@ -1,61 +1,27 @@
 import { Injectable } from '@angular/core'; 
 import { BehaviorSubject, Observable, of } from 'rxjs'; 
 import { Category } from '../model/category.model';
-
+import {HttpClient} from '@angular/common/http';
+import { environment } from '../../../env/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private categoriesSubject = new BehaviorSubject<Category[]>([
-    {
-      id: 1,
-      name: 'Audio/Visual Equipment',
-      description: 'High-quality sound and visual equipment for events',
-      deleted: false,
-      pending: true  // Set initial category as pending
-    }
-  ]);
 
-  categories$ = this.categoriesSubject.asObservable();
-
-  constructor() {}
-
-  fetchCategories(): Observable<Category[]> {
-    return this.categories$;
+  constructor(private httpClient: HttpClient) {}
+  getAll() : Observable<Category[]> {
+    return this.httpClient.get<Category[]>(environment.apiHost + `/categories`);
+  }
+  /*
+  add(eventType:CreateEventTypeDTO) : Observable<Category> {
+    return this.httpClient.post<Category>(environment.apiHost + "/event-types", eventType);
   }
 
-  addCategory(category: Category): Observable<Category> {
-    const currentCategories = this.categoriesSubject.value;
-    const newCategory = { 
-      ...category, 
-      id: this.generateUniqueId(),
-      pending: true  // Ensure new categories are pending by default
-    };
-    this.categoriesSubject.next([...currentCategories, newCategory]);
-    return of(newCategory);
+  edit(eventType:EditEventTypeDTO) : Observable<Category> {
+    return this.httpClient.put<Category>(environment.apiHost + "/event-types/"+eventType.id, eventType);
   }
-
-  updateCategory(updatedCategory: Category): Observable<Category> {
-    const currentCategories = this.categoriesSubject.value;
-    const updatedCategories = currentCategories.map(cat =>
-      cat.id === updatedCategory.id ? updatedCategory : cat
-    );
-    this.categoriesSubject.next(updatedCategories);
-    return of(updatedCategory);
+  delete(id:number):Observable<Category>{
+    return this.httpClient.delete<Category>(environment.apiHost + "/event-types/"+id);
   }
-
-  deleteCategory(id: number): Observable<void> {
-    const currentCategories = this.categoriesSubject.value;
-    const filteredCategories = currentCategories.filter(cat => cat.id !== id);
-    this.categoriesSubject.next(filteredCategories);
-    return of(undefined);
-  }
-
-  // Helper method to generate unique ID
-  private generateUniqueId(): number {
-    const currentCategories = this.categoriesSubject.value;
-    return currentCategories.length > 0 
-      ? Math.max(...currentCategories.map(cat => cat.id)) + 1 
-      : 1;
-  }
+    */
 }
