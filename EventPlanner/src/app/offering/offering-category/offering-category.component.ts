@@ -42,7 +42,6 @@ export class OfferingCategoryComponent implements OnInit {
     });
   }
   
-
   openAddCategoryDialog() {
     const dialogRef = this.dialog.open(CategoryDialogComponent, {
       width: '400px',
@@ -99,10 +98,15 @@ export class OfferingCategoryComponent implements OnInit {
   }
 
   approveCategory(category: Category) {
-    const approvedCategory = { 
-      ...category, 
-      pending: false 
-    };
-    // this.categoryService.updateCategory(approvedCategory).subscribe();
-  }
+    this.categoryService.approve(category.id).subscribe({
+      next: (response) => {
+        this.refreshDataSource();
+        this.snackBar.open('Category approved successfully', 'OK', { duration: 3000 });
+      },
+      error: (err) => {
+        console.error('Error approving category:', err);
+        this.snackBar.open('Error approving category', 'OK', { duration: 3000 });
+      }
+    });
+  }  
 }
