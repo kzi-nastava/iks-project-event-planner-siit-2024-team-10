@@ -176,6 +176,7 @@ export class HomeComponent implements OnInit {
     this.offeringService.getPaginatedOfferings(page, pageSize).subscribe({
       next: (response) => {
         this.allOfferings = response.content;
+        console.log('All Offerings:', this.allOfferings);
         this.filteredOfferings = response.content;
         this.offeringPageProperties.totalPages = response.totalPages;
         this.offeringPageProperties.totalElements = response.totalElements;

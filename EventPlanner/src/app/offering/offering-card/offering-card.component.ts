@@ -20,12 +20,4 @@ export class OfferingCardComponent {
     this.clicked.emit(this.offering);
     console.log(this.offering.id)
   }
-
-  isProduct(offering: Offering): boolean {
-    return offering.isProduct;
-  }
-
-  isService(offering: Offering): boolean {
-    return !offering.isProduct;
-  }
 }

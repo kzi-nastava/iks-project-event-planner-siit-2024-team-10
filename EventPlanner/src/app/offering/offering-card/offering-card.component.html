@@ -13,8 +13,7 @@
       <div class="bottom-row">
         <div class="tags-rating">
           <div class="tags">
-            <span class="tag" *ngIf="isProduct(offering)">PRODUCT</span>
-            <span class="tag" *ngIf="isService(offering)">SERVICE</span>
+            <span class="tag">{{ offering.isProduct ? 'PRODUCT' : 'SERVICE' }}</span>
             <span class="tag">{{offering.category.name}}</span>
           </div>
           <div class="rating">
