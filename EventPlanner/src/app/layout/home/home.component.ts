@@ -81,7 +81,7 @@ export class HomeComponent implements OnInit {
       next: (offerings: Offering[]) => {
         this.topOfferings = offerings;
         if (this.topOfferings === null || this.topOfferings.length === 0) {
-          this.noTopOfferingsMessage = 'No events found.';
+          this.noTopOfferingsMessage = 'No offerings found.';
         } else {
           this.noTopOfferingsMessage = '';
         }
@@ -130,11 +130,13 @@ export class HomeComponent implements OnInit {
   }
 
   filterOfferings() {
-    this.filteredOfferings = this.allOfferings.filter(offering => 
-      this.selectedOfferingType === 'services' 
-        ? !offering.isProduct 
-        : offering.isProduct
-    );
+    if (this.selectedOfferingType === 'services') {
+      console.log('Filtering Services...');
+    } else if (this.selectedOfferingType === 'products') {
+      console.log('Filtering Products...');
+    } else {
+      console.log('No Offering Type Selected.');
+    }
   }
 
   toggleOfferingType(type: 'services' | 'products') {
@@ -176,7 +178,6 @@ export class HomeComponent implements OnInit {
     this.offeringService.getPaginatedOfferings(page, pageSize).subscribe({
       next: (response) => {
         this.allOfferings = response.content;
-        console.log('All Offerings:', this.allOfferings);
         this.filteredOfferings = response.content;
         this.offeringPageProperties.totalPages = response.totalPages;
         this.offeringPageProperties.totalElements = response.totalElements;
@@ -187,8 +188,8 @@ export class HomeComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Error fetching paginated events:', err);
-        this.noEventsMessage = 'An error occurred while fetching events.';
+        console.error('Error fetching paginated offerings:', err);
+        this.noOfferingsMessage = 'An error occurred while fetching offerings.';
       }
     });
   }
