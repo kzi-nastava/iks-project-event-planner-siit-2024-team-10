@@ -28,6 +28,7 @@ const SAMPLE_PROVIDER: GetProvider = {
   company:{
     name: "EventPro",
     description: "Event management company",
+    phoneNumber: "+1234567890",
     email: "company@email.com",
     location: SAMPLE_LOCATION,
   },
