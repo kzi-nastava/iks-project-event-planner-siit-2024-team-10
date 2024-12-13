@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './layout/home/home.component';
-import {LoginComponent} from './layout/login/login.component';
+import {LoginComponent} from './infrastructure/auth/login/login.component';
 import {ManageOfferingsComponent} from './offering/manage-offerings/manage-offerings.component';
 import {CreateOfferingsComponent} from './offering/create-offerings/create-offerings.component';
 import { EditServiceComponent } from './offering/edit-service/edit-service.component';

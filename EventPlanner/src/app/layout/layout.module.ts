@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import {MatIcon} from "@angular/material/icon";
 import { MatCardModule } from '@angular/material/card';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from '../infrastructure/auth/login/login.component';
 import {MatButtonModule} from '@angular/material/button';
 import { EventModule } from '../event/event.module';
 import { OfferingModule } from '../offering/offering.module';
