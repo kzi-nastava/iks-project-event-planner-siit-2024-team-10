@@ -13,6 +13,13 @@
     padding: 10px 20px;
     font-size: 16px;
   }
+
+  .no-events-message{
+    text-align: center;
+    padding-top:10vh;
+    padding-bottom:10vh;
+    color: #4e4e4e;
+  }
   
   .top-events {
     display: flex;

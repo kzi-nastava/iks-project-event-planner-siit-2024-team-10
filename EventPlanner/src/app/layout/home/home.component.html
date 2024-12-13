@@ -1,5 +1,8 @@
 <div class="top-events">
   <h2>Top Events In Your Area</h2>
+  <div class="no-events-message" *ngIf="noTopEventsMessage">
+    <p>{{ noTopEventsMessage }}</p>
+  </div>
   <div class="top-event-cards">
     <app-event-card *ngFor="let event of topEvents" [event]="event"></app-event-card>
   </div>
@@ -47,10 +50,13 @@
   </div>
 
   <div class="all-events-section">
+    <div class="no-events-message" *ngIf="noEventsMessage">
+      <p>{{ noEventsMessage }}</p>
+    </div>
     <div class="all-event-cards">
       <app-event-card *ngFor="let event of allEvents" [event]="event"></app-event-card>
     </div>
-    <div class="pagination">
+    <div class="pagination" *ngIf="!noEventsMessage">
       <button mat-stroked-button (click)="previousEventPage()" [disabled]="eventPageProperties.page === 0">
         &lt;
       </button>
