@@ -11,6 +11,7 @@ export interface Offering {
     provider: GetProvider;
     location: Location;
     price: number;
+    specification?: string;
     averageRating: string;
     eventTypes?: string[];
     isAvailable?: boolean;

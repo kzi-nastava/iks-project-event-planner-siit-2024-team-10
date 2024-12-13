@@ -59,6 +59,8 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.fetchPaginatedEvents();
 
+    this.fetchPaginatedOfferings();
+
     this.service.getTop().subscribe({
       next: (events: Event[]) => {
         this.topEvents = events;
@@ -76,23 +78,11 @@ export class HomeComponent implements OnInit {
     this.offeringService.getTop().subscribe({
       next: (offerings: Offering[]) => {
         this.topOfferings = offerings;
-        this.filteredOfferings = offerings;
       },
       error: (err) => {
         console.error('Error fetching offerings:', err);
       }
     });
-
-    this.offeringService.getAll().subscribe({
-      next: (offerings: Offering[]) => {
-        this.allOfferings = offerings;
-        this.filteredOfferings = offerings;
-      },
-      error: (err) => {
-        console.error('Error fetching offerings:', err);
-      }
-    });
-
     
   }
   applySorting(type: 'event' | 'offering') {
@@ -161,6 +151,28 @@ export class HomeComponent implements OnInit {
         this.eventPageProperties.totalElements = response.totalElements;
         if (this.allEvents === null || this.allEvents.length === 0) {
           this.noEventsMessage = 'No events found.';
+        } else {
+          this.noEventsMessage = '';
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching paginated events:', err);
+        this.noEventsMessage = 'An error occurred while fetching events.';
+      }
+    });
+  }
+
+  fetchPaginatedOfferings(): void {
+    const { page, pageSize } = this.offeringPageProperties;
+  
+    this.offeringService.getPaginatedOfferings(page, pageSize).subscribe({
+      next: (response) => {
+        this.allOfferings = response.content;
+        this.filteredOfferings = response.content;
+        this.offeringPageProperties.totalPages = response.totalPages;
+        this.offeringPageProperties.totalElements = response.totalElements;
+        if (this.allOfferings === null || this.allOfferings.length === 0) {
+          this.noEventsMessage = 'No offerings found.';
         } else {
           this.noEventsMessage = '';
         }

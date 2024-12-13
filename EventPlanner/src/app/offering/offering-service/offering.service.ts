@@ -5,8 +5,9 @@ import { Observable, of } from 'rxjs';
 import { Offering } from '../model/offering.model';
 import { Location } from '../../event/model/location.model';
 import { GetProvider } from '../../user/model/get_provider.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {environment} from '../../../env/environment';
+import { PagedResponse } from '../../event/model/paged-response.model';
 
 const SAMPLE_LOCATION: Location = {
   id: 1,
@@ -17,9 +18,9 @@ const SAMPLE_LOCATION: Location = {
 };
 
 const SAMPLE_PROVIDER: GetProvider = {
-  _id: 1,
+  id: 1,
   email: "john.smith@eventpro.com",
-  password: "hashedPassword123",
+  phoneNumber: "+1234567890",
   firstName: "John",
   lastName: "Smith",
   profilePhoto: "image1.jpg",
@@ -327,6 +328,24 @@ export class OfferingService {
   getProducts(): Observable<Product[]> {
     return of(this.productList);
   }
+
+  getPaginatedOfferings(
+      page: number,
+      pageSize: number,
+      filters: any = {}
+    ): Observable<PagedResponse<Offering>> {
+      let params = new HttpParams()
+        .set('page', page.toString())
+        .set('size', pageSize.toString());
+  
+      Object.keys(filters).forEach((key) => {
+        if (filters[key]) {
+          params = params.set(key, filters[key]);
+        }
+      });
+  
+      return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost+"/offerings", { params });
+    }
 
   getServices(): Observable<Service[]> {
     return of(this.serviceList);
