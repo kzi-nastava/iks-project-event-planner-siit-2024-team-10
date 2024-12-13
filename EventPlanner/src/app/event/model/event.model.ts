@@ -13,6 +13,6 @@ export interface Event{
     isOpen: boolean;
     date: Date;
     location: Location;
-    rating: number;
-    agenda:AgendaItem[];
+    averageRating: number;
+    agenda?:AgendaItem[];
 }
