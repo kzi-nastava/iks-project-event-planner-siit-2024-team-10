@@ -4,15 +4,17 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryService } from '../category-service/category.service';
 import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
-import {Category} from '../model/category.model'; // Ispravi import ovde
+import {Category} from '../model/category.model'; 
 
 @Component({
   selector: 'app-offering-category',
   templateUrl: './offering-category.component.html',
   styleUrls: ['./offering-category.component.css']
 })
+
+
 export class OfferingCategoryComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'description', 'offerings', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'offerings', 'approve', 'actions'];
   dataSource: MatTableDataSource<Category>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -40,7 +42,13 @@ export class OfferingCategoryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.categoryService.addCategory(result).subscribe();
+        // Automatically set pending to true for new categories
+        const newCategory = { 
+          ...result, 
+          pending: true,
+          deleted: false
+        };
+        this.categoryService.addCategory(newCategory).subscribe();
       }
     });
   }
@@ -62,7 +70,13 @@ export class OfferingCategoryComponent implements OnInit {
     // You might want to add a confirmation dialog here
     this.categoryService.deleteCategory(category.id).subscribe();
   }
-  manageProposals(){
 
+  // New method to approve a category
+  approveCategory(category: Category) {
+    const approvedCategory = { 
+      ...category, 
+      pending: false 
+    };
+    this.categoryService.updateCategory(approvedCategory).subscribe();
   }
 }

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core'; 
+import { BehaviorSubject, Observable, of } from 'rxjs'; 
 import { Category } from '../model/category.model';
 
 @Injectable({
@@ -11,8 +11,8 @@ export class CategoryService {
       id: 1,
       name: 'Audio/Visual Equipment',
       description: 'High-quality sound and visual equipment for events',
-      deleted:false,
-      pending:false
+      deleted: false,
+      pending: true  // Set initial category as pending
     }
   ]);
 
@@ -26,14 +26,18 @@ export class CategoryService {
 
   addCategory(category: Category): Observable<Category> {
     const currentCategories = this.categoriesSubject.value;
-    const newCategory = { ...category, id: currentCategories.length + 1 };
+    const newCategory = { 
+      ...category, 
+      id: this.generateUniqueId(),
+      pending: true  // Ensure new categories are pending by default
+    };
     this.categoriesSubject.next([...currentCategories, newCategory]);
     return of(newCategory);
   }
 
   updateCategory(updatedCategory: Category): Observable<Category> {
     const currentCategories = this.categoriesSubject.value;
-    const updatedCategories = currentCategories.map(cat => 
+    const updatedCategories = currentCategories.map(cat =>
       cat.id === updatedCategory.id ? updatedCategory : cat
     );
     this.categoriesSubject.next(updatedCategories);
@@ -45,5 +49,13 @@ export class CategoryService {
     const filteredCategories = currentCategories.filter(cat => cat.id !== id);
     this.categoriesSubject.next(filteredCategories);
     return of(undefined);
+  }
+
+  // Helper method to generate unique ID
+  private generateUniqueId(): number {
+    const currentCategories = this.categoriesSubject.value;
+    return currentCategories.length > 0 
+      ? Math.max(...currentCategories.map(cat => cat.id)) + 1 
+      : 1;
   }
 }
