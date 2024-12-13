@@ -53,10 +53,10 @@
     <div class="no-events-message" *ngIf="noEventsMessage">
       <p>{{ noEventsMessage }}</p>
     </div>
-    <p class="total-elements">Total elements: {{ eventPageProperties.totalElements }}</p>
     <div class="all-event-cards">
       <app-event-card *ngFor="let event of allEvents" [event]="event"></app-event-card>
     </div>
+    <p class="total-elements">Total elements: {{ eventPageProperties.totalElements }}</p>
     <div class="pagination" *ngIf="!noEventsMessage">
       <button mat-stroked-button (click)="previousEventPage()" [disabled]="eventPageProperties.page === 0">
         &lt;

@@ -4,6 +4,8 @@ import { Service } from '../model/service.model';
 import { Observable, of } from 'rxjs';
 import { Offering } from '../model/offering.model';
 import { Provider } from '../../user/model/provider.model';
+import { HttpClient } from '@angular/common/http';
+import {environment} from '../../../env/environment';
 
 const SAMPLE_PROVIDER: Provider = {
   _id: 1,
@@ -227,7 +229,7 @@ export class OfferingService {
   private productList: Product[] = [];
   private serviceList: Service[] = [];
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
     this.productList = PRODUCTS;
     this.serviceList = SERVICES;
   }
@@ -244,6 +246,9 @@ export class OfferingService {
     const allOfferings = [...this.productList, ...this.serviceList];
     return of(this.shuffleArray(allOfferings));
   }
+  getTop(): Observable<Offering[]> {
+      return this.httpClient.get<Offering[]>(environment.apiHost+'/offerings/top');
+    }
 
   getProducts(): Observable<Product[]> {
     return of(this.productList);
