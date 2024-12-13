@@ -73,6 +73,15 @@ export class HomeComponent implements OnInit {
         this.noTopEventsMessage = 'An error occurred while fetching events.';
       }
     });
+    this.offeringService.getTop().subscribe({
+      next: (offerings: Offering[]) => {
+        this.topOfferings = offerings;
+        this.filteredOfferings = offerings;
+      },
+      error: (err) => {
+        console.error('Error fetching offerings:', err);
+      }
+    });
 
     this.offeringService.getAll().subscribe({
       next: (offerings: Offering[]) => {
@@ -83,8 +92,6 @@ export class HomeComponent implements OnInit {
         console.error('Error fetching offerings:', err);
       }
     });
-
-    this.topOfferings = this.allOfferings.slice(0, 5);
 
     
   }
@@ -178,7 +185,6 @@ export class HomeComponent implements OnInit {
       this.fetchPaginatedEvents();
     }
   }
-  
   
 }
 

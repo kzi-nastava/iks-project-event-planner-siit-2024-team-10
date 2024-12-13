@@ -4,32 +4,33 @@ import { Service } from '../model/service.model';
 import { Observable, of } from 'rxjs';
 import { Offering } from '../model/offering.model';
 import { Location } from '../../event/model/location.model';
-import { Provider } from '../../user/model/provider.model';
+import { GetProvider } from '../../user/model/get_provider.model';
 import { HttpClient } from '@angular/common/http';
 import {environment} from '../../../env/environment';
 
-const SAMPLE_PROVIDER: Provider = {
+const SAMPLE_LOCATION: Location = {
+  id: 1,
+  country: 'USA',
+  city: 'San Francisco',
+  street: 'Tech Blvd',
+  houseNumber: '123',
+};
+
+const SAMPLE_PROVIDER: GetProvider = {
   _id: 1,
   email: "john.smith@eventpro.com",
   password: "hashedPassword123",
   firstName: "John",
   lastName: "Smith",
   profilePhoto: "image1.jpg",
-  country: "United States",
-  city: "New York",
-  street: "Broadway",
-  houseNumber: "123",
-  phone: "+1-555-0123",
-  companyEmail: "contact@eventpro.com",
-  companyName: "EventPro Solutions",
-  companyCountry: "United States",
-  companyCity: "New York",
-  companyStreet: "Broadway",
-  companyHouseNumber: "123",
-  companyPhone: "+1-555-0124",
-  companyDescription: "Premium event equipment and services provider with over 10 years of experience.",
-  companyPhotos: "company.jpg"
-};
+  location: SAMPLE_LOCATION,
+  company:{
+    name: "EventPro",
+    description: "Event management company",
+    email: "company@email.com",
+    location: SAMPLE_LOCATION,
+  },
+}
 
 
 const SAMPLE_CATEGORY = {
