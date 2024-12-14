@@ -33,7 +33,7 @@ import { OfferingCategoryComponent } from './offering/offering-category/offering
 
 // Services
 import { CategoryService } from './offering/category-service/category.service';
-import { PricelistComponent } from './pricelist/pricelist.component';
+import { PricelistComponent } from './offering/pricelist/pricelist.component';
 
 @NgModule({
   declarations: [

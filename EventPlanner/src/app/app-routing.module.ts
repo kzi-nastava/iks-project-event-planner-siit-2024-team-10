@@ -12,7 +12,7 @@ import { NotificationsPageComponent } from './notification/notifications-page/no
 import { OfferingCategoryComponent } from './offering/offering-category/offering-category.component';
 import {CreateEventComponent} from './event/create-event/create-event.component';
 import {EventTypesComponent} from './event/event-types/event-types.component';
-import { PricelistComponent } from './pricelist/pricelist.component';
+import { PricelistComponent } from './offering/pricelist/pricelist.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {path: 'home', component: HomeComponent},
