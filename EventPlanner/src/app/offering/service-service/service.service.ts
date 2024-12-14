@@ -6,7 +6,6 @@ import { environment } from '../../../env/environment';
 import { Service } from '../model/service.model';
 import { EditServiceDTO } from '../model/edit-service-dto.model';
 import { PagedResponse } from '../../event/model/paged-response.model';
-import { Offering } from '../model/offering.model';
 
 @Injectable({
   providedIn: 'root'

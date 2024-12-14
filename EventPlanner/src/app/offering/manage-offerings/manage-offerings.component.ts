@@ -24,7 +24,7 @@ export class ManageOfferingsComponent implements OnInit {
   searchOfferingQuery: string = '';
   offeringPageProperties = {
     page: 0,
-    pageSize: 5,
+    pageSize: 6,
     totalPages: 0,
     totalElements: 0,
   };
@@ -37,19 +37,20 @@ export class ManageOfferingsComponent implements OnInit {
 
   fetchPaginatedOfferings(): void {
     const { page, pageSize } = this.offeringPageProperties;
-  
+
     this.service.getPaginatedOfferings(page, pageSize).subscribe({
       next: (response) => {
-        this.allOfferings = response.content;
-        this.filteredOfferings = response.content;
-        this.displayedOfferings = this.filteredOfferings; 
-        this.offeringPageProperties.totalPages = response.totalPages;
-        this.offeringPageProperties.totalElements = response.totalElements;
-  
-        if (this.allOfferings === null || this.allOfferings.length === 0) {
-          this.noOfferingsMessage = 'No offerings found.';
+        if (response && response.content) {
+          this.allOfferings = response.content.filter(offering => !offering.deleted) || [];
+          this.filteredOfferings = [...this.allOfferings];
+          this.updateDisplayedOfferings();
+
+          this.offeringPageProperties.totalPages = response.totalPages || 0;
+          this.offeringPageProperties.totalElements = response.totalElements || 0;
+
         } else {
-          this.noOfferingsMessage = '';
+          console.warn('Unexpected API response format:', response);
+          this.noOfferingsMessage = 'An error occurred while fetching offerings.';
         }
       },
       error: (err) => {
@@ -57,6 +58,11 @@ export class ManageOfferingsComponent implements OnInit {
         this.noOfferingsMessage = 'An error occurred while fetching offerings.';
       }
     });
+  }
+
+  updateDisplayedOfferings(): void {
+    const { page, pageSize } = this.offeringPageProperties;
+    this.displayedOfferings = this.filteredOfferings.slice(page * pageSize, (page + 1) * pageSize);
   }
   
   nextOfferingPage(): void {
