@@ -22,6 +22,10 @@ export class HomeComponent implements OnInit {
   allOfferings: Offering[] = [];
   filteredOfferings: Offering[] = [];
   clickedEvent: string;
+  noTopEventsMessage: string = '';
+  noEventsMessage: string = '';
+  noTopOfferingsMessage: string = '';
+  noOfferingsMessage: string = '';
 
   sortingDirections = ['Ascending', 'Descending'];
 
@@ -38,39 +42,55 @@ export class HomeComponent implements OnInit {
   searchEventQuery: string = '';
   searchOfferingQuery: string = '';
 
+  eventPageProperties = {
+    page: 0,
+    pageSize: 5,
+    totalPages: 0,
+    totalElements: 0,
+  };
+
+  offeringPageProperties = {
+    page: 0,
+    pageSize: 5,
+    totalPages: 0,
+    totalElements: 0,
+  };
+
   constructor(private service: EventService, private offeringService: OfferingService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.service.getAll().subscribe({
-      next: (event: Event[]) => {
-        this.allEvents = event;
-      },
-      error: (err) => {
-        console.error('Error fetching events:', err);
-      }
-    });
+    this.fetchPaginatedEvents();
+
+    this.fetchPaginatedOfferings();
 
     this.service.getTop().subscribe({
       next: (events: Event[]) => {
         this.topEvents = events;
+        if (this.topEvents === null || this.topEvents.length === 0) {
+          this.noTopEventsMessage = 'No events found.';
+        } else {
+          this.noTopEventsMessage = '';
+        }
       },
       error: (err) => {
         console.error('Error fetching events:', err);
+        this.noTopEventsMessage = 'An error occurred while fetching events.';
       }
     });
-
-    this.offeringService.getAll().subscribe({
+    this.offeringService.getTop().subscribe({
       next: (offerings: Offering[]) => {
-        this.allOfferings = offerings;
-        this.filteredOfferings = offerings;
+        this.topOfferings = offerings;
+        if (this.topOfferings === null || this.topOfferings.length === 0) {
+          this.noTopOfferingsMessage = 'No offerings found.';
+        } else {
+          this.noTopOfferingsMessage = '';
+        }
       },
       error: (err) => {
         console.error('Error fetching offerings:', err);
+        this.noTopOfferingsMessage = 'An error occurred while fetching offerings.';
       }
     });
-
-    this.topOfferings = this.allOfferings.slice(0, 5);
-
     
   }
   applySorting(type: 'event' | 'offering') {
@@ -110,11 +130,13 @@ export class HomeComponent implements OnInit {
   }
 
   filterOfferings() {
-    this.filteredOfferings = this.allOfferings.filter(offering => 
-      this.selectedOfferingType === 'services' 
-        ? !offering.isProduct 
-        : offering.isProduct
-    );
+    if (this.selectedOfferingType === 'services') {
+      console.log('Filtering Services...');
+    } else if (this.selectedOfferingType === 'products') {
+      console.log('Filtering Products...');
+    } else {
+      console.log('No Offering Type Selected.');
+    }
   }
 
   toggleOfferingType(type: 'services' | 'products') {
@@ -128,5 +150,77 @@ export class HomeComponent implements OnInit {
   searchOffering() {
     console.log('Search Query:', this.searchOfferingQuery);
   }
+
+  fetchPaginatedEvents(): void {
+    const { page, pageSize } = this.eventPageProperties;
+  
+    this.service.getPaginatedEvents(page, pageSize).subscribe({
+      next: (response) => {
+        this.allEvents = response.content;
+        this.eventPageProperties.totalPages = response.totalPages;
+        this.eventPageProperties.totalElements = response.totalElements;
+        if (this.allEvents === null || this.allEvents.length === 0) {
+          this.noEventsMessage = 'No events found.';
+        } else {
+          this.noEventsMessage = '';
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching paginated events:', err);
+        this.noEventsMessage = 'An error occurred while fetching events.';
+      }
+    });
+  }
+
+  fetchPaginatedOfferings(): void {
+    const { page, pageSize } = this.offeringPageProperties;
+  
+    this.offeringService.getPaginatedOfferings(page, pageSize).subscribe({
+      next: (response) => {
+        this.allOfferings = response.content;
+        this.filteredOfferings = response.content;
+        this.offeringPageProperties.totalPages = response.totalPages;
+        this.offeringPageProperties.totalElements = response.totalElements;
+        if (this.allOfferings === null || this.allOfferings.length === 0) {
+          this.noOfferingsMessage = 'No offerings found.';
+        } else {
+          this.noOfferingsMessage = '';
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching paginated offerings:', err);
+        this.noOfferingsMessage = 'An error occurred while fetching offerings.';
+      }
+    });
+  }
+
+  nextEventPage(): void {
+    if (this.eventPageProperties.page < this.eventPageProperties.totalPages - 1) {
+      this.eventPageProperties.page++;
+      this.fetchPaginatedEvents();
+    }
+  }
+  
+  previousEventPage(): void {
+    if (this.eventPageProperties.page > 0) {
+      this.eventPageProperties.page--;
+      this.fetchPaginatedEvents();
+    }
+  }
+
+  nextOfferingPage(): void {
+    if (this.offeringPageProperties.page < this.offeringPageProperties.totalPages - 1) {
+      this.offeringPageProperties.page++;
+      this.fetchPaginatedOfferings();
+    }
+  }
+  
+  previousOfferingPage(): void {
+    if (this.offeringPageProperties.page > 0) {
+      this.offeringPageProperties.page--;
+      this.fetchPaginatedOfferings();
+    }
+  }
+  
 }
 

@@ -36,7 +36,7 @@
     <div class="header-info">
       <h1 class="title">{{offering?.name}}</h1>
       <div class="meta-info">
-        <span class="category">{{offering?.category}}</span>
+        <span class="category">{{offering?.category.name}}</span>
         <div class="availability" [class.available]="offering?.isAvailable">
           {{offering?.isAvailable ? 'Available' : 'Not Available'}}
         </div>
@@ -89,10 +89,6 @@
           <span class="spec-value">{{offering?.specification}} days before</span>
         </div>
         <div class="spec-item">
-          <span class="spec-label">Event types:</span>
-          <span class="spec-value">{{offering?.eventTypes}}</span>
-        </div>
-        <div class="spec-item">
           <span class="spec-label">Confirmation:</span>
           <span class="spec-value">
             {{ offering?.autoConfirm ? 'Automatic' : 'Manual' }}
@@ -107,23 +103,23 @@
         <div class="provider-info">
           <img [src]="offering.provider.profilePhoto" alt="Provider" class="provider-avatar">
           <div class="provider-details">
-            <h3>{{offering.provider.companyName}}</h3>
+            <h3>{{offering.provider.company.name}}</h3>
             <div class="rating">
               <span class="stars">★★★★☆</span>
-              <span class="rating-number">({{offering.rating}})</span>
+              <span class="rating-number">({{offering.averageRating}})</span>
             </div>
             <p class="provider-location">
               <i class="fas fa-location">📍</i>
-              {{ offering.provider.companyCity }}, {{ offering.provider.companyCountry }}
+              {{ offering.provider.company.location.city }}, {{ offering.provider.company.location.country }}
             </p>
             <div class="provider-contact">
               <p class="contact-item">
                 <i class="fas fa-email">📧</i>
-                {{ offering.provider.companyEmail }}
+                {{ offering.provider.company.email }}
               </p>
               <p class="contact-item">
                 <i class="fas fa-phone"></i>
-                {{ offering.provider.companyPhone }}
+                {{ offering.provider.company.phoneNumber }}
               </p>
             </div>
           </div>

@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryService } from '../category-service/category.service';
@@ -7,7 +6,6 @@ import { CategoryDialogComponent } from '../category-dialog/category-dialog.comp
 import {Category} from '../model/category.model'; 
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
-import { C } from '@angular/cdk/keycodes';
 @Component({
   selector: 'app-offering-category',
   templateUrl: './offering-category.component.html',
