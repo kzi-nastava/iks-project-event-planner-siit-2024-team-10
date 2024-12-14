@@ -18,6 +18,5 @@ export class OfferingCardComponent {
   onOfferingClicked(): void {
     this.router.navigate(['/offering', this.offering.id]);
     this.clicked.emit(this.offering);
-    console.log(this.offering.id)
   }
 }

@@ -60,7 +60,6 @@ export class DetailsPageComponent implements OnInit {
       this.offering = offering;
       console.log('Offering:', this.offering); 
       if (this.offering) {
-        // da li je niz slika
         this.images = Array.isArray(this.offering.picture) ? this.offering.picture : [this.offering.picture];
         this.loadComments();
       }

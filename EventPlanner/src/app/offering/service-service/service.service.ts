@@ -35,7 +35,7 @@ export class ServiceService {
       page: number,
       pageSize: number,
       filters: any = {}
-    ): Observable<PagedResponse<Offering>> {
+    ): Observable<PagedResponse<Service>> {
       let params = new HttpParams()
         .set('page', page.toString())
         .set('size', pageSize.toString());
@@ -46,6 +46,19 @@ export class ServiceService {
         }
       });
   
-      return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost+"/offerings", { params });
+      return this.httpClient.get<PagedResponse<Service>>(environment.apiHost+"/services", { params }).pipe(
+      map((response: PagedResponse<Service>) => {
+        console.log('Paginated response:', response);
+  
+        // Log each service individually
+        if (response.content) {
+          response.content.forEach((service: Service) => {
+            console.log('Service:', service);
+          });
+        }
+  
+        return response;
+      })
+    );
     }
 }
