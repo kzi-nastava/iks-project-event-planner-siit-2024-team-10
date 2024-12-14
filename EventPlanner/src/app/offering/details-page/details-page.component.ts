@@ -5,9 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
-import { OfferingService } from '../offering-service/offering.service';
 import { CommentService, Comment } from '../comment-service/comment.service';
-import { Offering } from '../model/offering.model';
 import { switchMap } from 'rxjs/operators';
 import { Service } from '../model/service.model';
 import { Product } from '../model/product.model';
@@ -149,9 +147,23 @@ navigateToEdit(): void {
     this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
     }
   }
-  deleteOffering():void{
-    console.log('Pop up for deleting...');
+  deleteOffering(): void {
+    if (this.offering) {
+      const confirmation = confirm('Are you sure you want to delete this offering?');
+      if (confirmation) {
+        this.serviceService.delete(this.offering.id).subscribe(
+          () => {
+            console.log('Offering deleted successfully');
+            this.router.navigate(['/offerings']); 
+          },
+          error => {
+            console.error('Error deleting offering:', error);
+          }
+        );
+      }
+    }
   }
+  
   viewProviderProfile() {
     console.log('Viewing provider profile...');
   }
