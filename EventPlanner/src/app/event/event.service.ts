@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { Event } from './model/event.model';
 import {CreateEventTypeDTO} from './model/create-event-type-dto.model';
 import {EventType} from './model/event-type.model';
@@ -642,7 +642,6 @@ export class EventService {
         params = params.set(key, filters[key]);
       }
     });
-
     return this.httpClient.get<PagedResponse<Event>>(environment.apiHost+"/events", { params });
   }
 }

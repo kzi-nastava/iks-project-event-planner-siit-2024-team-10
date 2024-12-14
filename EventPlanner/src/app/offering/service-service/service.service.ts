@@ -1,11 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CreateServiceDTO } from '../model/create-service-dto.model';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../env/environment';
 import { Service } from '../model/service.model';
 import { EditServiceDTO } from '../model/edit-service-dto.model';
 import { PagedResponse } from '../../event/model/paged-response.model';
+import { Offering } from '../model/offering.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class ServiceService {
       page: number,
       pageSize: number,
       filters: any = {}
-    ): Observable<PagedResponse<Service>> {
+    ): Observable<PagedResponse<Offering>> {
       let params = new HttpParams()
         .set('page', page.toString())
         .set('size', pageSize.toString());
@@ -45,6 +46,6 @@ export class ServiceService {
         }
       });
   
-      return this.httpClient.get<PagedResponse<Service>>(environment.apiHost+"/services", { params });
+      return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost+"/offerings", { params });
     }
 }

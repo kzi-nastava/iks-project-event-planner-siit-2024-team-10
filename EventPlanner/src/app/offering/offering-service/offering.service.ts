@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../model/product.model';
 import { Service } from '../model/service.model';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { Offering } from '../model/offering.model';
 import { Location } from '../../event/model/location.model';
 import { GetProvider } from '../../user/model/get_provider.model';
@@ -57,7 +57,20 @@ export class OfferingService {
         }
       });
   
-      return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost+"/offerings", { params });
+      return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost+"/offerings", { params }).pipe(
+            map((response: PagedResponse<Offering>) => {
+              console.log('Paginated response:', response);
+        
+              // Log each service individually
+              if (response.content) {
+                response.content.forEach((service: Offering) => {
+                  console.log('Service:', service);
+                });
+              }
+        
+              return response;
+            })
+          );
     }
 
   getServices(): Observable<Service[]> {

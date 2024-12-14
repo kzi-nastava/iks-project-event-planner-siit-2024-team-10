@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Event } from '../../event/model/event.model';
-import { EventService } from '../../event/event.service';
-import { OfferingService } from '../offering-service/offering.service';
 import { Offering } from '../../offering/model/offering.model';
 import { MatDialog } from '@angular/material/dialog';
-import { FilterProvidersOfferingsDialogComponent } from '../filter-providers-offerings-dialog/filter-providers-offerings-dialog.component';
 import { FilterServiceDialogComponent } from '../filter-service-dialog/filter-service-dialog.component';
 import { FilterProductDialogComponent } from '../filter-product-dialog/filter-product-dialog.component';
 import { OfferingWarningDialogComponent } from '../../layout/offering-warning-dialog/offering-warning-dialog.component';
@@ -25,7 +21,7 @@ export class ManageOfferingsComponent implements OnInit {
 
   selectedSortingDirection: string = 'Ascending';
   selectedOfferingSortingCriteria: string = 'None';
-
+  searchOfferingQuery: string = '';
   offeringPageProperties = {
     page: 0,
     pageSize: 5,
@@ -46,8 +42,10 @@ export class ManageOfferingsComponent implements OnInit {
       next: (response) => {
         this.allOfferings = response.content;
         this.filteredOfferings = response.content;
+        this.displayedOfferings = this.filteredOfferings; // Ensure this is set
         this.offeringPageProperties.totalPages = response.totalPages;
         this.offeringPageProperties.totalElements = response.totalElements;
+  
         if (this.allOfferings === null || this.allOfferings.length === 0) {
           this.noOfferingsMessage = 'No offerings found.';
         } else {
@@ -60,7 +58,7 @@ export class ManageOfferingsComponent implements OnInit {
       }
     });
   }
-
+  
   nextOfferingPage(): void {
     if (this.offeringPageProperties.page < this.offeringPageProperties.totalPages - 1) {
       this.offeringPageProperties.page++;
@@ -74,7 +72,7 @@ export class ManageOfferingsComponent implements OnInit {
       this.fetchPaginatedOfferings();
     }
   }
-
+  
   openFilterDialog(): void {
     if (this.selectedOfferingType === 'services') {
       this.dialog.open(FilterServiceDialogComponent, {
@@ -103,5 +101,11 @@ export class ManageOfferingsComponent implements OnInit {
     } else {
       console.log('No Offering Type Selected.');
     }
+  }
+  applySorting(type: 'event' | 'offering') {
+    console.log(`Sorting Offerings by ${this.selectedOfferingSortingCriteria} in ${this.selectedSortingDirection} order.`);
+  }
+  searchOffering() {
+    console.log('Search Query:', this.searchOfferingQuery);
   }
 }
