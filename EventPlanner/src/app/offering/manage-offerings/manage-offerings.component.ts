@@ -42,7 +42,7 @@ export class ManageOfferingsComponent implements OnInit {
       next: (response) => {
         this.allOfferings = response.content;
         this.filteredOfferings = response.content;
-        this.displayedOfferings = this.filteredOfferings; // Ensure this is set
+        this.displayedOfferings = this.filteredOfferings; 
         this.offeringPageProperties.totalPages = response.totalPages;
         this.offeringPageProperties.totalElements = response.totalElements;
   

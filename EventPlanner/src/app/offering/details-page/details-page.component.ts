@@ -154,7 +154,7 @@ navigateToEdit(): void {
         this.serviceService.delete(this.offering.id).subscribe(
           () => {
             console.log('Offering deleted successfully');
-            this.router.navigate(['/offerings']); 
+            this.router.navigate(['/manage-offerings']); 
           },
           error => {
             console.error('Error deleting offering:', error);
