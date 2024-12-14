@@ -4,26 +4,23 @@ mat-toolbar {
   z-index: 1;
 }
 
-mat-icon{
+mat-icon {
   color: #252629;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  color:#3a2d30;
+  color: #3a2d30;
 }
 
-.navigation-container{
+.navigation-container {
   display: flex;
   justify-content: right;
   width: 100%;
+  align-items: center;
 }
-.navigation-item{
-  margin: 10px;
+
+.navigation-item {
   font-size: larger;
 }
 
-button {
-    margin-right: 10px;
-}
-
 span {
-  font-family: 'Fira Sans Condensed', serif
+  font-family: 'Fira Sans Condensed', serif;
 }

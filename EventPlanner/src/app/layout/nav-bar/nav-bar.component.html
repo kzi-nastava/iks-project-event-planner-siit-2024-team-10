@@ -1,17 +1,41 @@
 <mat-toolbar color="primary">
-    <span [routerLink]="['home']">Event Planner</span>
-    <div class="navigation-container">
-      <div class="navigation-item">
-        <mat-icon [routerLink]="['login']">account_circle</mat-icon>
-      </div>
-      <div class="navigation-item">
-        <mat-icon [routerLink]="['manage-offerings']">shopping_cart</mat-icon>
-      </div>
-      <div class="navigation-item">
-        <mat-icon [routerLink]="['notification-panel']">notifications</mat-icon>
-      </div>
-      <div class="navigation-item">
-        <mat-icon [routerLink]="['offering-categories']">category</mat-icon>
-      </div>
+  <span [routerLink]="['home']">Event Planner</span>
+  <div class="navigation-container">
+    <div class="navigation-item">
+      <button mat-icon-button [routerLink]="['login']">
+        <mat-icon>account_circle</mat-icon>
+      </button>
     </div>
+    <div class="navigation-item">
+      <button mat-icon-button [matMenuTriggerFor]="adminMenu">
+        <mat-icon>admin_panel_settings</mat-icon>
+      </button>
+      <mat-menu #adminMenu="matMenu">
+        <button mat-menu-item [routerLink]="['event-types']">
+          <mat-icon>event</mat-icon>
+          <span>Event Type Management</span>
+        </button>
+        <button mat-menu-item [routerLink]="['manage-offerings']" >
+          <mat-icon>shopping_cart</mat-icon>
+          <span>Offering Management</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>money</mat-icon>
+          <span>Pricelist</span>
+        </button>
+        <button mat-menu-item [routerLink]="['notification-panel']">
+          <mat-icon>notifications</mat-icon>
+          <span>Notification Management</span>
+        </button>
+        <button mat-menu-item [routerLink]="['offering-categories']">
+          <mat-icon>category</mat-icon>
+          <span>Category Management</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>chat</mat-icon>
+          <span>Chat</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
 </mat-toolbar>

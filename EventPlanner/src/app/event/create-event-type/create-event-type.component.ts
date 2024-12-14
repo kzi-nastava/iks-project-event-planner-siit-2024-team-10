@@ -24,7 +24,7 @@ export class CreateEventTypeComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-    this.categoryService.fetchCategories().subscribe({
+    this.categoryService.getAll().subscribe({
       next: (categories:Category[]) => {
         this.allCategories=categories.filter(x=>!x.deleted);
       },
