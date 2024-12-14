@@ -14,6 +14,7 @@ import { Product } from '../model/product.model';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ReservationDialogComponent } from '../reservation-dialog/reservation-dialog.component';
+import { ServiceService } from '../service-service/service.service';
 
 @Component({
   selector: 'app-details-page',
@@ -44,7 +45,7 @@ export class DetailsPageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private offeringService: OfferingService,
+    private serviceService: ServiceService,
     private commentService: CommentService,
     private router: Router,
     private dialog: MatDialog
@@ -54,7 +55,8 @@ export class DetailsPageComponent implements OnInit {
     this.route.params.pipe(
       switchMap(params => {
         const id = +params['id'];
-        return this.offeringService.getOfferingById(id);
+        console.log(id)
+        return this.serviceService.getById(id);
       })
     ).subscribe(offering => {
       this.offering = offering;
