@@ -24,6 +24,8 @@ export class HomeComponent implements OnInit {
   clickedEvent: string;
   noTopEventsMessage: string = '';
   noEventsMessage: string = '';
+  noTopOfferingsMessage: string = '';
+  noOfferingsMessage: string = '';
 
   sortingDirections = ['Ascending', 'Descending'];
 
@@ -49,7 +51,7 @@ export class HomeComponent implements OnInit {
 
   offeringPageProperties = {
     page: 0,
-    pageSize: 2,
+    pageSize: 5,
     totalPages: 0,
     totalElements: 0,
   };
@@ -58,6 +60,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchPaginatedEvents();
+
+    this.fetchPaginatedOfferings();
 
     this.service.getTop().subscribe({
       next: (events: Event[]) => {
@@ -73,19 +77,20 @@ export class HomeComponent implements OnInit {
         this.noTopEventsMessage = 'An error occurred while fetching events.';
       }
     });
-
-    this.offeringService.getAll().subscribe({
+    this.offeringService.getTop().subscribe({
       next: (offerings: Offering[]) => {
-        this.allOfferings = offerings;
-        this.filteredOfferings = offerings;
+        this.topOfferings = offerings;
+        if (this.topOfferings === null || this.topOfferings.length === 0) {
+          this.noTopOfferingsMessage = 'No offerings found.';
+        } else {
+          this.noTopOfferingsMessage = '';
+        }
       },
       error: (err) => {
         console.error('Error fetching offerings:', err);
+        this.noTopOfferingsMessage = 'An error occurred while fetching offerings.';
       }
     });
-
-    this.topOfferings = this.allOfferings.slice(0, 5);
-
     
   }
   applySorting(type: 'event' | 'offering') {
@@ -125,11 +130,13 @@ export class HomeComponent implements OnInit {
   }
 
   filterOfferings() {
-    this.filteredOfferings = this.allOfferings.filter(offering => 
-      this.selectedOfferingType === 'services' 
-        ? !offering.isProduct 
-        : offering.isProduct
-    );
+    if (this.selectedOfferingType === 'services') {
+      console.log('Filtering Services...');
+    } else if (this.selectedOfferingType === 'products') {
+      console.log('Filtering Products...');
+    } else {
+      console.log('No Offering Type Selected.');
+    }
   }
 
   toggleOfferingType(type: 'services' | 'products') {
@@ -165,6 +172,28 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  fetchPaginatedOfferings(): void {
+    const { page, pageSize } = this.offeringPageProperties;
+  
+    this.offeringService.getPaginatedOfferings(page, pageSize).subscribe({
+      next: (response) => {
+        this.allOfferings = response.content;
+        this.filteredOfferings = response.content;
+        this.offeringPageProperties.totalPages = response.totalPages;
+        this.offeringPageProperties.totalElements = response.totalElements;
+        if (this.allOfferings === null || this.allOfferings.length === 0) {
+          this.noOfferingsMessage = 'No offerings found.';
+        } else {
+          this.noOfferingsMessage = '';
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching paginated offerings:', err);
+        this.noOfferingsMessage = 'An error occurred while fetching offerings.';
+      }
+    });
+  }
+
   nextEventPage(): void {
     if (this.eventPageProperties.page < this.eventPageProperties.totalPages - 1) {
       this.eventPageProperties.page++;
@@ -178,7 +207,20 @@ export class HomeComponent implements OnInit {
       this.fetchPaginatedEvents();
     }
   }
+
+  nextOfferingPage(): void {
+    if (this.offeringPageProperties.page < this.offeringPageProperties.totalPages - 1) {
+      this.offeringPageProperties.page++;
+      this.fetchPaginatedOfferings();
+    }
+  }
   
+  previousOfferingPage(): void {
+    if (this.offeringPageProperties.page > 0) {
+      this.offeringPageProperties.page--;
+      this.fetchPaginatedOfferings();
+    }
+  }
   
 }
 
