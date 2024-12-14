@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CreateServiceDTO } from '../model/create-service-dto.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../../env/environment';
 import { Service } from '../model/service.model';
 import { EditServiceDTO } from '../model/edit-service-dto.model';
+import { PagedResponse } from '../../event/model/paged-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,21 @@ export class ServiceService {
     delete(id:number) : Observable<Service> {
       return this.httpClient.delete<Service>(environment.apiHost + "/services/"+id);
     }
-    
+    getPaginatedOfferings(
+      page: number,
+      pageSize: number,
+      filters: any = {}
+    ): Observable<PagedResponse<Service>> {
+      let params = new HttpParams()
+        .set('page', page.toString())
+        .set('size', pageSize.toString());
+  
+      Object.keys(filters).forEach((key) => {
+        if (filters[key]) {
+          params = params.set(key, filters[key]);
+        }
+      });
+  
+      return this.httpClient.get<PagedResponse<Service>>(environment.apiHost+"/services", { params });
+    }
 }
