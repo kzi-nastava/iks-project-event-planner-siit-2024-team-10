@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import {MatIcon} from "@angular/material/icon";
 import { MatCardModule } from '@angular/material/card';
-import { LoginComponent } from '../infrastructure/auth/login/login.component';
+import { LoginComponent } from './login/login.component';
 import {MatButtonModule} from '@angular/material/button';
 import { EventModule } from '../event/event.module';
 import { OfferingModule } from '../offering/offering.module';
@@ -20,10 +20,6 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { OfferingWarningDialogComponent } from './offering-warning-dialog/offering-warning-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
-import { AdminNavBarMenuComponent } from './admin-nav-bar-menu/admin-nav-bar-menu.component';
-import { ProviderNavBarMenuComponent } from './provider-nav-bar-menu/provider-nav-bar-menu.component';
-import { OrganizerNavBarMenuComponent } from './organizer-nav-bar-menu/organizer-nav-bar-menu.component';
-import { AuthenticatedUserNavBarMenuComponent } from './authenticated-user-nav-bar-menu/authenticated-user-nav-bar-menu.component';
 
 @NgModule({
   declarations: [
@@ -32,10 +28,6 @@ import { AuthenticatedUserNavBarMenuComponent } from './authenticated-user-nav-b
     LoginComponent,
     RegisterComponent,
     OfferingWarningDialogComponent,
-    AdminNavBarMenuComponent,
-    ProviderNavBarMenuComponent,
-    OrganizerNavBarMenuComponent,
-    AuthenticatedUserNavBarMenuComponent,
   ],
     imports: [
         MatMenuModule,

@@ -1,35 +1,40 @@
 <mat-toolbar color="primary">
   <span [routerLink]="['home']">Event Planner</span>
   <div class="navigation-container">
-    <div class="navigation-item" *ngIf="role==undefined">
+    <div class="navigation-item">
       <button mat-icon-button [routerLink]="['login']">
         <mat-icon>account_circle</mat-icon>
       </button>
     </div>
-    <div class="navigation-item" *ngIf="role!=undefined">
-      <button mat-icon-button [matMenuTriggerFor]="account">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-      <mat-menu #account="matMenu">
-        <button mat-menu-item>
-          <mat-icon>account_circle</mat-icon>
-          <span>Account details</span>
-        </button>
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          <span>Log out</span>
-        </button>
-      </mat-menu>
-    </div>
     <div class="navigation-item">
-      <button *ngIf="role!=undefined" mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>menu</mat-icon>
+      <button mat-icon-button [matMenuTriggerFor]="adminMenu">
+        <mat-icon>admin_panel_settings</mat-icon>
       </button>
-      <mat-menu #menu="matMenu">
-        <app-admin-nav-bar-menu *ngIf="role=='ADMIN'"></app-admin-nav-bar-menu>
-        <app-organizer-nav-bar-menu *ngIf="role=='ORGANIZER'"></app-organizer-nav-bar-menu>
-        <app-provider-nav-bar-menu *ngIf="role=='PROVIDER'"></app-provider-nav-bar-menu>
-        <app-authenticated-user-nav-bar-menu *ngIf="role=='AUTHENTICATED_USER'"></app-authenticated-user-nav-bar-menu>
+      <mat-menu #adminMenu="matMenu">
+        <button mat-menu-item [routerLink]="['event-types']">
+          <mat-icon>event</mat-icon>
+          <span>Event Type Management</span>
+        </button>
+        <button mat-menu-item [routerLink]="['manage-offerings']" >
+          <mat-icon>shopping_cart</mat-icon>
+          <span>Offering Management</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>money</mat-icon>
+          <span>Pricelist</span>
+        </button>
+        <button mat-menu-item [routerLink]="['notification-panel']">
+          <mat-icon>notifications</mat-icon>
+          <span>Notification Management</span>
+        </button>
+        <button mat-menu-item [routerLink]="['offering-categories']">
+          <mat-icon>category</mat-icon>
+          <span>Category Management</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>chat</mat-icon>
+          <span>Chat</span>
+        </button>
       </mat-menu>
     </div>
   </div>
