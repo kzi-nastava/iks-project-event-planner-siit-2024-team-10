@@ -19,7 +19,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import { OfferingWarningDialogComponent } from './offering-warning-dialog/offering-warning-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -30,6 +30,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     OfferingWarningDialogComponent,
   ],
     imports: [
+        MatMenuModule,
         CommonModule,
         MaterialModule,
         RouterModule,

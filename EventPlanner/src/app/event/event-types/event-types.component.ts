@@ -52,7 +52,7 @@ export class EventTypesComponent implements OnInit{
             this.refreshDataSource();
             this.snackBar.open('Event type updated successfully','OK',{duration:3000});
           },
-          error: (err) => console.error('Error adding event type:', err),
+          error: (err) => console.error('Error updating event type:', err),
         });
       }
     });
@@ -64,7 +64,7 @@ export class EventTypesComponent implements OnInit{
         this.refreshDataSource();
         this.snackBar.open('Event type activated successfully','OK',{duration:3000});
       },
-      error: (err) => console.error('Error adding event type:', err),
+      error: (err) => console.error('Error activating event type:', err),
     });
   }
 
@@ -74,7 +74,7 @@ export class EventTypesComponent implements OnInit{
         this.refreshDataSource();
         this.snackBar.open('Event type deactivated successfully','OK',{duration:3000});
       },
-      error: (err) => console.error('Error adding event type:', err),
+      error: (err) => console.error('Error deactivating event type:', err),
     });
   }
 

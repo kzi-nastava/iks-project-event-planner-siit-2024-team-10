@@ -46,7 +46,7 @@ export class EditEventTypeComponent implements OnInit{
 
   ngOnInit(): void {
     this.editForm.controls['name'].disable()
-    this.categoryService.fetchCategories().subscribe({
+    this.categoryService.getAll().subscribe({
       next: (categories:Category[]) => {
         this.allCategories = categories.filter((x) => !x.deleted);
 

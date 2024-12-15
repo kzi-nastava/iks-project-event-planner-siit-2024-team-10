@@ -1,18 +1,16 @@
-
-  .mat-raised-button {
-    margin-bottom: 15px;
-  }
-  .mat-icon-button {
-    margin: 0 5px;
-  }
-  .button-container {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .manage-proposals-button {
-    background-color: #bebce6 !important ;
-    color: white !important;
-  }
+.mat-raised-button {
+  margin-bottom: 15px;
+}
+.mat-icon-button {
+  margin: 0 5px;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.manage-proposals-button {
+  background-color: #bebce6 !important;
+  color: white !important;
+}
