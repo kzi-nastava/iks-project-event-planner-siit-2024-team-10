@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import {AuthService} from '../../infrastructure/auth/auth.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -10,21 +9,12 @@ import {AuthService} from '../../infrastructure/auth/auth.service';
 })
 
 export class NavBarComponent {
-  role: string = '';
-  constructor(private authService: AuthService, private router: Router) {
-  }
+  constructor(
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
 
-  ngOnInit(): void {
-    this.authService.userState.subscribe((result) => {
-      console.log(result);
-      this.role = result;
-    })
+  navigateToAdminSection(section: string) {
+    this.router.navigate([`/admin/${section}`]);
   }
-
-  logout(): void {
-    localStorage.removeItem('user');
-    this.authService.setUser();
-    this.router.navigate(['login']);
-  }
-
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './layout/home/home.component';
-import {LoginComponent} from './infrastructure/auth/login/login.component';
+import {LoginComponent} from './layout/login/login.component';
 import {ManageOfferingsComponent} from './offering/manage-offerings/manage-offerings.component';
 import {CreateOfferingsComponent} from './offering/create-offerings/create-offerings.component';
 import { EditServiceComponent } from './offering/edit-service/edit-service.component';
@@ -12,28 +12,20 @@ import { NotificationsPageComponent } from './notification/notifications-page/no
 import { OfferingCategoryComponent } from './offering/offering-category/offering-category.component';
 import {CreateEventComponent} from './event/create-event/create-event.component';
 import {EventTypesComponent} from './event/event-types/event-types.component';
-import {AuthGuard} from './infrastructure/auth/auth.guard';
 const routes: Routes = [
+  { path: '', component: HomeComponent },
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
-  {path:'manage-offerings',component:ManageOfferingsComponent, canActivate: [AuthGuard],
-    data: {role: ['PROVIDER']}},
-  {path:'create-offering',component:CreateOfferingsComponent, canActivate: [AuthGuard],
-    data: {role: ['PROVIDER']}},
-  {path:'edit-service',component:EditServiceComponent, canActivate: [AuthGuard],
-    data: {role: ['PROVIDER']}},
+  {path:'manage-offerings',component:ManageOfferingsComponent},
+  {path:'create-offering',component:CreateOfferingsComponent},
+  {path:'edit-service',component:EditServiceComponent},
   {path:'offering/:id',component:DetailsPageComponent},
   {path:'register',component: RegisterComponent},
   {path:'event/:id',component:EventDetailsComponent},
   {path:'notification-panel',component: NotificationsPageComponent},
-  {path:'offering-categories',component: OfferingCategoryComponent, canActivate: [AuthGuard],
-    data: {role: ['ADMIN']}},
-  {path:'event-types',component:EventTypesComponent, canActivate: [AuthGuard],
-    data: {role: ['ADMIN']}},
-  {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
-    data: {role: ['ORGANIZER']}},
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: '**', redirectTo: '/home', pathMatch: 'full'}
+  {path:'offering-categories',component: OfferingCategoryComponent},
+  {path:'event-types',component:EventTypesComponent},
+  {path:'create-event',component:CreateEventComponent}
 ];
 
 @NgModule({
