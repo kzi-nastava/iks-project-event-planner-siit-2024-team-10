@@ -20,6 +20,10 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { OfferingWarningDialogComponent } from './offering-warning-dialog/offering-warning-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { AdminNavBarMenuComponent } from './admin-nav-bar-menu/admin-nav-bar-menu.component';
+import { ProviderNavBarMenuComponent } from './provider-nav-bar-menu/provider-nav-bar-menu.component';
+import { OrganizerNavBarMenuComponent } from './organizer-nav-bar-menu/organizer-nav-bar-menu.component';
+import { AuthenticatedUserNavBarMenuComponent } from './authenticated-user-nav-bar-menu/authenticated-user-nav-bar-menu.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,10 @@ import { MatMenuModule } from '@angular/material/menu';
     LoginComponent,
     RegisterComponent,
     OfferingWarningDialogComponent,
+    AdminNavBarMenuComponent,
+    ProviderNavBarMenuComponent,
+    OrganizerNavBarMenuComponent,
+    AuthenticatedUserNavBarMenuComponent,
   ],
     imports: [
         MatMenuModule,
