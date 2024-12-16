@@ -10,6 +10,9 @@
     <mat-label>Password</mat-label>
     <input type="password" matInput formControlName="password">
   </mat-form-field>
+  <mat-error *ngIf="invalidCredentials">
+    Incorrect username or password
+  </mat-error>
   <button mat-flat-button (click)="login()" class="login-button">Login</button>
   <p>Don't have account yet? <a [routerLink]="['/register']">Register now!</a></p>
 </form>

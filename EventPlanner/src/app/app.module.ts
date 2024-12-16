@@ -34,6 +34,8 @@ import { OfferingCategoryComponent } from './offering/offering-category/offering
 // Services
 import { CategoryService } from './offering/category-service/category.service';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
+import {Interceptor} from './infrastructure/auth/interceptor';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -71,7 +73,12 @@ import { PricelistComponent } from './offering/pricelist/pricelist.component';
     ReactiveFormsModule
   ],
   providers: [
-    CategoryService
+    CategoryService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: Interceptor,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent]
 })

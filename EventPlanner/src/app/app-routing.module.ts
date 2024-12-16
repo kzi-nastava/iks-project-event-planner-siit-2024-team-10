@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './layout/home/home.component';
-import {LoginComponent} from './layout/login/login.component';
+import {LoginComponent} from './infrastructure/auth/login/login.component';
 import {ManageOfferingsComponent} from './offering/manage-offerings/manage-offerings.component';
 import {CreateOfferingsComponent} from './offering/create-offerings/create-offerings.component';
 import { EditServiceComponent } from './offering/edit-service/edit-service.component';
@@ -13,13 +13,16 @@ import { OfferingCategoryComponent } from './offering/offering-category/offering
 import {CreateEventComponent} from './event/create-event/create-event.component';
 import {EventTypesComponent} from './event/event-types/event-types.component';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
+import {AuthGuard} from './infrastructure/auth/auth.guard';
 const routes: Routes = [
-  { path: '', component: HomeComponent },
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
-  {path:'manage-offerings',component:ManageOfferingsComponent},
-  {path:'create-offering',component:CreateOfferingsComponent},
-  {path:'edit-service',component:EditServiceComponent},
+  {path:'manage-offerings',component:ManageOfferingsComponent, canActivate: [AuthGuard],
+    data: {role: ['PROVIDER']}},
+  {path:'create-offering',component:CreateOfferingsComponent, canActivate: [AuthGuard],
+    data: {role: ['PROVIDER']}},
+  {path:'edit-service',component:EditServiceComponent, canActivate: [AuthGuard],
+    data: {role: ['PROVIDER']}},
   {path:'offering/:id',component:DetailsPageComponent},
   {path:'register',component: RegisterComponent},
   {path:'event/:id',component:EventDetailsComponent},
@@ -27,7 +30,15 @@ const routes: Routes = [
   {path:'offering-categories',component: OfferingCategoryComponent},
   {path:'event-types',component:EventTypesComponent},
   {path:'create-event',component:CreateEventComponent},
-  {path:'pricelist',component:PricelistComponent}
+  {path:'pricelist',component:PricelistComponent},
+  {path:'offering-categories',component: OfferingCategoryComponent, canActivate: [AuthGuard],
+    data: {role: ['ADMIN']}},
+  {path:'event-types',component:EventTypesComponent, canActivate: [AuthGuard],
+    data: {role: ['ADMIN']}},
+  {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
+    data: {role: ['ORGANIZER']}},
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: '/home', pathMatch: 'full'}
 ];
 
 @NgModule({
