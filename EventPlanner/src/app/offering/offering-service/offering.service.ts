@@ -8,6 +8,7 @@ import { GetProvider } from '../../user/model/get_provider.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {environment} from '../../../env/environment';
 import { PagedResponse } from '../../event/model/paged-response.model';
+import { Category } from '../model/category.model';
 
 const SAMPLE_LOCATION: Location = {
   id: 1,
@@ -35,9 +36,12 @@ const SAMPLE_PROVIDER: GetProvider = {
 }
 
 
-const SAMPLE_CATEGORY = {
+const SAMPLE_CATEGORY: Category = {
   id: 1,
-  name: 'Audio/Visual Equipment'
+  name: 'Audio/Visual Equipment',
+  description: 'Audio/Visual equipment for events',
+  deleted: false,
+  pending: false
 };
 
 const PRODUCTS: Product[] = [
