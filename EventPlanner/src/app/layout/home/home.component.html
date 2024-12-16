@@ -42,7 +42,7 @@
             <button mat-stroked-button (click)="applySorting('event')">Sort</button>          </div>
           <div class="filter-section">
             <button mat-stroked-button (click)="openEventFilterDialog()"><mat-icon>filter_list</mat-icon> Filter</button>
-            <button mat-stroked-button class="reset-button">Reset Filters</button>
+            <button mat-stroked-button class="reset-button" (click)="resetEventFilter()">Reset Filters</button>
           </div>
         </div>
       </div>

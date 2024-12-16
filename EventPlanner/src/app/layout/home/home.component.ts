@@ -108,6 +108,11 @@ export class HomeComponent implements OnInit {
     this.dialog.open(dialogComponent, { width: dialogWidth });
   }
 
+  resetEventFilter(): void{
+    this.searchEventQuery = '';
+    this.fetchPaginatedEvents();
+  }
+
   openEventFilterDialog(): void {
     const dialogRef = this.dialog.open(FilterEventsDialogComponent, { width: '600px' });
 
