@@ -44,14 +44,14 @@ export class HomeComponent implements OnInit {
 
   eventPageProperties = {
     page: 0,
-    pageSize: 5,
+    pageSize: 6,
     totalPages: 0,
     totalElements: 0,
   };
 
   offeringPageProperties = {
     page: 0,
-    pageSize: 5,
+    pageSize: 6,
     totalPages: 0,
     totalElements: 0,
   };
