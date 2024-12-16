@@ -8,35 +8,33 @@ import { MatDialog } from '@angular/material/dialog';
 import { FilterServiceDialogComponent } from '../../offering/filter-service-dialog/filter-service-dialog.component';
 import { FilterProductDialogComponent } from '../../offering/filter-product-dialog/filter-product-dialog.component';
 import { OfferingWarningDialogComponent } from '../offering-warning-dialog/offering-warning-dialog.component';
-
+import { ComponentType } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
   allEvents: Event[] = [];
   topEvents: Event[] = [];
-  topOfferings: Offering[] = [];
   allOfferings: Offering[] = [];
+  topOfferings: Offering[] = [];
   filteredOfferings: Offering[] = [];
-  clickedEvent: string;
+
+  clickedEvent: string = '';
   noTopEventsMessage: string = '';
   noEventsMessage: string = '';
   noTopOfferingsMessage: string = '';
   noOfferingsMessage: string = '';
 
   sortingDirections = ['Ascending', 'Descending'];
-
   eventSortingCriteria = ['None', 'Name', 'Date and Time', 'Rating', 'City'];
-
   offeringSortingCriteria = ['None', 'Name', 'Rating', 'City', 'Price'];
 
   selectedSortingDirection: string = 'Ascending';
   selectedEventSortingCriteria: string = 'None';
   selectedOfferingSortingCriteria: string = 'None';
-
   selectedOfferingType: 'services' | 'products' | null = null;
 
   searchEventQuery: string = '';
@@ -46,145 +44,110 @@ export class HomeComponent implements OnInit {
     page: 0,
     pageSize: 6,
     totalPages: 0,
-    totalElements: 0,
+    totalElements: 0
   };
 
   offeringPageProperties = {
     page: 0,
     pageSize: 6,
     totalPages: 0,
-    totalElements: 0,
+    totalElements: 0
   };
 
-  constructor(private service: EventService, private offeringService: OfferingService, private dialog: MatDialog) {}
+  constructor(
+    private eventService: EventService,
+    private offeringService: OfferingService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.fetchPaginatedEvents();
-
     this.fetchPaginatedOfferings();
 
-    this.service.getTop().subscribe({
-      next: (events: Event[]) => {
+    this.loadTopEvents();
+    this.loadTopOfferings();
+  }
+
+  loadTopEvents(): void {
+    this.eventService.getTop().subscribe({
+      next: (events) => {
         this.topEvents = events;
-        if (this.topEvents === null || this.topEvents.length === 0) {
-          this.noTopEventsMessage = 'No events found.';
-        } else {
-          this.noTopEventsMessage = '';
-        }
+        this.noTopEventsMessage = events.length ? '' : 'No events found.';
       },
-      error: (err) => {
-        console.error('Error fetching events:', err);
+      error: () => {
         this.noTopEventsMessage = 'An error occurred while fetching events.';
       }
     });
+  }
+
+  loadTopOfferings(): void {
     this.offeringService.getTop().subscribe({
-      next: (offerings: Offering[]) => {
+      next: (offerings) => {
         this.topOfferings = offerings;
-        if (this.topOfferings === null || this.topOfferings.length === 0) {
-          this.noTopOfferingsMessage = 'No offerings found.';
-        } else {
-          this.noTopOfferingsMessage = '';
-        }
+        this.noTopOfferingsMessage = offerings.length ? '' : 'No offerings found.';
       },
-      error: (err) => {
-        console.error('Error fetching offerings:', err);
+      error: () => {
         this.noTopOfferingsMessage = 'An error occurred while fetching offerings.';
       }
     });
-    
   }
-  applySorting(type: 'event' | 'offering') {
-    if (type === 'event') {
-      console.log(`Sorting Events by ${this.selectedEventSortingCriteria} in ${this.selectedSortingDirection} order.`);
 
-    } else {
-      console.log(`Sorting Offerings by ${this.selectedOfferingSortingCriteria} in ${this.selectedSortingDirection} order.`);
-    }
+  applySorting(type: 'event' | 'offering'): void {
+    const criteria = type === 'event' ? this.selectedEventSortingCriteria : this.selectedOfferingSortingCriteria;
+    console.log(`Sorting ${type === 'event' ? 'Events' : 'Offerings'} by ${criteria} in ${this.selectedSortingDirection} order.`);
   }
+
   openFilterDialog(): void {
-    if (this.selectedOfferingType === 'services') {
-      this.dialog.open(FilterServiceDialogComponent, {
-        width: '600px',
-      });
-    } else if (this.selectedOfferingType === 'products') {
-      this.dialog.open(FilterProductDialogComponent, {
-        width: '600px',
-      });
-    } else {
-      this.dialog.open(OfferingWarningDialogComponent, {
-        width: '400px',
-      });
-    }
+    const dialogComponent: ComponentType<any> = this.selectedOfferingType === 'services'
+      ? FilterServiceDialogComponent
+      : this.selectedOfferingType === 'products'
+      ? FilterProductDialogComponent
+      : OfferingWarningDialogComponent;
+  
+    const dialogWidth = dialogComponent === OfferingWarningDialogComponent ? '400px' : '600px';
+    this.dialog.open(dialogComponent, { width: dialogWidth });
   }
 
-  openEventFilterDialog() {
-    const dialogRef = this.dialog.open(FilterEventsDialogComponent, {
-      width: '600px',
-    });
+  openEventFilterDialog(): void {
+    const dialogRef = this.dialog.open(FilterEventsDialogComponent, { width: '600px' });
 
     dialogRef.afterClosed().subscribe((filters) => {
       if (filters) {
-        console.log('Applied Filters:', filters);
-        this.service.getPaginatedEvents(this.eventPageProperties.page,
-          this.eventPageProperties.pageSize,
-          filters).subscribe({
-          next: (response) => {
-            this.allEvents = response.content;
-            this.eventPageProperties.totalPages = response.totalPages;
-            this.eventPageProperties.totalElements = response.totalElements;
-            if (this.allEvents === null || this.allEvents.length === 0) {
-              this.noEventsMessage = 'No events found.';
-            } else {
-              this.noEventsMessage = '';
-            }
-          },
-          error: (err) => {
-            console.error('Error fetching paginated events:', err);
-            this.noEventsMessage = 'An error occurred while fetching events.';
-          }
-        });
+        this.fetchPaginatedEvents(filters);
       }
     });
   }
 
-  filterOfferings() {
-    if (this.selectedOfferingType === 'services') {
-      console.log('Filtering Services...');
-    } else if (this.selectedOfferingType === 'products') {
-      console.log('Filtering Products...');
-    } else {
-      console.log('No Offering Type Selected.');
-    }
+  filterOfferings(): void {
+    console.log(`Filtering ${this.selectedOfferingType ? this.selectedOfferingType : 'Offerings'}...`);
   }
 
-  toggleOfferingType(type: 'services' | 'products') {
+  toggleOfferingType(type: 'services' | 'products'): void {
     this.selectedOfferingType = type;
     this.filterOfferings();
   }
-  searchEvent() {
-    console.log('Search Query:', this.searchEventQuery);
+
+  searchEvent(): void {
+    this.eventPageProperties.page = 0;
+    this.fetchPaginatedEvents();
   }
 
-  searchOffering() {
+  searchOffering(): void {
     console.log('Search Query:', this.searchOfferingQuery);
   }
 
-  fetchPaginatedEvents(): void {
+  fetchPaginatedEvents(filters: any = {}): void {
     const { page, pageSize } = this.eventPageProperties;
-  
-    this.service.getPaginatedEvents(page, pageSize).subscribe({
+    if (this.searchEventQuery) filters.name = this.searchEventQuery;
+
+    this.eventService.getPaginatedEvents(page, pageSize, filters).subscribe({
       next: (response) => {
         this.allEvents = response.content;
         this.eventPageProperties.totalPages = response.totalPages;
         this.eventPageProperties.totalElements = response.totalElements;
-        if (this.allEvents === null || this.allEvents.length === 0) {
-          this.noEventsMessage = 'No events found.';
-        } else {
-          this.noEventsMessage = '';
-        }
+        this.noEventsMessage = this.allEvents.length ? '' : 'No events found.';
       },
-      error: (err) => {
-        console.error('Error fetching paginated events:', err);
+      error: () => {
         this.noEventsMessage = 'An error occurred while fetching events.';
       }
     });
@@ -192,21 +155,16 @@ export class HomeComponent implements OnInit {
 
   fetchPaginatedOfferings(): void {
     const { page, pageSize } = this.offeringPageProperties;
-  
+
     this.offeringService.getPaginatedOfferings(page, pageSize).subscribe({
       next: (response) => {
         this.allOfferings = response.content;
         this.filteredOfferings = response.content;
         this.offeringPageProperties.totalPages = response.totalPages;
         this.offeringPageProperties.totalElements = response.totalElements;
-        if (this.allOfferings === null || this.allOfferings.length === 0) {
-          this.noOfferingsMessage = 'No offerings found.';
-        } else {
-          this.noOfferingsMessage = '';
-        }
+        this.noOfferingsMessage = this.allOfferings.length ? '' : 'No offerings found.';
       },
-      error: (err) => {
-        console.error('Error fetching paginated offerings:', err);
+      error: () => {
         this.noOfferingsMessage = 'An error occurred while fetching offerings.';
       }
     });
@@ -218,7 +176,7 @@ export class HomeComponent implements OnInit {
       this.fetchPaginatedEvents();
     }
   }
-  
+
   previousEventPage(): void {
     if (this.eventPageProperties.page > 0) {
       this.eventPageProperties.page--;
@@ -232,13 +190,11 @@ export class HomeComponent implements OnInit {
       this.fetchPaginatedOfferings();
     }
   }
-  
+
   previousOfferingPage(): void {
     if (this.offeringPageProperties.page > 0) {
       this.offeringPageProperties.page--;
       this.fetchPaginatedOfferings();
     }
   }
-  
 }
-

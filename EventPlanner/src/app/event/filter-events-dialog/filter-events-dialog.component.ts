@@ -21,7 +21,6 @@ export class FilterEventsDialogComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<FilterEventsDialogComponent>,
     private eventTypeService: EventTypeService,
-    private datePipe: DatePipe
   ) {
     this.eventTypes = this.eventTypeService.getAll().pipe(
       map(eventTypes => [{ id: -1, name: 'Any' }, ...eventTypes])
@@ -49,10 +48,8 @@ export class FilterEventsDialogComponent {
   
     const filters = { ...this.filterForm.value };
   
-    // Extract start and end date separately
     const { startDate, endDate } = filters.range;
   
-    // Format dates to MM/DD/YYYY
     if (startDate) {
       filters.startDate = this.formatDate(startDate);
     }
@@ -61,10 +58,8 @@ export class FilterEventsDialogComponent {
       filters.endDate = this.formatDate(endDate);
     }
   
-    // Remove the 'range' object from the filters
     delete filters.range;
   
-    // Close the dialog and send the filters
     this.dialogRef.close(filters);
   }
   

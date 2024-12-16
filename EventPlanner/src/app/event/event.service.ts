@@ -642,7 +642,6 @@ export class EventService {
         params = params.set(key, filters[key]);
       }
     });
-    console.log(params);
     return this.httpClient.get<PagedResponse<Event>>(environment.apiHost+"/events", { params });
   }
 }
