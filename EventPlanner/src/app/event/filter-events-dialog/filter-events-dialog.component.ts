@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { EventTypeService } from '../event-type.service';
+import {Observable} from 'rxjs';
+import { EventType } from '../model/event-type.model';
 
 @Component({
   selector: 'app-filter-events-dialog',
@@ -9,15 +12,17 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class FilterEventsDialogComponent {
   filterForm: FormGroup;
-
-  eventTypes = ['Any', 'Conferention','Wedding','Meetup','Concert'];
+  eventTypes: Observable<EventType[]>;
 
   selectedEventType: string = 'Any';
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<FilterEventsDialogComponent>
+    private dialogRef: MatDialogRef<FilterEventsDialogComponent>,
+    private eventTypeService: EventTypeService
   ) {
+    this.eventTypes = this.eventTypeService.getAll();
+
     this.filterForm = this.fb.group({
       type: [''],
       location: [''],

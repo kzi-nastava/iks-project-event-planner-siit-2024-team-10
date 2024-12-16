@@ -8,10 +8,11 @@
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Event Type</mat-label>
       <mat-select matInput [(ngModel)]="selectedEventType" formControlName="type">
-        <mat-option matInput *ngFor="let eventType of eventTypes" [value]="eventType">
-            {{ eventType }}
-          </mat-option>
+        <mat-option *ngFor="let eventType of eventTypes | async" [value]="eventType">
+          {{ eventType.name }}
+        </mat-option>
       </mat-select>
+      
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
