@@ -125,6 +125,24 @@ export class HomeComponent implements OnInit {
     dialogRef.afterClosed().subscribe((filters) => {
       if (filters) {
         console.log('Applied Filters:', filters);
+        this.service.getPaginatedEvents(this.eventPageProperties.page,
+          this.eventPageProperties.pageSize,
+          filters).subscribe({
+          next: (response) => {
+            this.allEvents = response.content;
+            this.eventPageProperties.totalPages = response.totalPages;
+            this.eventPageProperties.totalElements = response.totalElements;
+            if (this.allEvents === null || this.allEvents.length === 0) {
+              this.noEventsMessage = 'No events found.';
+            } else {
+              this.noEventsMessage = '';
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching paginated events:', err);
+            this.noEventsMessage = 'An error occurred while fetching events.';
+          }
+        });
       }
     });
   }
