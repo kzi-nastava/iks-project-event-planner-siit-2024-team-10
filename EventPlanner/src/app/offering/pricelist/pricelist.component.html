@@ -10,7 +10,7 @@
                 *ngFor="let item of pricelistItems; let i = index" 
                 class="pricelist-item"
                 [class.discounted]="item.discount && item.discount > 0"
-                [class.editing]="isEditing(item.id)"
+                [class.editing]="isEditing(item.offeringId)"
             >
                 <!-- Serial Number -->
                 <div class="serial-number">
@@ -18,7 +18,7 @@
                 </div>
 
                 <!-- View Mode -->
-                <ng-container *ngIf="!isEditing(item.id)">
+                <ng-container *ngIf="!isEditing(item.offeringId)">
                     <div class="item-content">
                         <h3 class="item-name">{{ item.name }}</h3>
                         
@@ -42,7 +42,7 @@
                 </ng-container>
 
                 <!-- Edit Mode -->
-                <ng-container *ngIf="isEditing(item.id)">
+                <ng-container *ngIf="isEditing(item.offeringId)">
                     <div class="edit-form">
                         <!-- Display service name as plain text -->
                         <div class="item-name">

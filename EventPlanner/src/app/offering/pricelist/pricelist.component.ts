@@ -15,31 +15,47 @@ export class PricelistComponent implements OnInit {
   constructor(private pricelistService: PricelistService) {}
 
   ngOnInit() {
-    this.pricelistService.getAll().subscribe(data => {
-      this.pricelistItems = data;
+    this.pricelistService.getAll().subscribe({
+      next: (data) => {
+        this.pricelistItems = data;
+      },
+      error: (err) => {
+        console.error('Error fetching pricelist:', err);
+      }
     });
   }
 
   startEditing(item: PricelistItem) {
-    this.editingItemId = item.id;
+    this.editingItemId = item.offeringId;
     this.editedItem = { ...item };
   }
 
   calculateDiscountedPrice() {
-    if (this.editedItem.price && this.editedItem.discount) {
+    if (this.editedItem.price && this.editedItem.discount !== undefined) {
+      if (this.editedItem.discount < 0 || this.editedItem.discount > 100) {
+        console.error('Discount must be between 0 and 100');
+        return;
+      }
       const discountAmount = this.editedItem.price * (this.editedItem.discount / 100);
       this.editedItem.priceWithDiscount = Number((this.editedItem.price - discountAmount).toFixed(2));
     }
   }
 
   saveChanges() {
-    const index = this.pricelistItems.findIndex(item => item.id === this.editingItemId);
-    if (index !== -1 && this.editedItem) {
-      this.pricelistItems[index] = {
-        ...this.pricelistItems[index],
-        ...this.editedItem
+    if (this.editingItemId !== null && this.editedItem) {
+      const updateDto= {
+        offeringId: this.editingItemId,
+        price: this.editedItem.price!,
+        discount: this.editedItem.discount
       };
-      this.cancelEditing();
+
+      this.pricelistService.edit(updateDto).subscribe({
+        next: (updatedItem) => {
+          this.updateLocalItem(updatedItem);
+          this.cancelEditing();
+        },
+        error: (err) => console.error('Error saving changes:', err)
+      });
     }
   }
 
@@ -50,5 +66,12 @@ export class PricelistComponent implements OnInit {
 
   isEditing(itemId: number): boolean {
     return this.editingItemId === itemId;
+  }
+
+  private updateLocalItem(updatedItem: PricelistItem) {
+    const index = this.pricelistItems.findIndex(item => item.offeringId === updatedItem.offeringId);
+    if (index !== -1) {
+      this.pricelistItems[index] = updatedItem;
+    }
   }
 }
