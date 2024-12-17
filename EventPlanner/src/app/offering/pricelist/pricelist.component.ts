@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PricelistItem } from '../model/pricelist-item.model';
 import { PricelistService } from '../pricelist-service/pricelist.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-pricelist',
@@ -12,7 +13,7 @@ export class PricelistComponent implements OnInit {
   editingItemId: number | null = null;
   editedItem: Partial<PricelistItem> = {};
 
-  constructor(private pricelistService: PricelistService) {}
+  constructor(private pricelistService: PricelistService, private http: HttpClient) {}
 
   ngOnInit() {
     this.pricelistService.getAll().subscribe({
@@ -92,6 +93,18 @@ export class PricelistComponent implements OnInit {
         return a.name.localeCompare(b.name); 
       }
       return 0;
+    });
+  }
+
+  generateReport() {
+    this.pricelistService.generateReport().subscribe({
+      next: (pdfBlob: Blob) => {
+        const fileURL = URL.createObjectURL(pdfBlob);
+        window.open(fileURL);
+      },
+      error: (err) => {
+        console.error('Error generating report:', err);
+      }
     });
   }
 }

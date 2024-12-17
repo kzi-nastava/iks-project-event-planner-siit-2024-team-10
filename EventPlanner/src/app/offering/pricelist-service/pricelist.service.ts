@@ -18,4 +18,9 @@ export class PricelistService {
   edit(item:EditPricelistItemDTO) : Observable<PricelistItem> {
     return this.httpClient.put<PricelistItem>(environment.apiHost + "/pricelist/"+item.offeringId, item);
   }
+  generateReport(): Observable<Blob> {
+    return this.httpClient.get(environment.apiHost + '/report/pricelist', {
+      responseType: 'blob'
+    });
+  }
 }
