@@ -18,6 +18,7 @@ export class PricelistComponent implements OnInit {
     this.pricelistService.getAll().subscribe({
       next: (data) => {
         this.pricelistItems = data;
+        this.sortItems(); 
       },
       error: (err) => {
         console.error('Error fetching pricelist:', err);
@@ -43,7 +44,7 @@ export class PricelistComponent implements OnInit {
 
   saveChanges() {
     if (this.editingItemId !== null && this.editedItem) {
-      const updateDto= {
+      const updateDto = {
         offeringId: this.editingItemId,
         price: this.editedItem.price!,
         discount: this.editedItem.discount
@@ -52,6 +53,15 @@ export class PricelistComponent implements OnInit {
       this.pricelistService.edit(updateDto).subscribe({
         next: (updatedItem) => {
           this.updateLocalItem(updatedItem);
+
+          this.pricelistService.getAll().subscribe({
+            next: (data) => {
+              this.pricelistItems = data; 
+              this.sortItems(); 
+            },
+            error: (err) => console.error('Error fetching pricelist after save:', err)
+          });
+
           this.cancelEditing();
         },
         error: (err) => console.error('Error saving changes:', err)
@@ -72,6 +82,16 @@ export class PricelistComponent implements OnInit {
     const index = this.pricelistItems.findIndex(item => item.offeringId === updatedItem.offeringId);
     if (index !== -1) {
       this.pricelistItems[index] = updatedItem;
+      this.sortItems(); 
     }
+  }
+
+  private sortItems() {
+    this.pricelistItems.sort((a, b) => {
+      if (a.name && b.name) {
+        return a.name.localeCompare(b.name); 
+      }
+      return 0;
+    });
   }
 }
