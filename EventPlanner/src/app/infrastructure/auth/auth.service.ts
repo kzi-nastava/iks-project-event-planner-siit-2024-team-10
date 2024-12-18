@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../../../env/environment';
 import {LoginRequestDto} from './model/login-request-dto.model';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {LoginResponseDTO} from './model/login-response-dto.model';
+import {RegisterDTO} from './model/register-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,14 @@ export class AuthService {
   login(auth: LoginRequestDto): Observable<LoginResponseDTO> {
     return this.http.post<LoginResponseDTO>(environment.apiHost + '/auth/login', auth, {
       headers: this.headers,
+    });
+  }
+
+  register(registerDTO:RegisterDTO): Observable<RegisterDTO> {
+    let params=new HttpParams().set('roleUpgrade',false);
+    return this.http.post<RegisterDTO>(environment.apiHost + '/auth/register', registerDTO, {
+      headers: this.headers,
+      params:params
     });
   }
 
