@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -15,6 +15,8 @@ import {Organizer} from '../../../user/model/organizer.model';
 import {LoginResponseDTO} from '../model/login-response-dto.model';
 import {AuthService} from '../auth.service';
 import {HttpErrorResponse} from '@angular/common/http';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -46,8 +48,11 @@ export class RegisterComponent {
     companyPhotos: new FormControl('')
   },
     { validators: MatchValidator('password', 'confirmPassword') });
+  snackBar:MatSnackBar = inject(MatSnackBar)
 
-  constructor(private authService:AuthService) {}
+  constructor(
+    private authService:AuthService,
+    private router:Router) {}
 
   companyInfoRequired(): boolean {
     return this.registerForm.get('role')?.value === 'provider';
@@ -92,9 +97,8 @@ export class RegisterComponent {
     }
     this.authService.register(registerDTO).subscribe({
       next: (response: RegisterDTO) => {
-        //TODO:toast
-        //this.router.navigate(['login'])
-        console.log(response);
+        this.snackBar.open('Registration succesfull!','OK',{duration:5000});
+        this.router.navigate(['home'])
       },
       error:(err:HttpErrorResponse)=>{
         if(err.status===409)

@@ -6,9 +6,9 @@
 
   h2{
     font-size: 2rem;
-    
+
   }
-  
+
   button[mat-stroked-button] {
     padding: 10px 20px;
     font-size: 16px;
@@ -25,12 +25,12 @@
     padding-top: 10px;
     color: #4e4e4e;
   }
-  
+
   .top-events {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
     padding-top: 20px;
     padding-bottom:20px;
     text-align: center;
@@ -44,7 +44,7 @@
     flex-wrap: wrap;
     justify-content: center;
     grid-template-columns: repeat(auto-fit,minmax(450px,450px));
-    
+
   }
 
   .event-bg button[mat-stroked-button]{
@@ -83,7 +83,7 @@
     border-color: #9c9ac9 !important;
     color: #ffffff !important ;
   }
-  
+
   .event-filter {
     padding:20px;
     text-align: center;
@@ -95,12 +95,12 @@
     justify-content: center;
     gap: 10px;
   }
-  
+
   .search-field {
     height: fit-content;
     width: 300px;
   }
-  
+
   .search-button {
     padding: 10px 20px;
     border-radius: 20px;
@@ -112,7 +112,7 @@
     gap: 5px;
     cursor: pointer;
   }
-  
+
   .search-button mat-icon {
     font-size: 20px;
   }
@@ -145,7 +145,7 @@
     background-color: #dddddd;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
    }
-  
+
   .all-event-cards {
     display: grid;
     width: 100%;
@@ -155,7 +155,7 @@
     grid-template-columns: repeat(auto-fit,minmax(450px,450px));
 
   }
-  
+
   .pagination {
     display: flex;
     justify-content: center;
@@ -167,7 +167,7 @@
     color: gray;
     font-family: 'Roboto','serif';
   }
-  
+
   .pagination button {
     padding: 10px 15px;
     color: #545283;
@@ -177,7 +177,7 @@
     font-size: 16px;
     cursor: pointer;
   }
-  
+
   .pagination button:hover {
     background-color: #9c9ac9;
     color: #fff;
@@ -195,7 +195,7 @@
     color: #3A2D30;
     padding: 20px 0;
   }
-  
+
   .footer-container {
     display: flex;
     justify-content: space-between;
@@ -204,39 +204,39 @@
     margin: 0 auto;
     padding: 0 20px;
   }
-  
-  .footer-info h1, 
+
+  .footer-info h1,
   .footer-social h1 {
     font-size: 2em;
     margin-bottom: 10px;
     color:#3A2D30;
   }
-  
-  .footer-info p, 
+
+  .footer-info p,
   .footer-social .social-icons {
     margin: 5px 0;
     display: flex;
     align-items: center;
   }
-  
-  .footer-info p mat-icon, 
+
+  .footer-info p mat-icon,
   .footer-social .social-icons mat-icon {
     margin-right: 10px;
     font-size: 1.5em;
     color: #3A2D30;
   }
-  
+
   .footer-social .social-icons mat-icon {
     cursor: pointer;
   }
-  
+
   .custom-icon {
     width: 24px;
     height: 24px;
     margin-right: 15px;
     cursor: pointer;
   }
-  
+
   .custom-icon:hover {
     filter: brightness(85%);
   }
@@ -259,11 +259,24 @@
     height: 64px;
     width: 48px;
   }
-  
+
   .event-bg{
     background-color: #d0cfe1;
   }
 
   .offering-bg{
     background-color: #d0cfe1;
+  }
+
+  ::ng-deep .mat-mdc-button:not(:disabled){
+    background-color: white !important ;
+    color: #000000 !important;
+  }
+  ::ng-deep .mat-mdc-button:not(:disabled):hover{
+    background-color: #bebce6 !important ;
+    color: white !important;
+  }
+  ::ng-deep .mat-mdc-snack-bar-container .mat-mdc-snackbar-surface{
+    background-color: #fff !important; /* Change background color */
+    color: #000000 !important; /* Change text color */
   }
