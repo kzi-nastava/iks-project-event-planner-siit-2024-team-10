@@ -13,6 +13,7 @@ import { OfferingCategoryComponent } from './offering/offering-category/offering
 import {CreateEventComponent} from './event/create-event/create-event.component';
 import {EventTypesComponent} from './event/event-types/event-types.component';
 import {AuthGuard} from './infrastructure/auth/auth.guard';
+import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
@@ -32,8 +33,9 @@ const routes: Routes = [
     data: {role: ['ADMIN']}},
   {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
     data: {role: ['ORGANIZER']}},
+  {path:'activate', component: ActivateComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: '**', redirectTo: '/home', pathMatch: 'full'}
+  { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];
 
 @NgModule({
