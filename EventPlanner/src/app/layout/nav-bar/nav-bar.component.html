@@ -27,7 +27,7 @@
       </button>
       <mat-menu #menu="matMenu">
         <app-admin-nav-bar-menu *ngIf="role=='ADMIN'"></app-admin-nav-bar-menu>
-        <app-organizer-nav-bar-menu *ngIf="role=='ORGANIZER'"></app-organizer-nav-bar-menu>
+        <app-organizer-nav-bar-menu *ngIf="role=='EVENT_ORGANIZER'"></app-organizer-nav-bar-menu>
         <app-provider-nav-bar-menu *ngIf="role=='PROVIDER'"></app-provider-nav-bar-menu>
         <app-authenticated-user-nav-bar-menu *ngIf="role=='AUTHENTICATED_USER'"></app-authenticated-user-nav-bar-menu>
       </mat-menu>
