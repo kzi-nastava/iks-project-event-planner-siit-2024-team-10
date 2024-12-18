@@ -9,8 +9,11 @@ import {
   Validators
 } from '@angular/forms';
 import {UserService} from '../../../user/user.service';
-import {Provider} from '../../../user/model/provider.model'
+import {CreateCompanyDTO} from '../model/create-company-dto.model';
+import {RegisterDTO} from '../model/register-dto.model';
 import {Organizer} from '../../../user/model/organizer.model';
+import {LoginResponseDTO} from '../model/login-response-dto.model';
+import {AuthService} from '../auth.service';
 
 @Component({
   selector: 'app-register',
@@ -43,59 +46,59 @@ export class RegisterComponent {
   },
     { validators: MatchValidator('password', 'confirmPassword') });
 
-  constructor(private userService: UserService) {}
+  constructor(private authService:AuthService) {}
 
   companyInfoRequired(): boolean {
     return this.registerForm.get('role')?.value === 'provider';
   }
 
   register() {
-
+    let company:CreateCompanyDTO=null;
     if(this.companyInfoRequired()){
       if(!this.registerForm.valid)
         return;
-      const provider:Provider ={
-        _id: Math.random(),
-        email: this.registerForm.value.email,
-        password: this.registerForm.value.password,
-        firstName: this.registerForm.value.firstName,
-        lastName: this.registerForm.value.lastName,
-        profilePhoto: this.registerForm.value.profilePhoto,
+      company={
+        email: this.registerForm.value.companyEmail,
+        name: this.registerForm.value.companyName,
+        location:
+          {country: this.registerForm.value.companyCountry,
+          city: this.registerForm.value.companyCity,
+          street: this.registerForm.value.companyStreet,
+          houseNumber: this.registerForm.value.companyHouseNumber
+          },
+        phoneNumber: this.registerForm.value.companyPhone,
+        description: this.registerForm.value.companyDescription,
+        photos: this.registerForm.value.companyPhotos.split(" ")
+      }
+    }
+    if(!this.isOrganizerFormValid())
+      return;
+    let registerDTO:RegisterDTO={
+      email: this.registerForm.value.email,
+      password: this.registerForm.value.password,
+      firstName: this.registerForm.value.firstName,
+      lastName: this.registerForm.value.lastName,
+      profilePhoto: this.registerForm.value.profilePhoto,
+      location:{
         country: this.registerForm.value.country,
         city: this.registerForm.value.city,
         street: this.registerForm.value.street,
-        houseNumber: this.registerForm.value.houseNumber,
-        phone: this.registerForm.value.phone,
-        companyEmail: this.registerForm.value.companyEmail,
-        companyName: this.registerForm.value.companyName,
-        companyCountry: this.registerForm.value.companyCountry,
-        companyCity: this.registerForm.value.companyCity,
-        companyStreet: this.registerForm.value.companyStreet,
-        companyHouseNumber: this.registerForm.value.companyHouseNumber,
-        companyPhone: this.registerForm.value.companyPhone,
-        companyDescription: this.registerForm.value.companyDescription,
-        companyPhotos: this.registerForm.value.companyPhotos
-      };
-      this.userService.registerProvider(provider);
+        houseNumber: this.registerForm.value.houseNumber
+      },
+      phoneNumber: this.registerForm.value.phone,
+      company:company,
+      role:this.companyInfoRequired()?'PROVIDER':'EVENT_ORGANIZER'
     }
-    else{
-      if(!this.isOrganizerFormValid())
-        return;
-      const organizer:Organizer ={
-        _id: Math.random(),
-        email: this.registerForm.value.email,
-        password: this.registerForm.value.password,
-        firstName: this.registerForm.value.firstName,
-        lastName: this.registerForm.value.lastName,
-        profilePhoto: this.registerForm.value.profilePhoto,
-        country: this.registerForm.value.country,
-        city: this.registerForm.value.city,
-        street: this.registerForm.value.street,
-        houseNumber: this.registerForm.value.houseNumber,
-        phone: this.registerForm.value.phone,
-      };
-      this.userService.registerOrganizer(organizer);
-    }
+    this.authService.register(registerDTO).subscribe({
+      next: (response: RegisterDTO) => {
+        //TODO:toast
+        //this.router.navigate(['login'])
+        console.log(response);
+      },
+      error:(err)=>{
+
+      }
+    })
   }
 
   isOrganizerFormValid():boolean{
