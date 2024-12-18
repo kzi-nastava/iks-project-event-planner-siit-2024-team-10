@@ -8,9 +8,9 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
-import {UserService} from '../../user/user.service';
-import {Provider} from '../../user/model/provider.model'
-import {Organizer} from '../../user/model/organizer.model';
+import {UserService} from '../../../user/user.service';
+import {Provider} from '../../../user/model/provider.model'
+import {Organizer} from '../../../user/model/organizer.model';
 
 @Component({
   selector: 'app-register',

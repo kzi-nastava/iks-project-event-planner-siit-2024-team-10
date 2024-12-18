@@ -6,7 +6,7 @@ import {ManageOfferingsComponent} from './offering/manage-offerings/manage-offer
 import {CreateOfferingsComponent} from './offering/create-offerings/create-offerings.component';
 import { EditServiceComponent } from './offering/edit-service/edit-service.component';
 import { DetailsPageComponent } from './offering/details-page/details-page.component';
-import {RegisterComponent} from './layout/register/register.component';
+import {RegisterComponent} from './infrastructure/auth/register/register.component';
 import {EventDetailsComponent} from './event/event-details/event-details.component';
 import { NotificationsPageComponent } from './notification/notifications-page/notifications-page.component';
 import { OfferingCategoryComponent } from './offering/offering-category/offering-category.component';
