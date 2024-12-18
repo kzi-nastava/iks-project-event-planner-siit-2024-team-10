@@ -38,6 +38,11 @@ export class AuthService {
     });
   }
 
+  activate(token: string): Observable<string> {
+    let params = new HttpParams().set('token', token);
+    return this.http.put(environment.apiHost + '/auth/activate', null, { params: params, responseType: 'text' });
+  }
+
   getRole(): any {
     if (this.isLoggedIn()) {
       const accessToken: any = localStorage.getItem('user');
