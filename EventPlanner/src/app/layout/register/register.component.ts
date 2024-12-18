@@ -1,5 +1,13 @@
 import {Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import {UserService} from '../../user/user.service';
 import {Provider} from '../../user/model/provider.model'
 import {Organizer} from '../../user/model/organizer.model';
@@ -13,7 +21,7 @@ export class RegisterComponent {
   registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    confirmPassword: new FormControl('', Validators.required),
+    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
     profilePhoto: new FormControl('',Validators.required),
@@ -32,7 +40,8 @@ export class RegisterComponent {
     companyPhone: new FormControl('', Validators.required),
     companyDescription: new FormControl('',Validators.required),
     companyPhotos: new FormControl('')
-  });
+  },
+    { validators: MatchValidator('password', 'confirmPassword') });
 
   constructor(private userService: UserService) {}
 
@@ -41,6 +50,7 @@ export class RegisterComponent {
   }
 
   register() {
+
     if(this.companyInfoRequired()){
       if(!this.registerForm.valid)
         return;
@@ -96,4 +106,28 @@ export class RegisterComponent {
     }
     return true;
   }
+}
+
+export function MatchValidator(controlName: string, matchingControlName: string): ValidatorFn {
+  return (formGroup: AbstractControl): ValidationErrors | null => {
+    const control = formGroup.get(controlName);
+    const matchingControl = formGroup.get(matchingControlName);
+
+    if (!control || !matchingControl) {
+      return null; // Return null if controls are missing
+    }
+
+    if (matchingControl.errors && !matchingControl.errors['mismatch']) {
+      return null; // Skip if another validator has found an error
+    }
+
+    if (control.value !== matchingControl.value) {
+      matchingControl.setErrors({ mismatch: true });
+      return { mismatch: true };
+    } else {
+      matchingControl.setErrors(null); // Clear mismatch error if values match
+    }
+
+    return null;
+  };
 }
