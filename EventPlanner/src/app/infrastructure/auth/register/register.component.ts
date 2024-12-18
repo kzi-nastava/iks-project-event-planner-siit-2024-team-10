@@ -14,6 +14,7 @@ import {RegisterDTO} from '../model/register-dto.model';
 import {Organizer} from '../../../user/model/organizer.model';
 import {LoginResponseDTO} from '../model/login-response-dto.model';
 import {AuthService} from '../auth.service';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -95,8 +96,9 @@ export class RegisterComponent {
         //this.router.navigate(['login'])
         console.log(response);
       },
-      error:(err)=>{
-
+      error:(err:HttpErrorResponse)=>{
+        if(err.status===409)
+          this.registerForm.controls.email.setErrors({'conflict':true})
       }
     })
   }
