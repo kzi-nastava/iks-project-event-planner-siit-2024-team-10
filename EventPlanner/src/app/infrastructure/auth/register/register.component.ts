@@ -71,7 +71,6 @@ export class RegisterComponent implements OnInit{
 
   register() {
     let company:CreateCompanyDTO=null;
-    console.log('a');
     if(this.companyInfoRequired()){
       if(!this.registerForm.valid)
         return;
@@ -89,10 +88,8 @@ export class RegisterComponent implements OnInit{
         photos: this.registerForm.value.companyPhotos.split(" ")
       }
     }
-    console.log('b');
     if(!this.isOrganizerFormValid())
       return;
-    console.log('c');
     let registerDTO:RegisterDTO={
       email: this.registerForm.value.email,
       password: this.roleUpgrade? null : this.registerForm.value.password,
