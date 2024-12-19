@@ -113,6 +113,8 @@ export class RegisterComponent implements OnInit{
     this.authService.register(registerDTO,this.roleUpgrade).subscribe({
       next: (response: RegisterDTO) => {
         this.snackBar.open('Registration successful!','OK',{duration:5000});
+        localStorage.removeItem('user');
+        this.authService.setUser();
         this.router.navigate(['home'])
       },
       error:(err:HttpErrorResponse)=>{
