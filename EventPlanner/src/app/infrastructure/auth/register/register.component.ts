@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -23,14 +23,14 @@ import {Router} from '@angular/router';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
   registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
-    profilePhoto: new FormControl('',Validators.required),
+    profilePhoto: new FormControl(''),
     country: new FormControl('', Validators.required),
     city: new FormControl('', Validators.required),
     street: new FormControl('',Validators.required),
@@ -48,11 +48,22 @@ export class RegisterComponent {
     companyPhotos: new FormControl('')
   },
     { validators: MatchValidator('password', 'confirmPassword') });
-  snackBar:MatSnackBar = inject(MatSnackBar)
+  snackBar:MatSnackBar = inject(MatSnackBar);
+  roleUpgrade:boolean;
 
   constructor(
     private authService:AuthService,
     private router:Router) {}
+
+  ngOnInit():void{
+    this.roleUpgrade=this.authService.getEmail()!=null;
+    if(this.roleUpgrade){
+      this.registerForm.removeControl('password');
+      this.registerForm.removeControl('confirmPassword');
+      this.registerForm.patchValue({email: this.authService.getEmail()});
+      this.registerForm.clearValidators();
+    }
+  }
 
   companyInfoRequired(): boolean {
     return this.registerForm.get('role')?.value === 'provider';
@@ -60,6 +71,7 @@ export class RegisterComponent {
 
   register() {
     let company:CreateCompanyDTO=null;
+    console.log('a');
     if(this.companyInfoRequired()){
       if(!this.registerForm.valid)
         return;
@@ -77,11 +89,13 @@ export class RegisterComponent {
         photos: this.registerForm.value.companyPhotos.split(" ")
       }
     }
+    console.log('b');
     if(!this.isOrganizerFormValid())
       return;
+    console.log('c');
     let registerDTO:RegisterDTO={
       email: this.registerForm.value.email,
-      password: this.registerForm.value.password,
+      password: this.roleUpgrade? null : this.registerForm.value.password,
       firstName: this.registerForm.value.firstName,
       lastName: this.registerForm.value.lastName,
       profilePhoto: this.registerForm.value.profilePhoto,
@@ -95,9 +109,10 @@ export class RegisterComponent {
       company:company,
       role:this.companyInfoRequired()?'PROVIDER':'EVENT_ORGANIZER'
     }
-    this.authService.register(registerDTO).subscribe({
+
+    this.authService.register(registerDTO,this.roleUpgrade).subscribe({
       next: (response: RegisterDTO) => {
-        this.snackBar.open('Registration succesfull!','OK',{duration:5000});
+        this.snackBar.open('Registration successful!','OK',{duration:5000});
         this.router.navigate(['home'])
       },
       error:(err:HttpErrorResponse)=>{
@@ -108,7 +123,12 @@ export class RegisterComponent {
   }
 
   isOrganizerFormValid():boolean{
-    const fieldNames:string[]=['email','password','firstName','lastName','profilePhoto','country','city','street'];
+    const fieldNames:string[]=['firstName','lastName','profilePhoto','country','city','street'];
+    if(!this.roleUpgrade){
+      fieldNames.push('email');
+      fieldNames.push('password');
+    }
+
     for(let fieldName of fieldNames){
       if(!this.registerForm.get(fieldName).valid)
         return false;

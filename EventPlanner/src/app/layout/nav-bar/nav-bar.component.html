@@ -19,6 +19,10 @@
           <mat-icon>logout</mat-icon>
           <span>Log out</span>
         </button>
+        <button mat-menu-item *ngIf="role=='AUTHENTICATED_USER'" [routerLink]="['register']">
+          <mat-icon>person_add</mat-icon>
+          <span>Upgrade role</span>
+        </button>
       </mat-menu>
     </div>
     <div class="navigation-item">

@@ -30,8 +30,8 @@ export class AuthService {
     });
   }
 
-  register(registerDTO:RegisterDTO): Observable<RegisterDTO> {
-    let params=new HttpParams().set('roleUpgrade',false);
+  register(registerDTO:RegisterDTO, roleUpgrade:boolean): Observable<RegisterDTO> {
+    let params=new HttpParams().set('roleUpgrade',roleUpgrade);
     return this.http.post<RegisterDTO>(environment.apiHost + '/auth/register', registerDTO, {
       headers: this.headers,
       params:params
@@ -58,5 +58,13 @@ export class AuthService {
 
   setUser(): void {
     this.user$.next(this.getRole());
+  }
+
+  getEmail() : string{
+    const accessToken: any = localStorage.getItem('user');
+    if(accessToken==null)
+      return null;
+    const helper = new JwtHelperService();
+    return helper.decodeToken(accessToken).sub;
   }
 }
