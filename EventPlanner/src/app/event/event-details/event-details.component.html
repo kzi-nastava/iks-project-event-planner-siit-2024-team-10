@@ -12,28 +12,28 @@
     <!-- Header Info -->
     <div class="header-info">
       <div class="header-title">
-        <h1 class="title">{{ event.name }}</h1>
+        <h1 class="title">{{ event?.name }}</h1>
         <button mat-button><mat-icon>favorite_border</mat-icon></button>
       </div>
       <div class="meta-info">
-        <span class="category"> {{ event.eventType.name }}</span>
+        <span class="category"> {{ event?.eventType?.name }}</span>
       </div>
     </div>
 
     <div class="info-section">
       <h2>Description</h2>
-      <p class="info-item">{{ event.description }}</p>
+      <p class="info-item">{{ event?.description }}</p>
       <h2>Location</h2>
-      <p class="info-item">{{ event.location.street }} {{ event.location.houseNumber}}, {{ event.location.city}}, {{ event.location.country }}</p>
+      <p class="info-item">{{ event?.location?.street }} {{ event?.location?.houseNumber}}, {{ event?.location?.city}}, {{ event?.location?.country }}</p>
       <h2>Date</h2>
-      <p class="info-item">{{ event.date | date: 'dd.MM.yyyy.'}}</p>
+      <p class="info-item">{{ event?.date | date: 'dd.MM.yyyy.'}}</p>
     </div>
 
     <!-- Specifications for Services -->
     <div class="agenda-section">
       <h2>Agenda</h2>
       <div class="agenda-grid" >
-        <div class="agenda-item"*ngFor="let agendaItem of event.agenda">
+        <div class="agenda-item"*ngFor="let agendaItem of agenda">
           <div>
             <span class="agenda-label">Name: </span>
             <span class="agenda-value">{{ agendaItem.name }}</span>
@@ -61,21 +61,21 @@
     <div class="organizer-section">
       <div class="organizer-card">
         <div class="organizer-info">
-          <img [src]="event.organizer.profilePhoto" alt="organizer" class="organizer-avatar">
+          <img [src]="event?.organizer?.profilePhoto?event?.organizer?.profilePhoto:'profile_photo.png'" alt="organizer" class="organizer-avatar">
           <div class="organizer-details">
-            <h3>{{ event.organizer.firstName}} {{ event.organizer.lastName}}</h3>
+            <h3>{{ event?.organizer?.firstName}} {{ event?.organizer?.lastName}}</h3>
             <p class="organizer-location">
               <i class="fas fa-location">📍</i>
-              {{ event.organizer.location.city }}, {{ event.organizer.location.country }}
+              {{ event?.organizer?.location?.city }}, {{ event?.organizer?.location?.country }}
             </p>
             <div class="organizer-contact">
               <p class="contact-item">
                 <i class="fas fa-email">📧</i>
-                {{ event.organizer.email }}
+                {{ event?.organizer?.email }}
               </p>
               <p class="contact-item">
                 <i class="fas fa-phone"></i>
-                {{ event.organizer.phoneNumber }}
+                {{ event?.organizer?.phoneNumber }}
               </p>
             </div>
           </div>
