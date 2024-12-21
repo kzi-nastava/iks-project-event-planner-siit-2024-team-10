@@ -30,12 +30,23 @@ export class HomeComponent implements OnInit {
 
   sortingDirections = ['Ascending', 'Descending'];
   eventSortingCriteria = ['None', 'Name', 'Date and Time', 'Rating', 'City'];
+
+  eventSortingCriteriaMapping: { [key: string]: string } = {
+    'None': '',
+    'Name': 'name',
+    'Date and Time': 'date',
+    'Rating': 'averageRating',
+    'City': 'location.city'
+  };  
+
   offeringSortingCriteria = ['None', 'Name', 'Rating', 'City', 'Price'];
 
   selectedSortingDirection: string = 'Ascending';
   selectedEventSortingCriteria: string = 'None';
   selectedOfferingSortingCriteria: string = 'None';
   selectedOfferingType: 'services' | 'products' | null = null;
+
+  filters: any = {};
 
   searchEventQuery: string = '';
   searchOfferingQuery: string = '';
@@ -93,8 +104,25 @@ export class HomeComponent implements OnInit {
   }
 
   applySorting(type: 'event' | 'offering'): void {
-    const criteria = type === 'event' ? this.selectedEventSortingCriteria : this.selectedOfferingSortingCriteria;
-    console.log(`Sorting ${type === 'event' ? 'Events' : 'Offerings'} by ${criteria} in ${this.selectedSortingDirection} order.`);
+      const backendSortBy = this.eventSortingCriteriaMapping[this.selectedEventSortingCriteria];
+    
+      if (backendSortBy) {
+        this.filters.sortBy = backendSortBy;
+        this.filters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
+      } else {
+        delete this.filters.sortBy;
+        delete this.filters.sortDirection;
+      }
+    
+      this.eventPageProperties.page = 0;
+      this.fetchPaginatedEvents(this.filters);
+    }
+    
+
+  applyFilters(newFilters: any): void {
+    this.filters = { ...this.filters, ...newFilters };
+    this.eventPageProperties.page = 0;
+    this.fetchPaginatedEvents(this.filters);
   }
 
   openFilterDialog(): void {
@@ -110,18 +138,20 @@ export class HomeComponent implements OnInit {
 
   resetEventFilter(): void{
     this.searchEventQuery = '';
+    this.filters = {};
     this.fetchPaginatedEvents();
   }
 
   openEventFilterDialog(): void {
     const dialogRef = this.dialog.open(FilterEventsDialogComponent, { width: '600px' });
-
-    dialogRef.afterClosed().subscribe((filters) => {
-      if (filters) {
-        this.fetchPaginatedEvents(filters);
+  
+    dialogRef.afterClosed().subscribe((newFilters) => {
+      if (newFilters) {
+        this.applyFilters(newFilters);
       }
     });
   }
+  
 
   filterOfferings(): void {
     console.log(`Filtering ${this.selectedOfferingType ? this.selectedOfferingType : 'Offerings'}...`);
@@ -134,6 +164,7 @@ export class HomeComponent implements OnInit {
 
   searchEvent(): void {
     this.eventPageProperties.page = 0;
+    this.filters.name = this.searchEventQuery;
     this.fetchPaginatedEvents();
   }
 
@@ -141,10 +172,9 @@ export class HomeComponent implements OnInit {
     console.log('Search Query:', this.searchOfferingQuery);
   }
 
-  fetchPaginatedEvents(filters: any = {}): void {
+  fetchPaginatedEvents(filters: any = this.filters): void {
     const { page, pageSize } = this.eventPageProperties;
-    if (this.searchEventQuery) filters.name = this.searchEventQuery;
-
+  
     this.eventService.getPaginatedEvents(page, pageSize, filters).subscribe({
       next: (response) => {
         this.allEvents = response.content;
@@ -157,6 +187,7 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+  
 
   fetchPaginatedOfferings(): void {
     const { page, pageSize } = this.offeringPageProperties;
