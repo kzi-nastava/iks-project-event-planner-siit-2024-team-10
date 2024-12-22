@@ -61,8 +61,19 @@ export class FilterServiceDialogComponent {
     if (endDate) {
       filters.endDate = this.formatDate(endDate);
     }
+
+    const { startPrice, endPrice } = filters.priceRange;
+
+    filters.startPrice = startPrice;
+    filters.endPrice = endPrice;
   
     delete filters.range;
+    delete filters.priceRange;
+
+    if(!filters.checkAviailability){
+      filters.isAvailable = null;
+    }
+    delete filters.checkAviailability;
   
     this.dialogRef.close(filters);
   }

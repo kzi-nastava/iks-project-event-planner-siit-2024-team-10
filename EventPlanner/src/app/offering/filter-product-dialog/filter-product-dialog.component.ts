@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { map, Observable } from 'rxjs';
+import { Category } from '../model/category.model';
+import { CategoryService } from '../category-service/category.service';
 
 @Component({
   selector: 'app-filter-product-dialog',
@@ -9,17 +12,18 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class FilterProductDialogComponent {
   filterForm: FormGroup;
-
-  eventTypes = ['Any', 'Conferention','Wedding','Meetup','Concert'];
-  productCategories = ['Any', 'Decoration', 'Catering', 'Fireworks'];
-
-  selectedEventType: string = 'Any';
+  categories: Observable<Category[]>;
   selectedProductCategory: string = 'Any';
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<FilterProductDialogComponent>
+    private dialogRef: MatDialogRef<FilterProductDialogComponent>,
+    private categoryService: CategoryService,
   ) {
+    this.categories = this.categoryService.getAll().pipe(
+          map(categories => [{ id: -1, name: 'Any' }, ...categories])
+        );
+
     this.filterForm = this.fb.group({
       category: [''],
       location: [''],
@@ -37,10 +41,20 @@ export class FilterProductDialogComponent {
   }
 
   applyFilters() {
-    const filters = this.filterForm.value;
+    const filters = { ...this.filterForm.value };
 
-    console.log('Filters:', filters);
+    const { startPrice, endPrice } = filters.priceRange;
 
+    filters.startPrice = startPrice;
+    filters.endPrice = endPrice;
+  
+    delete filters.priceRange;
+
+    if(!filters.checkAviailability){
+      filters.isAvialable = null;
+    }
+    delete filters.checkAviailability;
+  
     this.dialogRef.close(filters);
   }
 

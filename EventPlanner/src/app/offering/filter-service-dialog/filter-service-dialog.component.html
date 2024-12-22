@@ -9,8 +9,8 @@
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Service Category</mat-label>
       <mat-select matInput formControlName="category">
-        <mat-option matInput *ngFor="let serviceCategory of serviceCategories" [value]="serviceCategory">
-            {{ serviceCategory }}
+        <mat-option matInput *ngFor="let category of categories | async" [value]="category.id">
+            {{ category.name }}
           </mat-option>
       </mat-select>
     </mat-form-field>
@@ -69,10 +69,10 @@
       <mat-date-range-picker #picker></mat-date-range-picker>
       
       <ng-container *ngIf="dateRangeGroup">
-        <mat-error *ngIf="dateRangeGroup.get('start')?.hasError('matStartDateInvalid')">
+        <mat-error *ngIf="dateRangeGroup.get('startDate')?.hasError('matStartDateInvalid')">
           Invalid start date
         </mat-error>
-        <mat-error *ngIf="dateRangeGroup.get('end')?.hasError('matEndDateInvalid')">
+        <mat-error *ngIf="dateRangeGroup.get('endDate')?.hasError('matEndDateInvalid')">
           Invalid end date
         </mat-error>
       </ng-container>
