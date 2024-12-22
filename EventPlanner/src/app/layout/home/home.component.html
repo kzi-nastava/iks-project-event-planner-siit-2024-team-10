@@ -124,7 +124,7 @@
           </div>
           <div class="filter-section">
             <button mat-stroked-button (click)="openFilterDialog()"><mat-icon>filter_list</mat-icon> Filter</button>
-            <button mat-stroked-button class="reset-button">Reset Filters</button>
+            <button mat-stroked-button class="reset-button" (click)="resetOfferingFilter()">Reset Filters</button>
           </div>
         </div>
       </div>
@@ -135,7 +135,7 @@
       <p>{{ noOfferingsMessage }}</p>
     </div>
     <div class="all-event-cards">
-      <app-offering-card *ngFor="let offering of filteredOfferings" [offering]="offering"></app-offering-card>
+      <app-offering-card *ngFor="let offering of allOfferings" [offering]="offering"></app-offering-card>
     </div>
     <p class="total-elements">Total elements: {{ offeringPageProperties.totalElements }}</p>
     <div class="pagination" *ngIf="!noOfferingsMessage">

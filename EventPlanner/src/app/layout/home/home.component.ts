@@ -20,7 +20,6 @@ export class HomeComponent implements OnInit {
   topEvents: Event[] = [];
   allOfferings: Offering[] = [];
   topOfferings: Offering[] = [];
-  filteredOfferings: Offering[] = [];
 
   clickedEvent: string = '';
   noTopEventsMessage: string = '';
@@ -41,12 +40,22 @@ export class HomeComponent implements OnInit {
 
   offeringSortingCriteria = ['None', 'Name', 'Rating', 'City', 'Price'];
 
+  offeringSortingCriteriaMapping: { [key: string]: string } = {
+    'None': '',
+    'Name': 'name',
+    'Price': 'price',
+    'Rating': 'averageRating',
+    'City': 'location.city'
+  };  
+
   selectedSortingDirection: string = 'Ascending';
   selectedEventSortingCriteria: string = 'None';
   selectedOfferingSortingCriteria: string = 'None';
   selectedOfferingType: 'services' | 'products' | null = null;
 
-  filters: any = {};
+  eventFilters: any = {};
+  offeringFilters: any = {};
+
 
   searchEventQuery: string = '';
   searchOfferingQuery: string = '';
@@ -107,22 +116,22 @@ export class HomeComponent implements OnInit {
       const backendSortBy = this.eventSortingCriteriaMapping[this.selectedEventSortingCriteria];
     
       if (backendSortBy) {
-        this.filters.sortBy = backendSortBy;
-        this.filters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
+        this.eventFilters.sortBy = backendSortBy;
+        this.eventFilters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
       } else {
-        delete this.filters.sortBy;
-        delete this.filters.sortDirection;
+        delete this.eventFilters.sortBy;
+        delete this.eventFilters.sortDirection;
       }
     
       this.eventPageProperties.page = 0;
-      this.fetchPaginatedEvents(this.filters);
+      this.fetchPaginatedEvents(this.eventFilters);
     }
     
 
   applyFilters(newFilters: any): void {
-    this.filters = { ...this.filters, ...newFilters };
+    this.eventFilters = { ...this.eventFilters, ...newFilters };
     this.eventPageProperties.page = 0;
-    this.fetchPaginatedEvents(this.filters);
+    this.fetchPaginatedEvents(this.eventFilters);
   }
 
   openFilterDialog(): void {
@@ -138,8 +147,14 @@ export class HomeComponent implements OnInit {
 
   resetEventFilter(): void{
     this.searchEventQuery = '';
-    this.filters = {};
+    this.eventFilters = {};
     this.fetchPaginatedEvents();
+  }
+
+  resetOfferingFilter(): void{
+    this.searchOfferingQuery = '';
+    this.offeringFilters = {};
+    this.fetchPaginatedOfferings();
   }
 
   openEventFilterDialog(): void {
@@ -164,7 +179,7 @@ export class HomeComponent implements OnInit {
 
   searchEvent(): void {
     this.eventPageProperties.page = 0;
-    this.filters.name = this.searchEventQuery;
+    this.eventFilters.name = this.searchEventQuery;
     this.fetchPaginatedEvents();
   }
 
@@ -172,10 +187,10 @@ export class HomeComponent implements OnInit {
     console.log('Search Query:', this.searchOfferingQuery);
   }
 
-  fetchPaginatedEvents(filters: any = this.filters): void {
+  fetchPaginatedEvents(eventFilters: any = this.eventFilters): void {
     const { page, pageSize } = this.eventPageProperties;
   
-    this.eventService.getPaginatedEvents(page, pageSize, filters).subscribe({
+    this.eventService.getPaginatedEvents(page, pageSize, eventFilters).subscribe({
       next: (response) => {
         this.allEvents = response.content;
         this.eventPageProperties.totalPages = response.totalPages;
@@ -195,7 +210,6 @@ export class HomeComponent implements OnInit {
     this.offeringService.getPaginatedOfferings(page, pageSize).subscribe({
       next: (response) => {
         this.allOfferings = response.content;
-        this.filteredOfferings = response.content;
         this.offeringPageProperties.totalPages = response.totalPages;
         this.offeringPageProperties.totalElements = response.totalElements;
         this.noOfferingsMessage = this.allOfferings.length ? '' : 'No offerings found.';
