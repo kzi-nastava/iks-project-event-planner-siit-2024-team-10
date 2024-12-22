@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ManageOfferingsComponent } from './manage-offerings/manage-offerings.component';
 import { OfferingCardComponent } from './offering-card/offering-card.component';
 import {MatIcon} from "@angular/material/icon";
@@ -59,7 +59,8 @@ import { ReservationDialogComponent } from './reservation-dialog/reservation-dia
     MatNativeDateModule,
     MatRadioButton, MatRadioGroup,
     MatSliderModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    DatePipe
   ],
   exports: [
     ManageOfferingsComponent,

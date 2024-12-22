@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { map, Observable } from 'rxjs';
+import { Category } from '../model/category.model';
+import { CategoryService } from '../category-service/category.service';
 
 @Component({
   selector: 'app-filter-service-dialog',
@@ -9,17 +13,18 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class FilterServiceDialogComponent {
   filterForm: FormGroup;
-
-  eventTypes = ['Any', 'Conferention','Wedding','Meetup','Concert'];
-  serviceCategories = ['Any', 'Decoration', 'Catering', 'Band'];
-
-  selectedEventType: string = 'Any';
+  categories: Observable<Category[]>;
   selectedServiceCategory: string = 'Any';
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<FilterServiceDialogComponent>
+    private dialogRef: MatDialogRef<FilterServiceDialogComponent>,
+    private categoryService: CategoryService,
   ) {
+    this.categories = this.categoryService.getAll().pipe(
+      map(categories => [{ id: -1, name: 'Any' }, ...categories])
+    );
+
     this.filterForm = this.fb.group({
       category: [''],
       location: [''],
@@ -45,7 +50,20 @@ export class FilterServiceDialogComponent {
   }
 
   applyFilters() {
-    const filters = this.filterForm.value;
+    const filters = { ...this.filterForm.value };
+  
+    const { startDate, endDate } = filters.range;
+  
+    if (startDate) {
+      filters.startDate = this.formatDate(startDate);
+    }
+  
+    if (endDate) {
+      filters.endDate = this.formatDate(endDate);
+    }
+  
+    delete filters.range;
+  
     this.dialogRef.close(filters);
   }
 
@@ -56,4 +74,9 @@ export class FilterServiceDialogComponent {
   formatLabel(value: number): string {
     return `${value}`;
   }
+
+  formatDate(date: any): string {
+      const datePipe = new DatePipe('en-US');
+      return datePipe.transform(date, 'MM/dd/yyyy')!;
+    }
 }
