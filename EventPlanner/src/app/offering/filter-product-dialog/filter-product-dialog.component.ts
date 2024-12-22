@@ -22,7 +22,6 @@ export class FilterProductDialogComponent {
   ) {
     this.filterForm = this.fb.group({
       category: [''],
-      type: [''],
       location: [''],
       priceRange: this.fb.group({
         startPrice: [0],

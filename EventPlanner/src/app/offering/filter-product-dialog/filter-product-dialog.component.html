@@ -21,16 +21,6 @@
         <input matInput formControlName="location" placeholder="City">
       </mat-form-field>
   
-      <!-- Event Type -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Event Type</mat-label>
-        <mat-select matInput formControlName="type">
-          <mat-option matInput *ngFor="let eventType of eventTypes" [value]="eventType">
-              {{ eventType }}
-            </mat-option>
-        </mat-select>
-      </mat-form-field>
-  
       <!-- Price Range -->
       <mat-label class="rating-label">Price Range (€)</mat-label>
       <div class="rating-section">
