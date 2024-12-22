@@ -31,8 +31,8 @@ export class FilterServiceDialogComponent {
       minRating: [1.0],
       minDiscount: [0],
       dateRange: this.fb.group({
-        start: [null],
-        end: [null],
+        startDate: [null],
+        endDate: [null],
       }),
       duration:[0],
     });
@@ -46,15 +46,6 @@ export class FilterServiceDialogComponent {
 
   applyFilters() {
     const filters = this.filterForm.value;
-
-    const startDate = filters.dateRange.start;
-    const endDate = filters.dateRange.end;
-
-    const startPrice = filters.priceRange.startPrice;
-    const endPrice = filters.priceRange.endPrice;
-
-    console.log('Filters:', filters);
-
     this.dialogRef.close(filters);
   }
 
