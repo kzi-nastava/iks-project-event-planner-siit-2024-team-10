@@ -134,6 +134,12 @@ export class HomeComponent implements OnInit {
     this.fetchPaginatedEvents(this.eventFilters);
   }
 
+  applyOfferingFilters(newFilters: any): void {
+    this.offeringFilters = { ...this.offeringFilters, ...newFilters };
+    this.offeringPageProperties.page = 0;
+    this.fetchPaginatedOfferings();
+  }
+
   openFilterDialog(): void {
     const dialogComponent: ComponentType<any> = this.selectedOfferingType === 'services'
       ? FilterServiceDialogComponent
@@ -142,7 +148,13 @@ export class HomeComponent implements OnInit {
       : OfferingWarningDialogComponent;
   
     const dialogWidth = dialogComponent === OfferingWarningDialogComponent ? '400px' : '600px';
-    this.dialog.open(dialogComponent, { width: dialogWidth });
+    const dialogRef = this.dialog.open(dialogComponent, { width: dialogWidth });
+    
+    dialogRef.afterClosed().subscribe((newFilters) => {
+      if (newFilters) {
+        this.applyOfferingFilters(newFilters);
+      }
+    });
   }
 
   resetEventFilter(): void{
@@ -166,15 +178,18 @@ export class HomeComponent implements OnInit {
       }
     });
   }
-  
-
-  filterOfferings(): void {
-    console.log(`Filtering ${this.selectedOfferingType ? this.selectedOfferingType : 'Offerings'}...`);
-  }
 
   toggleOfferingType(type: 'services' | 'products'): void {
     this.selectedOfferingType = type;
-    this.filterOfferings();
+    if (type === 'services') {
+      this.offeringFilters.isServiceFilter = true;
+    } else if (type === 'products') {
+      this.offeringFilters.isServiceFilter = false;
+    } else{
+      delete this.offeringFilters.isServiceFilter;
+    }
+    this.fetchPaginatedOfferings();
+    this.resetOfferingFilter();
   }
 
   searchEvent(): void {
@@ -184,7 +199,9 @@ export class HomeComponent implements OnInit {
   }
 
   searchOffering(): void {
-    console.log('Search Query:', this.searchOfferingQuery);
+    this.offeringPageProperties.page = 0;
+    this.offeringFilters.name = this.searchOfferingQuery;
+    this.fetchPaginatedOfferings();
   }
 
   fetchPaginatedEvents(eventFilters: any = this.eventFilters): void {
@@ -204,10 +221,10 @@ export class HomeComponent implements OnInit {
   }
   
 
-  fetchPaginatedOfferings(): void {
+  fetchPaginatedOfferings(offeringFilters: any = this.offeringFilters): void {
     const { page, pageSize } = this.offeringPageProperties;
 
-    this.offeringService.getPaginatedOfferings(page, pageSize).subscribe({
+    this.offeringService.getPaginatedOfferings(page, pageSize, offeringFilters).subscribe({
       next: (response) => {
         this.allOfferings = response.content;
         this.offeringPageProperties.totalPages = response.totalPages;

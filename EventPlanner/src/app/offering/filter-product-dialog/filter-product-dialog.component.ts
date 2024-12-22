@@ -25,11 +25,11 @@ export class FilterProductDialogComponent {
         );
 
     this.filterForm = this.fb.group({
-      category: [''],
+      categoryId: [-1],
       location: [''],
       priceRange: this.fb.group({
         startPrice: [0],
-        endPrice: [1000],
+        endPrice: [100000],
       }),
       checkAviailability:[false],
       minRating: [1.0],
@@ -43,6 +43,10 @@ export class FilterProductDialogComponent {
   applyFilters() {
     const filters = { ...this.filterForm.value };
 
+    if (this.filterForm.value.categoryId === -1 || this.selectedProductCategory === 'Any') {
+      filters.categoryId = null;
+    }
+
     const { startPrice, endPrice } = filters.priceRange;
 
     filters.startPrice = startPrice;
@@ -51,9 +55,12 @@ export class FilterProductDialogComponent {
     delete filters.priceRange;
 
     if(!filters.checkAviailability){
-      filters.isAvialable = null;
+      filters.isAvailable = null;
+    } else{
+      filters.isAvailable = true;
     }
     delete filters.checkAviailability;
+    filters.isServiceFilter = false;
   
     this.dialogRef.close(filters);
   }

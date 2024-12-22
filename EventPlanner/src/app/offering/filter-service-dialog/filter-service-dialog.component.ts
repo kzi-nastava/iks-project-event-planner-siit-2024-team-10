@@ -26,7 +26,7 @@ export class FilterServiceDialogComponent {
     );
 
     this.filterForm = this.fb.group({
-      category: [''],
+      categoryId: [-1],
       location: [''],
       priceRange: this.fb.group({
         startPrice: [0],
@@ -51,8 +51,12 @@ export class FilterServiceDialogComponent {
 
   applyFilters() {
     const filters = { ...this.filterForm.value };
+
+    if (this.filterForm.value.categoryId === -1 || this.selectedServiceCategory === 'Any') {
+      this.filterForm.value.categoryId = null;
+    }
   
-    const { startDate, endDate } = filters.range;
+    const { startDate, endDate } = filters.dateRange;
   
     if (startDate) {
       filters.startDate = this.formatDate(startDate);
@@ -67,13 +71,14 @@ export class FilterServiceDialogComponent {
     filters.startPrice = startPrice;
     filters.endPrice = endPrice;
   
-    delete filters.range;
+    delete filters.dateRange;
     delete filters.priceRange;
 
     if(!filters.checkAviailability){
       filters.isAvailable = null;
     }
     delete filters.checkAviailability;
+    filters.isServiceFilter = true;
   
     this.dialogRef.close(filters);
   }
