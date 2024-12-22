@@ -346,7 +346,6 @@ export class OfferingService {
       Object.keys(filters).forEach((key) => {
         if (filters[key] !== null && filters[key] !== undefined && filters[key] !== '') {
           params = params.set(key, filters[key]);
-          console.log(key, filters[key]);
         }
       });
   

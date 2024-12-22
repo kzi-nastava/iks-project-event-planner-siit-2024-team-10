@@ -9,6 +9,7 @@ import { FilterServiceDialogComponent } from '../../offering/filter-service-dial
 import { FilterProductDialogComponent } from '../../offering/filter-product-dialog/filter-product-dialog.component';
 import { OfferingWarningDialogComponent } from '../offering-warning-dialog/offering-warning-dialog.component';
 import { ComponentType } from '@angular/cdk/overlay';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -223,6 +224,9 @@ export class HomeComponent implements OnInit {
 
   fetchPaginatedOfferings(offeringFilters: any = this.offeringFilters): void {
     const { page, pageSize } = this.offeringPageProperties;
+    if (this.selectedOfferingType!==null){
+      offeringFilters.isServiceFilter = this.selectedOfferingType === 'services';
+    }
 
     this.offeringService.getPaginatedOfferings(page, pageSize, offeringFilters).subscribe({
       next: (response) => {
