@@ -45,19 +45,19 @@ export class FilterServiceDialogComponent {
   applyFilters() {
     const filters = { ...this.filterForm.value };
 
-    if (this.filterForm.value.categoryId === -1 || this.selectedServiceCategory === 'Any') {
+    if (this.filterForm.value.categoryId === -1) {
       filters.categoryId = null;
     }
 
     if (this.filterForm.value.serviceDuration === 0) {
-      this.filterForm.value.serviceDuration = null;
+      filters.serviceDuration = null;
     }
 
     const { startPrice, endPrice } = filters.priceRange;
 
     filters.startPrice = startPrice;
     filters.endPrice = endPrice;
-    
+
     delete filters.priceRange;
 
     if(!filters.checkAviailability){
@@ -67,6 +67,8 @@ export class FilterServiceDialogComponent {
     }
     delete filters.checkAviailability;
     filters.isServiceFilter = true;
+
+    console.log(filters);
   
     this.dialogRef.close(filters);
   }

@@ -7,7 +7,7 @@
     <form [formGroup]="filterForm">
         <!-- Product Category -->
       <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Service Category</mat-label>
+        <mat-label>Product Category</mat-label>
         <mat-select matInput formControlName="categoryId">
           <mat-option matInput *ngFor="let category of categories | async" [value]="category.id">
               {{ category.name }}

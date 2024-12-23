@@ -43,7 +43,7 @@ export class FilterProductDialogComponent {
   applyFilters() {
     const filters = { ...this.filterForm.value };
 
-    if (this.filterForm.value.categoryId === -1 || this.selectedProductCategory === 'Any') {
+    if (this.filterForm.value.categoryId === -1) {
       filters.categoryId = null;
     }
 

@@ -205,9 +205,9 @@ export class HomeComponent implements OnInit {
       this.offeringFilters.isServiceFilter = false;
     } else{
       delete this.offeringFilters.isServiceFilter;
+      this.selectedOfferingType = null;
     }
     this.resetOfferingFilter();
-    this.fetchPaginatedOfferings();
   }
 
   searchEvent(): void {
@@ -247,7 +247,6 @@ export class HomeComponent implements OnInit {
 
     this.offeringService.getPaginatedOfferings(page, pageSize, offeringFilters).subscribe({
       next: (response) => {
-        console.log(offeringFilters);
         this.allOfferings = response.content;
         this.offeringPageProperties.totalPages = response.totalPages;
         this.offeringPageProperties.totalElements = response.totalElements;
