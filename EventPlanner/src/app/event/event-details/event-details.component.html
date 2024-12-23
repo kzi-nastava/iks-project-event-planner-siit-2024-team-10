@@ -13,7 +13,9 @@
     <div class="header-info">
       <div class="header-title">
         <h1 class="title">{{ event?.name }}</h1>
-        <button mat-button><mat-icon>favorite_border</mat-icon></button>
+        <button mat-button (click)="toggleFavourite()">
+          <mat-icon>{{ isFavourite ? 'favorite' : 'favorite_border' }}</mat-icon>
+        </button>
       </div>
       <div class="meta-info">
         <span class="meta-item"> {{ event?.eventType?.name }}</span>
