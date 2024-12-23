@@ -114,18 +114,33 @@ export class HomeComponent implements OnInit {
   }
 
   applySorting(type: 'event' | 'offering'): void {
-      const backendSortBy = this.eventSortingCriteriaMapping[this.selectedEventSortingCriteria];
-    
-      if (backendSortBy) {
-        this.eventFilters.sortBy = backendSortBy;
-        this.eventFilters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
-      } else {
-        delete this.eventFilters.sortBy;
-        delete this.eventFilters.sortDirection;
+      if(type === 'event'){
+        const backendSortBy = this.eventSortingCriteriaMapping[this.selectedEventSortingCriteria];
+      
+        if (backendSortBy) {
+          this.eventFilters.sortBy = backendSortBy;
+          this.eventFilters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
+        } else {
+          delete this.eventFilters.sortBy;
+          delete this.eventFilters.sortDirection;
+        }
+      
+        this.eventPageProperties.page = 0;
+        this.fetchPaginatedEvents(this.eventFilters);
+      }else{
+        const backendSortBy = this.offeringSortingCriteriaMapping[this.selectedOfferingSortingCriteria];
+      
+        if (backendSortBy) {
+          this.offeringFilters.sortBy = backendSortBy;
+          this.offeringFilters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
+        } else {
+          delete this.offeringFilters.sortBy;
+          delete this.offeringFilters.sortDirection;
+        }
+      
+        this.offeringPageProperties.page = 0;
+        this.fetchPaginatedOfferings(this.offeringFilters);
       }
-    
-      this.eventPageProperties.page = 0;
-      this.fetchPaginatedEvents(this.eventFilters);
     }
     
 
@@ -161,12 +176,14 @@ export class HomeComponent implements OnInit {
   resetEventFilter(): void{
     this.searchEventQuery = '';
     this.eventFilters = {};
+    this.eventPageProperties.page = 0;
     this.fetchPaginatedEvents();
   }
 
   resetOfferingFilter(): void{
     this.searchOfferingQuery = '';
     this.offeringFilters = {};
+    this.offeringPageProperties.page = 0;
     this.fetchPaginatedOfferings();
   }
 
