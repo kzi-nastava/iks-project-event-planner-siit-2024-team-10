@@ -30,16 +30,13 @@ export class FilterServiceDialogComponent {
       location: [''],
       priceRange: this.fb.group({
         startPrice: [0],
-        endPrice: [1000],
+        endPrice: [100000],
       }),
       checkAviailability:[false],
       minRating: [1.0],
       minDiscount: [0],
-      duration:[0],
+      serviceDuration:[0],
     });
-  }
-  get dateRangeGroup(): FormGroup {
-    return this.filterForm.get('dateRange') as FormGroup;
   }
   get priceRangeGroup(): FormGroup {
     return this.filterForm.get('priceRange') as FormGroup;
@@ -49,16 +46,24 @@ export class FilterServiceDialogComponent {
     const filters = { ...this.filterForm.value };
 
     if (this.filterForm.value.categoryId === -1 || this.selectedServiceCategory === 'Any') {
-      this.filterForm.value.categoryId = null;
+      filters.categoryId = null;
+    }
+
+    if (this.filterForm.value.serviceDuration === 0) {
+      this.filterForm.value.serviceDuration = null;
     }
 
     const { startPrice, endPrice } = filters.priceRange;
 
     filters.startPrice = startPrice;
     filters.endPrice = endPrice;
+    
+    delete filters.priceRange;
 
     if(!filters.checkAviailability){
       filters.isAvailable = null;
+    }else{
+      filters.isAvailable = true;
     }
     delete filters.checkAviailability;
     filters.isServiceFilter = true;
