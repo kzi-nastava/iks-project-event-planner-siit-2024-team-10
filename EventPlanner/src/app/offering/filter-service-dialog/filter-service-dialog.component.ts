@@ -35,10 +35,6 @@ export class FilterServiceDialogComponent {
       checkAviailability:[false],
       minRating: [1.0],
       minDiscount: [0],
-      dateRange: this.fb.group({
-        startDate: [null],
-        endDate: [null],
-      }),
       duration:[0],
     });
   }
@@ -55,24 +51,11 @@ export class FilterServiceDialogComponent {
     if (this.filterForm.value.categoryId === -1 || this.selectedServiceCategory === 'Any') {
       this.filterForm.value.categoryId = null;
     }
-  
-    const { startDate, endDate } = filters.dateRange;
-  
-    if (startDate) {
-      filters.startDate = this.formatDate(startDate);
-    }
-  
-    if (endDate) {
-      filters.endDate = this.formatDate(endDate);
-    }
 
     const { startPrice, endPrice } = filters.priceRange;
 
     filters.startPrice = startPrice;
     filters.endPrice = endPrice;
-  
-    delete filters.dateRange;
-    delete filters.priceRange;
 
     if(!filters.checkAviailability){
       filters.isAvailable = null;
@@ -90,9 +73,4 @@ export class FilterServiceDialogComponent {
   formatLabel(value: number): string {
     return `${value}`;
   }
-
-  formatDate(date: any): string {
-      const datePipe = new DatePipe('en-US');
-      return datePipe.transform(date, 'MM/dd/yyyy')!;
-    }
 }

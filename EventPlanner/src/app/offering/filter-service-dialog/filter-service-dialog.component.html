@@ -57,26 +57,7 @@
       <input matInput type="number" formControlName="duration">
     </mat-form-field>
 
-    <!-- Date Range -->
-    <mat-form-field class="form-field">
-      <mat-label>Enter a date range</mat-label>
-      <mat-date-range-input [formGroup]="dateRangeGroup" [rangePicker]="picker">
-        <input matStartDate formControlName="startDate" placeholder="Start date">
-        <input matEndDate formControlName="endDate" placeholder="End date">
-      </mat-date-range-input>
-      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-      
-      <ng-container *ngIf="dateRangeGroup">
-        <mat-error *ngIf="dateRangeGroup.get('startDate')?.hasError('matStartDateInvalid')">
-          Invalid start date
-        </mat-error>
-        <mat-error *ngIf="dateRangeGroup.get('endDate')?.hasError('matEndDateInvalid')">
-          Invalid end date
-        </mat-error>
-      </ng-container>
-    </mat-form-field>
+    <!-- Availability -->
     <mat-slide-toggle formControlName="checkAviailability">
       Show Only Available Services
     </mat-slide-toggle>
