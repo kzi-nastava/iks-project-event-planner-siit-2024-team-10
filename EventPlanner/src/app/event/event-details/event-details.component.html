@@ -16,7 +16,8 @@
         <button mat-button><mat-icon>favorite_border</mat-icon></button>
       </div>
       <div class="meta-info">
-        <span class="category"> {{ event?.eventType?.name }}</span>
+        <span class="meta-item"> {{ event?.eventType?.name }}</span>
+        <span class="meta-item">★ {{ event?.averageRating }}</span>
       </div>
     </div>
 
@@ -83,34 +84,17 @@
     </div>
 </div>
     <div class="comments-section">
-      <h2>Customer Reviews</h2>
-
-      <!-- Add Comment Form -->
-      <div class="comment-form">
-        <h3>Leave a Review</h3>
-        <div class="rating-input">
-          <span>Your Rating:</span>
-          <div class="stars-input">
+      <h2>Leave rating</h2>
+      <div class="stars-input">
             <span
               *ngFor="let star of getStarArray(5); let i = index"
               (click)="setRating(i + 1)"
               [class.filled]="i < userRating"
               class="star-icon"
             >★</span>
-          </div>
-        </div>
-        <input
-          type="text"
-          placeholder="Your Name"
-          class="input-field"
-        >
-        <textarea
-          placeholder="Your Review"
-          class="input-field"
-        ></textarea>
-        <button
-          class="submit-btn"
-        >Submit Review</button>
+        <button class="submit-btn" mat-flat-button color>
+          Submit
+        </button>
       </div>
     </div>
 
