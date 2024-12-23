@@ -13,8 +13,8 @@ import { OfferingModule } from '../offering/offering.module';
 import {MatInputModule} from '@angular/material/input';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {MatSelectModule} from '@angular/material/select';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { RegisterComponent } from './register/register.component';
+import {FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import { RegisterComponent } from '../infrastructure/auth/register/register.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import { OfferingWarningDialogComponent } from './offering-warning-dialog/offering-warning-dialog.component';
@@ -55,7 +55,8 @@ import { AuthenticatedUserNavBarMenuComponent } from './authenticated-user-nav-b
         MatSelectModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatDialogModule
+        MatDialogModule,
+
   ],
   exports: [NavBarComponent]
 })
