@@ -7,11 +7,12 @@
   <form [formGroup]="filterForm">
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Event Type</mat-label>
-      <mat-select matInput [(ngModel)]="selectedEventType" formControlName="type">
-        <mat-option matInput *ngFor="let eventType of eventTypes" [value]="eventType">
-            {{ eventType }}
-          </mat-option>
+      <mat-select matInput [(ngModel)]="selectedEventType" formControlName="eventTypeId">
+        <mat-option *ngFor="let eventType of eventTypes | async" [value]="eventType.id">
+          {{ eventType.name }}
+        </mat-option>
       </mat-select>
+      
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
@@ -27,7 +28,7 @@
     <mat-label class="rating-label">Minimum Rating</mat-label>
     <div class="rating-section">
       <p>{{ filterForm.get('minRating')?.value }}★</p>
-      <mat-slider min="1" max="5" step="0.5" showTickMarks discrete [displayWith]="formatLabel">
+      <mat-slider min="0" max="5" step="0.5" showTickMarks discrete [displayWith]="formatLabel">
         <input formControlName="minRating" matSliderThumb>
       </mat-slider>
     </div>
@@ -35,18 +36,18 @@
       <mat-form-field class="form-field">
         <mat-label>Enter a date range</mat-label>
         <mat-date-range-input [formGroup]="rangeGroup" [rangePicker]="picker">
-          <input matStartDate formControlName="start" placeholder="Start date">
-          <input matEndDate formControlName="end" placeholder="End date">
+          <input matStartDate formControlName="startDate" placeholder="Start date">
+          <input matEndDate formControlName="endDate" placeholder="End date">
         </mat-date-range-input>
         <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
         
         <ng-container *ngIf="rangeGroup">
-          <mat-error *ngIf="rangeGroup.get('start')?.hasError('matStartDateInvalid')">
+          <mat-error *ngIf="rangeGroup.get('startDate')?.hasError('matStartDateInvalid')">
             Invalid start date
           </mat-error>
-          <mat-error *ngIf="rangeGroup.get('end')?.hasError('matEndDateInvalid')">
+          <mat-error *ngIf="rangeGroup.get('endDate')?.hasError('matEndDateInvalid')">
             Invalid end date
           </mat-error>
         </ng-container>

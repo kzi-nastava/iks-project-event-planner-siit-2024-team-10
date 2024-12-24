@@ -39,10 +39,11 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <button mat-stroked-button (click)="applySorting('event')">Sort</button>          </div>
+            <button mat-stroked-button (click)="applySorting('event')">Sort</button>
+          </div>
           <div class="filter-section">
             <button mat-stroked-button (click)="openEventFilterDialog()"><mat-icon>filter_list</mat-icon> Filter</button>
-            <button mat-stroked-button class="reset-button">Reset Filters</button>
+            <button mat-stroked-button class="reset-button" (click)="resetEventFilter()">Reset Filters</button>
           </div>
         </div>
       </div>
@@ -135,8 +136,8 @@
     </div>
     <div class="all-event-cards">
       <app-offering-card *ngFor="let offering of filteredOfferings" [offering]="offering"></app-offering-card>
-
     </div>
+    <p class="total-elements">Total elements: {{ offeringPageProperties.totalElements }}</p>
     <div class="pagination" *ngIf="!noOfferingsMessage">
       <button mat-stroked-button (click)="previousOfferingPage()" [disabled]="offeringPageProperties.page === 0">
         &lt;

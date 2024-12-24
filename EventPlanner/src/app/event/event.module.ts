@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatIconModule } from "@angular/material/icon";
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -84,6 +84,7 @@ import {MatCheckbox} from '@angular/material/checkbox';
   exports: [
     EventCardComponent,
     MatInputModule
-  ]
+  ],
+  providers: [DatePipe],
 })
 export class EventModule { }
