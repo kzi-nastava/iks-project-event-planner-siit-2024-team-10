@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {ActivateComponent} from './activate/activate.component';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ActivateComponent
+  ],
   imports: [
     CommonModule
   ]
