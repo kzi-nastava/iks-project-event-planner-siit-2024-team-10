@@ -1,10 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {EventService} from '../event.service';
 import {Event} from '../model/event.model'
 import {AgendaItem} from '../model/agenda-item.model';
 import {Observable} from 'rxjs';
 import {AccountService} from '../../account/account.service';
+import {CreateEventRatingDTO} from '../model/create-event-rating-dto.model';
+import {CreatedEventRatingDTO} from '../model/created-event-rating-dto.model';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-event-details',
@@ -16,6 +19,7 @@ export class EventDetailsComponent implements OnInit {
   agenda:AgendaItem[];
   userRating:number;
   isFavourite:boolean=false;
+  snackBar:MatSnackBar = inject(MatSnackBar)
 
   constructor(
     private route: ActivatedRoute,
@@ -52,6 +56,18 @@ export class EventDetailsComponent implements OnInit {
         }
       });
     }
+  }
+
+  addReview():void{
+    this.eventService.addRating(this.event.id,{rating:this.userRating}).subscribe({
+      next: (createdEventRating:CreatedEventRatingDTO) => {
+        this.event.averageRating=createdEventRating.averageRating;
+        this.snackBar.open('Event rated successfully','OK',{duration:5000});
+      },
+      error: (err) => {
+        console.error('Error rating event:', err);
+      }
+    });
   }
 
   ngOnInit(): void {

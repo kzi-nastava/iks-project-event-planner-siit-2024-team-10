@@ -94,7 +94,7 @@
               [class.filled]="i < userRating"
               class="star-icon"
             >★</span>
-        <button class="submit-btn" mat-flat-button color>
+        <button class="submit-btn" mat-flat-button color (click)="addReview()">
           Submit
         </button>
       </div>
