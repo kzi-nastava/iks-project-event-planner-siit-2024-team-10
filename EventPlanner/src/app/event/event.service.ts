@@ -8,6 +8,8 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {CreateEventDTO} from './model/create-event-dto.model';
 import { PagedResponse } from './model/paged-response.model';
 import {AgendaItem} from './model/agenda-item.model';
+import {CreateEventRatingDTO} from './model/create-event-rating-dto.model';
+import {CreatedEventRatingDTO} from './model/created-event-rating-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +38,10 @@ export class EventService {
 
   add(event:CreateEventDTO) : Observable<Event> {
     return this.httpClient.post<Event>(environment.apiHost + "/events", event);
+  }
+
+  addRating(eventId:number,rating:CreateEventRatingDTO) : Observable<CreatedEventRatingDTO> {
+    return this.httpClient.post<CreatedEventRatingDTO>(environment.apiHost + "/events/"+eventId+"/ratings", rating);
   }
 
   getPaginatedEvents(
