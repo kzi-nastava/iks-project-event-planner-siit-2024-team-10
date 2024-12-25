@@ -6,7 +6,7 @@ import {ManageOfferingsComponent} from './offering/manage-offerings/manage-offer
 import {CreateOfferingsComponent} from './offering/create-offerings/create-offerings.component';
 import { EditServiceComponent } from './offering/edit-service/edit-service.component';
 import { DetailsPageComponent } from './offering/details-page/details-page.component';
-import {RegisterComponent} from './layout/register/register.component';
+import {RegisterComponent} from './infrastructure/auth/register/register.component';
 import {EventDetailsComponent} from './event/event-details/event-details.component';
 import { NotificationsPageComponent } from './notification/notifications-page/notifications-page.component';
 import { OfferingCategoryComponent } from './offering/offering-category/offering-category.component';
@@ -14,6 +14,7 @@ import {CreateEventComponent} from './event/create-event/create-event.component'
 import {EventTypesComponent} from './event/event-types/event-types.component';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {AuthGuard} from './infrastructure/auth/auth.guard';
+import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
@@ -37,8 +38,9 @@ const routes: Routes = [
     data: {role: ['ADMIN']}},
   {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
     data: {role: ['ORGANIZER']}},
+  {path:'activate', component: ActivateComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: '**', redirectTo: '/home', pathMatch: 'full'}
+  { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];
 
 @NgModule({

@@ -8,6 +8,7 @@ import { GetProvider } from '../../user/model/get_provider.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {environment} from '../../../env/environment';
 import { PagedResponse } from '../../event/model/paged-response.model';
+import { Category } from '../model/category.model';
 
 
 @Injectable({

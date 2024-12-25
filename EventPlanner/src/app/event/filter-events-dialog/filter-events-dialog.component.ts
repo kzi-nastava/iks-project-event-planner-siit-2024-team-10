@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { EventTypeService } from '../event-type.service';
+import {map, Observable} from 'rxjs';
+import { EventType } from '../model/event-type.model';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-filter-events-dialog',
@@ -9,23 +13,27 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class FilterEventsDialogComponent {
   filterForm: FormGroup;
-
-  eventTypes = ['Any', 'Conferention','Wedding','Meetup','Concert'];
+  eventTypes: Observable<EventType[]>;
 
   selectedEventType: string = 'Any';
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<FilterEventsDialogComponent>
+    private dialogRef: MatDialogRef<FilterEventsDialogComponent>,
+    private eventTypeService: EventTypeService,
   ) {
+    this.eventTypes = this.eventTypeService.getAll().pipe(
+      map(eventTypes => [{ id: -1, name: 'Any' }, ...eventTypes])
+    );
+
     this.filterForm = this.fb.group({
-      type: [''],
+      eventTypeId: [-1],
       location: [''],
       maxParticipants: [''],
-      minRating: [1],
+      minRating: [0],
       range: this.fb.group({
-        start: [null],
-        end: [null],
+        startDate: [null],
+        endDate: [null],
       }),
     });
   }
@@ -34,11 +42,27 @@ export class FilterEventsDialogComponent {
   }
 
   applyFilters() {
-    const filters = this.filterForm.value;
-    console.log('Filters:', filters);
-
+    if (this.filterForm.value.eventTypeId === -1 || this.selectedEventType === 'Any') {
+      this.filterForm.value.eventTypeId = null;
+    }
+  
+    const filters = { ...this.filterForm.value };
+  
+    const { startDate, endDate } = filters.range;
+  
+    if (startDate) {
+      filters.startDate = this.formatDate(startDate);
+    }
+  
+    if (endDate) {
+      filters.endDate = this.formatDate(endDate);
+    }
+  
+    delete filters.range;
+  
     this.dialogRef.close(filters);
   }
+  
 
   closeDialog() {
     this.dialogRef.close();
@@ -46,5 +70,10 @@ export class FilterEventsDialogComponent {
 
   formatLabel(value: number): string {
     return `${value}`;
+  }
+
+  formatDate(date: any): string {
+    const datePipe = new DatePipe('en-US');
+    return datePipe.transform(date, 'MM/dd/yyyy')!;
   }
 }

@@ -638,7 +638,7 @@ export class EventService {
       .set('size', pageSize.toString());
 
     Object.keys(filters).forEach((key) => {
-      if (filters[key]) {
+      if (filters[key] && filters[key] !== '') {
         params = params.set(key, filters[key]);
       }
     });
