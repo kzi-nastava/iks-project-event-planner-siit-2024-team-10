@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { HttpClient } from '@angular/common/http'; // Add HttpClient import
+import { HttpClient } from '@angular/common/http'; 
 import { ViewChild, ElementRef } from '@angular/core';
 import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
 import { ServiceService } from '../service-service/service.service';
@@ -59,7 +59,7 @@ export class CreateOfferingsComponent implements OnInit {
       specification: [''],
       price: ['', [Validators.required, Validators.min(0)]],
       discount: ['', [Validators.min(0), Validators.max(100)]],
-      photos: [[]], // Ovo je polje koje će čuvati putanje slika
+      photos: [[]],
       timeType: ['fixed'],
       fixedTime: [''],
       minTime: [''],
@@ -75,14 +75,13 @@ export class CreateOfferingsComponent implements OnInit {
   onPhotoUpload() {
     const files = this.fileInput.nativeElement.files;
     if (files.length > 0) {
-      // Process the files for upload
       this.uploadFiles(files);
     }
   }
 
   uploadFiles(files: FileList) {
     const formData = new FormData();
-    const productId = 1;  // Koristite stvarni ID proizvoda/usluge
+    const productId = 1;  // real id later
   
     for (let i = 0; i < files.length; i++) {
       formData.append('files', files[i]);
@@ -94,8 +93,7 @@ export class CreateOfferingsComponent implements OnInit {
       next: (response: any) => {
         console.log('Files uploaded successfully:', response);
         this.snackBar.open('Files uploaded successfully', 'OK', { duration: 3000 });
-        this.photoPaths = response; // Update the uploaded photos paths
-        // Ažuriranje polja 'photos' u formi sa dobijenim putanjama slika
+        this.photoPaths = response; 
         this.createForm.patchValue({ photos: response });
       },
       error: (error) => {
@@ -120,32 +118,25 @@ export class CreateOfferingsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // Log the entire form value for debugging
     console.log('Form Value:', this.createForm.value);
   
     if (this.createForm.valid) {
   
-      // Prepare the service data according to CreateServiceDTO
       const service: CreateServiceDTO = {
-        // Replace the hardcoded value with the actual form value if needed
         category: 1, 
         categoryProposal: "",
-        pending: false, // You might want to set this based on your business logic
+        pending: false, 
         provider: 1,
   
-        // Basic service details from the form
         name: this.createForm.value.name,
         description: this.createForm.value.description,
         specification: this.createForm.value.specification || '',
   
-        // Pricing details
         price: parseFloat(this.createForm.value.price),
         discount: parseFloat(this.createForm.value.discount) || 0,
   
-        // Photos (they will now come from the form)
         photos: this.createForm.value.photos || [],
   
-        // Visibility and availability
         isVisible: this.createForm.value.isVisible ?? true,
         isAvailable: this.createForm.value.isAvailable ?? true,
   
@@ -153,38 +144,30 @@ export class CreateOfferingsComponent implements OnInit {
         maxDuration: parseInt(this.createForm.value.maxTime, 10) || 0,
         minDuration: parseInt(this.createForm.value.minTime, 10) || 0,
   
-        // Reservation and cancellation periods
         cancellationPeriod: parseInt(this.createForm.value.cancellationDeadline, 10) || 0,
         reservationPeriod: parseInt(this.createForm.value.reservationDeadline, 10) || 0,
   
-        // Auto-confirm can be added based on your form or business logic
-        autoConfirm: false // Default to false, adjust as needed
+        autoConfirm: false 
       };
     
-      // Call service to add the new service
       this.serviceService.add(service).subscribe({
         next: (response) => {
-          // Success handling
           this.snackBar.open('Service created successfully', 'OK', { 
             duration: 3000 
           });
   
-          // Optional: Reset form or navigate
           this.createForm.reset();
-          // this.router.navigate(['/services']); // Uncomment if you want to redirect
+          // this.router.navigate(['/services']);
         },
         error: (error) => {
-          // Error handling
           console.error('Error creating service:', error);
   
-          // Show error to user
           this.snackBar.open('Failed to create service. Please try again.', 'Dismiss', {
             duration: 3000
           });
         }
       });
     } else {
-      // Form validation failed
       this.markFormGroupTouched(this.createForm);
       this.snackBar.open('Please fill in all required fields correctly', 'Dismiss', {
         duration: 3000
@@ -193,7 +176,6 @@ export class CreateOfferingsComponent implements OnInit {
   }  
   
     
-    // Helper method to mark all controls as touched to show validation errors
     private markFormGroupTouched(formGroup: FormGroup) {
       Object.values(formGroup.controls).forEach(control => {
         control.markAsTouched();
