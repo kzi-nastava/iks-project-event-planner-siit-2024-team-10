@@ -13,7 +13,7 @@
     <div class="header-info">
       <div class="header-title">
         <h1 class="title">{{ event?.name }}</h1>
-        <button mat-button (click)="toggleFavourite()">
+        <button mat-button (click)="toggleFavourite()" *ngIf="loggedInUserId!=null">
           <mat-icon>{{ isFavourite ? 'favorite' : 'favorite_border' }}</mat-icon>
         </button>
       </div>

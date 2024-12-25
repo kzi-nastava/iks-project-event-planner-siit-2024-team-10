@@ -8,6 +8,7 @@ import {AccountService} from '../../account/account.service';
 import {CreateEventRatingDTO} from '../model/create-event-rating-dto.model';
 import {CreatedEventRatingDTO} from '../model/created-event-rating-dto.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthService} from '../../infrastructure/auth/auth.service';
 
 @Component({
   selector: 'app-event-details',
@@ -19,12 +20,14 @@ export class EventDetailsComponent implements OnInit {
   agenda:AgendaItem[];
   userRating:number;
   isFavourite:boolean=false;
+  loggedInUserId:number;
   snackBar:MatSnackBar = inject(MatSnackBar)
 
   constructor(
     private route: ActivatedRoute,
     private eventService:EventService,
-    private accountService: AccountService) {
+    private accountService: AccountService,
+    private authService:AuthService) {
   }
 
   getStarArray(rating: number): number[] {
@@ -71,6 +74,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loggedInUserId=this.authService.getUserId();
     this.route.params.subscribe((params) => {
       const id = +params['id'];
       this.eventService.getEvent(id).subscribe({
