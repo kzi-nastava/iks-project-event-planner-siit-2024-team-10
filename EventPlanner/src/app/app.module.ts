@@ -36,6 +36,7 @@ import { CategoryService } from './offering/category-service/category.service';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {Interceptor} from './infrastructure/auth/interceptor';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
     CreateCategoryDialogComponent,
     CategoryDialogComponent,
     OfferingCategoryComponent,
-    PricelistComponent
+    PricelistComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
