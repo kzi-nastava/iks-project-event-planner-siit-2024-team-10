@@ -14,5 +14,4 @@ export interface Event{
     date: Date;
     location: Location;
     averageRating: number;
-    agenda?:AgendaItem[];
 }

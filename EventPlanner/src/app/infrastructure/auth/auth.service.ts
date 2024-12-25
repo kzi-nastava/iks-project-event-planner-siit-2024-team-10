@@ -67,4 +67,20 @@ export class AuthService {
     const helper = new JwtHelperService();
     return helper.decodeToken(accessToken).sub;
   }
+
+  getAccountId() : number{
+    const accessToken: any = localStorage.getItem('user');
+    if(accessToken==null)
+      return null;
+    const helper = new JwtHelperService();
+    return helper.decodeToken(accessToken).account_id;
+  }
+
+  getUserId() : number{
+    const accessToken: any = localStorage.getItem('user');
+    if(accessToken==null)
+      return null;
+    const helper = new JwtHelperService();
+    return helper.decodeToken(accessToken).user_id;
+  }
 }
