@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { Event } from './model/event.model';
 import {CreateEventTypeDTO} from './model/create-event-type-dto.model';
 import {EventType} from './model/event-type.model';

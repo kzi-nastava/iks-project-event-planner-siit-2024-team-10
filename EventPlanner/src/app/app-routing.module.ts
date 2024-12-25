@@ -12,6 +12,7 @@ import { NotificationsPageComponent } from './notification/notifications-page/no
 import { OfferingCategoryComponent } from './offering/offering-category/offering-category.component';
 import {CreateEventComponent} from './event/create-event/create-event.component';
 import {EventTypesComponent} from './event/event-types/event-types.component';
+import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {AuthGuard} from './infrastructure/auth/auth.guard';
 import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
 const routes: Routes = [
@@ -27,6 +28,10 @@ const routes: Routes = [
   {path:'register',component: RegisterComponent},
   {path:'event/:id',component:EventDetailsComponent},
   {path:'notification-panel',component: NotificationsPageComponent},
+  {path:'offering-categories',component: OfferingCategoryComponent},
+  {path:'event-types',component:EventTypesComponent},
+  {path:'create-event',component:CreateEventComponent},
+  {path:'pricelist',component:PricelistComponent},
   {path:'offering-categories',component: OfferingCategoryComponent, canActivate: [AuthGuard],
     data: {role: ['ADMIN']}},
   {path:'event-types',component:EventTypesComponent, canActivate: [AuthGuard],

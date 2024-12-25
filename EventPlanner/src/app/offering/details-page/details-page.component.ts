@@ -5,15 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
-import { OfferingService } from '../offering-service/offering.service';
 import { CommentService, Comment } from '../comment-service/comment.service';
-import { Offering } from '../model/offering.model';
 import { switchMap } from 'rxjs/operators';
 import { Service } from '../model/service.model';
 import { Product } from '../model/product.model';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ReservationDialogComponent } from '../reservation-dialog/reservation-dialog.component';
+import { ServiceService } from '../service-service/service.service';
 
 @Component({
   selector: 'app-details-page',
@@ -44,7 +43,7 @@ export class DetailsPageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private offeringService: OfferingService,
+    private serviceService: ServiceService,
     private commentService: CommentService,
     private router: Router,
     private dialog: MatDialog
@@ -54,13 +53,13 @@ export class DetailsPageComponent implements OnInit {
     this.route.params.pipe(
       switchMap(params => {
         const id = +params['id'];
-        return this.offeringService.getOfferingById(id);
+        console.log(id)
+        return this.serviceService.getById(id);
       })
     ).subscribe(offering => {
       this.offering = offering;
       console.log('Offering:', this.offering); 
       if (this.offering) {
-        // da li je niz slika
         this.images = Array.isArray(this.offering.picture) ? this.offering.picture : [this.offering.picture];
         this.loadComments();
       }
@@ -148,9 +147,23 @@ navigateToEdit(): void {
     this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
     }
   }
-  deleteOffering():void{
-    console.log('Pop up for deleting...');
+  deleteOffering(): void {
+    if (this.offering) {
+      const confirmation = confirm('Are you sure you want to delete this offering?');
+      if (confirmation) {
+        this.serviceService.delete(this.offering.id).subscribe(
+          () => {
+            console.log('Offering deleted successfully');
+            this.router.navigate(['/manage-offerings']); 
+          },
+          error => {
+            console.error('Error deleting offering:', error);
+          }
+        );
+      }
+    }
   }
+  
   viewProviderProfile() {
     console.log('Viewing provider profile...');
   }

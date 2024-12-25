@@ -1,0 +1,97 @@
+
+<div class="pricelist-wrapper">
+    <div class="pricelist-header">
+        <h1>Pricelist</h1>
+    </div>
+
+    <div class="pricelist-container">
+        <div class="pricelist-grid">
+            <div 
+                *ngFor="let item of pricelistItems; let i = index" 
+                class="pricelist-item"
+                [class.discounted]="item.discount && item.discount > 0"
+                [class.editing]="isEditing(item.offeringId)"
+            >
+                <!-- Serial Number -->
+                <div class="serial-number">
+                    <span>{{ i + 1 < 10 ? '0' + (i + 1) : i + 1 }}</span>
+                </div>
+
+                <!-- View Mode -->
+                <ng-container *ngIf="!isEditing(item.offeringId)">
+                    <div class="item-content">
+                        <h3 class="item-name">{{ item.name }}</h3>
+                        
+                        <div class="price-details">
+                            <div class="original-price" *ngIf="item.discount">
+                                <span class="price-value original">{{ item.price | currency }}</span>
+                                <span class="discount-badge">-{{ item.discount }}%</span>
+                            </div>
+                            
+                            <div class="discounted-price">
+                                <span class="price-value highlight">
+                                    {{ item.priceWithDiscount | currency }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <button class="edit-trigger" (click)="startEditing(item)">
+                            <i class="material-icons">edit</i>
+                        </button>
+                    </div>
+                </ng-container>
+
+                <!-- Edit Mode -->
+                <ng-container *ngIf="isEditing(item.offeringId)">
+                    <div class="edit-form">
+                        <!-- Display service name as plain text -->
+                        <div class="item-name">
+                            <strong>{{ editedItem.name }}</strong>
+                        </div>
+                        
+                        <div class="price-edit-row">
+                            <div class="price-input-group">
+                                <label>Price</label>
+                                <input 
+                                    type="number" 
+                                    [(ngModel)]="editedItem.price" 
+                                    (ngModelChange)="calculateDiscountedPrice()"
+                                    class="edit-input"
+                                >
+                            </div>
+                            
+                            <div class="discount-input-group">
+                                <label>Discount %</label>
+                                <input 
+                                    type="number" 
+                                    [(ngModel)]="editedItem.discount" 
+                                    (ngModelChange)="calculateDiscountedPrice()"
+                                    class="edit-input"
+                                    max="100"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="edit-preview">
+                            <span>Discounted Price:</span>
+                            <strong>{{ editedItem.priceWithDiscount | currency }}</strong>
+                        </div>
+
+                        <div class="edit-actions">
+                            <button class="save-btn" (click)="saveChanges()">
+                                Save Changes
+                            </button>
+                            <button class="cancel-btn" (click)="cancelEditing()">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

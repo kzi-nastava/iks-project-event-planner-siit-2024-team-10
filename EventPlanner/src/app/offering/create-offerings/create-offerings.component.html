@@ -1,6 +1,6 @@
 <div style="background-color: #f6f6f6;">
 <div class="offering-container">
-  <form [formGroup]="offeringForm" (ngSubmit)="onSubmit()" class="elegant-form">
+  <form [formGroup]="createForm" (ngSubmit)="onSubmit()" class="elegant-form">
     <div class="form-header">
       <h1>Create Your Service</h1>
       <p>Craft a compelling service that stands out in the market</p>
@@ -53,14 +53,14 @@
 
     <div class="form-section photo-upload">
       <div class="upload-container">
-        <input type="file" #fileInput multiple (change)="onPhotoUpload($event)" accept="image/*" class="file-input">
+        <input type="file" #fileInput multiple (change)="onPhotoUpload()" accept="image/*" class="file-input">
         <div class="upload-area" (click)="fileInput.click()">
           <mat-icon class="upload-icon">cloud_upload</mat-icon>
           <p>Drag & Drop or Click to Upload Photos</p>
           <small>Maximum 5 images, PNG or JPEG</small>
         </div>
       </div>
-    </div>
+    </div>      
 
     <div class="form-section event-types">
       <h3 class="small-subtitle">Select Applicable Event Types</h3>
@@ -79,7 +79,7 @@
         <mat-radio-button value="flexible">Flexible Time</mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="offeringForm.get('timeType')?.value === 'fixed'" class="fixed-duration">
+      <div *ngIf="createForm.get('timeType')?.value === 'fixed'" class="fixed-duration">
         <mat-form-field appearance="outline">
           <mat-label>Select Duration</mat-label>
           <mat-select formControlName="fixedTime">
@@ -90,7 +90,7 @@
         </mat-form-field>
       </div>
 
-      <div *ngIf="offeringForm.get('timeType')?.value === 'flexible'" class="price-section">
+      <div *ngIf="createForm.get('timeType')?.value === 'flexible'" class="price-section">
         <mat-form-field style="padding-right: 20px;" appearance="outline">
           <mat-label>Minimum Hours</mat-label>
           <input matInput type="number" formControlName="minTime">
@@ -112,7 +112,7 @@
 
       <mat-form-field style="padding-left: 10px;" appearance="outline">
         <mat-label>Cancellation deadline</mat-label>
-        <input matInput type="number" formControlName="cancelldationDeadline" placeholder="0">
+        <input matInput type="number" formControlName="cancellationDeadline" placeholder="0">
       </mat-form-field>
       </div>
     </div>
@@ -126,7 +126,7 @@
     </div>
 
     <div class="form-section submit-section">
-      <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="!offeringForm.valid">
+      <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="!createForm.valid">
         Create Service
       </button>
     </div>

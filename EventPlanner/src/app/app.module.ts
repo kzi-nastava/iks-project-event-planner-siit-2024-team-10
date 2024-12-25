@@ -33,6 +33,7 @@ import { OfferingCategoryComponent } from './offering/offering-category/offering
 
 // Services
 import { CategoryService } from './offering/category-service/category.service';
+import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {Interceptor} from './infrastructure/auth/interceptor';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
@@ -41,7 +42,8 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
     AppComponent,
     CreateCategoryDialogComponent,
     CategoryDialogComponent,
-    OfferingCategoryComponent
+    OfferingCategoryComponent,
+    PricelistComponent
   ],
   imports: [
     BrowserModule,

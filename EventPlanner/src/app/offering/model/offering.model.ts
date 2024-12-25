@@ -17,4 +17,5 @@ export interface Offering {
     isAvailable?: boolean;
     isVisible?: boolean;
     isProduct: boolean;
+    deleted:boolean;
 }
