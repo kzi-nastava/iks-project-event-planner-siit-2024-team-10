@@ -15,6 +15,7 @@ import {EventTypesComponent} from './event/event-types/event-types.component';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {AuthGuard} from './infrastructure/auth/auth.guard';
 import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
+import { ChatComponent } from './chat/chat.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
@@ -39,6 +40,7 @@ const routes: Routes = [
   {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
     data: {role: ['ORGANIZER']}},
   {path:'activate', component: ActivateComponent},
+  { path: 'chat', component: ChatComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];

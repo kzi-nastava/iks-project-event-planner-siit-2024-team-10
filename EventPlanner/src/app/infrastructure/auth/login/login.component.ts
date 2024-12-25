@@ -29,12 +29,14 @@ export class LoginComponent {
         next: (response: LoginResponseDTO) => {
           localStorage.setItem('user', response.accessToken);
           this.authService.setUser()
+          console.log(this.authService)
           this.router.navigate(['home'])
         },
         error:(err)=>{
           this.invalidCredentials = true;
         }
       })
+      console.log(this.authService.getUserId)
     }
 
   }
