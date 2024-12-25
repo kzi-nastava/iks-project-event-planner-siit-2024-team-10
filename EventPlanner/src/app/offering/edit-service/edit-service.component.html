@@ -45,20 +45,7 @@
               <small>Maximum 5 images, PNG or JPEG</small>
             </div>
           </div>
-        </div>
-    
-        <div class="form-section event-types">
-          <h3 class="small-subtitle">Select Applicable Event Types</h3>
-          <div class="selected-labels">
-            <span 
-              *ngFor="let type of eventTypes" 
-              [ngClass]="{'selected-label': isSelected(type)}" 
-              (click)="toggleSelection(type)"
-              class="clickable-label">
-              {{type}}
-            </span>
-          </div>
-        </div>        
+        </div>      
     
         <div class="form-section time-selection">
           <h3 class="small-subtitle">Service Duration</h3>
