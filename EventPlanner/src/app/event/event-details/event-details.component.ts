@@ -45,6 +45,7 @@ export class EventDetailsComponent implements OnInit {
           this.isFavourite = !this.isFavourite;
         },
         error: (err) => {
+          this.snackBar.open('Error adding event to favourites','OK',{duration:5000});
           console.error('Error adding event to favourites:', err);
         }
       });
@@ -55,6 +56,7 @@ export class EventDetailsComponent implements OnInit {
           this.isFavourite = !this.isFavourite;
         },
         error: (err) => {
+          this.snackBar.open('Error removing event from favourites','OK',{duration:5000});
           console.error('Error removing event from favourites:', err);
         }
       });
@@ -68,6 +70,7 @@ export class EventDetailsComponent implements OnInit {
         this.snackBar.open('Event rated successfully','OK',{duration:5000});
       },
       error: (err) => {
+        this.snackBar.open('Error rating event','OK',{duration:5000});
         console.error('Error rating event:', err);
       }
     });
@@ -83,6 +86,7 @@ export class EventDetailsComponent implements OnInit {
           this.event=event;
         },
         error: (err) => {
+          this.snackBar.open('Error fetching event','OK',{duration:5000});
           console.error('Error fetching event:', err);
         }
       });
@@ -91,6 +95,7 @@ export class EventDetailsComponent implements OnInit {
           this.agenda=agenda;
         },
         error: (err) => {
+          this.snackBar.open('Error fetching event agenda','OK',{duration:5000});
           console.error('Error fetching event agenda:', err);
         }
       });
@@ -99,6 +104,7 @@ export class EventDetailsComponent implements OnInit {
           this.isFavourite = isFavourite;
         },
         error: (err) => {
+          this.snackBar.open('Error fetching favourite event','OK',{duration:5000});
           console.error('Error fetching favourite event:', err);
         }
       });

@@ -16,7 +16,7 @@ export class AccountService {
   getFavouriteEvents(): Observable<Event[]> {
     let accountId:number=this.authService.getAccountId();
     if(accountId == null)
-      return null;
+      return of([]);
     return this.httpClient.get<Event[]>(environment.apiHost+'/accounts/'+accountId+'/favourite-events');
   }
 
