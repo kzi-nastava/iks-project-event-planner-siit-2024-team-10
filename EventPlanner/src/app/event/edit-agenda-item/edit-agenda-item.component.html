@@ -1,0 +1,51 @@
+<h2 mat-dialog-title class="dialog-title">
+  Add new agenda item
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="editForm">
+    <div class="form-container">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="3"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Start time</mat-label>
+        <input type="time" matInput formControlName="startTime" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>End time</mat-label>
+        <input type="time" matInput formControlName="endTime" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Location</mat-label>
+        <input matInput formControlName="location" required>
+      </mat-form-field>
+
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSave()"
+    [disabled]="editForm.invalid">
+    Save
+  </button>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="onCancel()">
+    Cancel
+  </button>
+</mat-dialog-actions>

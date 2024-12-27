@@ -12,6 +12,9 @@ import {AuthService} from '../../infrastructure/auth/auth.service';
 import {CreateEventTypeComponent} from '../create-event-type/create-event-type.component';
 import {CreateAgendaItemComponent} from '../create-agenda-item/create-agenda-item.component';
 import {MatDialog} from '@angular/material/dialog';
+import {EventType} from '../model/event-type.model';
+import {EditEventTypeComponent} from '../edit-event-type/edit-event-type.component';
+import {EditAgendaItemComponent} from '../edit-agenda-item/edit-agenda-item.component';
 
 @Component({
   selector: 'app-event-details',
@@ -135,6 +138,25 @@ export class EventDetailsComponent implements OnInit {
             this.snackBar.open('Agenda item created successfully','OK',{duration:3000});
           },
           error: (err) => console.error('Error adding event type:', err),
+        });
+      }
+    });
+  }
+
+  openEditAgendaItemDialog(element: AgendaItem): void {
+    const dialogRef = this.dialog.open(EditAgendaItemComponent, {
+      width: '400px',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.eventService.updateAgendaItem(this.event.id,element.id,result).subscribe({
+          next: (response) => {
+            this.refreshAgenda();
+            this.snackBar.open('Agenda item updated successfully','OK',{duration:3000});
+          },
+          error: (err) => console.error('Error updating agenda item:', err),
         });
       }
     });

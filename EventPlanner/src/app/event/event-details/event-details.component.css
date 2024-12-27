@@ -282,3 +282,8 @@ textarea.input-field {
   display: flex;
   justify-content: space-between;
 }
+
+.agenda-item-body{
+  display: flex;
+  justify-content: space-between;
+}
