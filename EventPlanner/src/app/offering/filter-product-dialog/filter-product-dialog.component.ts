@@ -66,7 +66,11 @@ export class FilterProductDialogComponent implements OnInit {
     const { startPrice, endPrice } = filters.priceRange;
 
     filters.startPrice = startPrice;
-    filters.endPrice = endPrice;
+    if (endPrice === 0){
+      filters.endPrice = null;
+    } else {
+      filters.endPrice = endPrice;
+    }
   
     delete filters.priceRange;
 
