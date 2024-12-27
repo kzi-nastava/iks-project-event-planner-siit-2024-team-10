@@ -33,6 +33,7 @@ import { CreateEventComponent } from './create-event/create-event.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {MatCheckbox} from '@angular/material/checkbox';
+import { CreateAgendaItemComponent } from './create-agenda-item/create-agenda-item.component';
 
 
 
@@ -45,6 +46,7 @@ import {MatCheckbox} from '@angular/material/checkbox';
     EventTypesComponent,
     CreateEventTypeComponent,
     EditEventTypeComponent,
+    CreateAgendaItemComponent,
   ],
   imports: [
     CommonModule,

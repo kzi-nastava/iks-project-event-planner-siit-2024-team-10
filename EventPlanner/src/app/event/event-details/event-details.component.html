@@ -34,7 +34,12 @@
 
     <!-- Specifications for Services -->
     <div class="agenda-section">
-      <h2>Agenda</h2>
+      <div class="agenda-header">
+        <h2>Agenda</h2>
+        <button mat-button (click)="openAddAgendaItemDialog()" *ngIf="owner">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
       <div class="agenda-grid" >
         <div class="agenda-item"*ngFor="let agendaItem of agenda">
           <div>

@@ -9,6 +9,9 @@ import {CreateEventRatingDTO} from '../model/create-event-rating-dto.model';
 import {CreatedEventRatingDTO} from '../model/created-event-rating-dto.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../infrastructure/auth/auth.service';
+import {CreateEventTypeComponent} from '../create-event-type/create-event-type.component';
+import {CreateAgendaItemComponent} from '../create-agenda-item/create-agenda-item.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-event-details',
@@ -21,13 +24,15 @@ export class EventDetailsComponent implements OnInit {
   userRating:number;
   isFavourite:boolean=false;
   loggedInUserId:number;
+  owner:boolean=false;
   snackBar:MatSnackBar = inject(MatSnackBar)
 
   constructor(
     private route: ActivatedRoute,
     private eventService:EventService,
     private accountService: AccountService,
-    private authService:AuthService) {
+    private authService:AuthService,
+    private dialog: MatDialog) {
   }
 
   getStarArray(rating: number): number[] {
@@ -84,19 +89,13 @@ export class EventDetailsComponent implements OnInit {
         next: (event: Event) => {
           console.log(event);
           this.event=event;
+          console.log(this.loggedInUserId);
+          this.owner=event.organizer.id==this.loggedInUserId;
+          this.refreshAgenda();
         },
         error: (err) => {
           this.snackBar.open('Error fetching event','OK',{duration:5000});
           console.error('Error fetching event:', err);
-        }
-      });
-      this.eventService.getEventAgenda(id).subscribe({
-        next: (agenda: AgendaItem[]) => {
-          this.agenda=agenda;
-        },
-        error: (err) => {
-          this.snackBar.open('Error fetching event agenda','OK',{duration:5000});
-          console.error('Error fetching event agenda:', err);
         }
       });
       this.accountService.isInFavouriteEvents(id).subscribe({
@@ -109,5 +108,35 @@ export class EventDetailsComponent implements OnInit {
         }
       });
     })
+  }
+
+  refreshAgenda(){
+    this.eventService.getEventAgenda(this.event.id).subscribe({
+      next: (agenda: AgendaItem[]) => {
+        this.agenda=agenda;
+      },
+      error: (err) => {
+        this.snackBar.open('Error fetching event agenda','OK',{duration:5000});
+        console.error('Error fetching event agenda:', err);
+      }
+    });
+  }
+
+  openAddAgendaItemDialog() {
+    const dialogRef = this.dialog.open(CreateAgendaItemComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.eventService.addAgendaItem(this.event.id,result).subscribe({
+          next: (response) => {
+            this.refreshAgenda();
+            this.snackBar.open('Agenda item created successfully','OK',{duration:3000});
+          },
+          error: (err) => console.error('Error adding event type:', err),
+        });
+      }
+    });
   }
 }
