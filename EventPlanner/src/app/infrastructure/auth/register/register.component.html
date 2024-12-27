@@ -6,15 +6,21 @@
       </div>
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="email" name="email">
+        <input matInput formControlName="email" name="email" [readonly]="roleUpgrade">
+        <mat-error *ngIf="registerForm.controls.email.errors!=null && registerForm.controls.email.errors['conflict']">
+          Account with given email already exists
+        </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" *ngIf="!roleUpgrade">
         <mat-label>Password</mat-label>
         <input type="password" matInput formControlName="password" name="password">
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" *ngIf="!roleUpgrade">
         <mat-label>Password again</mat-label>
         <input type="password" matInput formControlName="confirmPassword" name="confirmPassword">
+        <mat-error *ngIf="registerForm.errors!=null && registerForm.errors['mismatch']">
+          Passwords don't match
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>First name</mat-label>
