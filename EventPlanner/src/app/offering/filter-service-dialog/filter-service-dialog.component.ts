@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 import { map, Observable } from 'rxjs';
 import { Category } from '../model/category.model';
 import { CategoryService } from '../category-service/category.service';
+import { OfferingService } from '../offering-service/offering.service';
 
 @Component({
   selector: 'app-filter-service-dialog',
@@ -15,11 +16,13 @@ export class FilterServiceDialogComponent {
   filterForm: FormGroup;
   categories: Observable<Category[]>;
   selectedServiceCategory: string = 'Any';
+  maxPrice: number = 100000;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<FilterServiceDialogComponent>,
     private categoryService: CategoryService,
+    private offeringService: OfferingService
   ) {
     this.categories = this.categoryService.getAll().pipe(
       map(categories => [{ id: -1, name: 'Any' }, ...categories])
@@ -38,6 +41,19 @@ export class FilterServiceDialogComponent {
       serviceDuration:[0],
     });
   }
+
+  ngOnInit(): void {
+    this.offeringService.getHighestPrice(true).subscribe({
+      next: (price) => {
+        this.maxPrice = price || 10000;
+        this.filterForm.get('priceRange.endPrice')?.setValue(this.maxPrice);
+      },
+      error: (err) => {
+        console.error('Failed to fetch max price:', err);
+      },
+    });
+  }
+
   get priceRangeGroup(): FormGroup {
     return this.filterForm.get('priceRange') as FormGroup;
   }
@@ -67,8 +83,6 @@ export class FilterServiceDialogComponent {
     }
     delete filters.checkAviailability;
     filters.isServiceFilter = true;
-
-    console.log(filters);
   
     this.dialogRef.close(filters);
   }

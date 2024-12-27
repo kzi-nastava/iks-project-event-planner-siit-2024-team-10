@@ -351,6 +351,11 @@ export class OfferingService {
   
       return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost+"/offerings", { params });
     }
+    getHighestPrice(
+      isService: boolean
+    ): Observable<number> {
+      return this.httpClient.get<number>(environment.apiHost+"/offerings/highest-prices", { params: new HttpParams().set('isService', isService.toString()) });
+    }
 
   getServices(): Observable<Service[]> {
     return of(this.serviceList);

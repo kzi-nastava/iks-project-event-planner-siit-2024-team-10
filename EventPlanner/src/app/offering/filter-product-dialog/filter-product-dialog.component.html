@@ -25,14 +25,14 @@
       <mat-label class="rating-label">Price Range (€)</mat-label>
       <div class="rating-section">
         <p>
-          {{ filterForm.get('priceRange.startPrice')?.value || 0 }} -  {{ filterForm.get('priceRange.endPrice')?.value || 1000 }}€
+          {{ filterForm.get('priceRange.startPrice')?.value || 0 }} -  {{ filterForm.get('priceRange.endPrice')?.value || maxPrice }}€
         </p>
-        <mat-slider min="0" max="100000" step="100" discrete [displayWith]="formatLabel" [formGroup]="priceRangeGroup">
+        <mat-slider min="0" [max]="maxPrice" step="100" discrete [displayWith]="formatLabel" [formGroup]="priceRangeGroup">
           <input matSliderStartThumb formControlName="startPrice" aria-label="Minimum Price" />
           <input matSliderEndThumb formControlName="endPrice" aria-label="Maximum Price" />
         </mat-slider>
       </div>
-  
+
       <!-- Minimum Discount -->
       <mat-label class="rating-label">Minimum Discount</mat-label>
       <div class="rating-section">
