@@ -11,6 +11,7 @@ import {AgendaItem} from './model/agenda-item.model';
 import {CreateEventRatingDTO} from './model/create-event-rating-dto.model';
 import {CreatedEventRatingDTO} from './model/created-event-rating-dto.model';
 import {CreateAgendaItemDTO} from './model/create-agenda-item-dto.model';
+import {UpdateAgendaItemDTO} from './model/update-agenda-item-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,10 @@ export class EventService {
 
   addAgendaItem(eventId:number,agendaItem:CreateAgendaItemDTO) : Observable<AgendaItem> {
     return this.httpClient.post<AgendaItem>(environment.apiHost + "/events/"+eventId+"/agenda", agendaItem);
+  }
+
+  updateAgendaItem(eventId:number,agendaItemId:number,agendaItem:UpdateAgendaItemDTO) : Observable<AgendaItem> {
+    return this.httpClient.put<AgendaItem>(environment.apiHost + "/events/"+eventId+"/agenda/"+agendaItemId, agendaItem);
   }
 
   getPaginatedEvents(
