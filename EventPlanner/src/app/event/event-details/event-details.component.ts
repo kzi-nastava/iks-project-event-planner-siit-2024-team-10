@@ -116,7 +116,7 @@ export class EventDetailsComponent implements OnInit {
   refreshAgenda(){
     this.eventService.getEventAgenda(this.event.id).subscribe({
       next: (agenda: AgendaItem[]) => {
-        this.agenda=agenda;
+        this.agenda=agenda.filter(item=>!item.isDeleted);
       },
       error: (err) => {
         this.snackBar.open('Error fetching event agenda','OK',{duration:5000});
@@ -137,7 +137,7 @@ export class EventDetailsComponent implements OnInit {
             this.refreshAgenda();
             this.snackBar.open('Agenda item created successfully','OK',{duration:3000});
           },
-          error: (err) => console.error('Error adding event type:', err),
+          error: (err) => console.error('Error adding agenda item:', err),
         });
       }
     });
@@ -159,6 +159,16 @@ export class EventDetailsComponent implements OnInit {
           error: (err) => console.error('Error updating agenda item:', err),
         });
       }
+    });
+  }
+
+  deleteAgendaItem(agendaItemId:number){
+    this.eventService.deleteAgendaItem(this.event.id,agendaItemId).subscribe({
+      next: (response) => {
+        this.refreshAgenda();
+        this.snackBar.open('Agenda item deleted successfully','OK',{duration:3000});
+      },
+      error: (err) => console.error('Error deleting agenda item:', err),
     });
   }
 }

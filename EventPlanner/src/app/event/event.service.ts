@@ -54,6 +54,10 @@ export class EventService {
     return this.httpClient.put<AgendaItem>(environment.apiHost + "/events/"+eventId+"/agenda/"+agendaItemId, agendaItem);
   }
 
+  deleteAgendaItem(eventId:number, agendaItemId:number) : Observable<void> {
+    return this.httpClient.delete<void>(environment.apiHost + "/events/"+eventId+"/agenda/"+agendaItemId);
+  }
+
   getPaginatedEvents(
     page: number,
     pageSize: number,

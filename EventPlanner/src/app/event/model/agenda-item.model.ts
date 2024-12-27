@@ -5,4 +5,5 @@ export interface AgendaItem {
   startTime:string;
   endTime:string;
   location:string;
+  isDeleted:boolean;
 }

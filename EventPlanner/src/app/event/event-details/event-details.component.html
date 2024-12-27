@@ -69,8 +69,8 @@
               <button mat-button (click)="openEditAgendaItemDialog(agendaItem)" *ngIf="owner">
                 <mat-icon>create</mat-icon>
               </button>
-              <button mat-button (click)="openAddAgendaItemDialog()" *ngIf="owner">
-                <mat-icon>add</mat-icon>
+              <button mat-button (click)="deleteAgendaItem(agendaItem.id)" *ngIf="owner">
+                <mat-icon>delete</mat-icon>
               </button>
             </div>
           </div>
