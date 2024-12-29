@@ -13,13 +13,13 @@ export class PricelistService {
   constructor(private httpClient: HttpClient) { }
   getAll(): Observable<PricelistItem[]> {
     console.log("got into service")
-    return this.httpClient.get<PricelistItem[]>(environment.apiHost+'/pricelist');
+    return this.httpClient.get<PricelistItem[]>(environment.apiHost+'/pricelists');
   }
   edit(item:EditPricelistItemDTO) : Observable<PricelistItem> {
-    return this.httpClient.put<PricelistItem>(environment.apiHost + "/pricelist/"+item.offeringId, item);
+    return this.httpClient.put<PricelistItem>(environment.apiHost + "/pricelists/"+item.offeringId, item);
   }
   generateReport(): Observable<Blob> {
-    return this.httpClient.get(environment.apiHost + '/report/pricelist', {
+    return this.httpClient.get(environment.apiHost + '/reports/pricelists', {
       responseType: 'blob'
     });
   }
