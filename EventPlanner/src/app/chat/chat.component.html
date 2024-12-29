@@ -1,4 +1,28 @@
-<div>
-  <p>Logged In User ID: {{ loggedInUserId }}</p>
-  <p>Event Organizer ID: {{ organizerId }}</p>
-</div>
+<div class="chat-container">
+    <div class="chat-header">
+      <h2>Chat with {{ organizerId === loggedInUserId ? 'Organizer' : 'Participant' }}</h2>
+    </div>
+    
+    <div class="messages-container" #scrollContainer>
+      <div *ngFor="let message of messages" 
+           [ngClass]="{'message': true, 'sent': message.sender === loggedInUserId, 'received': message.sender !== loggedInUserId}">
+        <div class="message-content">
+          {{ message.content }}
+        </div>
+        <div class="message-timestamp">
+          {{ message.timestamp | date:'short' }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="input-container">
+      <input type="text" 
+             [(ngModel)]="newMessage" 
+             (keyup.enter)="sendMessage()"
+             placeholder="Type a message..."
+             class="message-input">
+      <button (click)="sendMessage()" class="send-button">
+        Send
+      </button>
+    </div>
+  </div>
