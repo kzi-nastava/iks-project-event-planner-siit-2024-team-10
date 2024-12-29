@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PricelistItem } from '../model/pricelist-item.model';
 import { PricelistService } from '../pricelist-service/pricelist.service';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';  // Import MatSnackBar
 
 @Component({
   selector: 'app-pricelist',
@@ -13,16 +14,17 @@ export class PricelistComponent implements OnInit {
   editingItemId: number | null = null;
   editedItem: Partial<PricelistItem> = {};
 
-  constructor(private pricelistService: PricelistService, private http: HttpClient) {}
+  constructor(private pricelistService: PricelistService, private http: HttpClient, private snackBar: MatSnackBar) {}  // Inject MatSnackBar
 
   ngOnInit() {
     this.pricelistService.getAll().subscribe({
       next: (data) => {
         this.pricelistItems = data;
-        this.sortItems(); 
+        this.sortItems();
       },
       error: (err) => {
         console.error('Error fetching pricelist:', err);
+        this.openSnackbar('Error fetching pricelist');
       }
     });
   }
@@ -36,6 +38,7 @@ export class PricelistComponent implements OnInit {
     if (this.editedItem.price && this.editedItem.discount !== undefined) {
       if (this.editedItem.discount < 0 || this.editedItem.discount > 100) {
         console.error('Discount must be between 0 and 100');
+        this.openSnackbar('Discount must be between 0 and 100');
         return;
       }
       const discountAmount = this.editedItem.price * (this.editedItem.discount / 100);
@@ -57,15 +60,21 @@ export class PricelistComponent implements OnInit {
 
           this.pricelistService.getAll().subscribe({
             next: (data) => {
-              this.pricelistItems = data; 
-              this.sortItems(); 
+              this.pricelistItems = data;
+              this.sortItems();
             },
-            error: (err) => console.error('Error fetching pricelist after save:', err)
+            error: (err) => {
+              console.error('Error fetching pricelist after save:', err);
+              this.openSnackbar('Error fetching pricelist after save');
+            }
           });
 
           this.cancelEditing();
         },
-        error: (err) => console.error('Error saving changes:', err)
+        error: (err) => {
+          console.error('Error saving changes:', err);
+          this.openSnackbar('Error saving changes');
+        }
       });
     }
   }
@@ -83,14 +92,14 @@ export class PricelistComponent implements OnInit {
     const index = this.pricelistItems.findIndex(item => item.offeringId === updatedItem.offeringId);
     if (index !== -1) {
       this.pricelistItems[index] = updatedItem;
-      this.sortItems(); 
+      this.sortItems();
     }
   }
 
   private sortItems() {
     this.pricelistItems.sort((a, b) => {
       if (a.name && b.name) {
-        return a.name.localeCompare(b.name); 
+        return a.name.localeCompare(b.name);
       }
       return 0;
     });
@@ -104,7 +113,14 @@ export class PricelistComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error generating report:', err);
+        this.openSnackbar('Error generating report');
       }
+    });
+  }
+
+  private openSnackbar(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,  
     });
   }
 }
