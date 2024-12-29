@@ -1,7 +1,5 @@
 export interface EditServiceDTO {
     id: number;
-    pending: boolean;
-    provider: number;
     name: string;
     description: string;
     specification: string;
@@ -16,4 +14,3 @@ export interface EditServiceDTO {
     reservationPeriod: number;
     autoConfirm: boolean;
   }
-  

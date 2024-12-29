@@ -117,9 +117,7 @@ export class CreateOfferingsComponent implements OnInit {
     return this.selectedEventTypes.has(type);
   }
 
-  onSubmit(): void {
-    console.log('Form Value:', this.createForm.value);
-  
+  onSubmit(): void {  
     if (this.createForm.valid) {
   
       const service: CreateServiceDTO = {

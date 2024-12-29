@@ -127,6 +127,7 @@ export class DetailsPageComponent implements OnInit {
 navigateToEdit(): void {
   if (this.offering) {
     const prefilledData = {
+      id: this.offering.id,
       serviceCategory: this.offering.category || 'Default Category',
       name: this.offering.name || '',
       description: this.offering.description || '',
