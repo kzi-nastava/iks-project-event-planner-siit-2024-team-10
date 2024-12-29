@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {CreateEventTypeDTO} from '../model/create-event-type-dto.model';
 import {Category} from '../../offering/model/category.model';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -18,7 +18,8 @@ export class CreateAgendaItemComponent {
     startTime: new FormControl('', [Validators.required]),
     endTime: new FormControl('', [Validators.required]),
     location: new FormControl('', [Validators.required]),
-  });
+  },
+    { validators: TimeValidator('startTime','endTime') });
 
   constructor(
     public dialogRef: MatDialogRef<CreateAgendaItemComponent>
@@ -40,4 +41,28 @@ export class CreateAgendaItemComponent {
       this.dialogRef.close(agendaItem);
     }
   }
+}
+
+export function TimeValidator(startTimeControlName: string, endTimeControlName: string): ValidatorFn {
+  return (formGroup: AbstractControl): ValidationErrors | null => {
+    const startTimeControl = formGroup.get(startTimeControlName);
+    const endTimeControl = formGroup.get(endTimeControlName);
+
+    if (!startTimeControl || !endTimeControl) {
+      return null; // Return null if controls are missing
+    }
+
+    if (startTimeControl.errors && !endTimeControl.errors['time']) {
+      return null; // Skip if another validator has found an error
+    }
+
+    if (startTimeControl.value >= endTimeControl.value) {
+      endTimeControl.setErrors({ time: true });
+      return { time: true };
+    } else {
+      endTimeControl.setErrors(null);
+    }
+
+    return null;
+  };
 }

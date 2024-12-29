@@ -23,6 +23,7 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>End time</mat-label>
         <input type="time" matInput formControlName="endTime" required>
+        <mat-error *ngIf="editForm.errors!=null && editForm.errors['time']">End time must be after start time</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
