@@ -47,7 +47,6 @@ export class EditServiceComponent implements OnInit {
       isAvailable: [true],
       isVisible: [true]
     });
-    console.log(this.offeringForm.valid);
   }
 
   prefillForm(data: any): void {
@@ -76,7 +75,6 @@ export class EditServiceComponent implements OnInit {
     if (photosControl) {
       photosControl.setValue([...files]);
     }
-    console.log(this.offeringForm.valid);
   }
 
   onSubmit(): void {
@@ -85,17 +83,14 @@ export class EditServiceComponent implements OnInit {
         ...this.offeringForm.value,
       };
 
-      console.log(formData)
       this.serviceService.edit(formData).subscribe({
         next: (response) => {
           this.snackBar.open('Service edited successfully', 'OK', { 
             duration: 3000 
           });
           },
-        error: (error) => {
-          console.error('Error creating service:', error);
-  
-          this.snackBar.open('Failed to create service. Please try again.', 'Dismiss', {
+        error: (error) => {  
+          this.snackBar.open('Failed to edit service. Please try again.', 'Dismiss', {
             duration: 3000
           });
         }
