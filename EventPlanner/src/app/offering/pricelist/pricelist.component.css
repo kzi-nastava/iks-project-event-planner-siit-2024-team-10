@@ -276,3 +276,29 @@
     white-space: nowrap;
     overflow: hidden;
 }
+
+.generate-report-btn {
+    margin-bottom: 20px;
+    background-color: #d0cfe1;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 10px rgba(74, 74, 106, 0.2);
+}
+
+.generate-report-btn:hover {
+    background-color: #5d5d82;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(74, 74, 106, 0.3);
+}
+
+.generate-report-btn i {
+    font-size: 1.2rem;
+}
