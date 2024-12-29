@@ -5,12 +5,12 @@
     </div>
   <mat-dialog-content>
     <form [formGroup]="filterForm">
-      <!-- Product Category -->
+        <!-- Product Category -->
       <mat-form-field appearance="outline" class="form-field">
         <mat-label>Product Category</mat-label>
-        <mat-select matInput formControlName="category">
-          <mat-option matInput *ngFor="let productCategory of productCategories" [value]="productCategory">
-              {{ productCategory }}
+        <mat-select matInput formControlName="categoryId">
+          <mat-option matInput *ngFor="let category of categories | async" [value]="category.id">
+              {{ category.name }}
             </mat-option>
         </mat-select>
       </mat-form-field>
@@ -21,28 +21,18 @@
         <input matInput formControlName="location" placeholder="City">
       </mat-form-field>
   
-      <!-- Event Type -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Event Type</mat-label>
-        <mat-select matInput formControlName="type">
-          <mat-option matInput *ngFor="let eventType of eventTypes" [value]="eventType">
-              {{ eventType }}
-            </mat-option>
-        </mat-select>
-      </mat-form-field>
-  
       <!-- Price Range -->
       <mat-label class="rating-label">Price Range (€)</mat-label>
       <div class="rating-section">
         <p>
-          {{ filterForm.get('priceRange.startPrice')?.value || 0 }} -  {{ filterForm.get('priceRange.endPrice')?.value || 1000 }}€
+          {{ filterForm.get('priceRange.startPrice')?.value || 0 }} -  {{ filterForm.get('priceRange.endPrice')?.value || maxPrice }}€
         </p>
-        <mat-slider min="0" max="1000" step="10" discrete [displayWith]="formatLabel" [formGroup]="priceRangeGroup">
+        <mat-slider min="0" [max]="maxPrice" step="100" discrete [displayWith]="formatLabel" [formGroup]="priceRangeGroup">
           <input matSliderStartThumb formControlName="startPrice" aria-label="Minimum Price" />
           <input matSliderEndThumb formControlName="endPrice" aria-label="Maximum Price" />
         </mat-slider>
       </div>
-  
+
       <!-- Minimum Discount -->
       <mat-label class="rating-label">Minimum Discount</mat-label>
       <div class="rating-section">

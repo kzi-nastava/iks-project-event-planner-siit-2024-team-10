@@ -99,7 +99,7 @@
             <mat-label>Service/Product Name</mat-label>
             <input matInput [(ngModel)]="searchOfferingQuery">
           </mat-form-field>
-          <button mat-stroked-button class="search-button" (click)="searchOffering()"><mat-icon>search</mat-icon> Search</button>
+          <button mat-stroked-button class="search-button" (click)="searchOffering()" [disabled]="!selectedOfferingType"><mat-icon>search</mat-icon> Search</button>
         </div>
         <div class="sort-filter">
           <div class="sort-section">
@@ -120,11 +120,11 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <button mat-stroked-button (click)="applySorting('offering')">Sort</button>
+            <button mat-stroked-button (click)="applySorting('offering')" [disabled]="!selectedOfferingType">Sort</button>
           </div>
           <div class="filter-section">
             <button mat-stroked-button (click)="openFilterDialog()"><mat-icon>filter_list</mat-icon> Filter</button>
-            <button mat-stroked-button class="reset-button">Reset Filters</button>
+            <button mat-stroked-button class="reset-button" (click)="resetOfferingFilter()" [disabled]="!selectedOfferingType">Reset Filters</button>
           </div>
         </div>
       </div>
@@ -135,7 +135,7 @@
       <p>{{ noOfferingsMessage }}</p>
     </div>
     <div class="all-event-cards">
-      <app-offering-card *ngFor="let offering of filteredOfferings" [offering]="offering"></app-offering-card>
+      <app-offering-card *ngFor="let offering of allOfferings" [offering]="offering"></app-offering-card>
     </div>
     <p class="total-elements">Total elements: {{ offeringPageProperties.totalElements }}</p>
     <div class="pagination" *ngIf="!noOfferingsMessage">

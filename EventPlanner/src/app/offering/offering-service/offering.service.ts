@@ -53,7 +53,7 @@ export class OfferingService {
         .set('size', pageSize.toString());
   
       Object.keys(filters).forEach((key) => {
-        if (filters[key]) {
+        if (filters[key] !== null && filters[key] !== undefined && filters[key] !== '') {
           params = params.set(key, filters[key]);
         }
       });
@@ -72,6 +72,11 @@ export class OfferingService {
               return response;
             })
           );
+    }
+    getHighestPrice(
+      isService: boolean
+    ): Observable<number> {
+      return this.httpClient.get<number>(environment.apiHost+"/offerings/highest-prices", { params: new HttpParams().set('isService', isService.toString()) });
     }
 
   getServices(): Observable<Service[]> {
