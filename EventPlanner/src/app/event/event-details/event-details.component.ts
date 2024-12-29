@@ -15,6 +15,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {EventType} from '../model/event-type.model';
 import {EditEventTypeComponent} from '../edit-event-type/edit-event-type.component';
 import {EditAgendaItemComponent} from '../edit-agenda-item/edit-agenda-item.component';
+import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-event-details',
@@ -163,12 +164,21 @@ export class EventDetailsComponent implements OnInit {
   }
 
   deleteAgendaItem(agendaItemId:number){
-    this.eventService.deleteAgendaItem(this.event.id,agendaItemId).subscribe({
-      next: (response) => {
-        this.refreshAgenda();
-        this.snackBar.open('Agenda item deleted successfully','OK',{duration:3000});
-      },
-      error: (err) => console.error('Error deleting agenda item:', err),
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data:{message:"Are you sure you want to delete an agenda item?"}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.eventService.deleteAgendaItem(this.event.id,agendaItemId).subscribe({
+          next: (response) => {
+            this.refreshAgenda();
+            this.snackBar.open('Agenda item deleted successfully','OK',{duration:3000});
+          },
+          error: (err) => console.error('Error deleting agenda item:', err),
+        });
+      }
     });
   }
 }
