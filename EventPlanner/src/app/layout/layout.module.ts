@@ -24,6 +24,7 @@ import { AdminNavBarMenuComponent } from './admin-nav-bar-menu/admin-nav-bar-men
 import { ProviderNavBarMenuComponent } from './provider-nav-bar-menu/provider-nav-bar-menu.component';
 import { OrganizerNavBarMenuComponent } from './organizer-nav-bar-menu/organizer-nav-bar-menu.component';
 import { AuthenticatedUserNavBarMenuComponent } from './authenticated-user-nav-bar-menu/authenticated-user-nav-bar-menu.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { AuthenticatedUserNavBarMenuComponent } from './authenticated-user-nav-b
     ProviderNavBarMenuComponent,
     OrganizerNavBarMenuComponent,
     AuthenticatedUserNavBarMenuComponent,
+    ConfirmDialogComponent,
   ],
     imports: [
         MatMenuModule,

@@ -277,3 +277,13 @@ textarea.input-field {
   background-color: #fff !important; /* Change background color */
   color: #000000 !important; /* Change text color */
 }
+
+.agenda-header{
+  display: flex;
+  justify-content: space-between;
+}
+
+.agenda-item-body{
+  display: flex;
+  justify-content: space-between;
+}

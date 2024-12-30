@@ -34,29 +34,47 @@
 
     <!-- Specifications for Services -->
     <div class="agenda-section">
-      <h2>Agenda</h2>
+      <div class="agenda-header">
+        <h2>Agenda</h2>
+        <button mat-button (click)="openAddAgendaItemDialog()" *ngIf="owner">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
       <div class="agenda-grid" >
         <div class="agenda-item"*ngFor="let agendaItem of agenda">
-          <div>
-            <span class="agenda-label">Name: </span>
-            <span class="agenda-value">{{ agendaItem.name }}</span>
+          <div class="agenda-item-body">
+            <div>
+              <div>
+                <span class="agenda-label">Name: </span>
+                <span class="agenda-value">{{ agendaItem.name }}</span>
+              </div>
+              <div>
+                <span class="agenda-label">Description: </span>
+                <span class="agenda-value">{{ agendaItem.description }}</span>
+              </div>
+              <div>
+                <span class="agenda-label">Start: </span>
+                <span class="agenda-value">{{ agendaItem.startTime }}</span>
+              </div>
+              <div>
+                <span class="agenda-label">End: </span>
+                <span class="agenda-value">{{ agendaItem.endTime }}</span>
+              </div>
+              <div>
+                <span class="agenda-label">Location: </span>
+                <span class="agenda-value">{{ agendaItem.location }}</span>
+              </div>
+            </div>
+            <div>
+              <button mat-button (click)="openEditAgendaItemDialog(agendaItem)" *ngIf="owner">
+                <mat-icon>create</mat-icon>
+              </button>
+              <button mat-button (click)="deleteAgendaItem(agendaItem.id)" *ngIf="owner">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </div>
-          <div>
-            <span class="agenda-label">Description: </span>
-            <span class="agenda-value">{{ agendaItem.description }}</span>
-          </div>
-          <div>
-            <span class="agenda-label">Start: </span>
-            <span class="agenda-value">{{ agendaItem.startTime }}</span>
-          </div>
-          <div>
-            <span class="agenda-label">End: </span>
-            <span class="agenda-value">{{ agendaItem.endTime }}</span>
-          </div>
-          <div>
-            <span class="agenda-label">Location: </span>
-            <span class="agenda-value">{{ agendaItem.location }}</span>
-          </div>
+
         </div>
       </div>
     </div>

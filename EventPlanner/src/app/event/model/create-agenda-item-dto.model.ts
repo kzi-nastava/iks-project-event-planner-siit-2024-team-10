@@ -1,9 +1,7 @@
-export interface AgendaItem {
-  id: number;
+export interface CreateAgendaItemDTO {
   name: string;
   description: string;
   startTime:string;
   endTime:string;
   location:string;
-  isDeleted:boolean;
 }

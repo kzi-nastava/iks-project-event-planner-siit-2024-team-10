@@ -10,6 +10,8 @@ import { PagedResponse } from './model/paged-response.model';
 import {AgendaItem} from './model/agenda-item.model';
 import {CreateEventRatingDTO} from './model/create-event-rating-dto.model';
 import {CreatedEventRatingDTO} from './model/created-event-rating-dto.model';
+import {CreateAgendaItemDTO} from './model/create-agenda-item-dto.model';
+import {UpdateAgendaItemDTO} from './model/update-agenda-item-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +44,18 @@ export class EventService {
 
   addRating(eventId:number,rating:CreateEventRatingDTO) : Observable<CreatedEventRatingDTO> {
     return this.httpClient.post<CreatedEventRatingDTO>(environment.apiHost + "/events/"+eventId+"/ratings", rating);
+  }
+
+  addAgendaItem(eventId:number,agendaItem:CreateAgendaItemDTO) : Observable<AgendaItem> {
+    return this.httpClient.post<AgendaItem>(environment.apiHost + "/events/"+eventId+"/agenda", agendaItem);
+  }
+
+  updateAgendaItem(eventId:number,agendaItemId:number,agendaItem:UpdateAgendaItemDTO) : Observable<AgendaItem> {
+    return this.httpClient.put<AgendaItem>(environment.apiHost + "/events/"+eventId+"/agenda/"+agendaItemId, agendaItem);
+  }
+
+  deleteAgendaItem(eventId:number, agendaItemId:number) : Observable<void> {
+    return this.httpClient.delete<void>(environment.apiHost + "/events/"+eventId+"/agenda/"+agendaItemId);
   }
 
   getPaginatedEvents(
