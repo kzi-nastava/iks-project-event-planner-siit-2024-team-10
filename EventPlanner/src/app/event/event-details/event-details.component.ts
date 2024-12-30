@@ -138,7 +138,10 @@ export class EventDetailsComponent implements OnInit {
             this.refreshAgenda();
             this.snackBar.open('Agenda item created successfully','OK',{duration:3000});
           },
-          error: (err) => console.error('Error adding agenda item:', err),
+          error: (err) => {
+            console.error('Error adding agenda item:', err);
+            this.snackBar.open('Error adding agenda item','OK',{duration:3000});
+          },
         });
       }
     });
@@ -157,7 +160,10 @@ export class EventDetailsComponent implements OnInit {
             this.refreshAgenda();
             this.snackBar.open('Agenda item updated successfully','OK',{duration:3000});
           },
-          error: (err) => console.error('Error updating agenda item:', err),
+          error: (err) => {
+            console.error('Error updating agenda item:', err)
+            this.snackBar.open('Error updating agenda item','OK',{duration:3000});
+          }
         });
       }
     });
@@ -176,7 +182,10 @@ export class EventDetailsComponent implements OnInit {
             this.refreshAgenda();
             this.snackBar.open('Agenda item deleted successfully','OK',{duration:3000});
           },
-          error: (err) => console.error('Error deleting agenda item:', err),
+          error: (err) => {
+            console.error('Error deleting agenda item:', err)
+            this.snackBar.open('Error deleting agenda item','OK',{duration:3000});
+            },
         });
       }
     });
