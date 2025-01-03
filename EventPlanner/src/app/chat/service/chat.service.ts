@@ -4,6 +4,7 @@ import { environment } from '../../../env/environment';
 import { Message } from '../model/message.model';
 import { map, Observable } from 'rxjs';
 import { CreateMessage } from '../model/create-message.model';
+import { ChatContact } from '../component/chat.component';
 
 @Injectable({
   providedIn: 'root',
@@ -37,5 +38,8 @@ export class ChatService {
   add(message:CreateMessage) : Observable<Message> {
     console.log(message)
     return this.http.post<Message>(environment.apiHost + "/messages", message);
+  }
+  getContacts(userId: number): Observable<ChatContact[]> {
+    return this.http.get<ChatContact[]>(environment.apiHost + `/messages/${userId}`);
   }
 }

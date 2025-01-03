@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChatComponent } from './component/chat.component';
 import { ChatService } from './service/chat.service';
+import { FilterPipe } from './filter-pipe';
 
 @NgModule({
   declarations: [
-    ChatComponent
+    ChatComponent,
+    FilterPipe
   ],
   imports: [
     CommonModule,

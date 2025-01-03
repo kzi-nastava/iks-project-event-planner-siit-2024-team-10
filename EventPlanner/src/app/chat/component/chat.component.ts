@@ -7,12 +7,17 @@ import { Message } from '../model/message.model';
 import { ActivatedRoute } from '@angular/router';
 import { CreateMessage } from '../model/create-message.model';
 
+export interface ChatContact {
+  user: number;
+  name: string;
+  content?: string;
+  timestamp?: Date;
+}
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-
 export class ChatComponent implements OnInit, AfterViewChecked {
   private serverUrl = 'http://localhost:8080/socket';
   private stompClient: any;
@@ -20,9 +25,10 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   
   isLoaded: boolean = false;
   messages: Message[] = [];
+  contacts: ChatContact[] = []; 
   
   loggedInUserId: number;
-  organizerId: number;
+  selectedContactId: number | null = null;
   
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
 
@@ -34,14 +40,38 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
     const state = history.state;
     this.loggedInUserId = state.loggedInUserId;
-    this.organizerId = state.organizerId;
 
     this.form = new FormGroup({
       message: new FormControl(null, [Validators.required])
     });
 
     this.initializeWebSocketConnection();
-    this.loadMessages(this.loggedInUserId, this.organizerId);
+    this.loadContacts();
+  }
+
+  getSelectedContactName(): string {
+    const selectedContact = this.contacts.find(contact => contact.user === this.selectedContactId);
+    return selectedContact?.name || '';
+  }
+
+  loadContacts() {
+    this.socketService.getContacts(this.loggedInUserId).subscribe({
+      next: (contacts) => {
+        this.contacts = contacts;
+        if (contacts.length > 0 && !this.selectedContactId) {
+          this.selectContact(contacts[0]);
+        }
+      },
+      error: (err) => {
+        console.error('Error loading contacts:', err);
+      }
+    });
+  }
+
+  selectContact(contact: ChatContact) {
+    console.log(contact.user)
+    this.selectedContactId = contact.user;
+    this.loadMessages(this.loggedInUserId, contact.user);
   }
 
   isSentByCurrentUser(senderId: number): boolean {
@@ -49,9 +79,10 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   loadMessages(senderId: number, receiverId: number) {
+    console.log(senderId,receiverId)
     this.socketService.getMessages(senderId, receiverId).subscribe({
       next: (messages) => {
-        this.messages = messages;  
+        this.messages = messages;
         setTimeout(() => this.scrollToBottom(), 100);
       },
       error: (err) => {
@@ -60,22 +91,12 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  initializeWebSocketConnection() {
-    const ws = new SockJS(this.serverUrl);
-    this.stompClient = Stomp.over(ws);
-    
-    this.stompClient.connect({}, () => {
-      this.isLoaded = true;
-      this.openGlobalSocket();
-    });
-  }
-
   sendMessageUsingSocket() {
-    if (this.form.valid) {
+    if (this.form.valid && this.selectedContactId) {
       const message: Message = {
         content: this.form.value.message,
         senderId: this.loggedInUserId,
-        receiverId: this.organizerId,
+        receiverId: this.selectedContactId,
         timestamp: new Date()
       };
 
@@ -99,6 +120,16 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  initializeWebSocketConnection() {
+    const ws = new SockJS(this.serverUrl);
+    this.stompClient = Stomp.over(ws);
+    
+    this.stompClient.connect({}, () => {
+      this.isLoaded = true;
+      this.openGlobalSocket();
+    });
+  }
+
   openGlobalSocket() {
     if (this.isLoaded) {
       this.stompClient.subscribe("/socket-publisher", (message: { body: string }) => {
@@ -110,9 +141,19 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   handleResult(message: { body: string }) {
     if (message.body) {
       const messageResult: Message = JSON.parse(message.body);
-      this.messages.push(messageResult);
-      setTimeout(() => this.scrollToBottom(), 100);
+      // Only add message if it's part of the current conversation
+      if (this.isPartOfCurrentConversation(messageResult)) {
+        this.messages.push(messageResult);
+        setTimeout(() => this.scrollToBottom(), 100);
+      }
+      // Refresh contacts list to update latest messages
+      this.loadContacts();
     }
+  }
+
+  isPartOfCurrentConversation(message: Message): boolean {
+    return (message.senderId === this.loggedInUserId && message.receiverId === this.selectedContactId) ||
+           (message.senderId === this.selectedContactId && message.receiverId === this.loggedInUserId);
   }
 
   ngAfterViewChecked() {
