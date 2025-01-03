@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../env/environment';
 import { Message } from './message.model';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -27,5 +27,10 @@ export class ChatService {
         return data;
       })
     );
+  }
+
+  getMessages(senderId: number, receiverId: number): Observable<Message[]> {
+    console.log(environment.apiHost + `/messages/`+ senderId + "/"+ receiverId)
+    return this.http.get<Message[]>(environment.apiHost + `/messages/`+ senderId + "/"+ receiverId);
   }
 }

@@ -1,23 +1,16 @@
-<!-- chat.component.html -->
 <div class="chat-container">
   <div class="chat-messages" #scrollMe>
     <div *ngFor="let message of messages" 
-         [ngClass]="{'message-container': true, 'sent': message.sender === userForm.value.fromId, 'received': message.sender !== userForm.value.fromId}">
+         [ngClass]="{'message-container': true, 'sent': message.sender === loggedInUserId, 'received': message.sender !== loggedInUserId}">
       <div class="message">
         <div class="message-content">{{message.content}}</div>
         <div class="message-time">{{message.timestamp | date:'shortTime'}}</div>
       </div>
     </div>
   </div>
-  
+
   <div class="chat-input">
-    <form [formGroup]="userForm" (ngSubmit)="openSocket()" *ngIf="!isCustomSocketOpened">
-      <input type="text" formControlName="fromId" placeholder="Enter your ID">
-      <button type="submit" [disabled]="!userForm.valid">Connect</button>
-    </form>
-    
-    <form [formGroup]="form" (ngSubmit)="sendMessageUsingSocket()" *ngIf="isCustomSocketOpened">
-      <input type="text" formControlName="toId" placeholder="Recipient ID">
+    <form [formGroup]="form" (ngSubmit)="sendMessageUsingSocket()">
       <input type="text" formControlName="message" placeholder="Type a message...">
       <button type="submit" [disabled]="!form.valid">Send</button>
     </form>
