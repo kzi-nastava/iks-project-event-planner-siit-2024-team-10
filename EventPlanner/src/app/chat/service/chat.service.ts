@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../env/environment';
 import { Message } from '../model/message.model';
 import { map, Observable } from 'rxjs';
+import { CreateMessage } from '../model/create-message.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +33,9 @@ export class ChatService {
   getMessages(senderId: number, receiverId: number): Observable<Message[]> {
     console.log(environment.apiHost + `/messages/`+ senderId + "/"+ receiverId)
     return this.http.get<Message[]>(environment.apiHost + `/messages/`+ senderId + "/"+ receiverId);
+  }
+  add(message:CreateMessage) : Observable<Message> {
+    console.log(message)
+    return this.http.post<Message>(environment.apiHost + "/messages", message);
   }
 }

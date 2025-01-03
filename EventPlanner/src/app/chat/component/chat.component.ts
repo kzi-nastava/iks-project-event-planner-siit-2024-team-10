@@ -5,12 +5,14 @@ import * as Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { Message } from '../model/message.model';
 import { ActivatedRoute } from '@angular/router';
+import { CreateMessage } from '../model/create-message.model';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
+
 export class ChatComponent implements OnInit, AfterViewChecked {
   private serverUrl = 'http://localhost:8080/socket';
   private stompClient: any;
@@ -43,19 +45,13 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   isSentByCurrentUser(senderId: number): boolean {
-    console.log(senderId === this.loggedInUserId)
-    console.log(senderId)
-    console.log(this.loggedInUserId)
     return senderId === this.loggedInUserId;
   }
 
   loadMessages(senderId: number, receiverId: number) {
     this.socketService.getMessages(senderId, receiverId).subscribe({
       next: (messages) => {
-        this.messages = messages.map(message => ({
-          ...message,
-          sender: message.senderId
-        }));
+        this.messages = messages;  
         setTimeout(() => this.scrollToBottom(), 100);
       },
       error: (err) => {
@@ -83,8 +79,23 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         timestamp: new Date()
       };
 
+      const createMessage: CreateMessage = {
+        content: message.content,
+        sender: message.senderId,
+        receiver: message.receiverId
+      };
+
       this.stompClient.send("/socket-subscriber/send/message", {}, JSON.stringify(message));
       this.form.reset();
+
+      this.socketService.add(createMessage).subscribe({
+        next: (response) => {
+          console.log('Message sent successfully:', response);
+        },
+        error: (err) => {
+          console.error('Error sending message:', err);
+        }
+      });
     }
   }
 
