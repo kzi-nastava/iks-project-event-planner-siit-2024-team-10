@@ -7,7 +7,9 @@
            [class.received]="!isSentByCurrentUser(message.senderId)">
         <div class="message-bubble">
           <div class="message-content">{{ message.content }}</div>
-          <div class="message-time">{{ message.timestamp | date:'shortTime' }}</div>
+          <div class="message-time">
+            {{ message.timestamp | date:'shortDate' }} {{ message.timestamp | date:'shortTime' }}
+          </div>
         </div>
       </div>
     </ng-container>
