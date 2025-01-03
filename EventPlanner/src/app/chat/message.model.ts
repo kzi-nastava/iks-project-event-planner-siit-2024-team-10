@@ -1,9 +1,10 @@
 import { Organizer } from "../event/model/organizer.model";
 
-interface Message {
+export interface Message {
     id?: number;
     content: string;
     timestamp: Date;
-    sender: Organizer;
+    sender: number;
+    receiver: number;
     isRead: boolean;
   }
