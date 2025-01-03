@@ -9,6 +9,7 @@ import { OfferingModule } from './offering/offering.module';
 import { WineModule } from './wine/wine.module';
 import { EventModule } from './event/event.module';
 import { NotificationModule } from './notification/notification.module';
+import { ChatModule } from './chat/chat.module';
 
 // Material Imports
 import { MatButtonModule } from '@angular/material/button';
@@ -36,7 +37,6 @@ import { CategoryService } from './offering/category-service/category.service';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {Interceptor} from './infrastructure/auth/interceptor';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -45,9 +45,9 @@ import { ChatComponent } from './chat/chat.component';
     CategoryDialogComponent,
     OfferingCategoryComponent,
     PricelistComponent,
-    ChatComponent
   ],
   imports: [
+    ChatModule,
     BrowserModule,
     AppRoutingModule,
     LayoutModule,

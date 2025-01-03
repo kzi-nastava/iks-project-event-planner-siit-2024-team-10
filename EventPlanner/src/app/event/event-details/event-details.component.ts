@@ -114,16 +114,15 @@ export class EventDetailsComponent implements OnInit {
   }
 
   navigateToChat(): void {
-    // account ids
     const sender = this.authService.getAccountId();
     const recipient = this.event.organizer.accountId;
-    console.log(sender)
-    console.log(recipient)
+    console.log(sender);
+    console.log(recipient);
     this.router.navigate(['/chat'], {
       state: {
         loggedInUserId: sender,
         organizerId: recipient
       }
     });
-  }
+  }  
 }

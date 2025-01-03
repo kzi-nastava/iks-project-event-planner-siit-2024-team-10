@@ -1,0 +1,22 @@
+<div class="chat-container">
+  <div class="chat-messages" #scrollMe>
+    <ng-container *ngFor="let message of messages">
+      <!-- Using [class.sent] and [class.received] to dynamically assign classes based on the sender -->
+      <div class="message-row" 
+           [class.sent]="isSentByCurrentUser(message.senderId)" 
+           [class.received]="!isSentByCurrentUser(message.senderId)">
+        <div class="message-bubble">
+          <div class="message-content">{{ message.content }}</div>
+          <div class="message-time">{{ message.timestamp | date:'shortTime' }}</div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  
+  <div class="chat-input">
+    <form [formGroup]="form" (ngSubmit)="sendMessageUsingSocket()">
+      <input type="text" formControlName="message" placeholder="Type a message...">
+      <button type="submit" [disabled]="!form.valid">Send</button>
+    </form>
+  </div>
+</div>

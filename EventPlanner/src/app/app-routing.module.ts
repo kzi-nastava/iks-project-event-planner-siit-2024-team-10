@@ -15,7 +15,7 @@ import {EventTypesComponent} from './event/event-types/event-types.component';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {AuthGuard} from './infrastructure/auth/auth.guard';
 import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
-import { ChatComponent } from './chat/chat.component';
+import { ChatComponent } from './chat/component/chat.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
