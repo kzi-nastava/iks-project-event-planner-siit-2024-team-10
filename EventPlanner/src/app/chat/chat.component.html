@@ -1,61 +1,25 @@
-<div class="container">
-  <div class="row">
-    <article class="col-md-5 well" style="margin: 30px;">
-
-      <h3 class="page-header text-center">User Information<br />
-        <small>enter your name</small>
-      </h3>
-
-      <form [formGroup]="userForm" (submit)="openSocket()" *ngIf="isLoaded">
-        <div class="form-group">
-          <input class="form-control" type="text" formControlName="fromId" name="fromId" placeholder="Your id">
-        </div>
-
-        <div class="text-center">
-          <input type="submit" class="btn btn-success" [disabled]="userForm.invalid || isCustomSocketOpened"
-            value="open socket to recieve custom messages">
-        </div>
-
-      </form>
-
-      <h3 class="page-header text-center">Send message<br />
-        <small>if user id is null the message will be sended to all users</small>
-      </h3>
-
-      <form [formGroup]="form" (submit)="sendMessageUsingSocket()" *ngIf="isLoaded">
-
-        <div class="form-group">
-          <input class="form-control" type="text" formControlName="toId" name="toId"
-            placeholder="User id to send the message to">
-        </div>
-
-        <div class="form-group">
-          <input class="form-control" type="text" formControlName="message" name="message" placeholder="Message">
-        </div>
-
-        <div class="row text-center">
-          <input class="btn btn-success" type="submit" [disabled]="form.invalid || userForm.invalid"
-            value="Send using socket subscription">
-          <input class="btn btn-info" type="button" [disabled]="form.invalid || userForm.invalid"
-            value="Send using a rest controller" (click)="sendMessageUsingRest()">
-        </div>
-
-      </form>
-
-    </article>
-
-    <article class="col-md-5 well" style="margin: 30px;">
-
-      <h3 class="page-header text-center">Recieved messages<br />
-        <small>messages sent to all and to your id</small>
-      </h3>
-
-      <ul class="list-group">
-        <li class="list-group-item list-group-item-success" *ngFor="let message of messages"
-          style="margin-bottom: 10px;">From: {{message.sender}}, To: {{message.receiver}}, Message:
-          {{message.content}}</li>
-      </ul>
-
-    </article>
+<!-- chat.component.html -->
+<div class="chat-container">
+  <div class="chat-messages" #scrollMe>
+    <div *ngFor="let message of messages" 
+         [ngClass]="{'message-container': true, 'sent': message.sender === userForm.value.fromId, 'received': message.sender !== userForm.value.fromId}">
+      <div class="message">
+        <div class="message-content">{{message.content}}</div>
+        <div class="message-time">{{message.timestamp | date:'shortTime'}}</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="chat-input">
+    <form [formGroup]="userForm" (ngSubmit)="openSocket()" *ngIf="!isCustomSocketOpened">
+      <input type="text" formControlName="fromId" placeholder="Enter your ID">
+      <button type="submit" [disabled]="!userForm.valid">Connect</button>
+    </form>
+    
+    <form [formGroup]="form" (ngSubmit)="sendMessageUsingSocket()" *ngIf="isCustomSocketOpened">
+      <input type="text" formControlName="toId" placeholder="Recipient ID">
+      <input type="text" formControlName="message" placeholder="Type a message...">
+      <button type="submit" [disabled]="!form.valid">Send</button>
+    </form>
   </div>
 </div>

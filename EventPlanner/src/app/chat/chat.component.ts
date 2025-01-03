@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from '../../env/environment';
 import { ChatService } from './chat.service';
@@ -126,5 +126,16 @@ export class ChatComponent implements OnInit {
       this.messages.push(messageResult);
     }
   }
+  
+  @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
 
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+  
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch(err) { }
+  }
 }
