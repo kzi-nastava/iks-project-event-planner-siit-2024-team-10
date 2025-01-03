@@ -6,6 +6,7 @@ import SockJS from 'sockjs-client';
 import { Message } from '../model/message.model';
 import { ActivatedRoute } from '@angular/router';
 import { CreateMessage } from '../model/create-message.model';
+import { AuthService } from '../../infrastructure/auth/auth.service';
 
 export interface ChatContact {
   user: number;
@@ -34,13 +35,16 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private socketService: ChatService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     const state = history.state;
     this.loggedInUserId = state.loggedInUserId;
-
+    if(this.loggedInUserId === undefined){
+      this.loggedInUserId = this.loggedInUserId = this.authService.getUserId();
+    }
     this.form = new FormGroup({
       message: new FormControl(null, [Validators.required])
     });
@@ -58,6 +62,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.socketService.getContacts(this.loggedInUserId).subscribe({
       next: (contacts) => {
         this.contacts = contacts;
+        console.log(contacts)
         if (contacts.length > 0 && !this.selectedContactId) {
           this.selectContact(contacts[0]);
         }
