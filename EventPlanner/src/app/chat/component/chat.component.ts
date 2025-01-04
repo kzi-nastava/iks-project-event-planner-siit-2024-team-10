@@ -35,16 +35,17 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private socketService: ChatService,
-    private route: ActivatedRoute,
     private authService: AuthService
   ) {}
 
   ngOnInit() {
+    console.log(this.loggedInUserId)
     const state = history.state;
     this.loggedInUserId = state.loggedInUserId;
     if(this.loggedInUserId === undefined){
-      this.loggedInUserId = this.loggedInUserId = this.authService.getUserId();
+      this.loggedInUserId = this.authService.getAccountId();
     }
+    console.log(this.loggedInUserId)
     this.form = new FormGroup({
       message: new FormControl(null, [Validators.required])
     });

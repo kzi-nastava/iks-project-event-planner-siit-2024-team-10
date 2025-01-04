@@ -23,8 +23,7 @@ export class ServiceService {
     add(service:CreateServiceDTO) : Observable<Service> {
       return this.httpClient.post<Service>(environment.apiHost + "/services", service);
     }
-    edit(id:number, service:EditServiceDTO) : Observable<Service> {
-      console.log(service)
+    edit(service:EditServiceDTO) : Observable<Service> {
       return this.httpClient.put<Service>(environment.apiHost + "/services/" + service.id, service);
     }
     delete(id:number) : Observable<Service> {

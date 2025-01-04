@@ -46,6 +46,7 @@ export class EventTypesComponent implements OnInit{
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
       if (result) {
         this.service.edit(result).subscribe({
           next: (response) => {

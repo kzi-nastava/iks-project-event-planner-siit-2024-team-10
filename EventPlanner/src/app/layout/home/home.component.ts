@@ -9,6 +9,7 @@ import { FilterServiceDialogComponent } from '../../offering/filter-service-dial
 import { FilterProductDialogComponent } from '../../offering/filter-product-dialog/filter-product-dialog.component';
 import { OfferingWarningDialogComponent } from '../offering-warning-dialog/offering-warning-dialog.component';
 import { ComponentType } from '@angular/cdk/overlay';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,6 @@ export class HomeComponent implements OnInit {
   topEvents: Event[] = [];
   allOfferings: Offering[] = [];
   topOfferings: Offering[] = [];
-  filteredOfferings: Offering[] = [];
 
   clickedEvent: string = '';
   noTopEventsMessage: string = '';
@@ -41,12 +41,22 @@ export class HomeComponent implements OnInit {
 
   offeringSortingCriteria = ['None', 'Name', 'Rating', 'City', 'Price'];
 
+  offeringSortingCriteriaMapping: { [key: string]: string } = {
+    'None': '',
+    'Name': 'name',
+    'Price': 'price',
+    'Rating': 'averageRating',
+    'City': 'location.city'
+  };  
+
   selectedSortingDirection: string = 'Ascending';
   selectedEventSortingCriteria: string = 'None';
   selectedOfferingSortingCriteria: string = 'None';
   selectedOfferingType: 'services' | 'products' | null = null;
 
-  filters: any = {};
+  eventFilters: any = {};
+  offeringFilters: any = {};
+
 
   searchEventQuery: string = '';
   searchOfferingQuery: string = '';
@@ -104,25 +114,46 @@ export class HomeComponent implements OnInit {
   }
 
   applySorting(type: 'event' | 'offering'): void {
-      const backendSortBy = this.eventSortingCriteriaMapping[this.selectedEventSortingCriteria];
-    
-      if (backendSortBy) {
-        this.filters.sortBy = backendSortBy;
-        this.filters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
-      } else {
-        delete this.filters.sortBy;
-        delete this.filters.sortDirection;
+      if(type === 'event'){
+        const backendSortBy = this.eventSortingCriteriaMapping[this.selectedEventSortingCriteria];
+      
+        if (backendSortBy) {
+          this.eventFilters.sortBy = backendSortBy;
+          this.eventFilters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
+        } else {
+          delete this.eventFilters.sortBy;
+          delete this.eventFilters.sortDirection;
+        }
+      
+        this.eventPageProperties.page = 0;
+        this.fetchPaginatedEvents(this.eventFilters);
+      }else{
+        const backendSortBy = this.offeringSortingCriteriaMapping[this.selectedOfferingSortingCriteria];
+      
+        if (backendSortBy) {
+          this.offeringFilters.sortBy = backendSortBy;
+          this.offeringFilters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
+        } else {
+          delete this.offeringFilters.sortBy;
+          delete this.offeringFilters.sortDirection;
+        }
+      
+        this.offeringPageProperties.page = 0;
+        this.fetchPaginatedOfferings(this.offeringFilters);
       }
-    
-      this.eventPageProperties.page = 0;
-      this.fetchPaginatedEvents(this.filters);
     }
     
 
   applyFilters(newFilters: any): void {
-    this.filters = { ...this.filters, ...newFilters };
+    this.eventFilters = { ...this.eventFilters, ...newFilters };
     this.eventPageProperties.page = 0;
-    this.fetchPaginatedEvents(this.filters);
+    this.fetchPaginatedEvents(this.eventFilters);
+  }
+
+  applyOfferingFilters(newFilters: any): void {
+    this.offeringFilters = { ...this.offeringFilters, ...newFilters };
+    this.offeringPageProperties.page = 0;
+    this.fetchPaginatedOfferings();
   }
 
   openFilterDialog(): void {
@@ -133,13 +164,27 @@ export class HomeComponent implements OnInit {
       : OfferingWarningDialogComponent;
   
     const dialogWidth = dialogComponent === OfferingWarningDialogComponent ? '400px' : '600px';
-    this.dialog.open(dialogComponent, { width: dialogWidth });
+    const dialogRef = this.dialog.open(dialogComponent, { width: dialogWidth });
+    
+    dialogRef.afterClosed().subscribe((newFilters) => {
+      if (newFilters) {
+        this.applyOfferingFilters(newFilters);
+      }
+    });
   }
 
   resetEventFilter(): void{
     this.searchEventQuery = '';
-    this.filters = {};
+    this.eventFilters = {};
+    this.eventPageProperties.page = 0;
     this.fetchPaginatedEvents();
+  }
+
+  resetOfferingFilter(): void{
+    this.searchOfferingQuery = '';
+    this.offeringFilters = {};
+    this.offeringPageProperties.page = 0;
+    this.fetchPaginatedOfferings();
   }
 
   openEventFilterDialog(): void {
@@ -151,31 +196,36 @@ export class HomeComponent implements OnInit {
       }
     });
   }
-  
-
-  filterOfferings(): void {
-    console.log(`Filtering ${this.selectedOfferingType ? this.selectedOfferingType : 'Offerings'}...`);
-  }
 
   toggleOfferingType(type: 'services' | 'products'): void {
     this.selectedOfferingType = type;
-    this.filterOfferings();
+    if (type === 'services') {
+      this.offeringFilters.isServiceFilter = true;
+    } else if (type === 'products') {
+      this.offeringFilters.isServiceFilter = false;
+    } else{
+      delete this.offeringFilters.isServiceFilter;
+      this.selectedOfferingType = null;
+    }
+    this.resetOfferingFilter();
   }
 
   searchEvent(): void {
     this.eventPageProperties.page = 0;
-    this.filters.name = this.searchEventQuery;
+    this.eventFilters.name = this.searchEventQuery;
     this.fetchPaginatedEvents();
   }
 
   searchOffering(): void {
-    console.log('Search Query:', this.searchOfferingQuery);
+    this.offeringPageProperties.page = 0;
+    this.offeringFilters.name = this.searchOfferingQuery;
+    this.fetchPaginatedOfferings();
   }
 
-  fetchPaginatedEvents(filters: any = this.filters): void {
+  fetchPaginatedEvents(eventFilters: any = this.eventFilters): void {
     const { page, pageSize } = this.eventPageProperties;
   
-    this.eventService.getPaginatedEvents(page, pageSize, filters).subscribe({
+    this.eventService.getPaginatedEvents(page, pageSize, eventFilters).subscribe({
       next: (response) => {
         this.allEvents = response.content;
         this.eventPageProperties.totalPages = response.totalPages;
@@ -189,13 +239,15 @@ export class HomeComponent implements OnInit {
   }
   
 
-  fetchPaginatedOfferings(): void {
+  fetchPaginatedOfferings(offeringFilters: any = this.offeringFilters): void {
     const { page, pageSize } = this.offeringPageProperties;
+    if (this.selectedOfferingType!==null){
+      offeringFilters.isServiceFilter = this.selectedOfferingType === 'services';
+    }
 
-    this.offeringService.getPaginatedOfferings(page, pageSize).subscribe({
+    this.offeringService.getPaginatedOfferings(page, pageSize, offeringFilters).subscribe({
       next: (response) => {
         this.allOfferings = response.content;
-        this.filteredOfferings = response.content;
         this.offeringPageProperties.totalPages = response.totalPages;
         this.offeringPageProperties.totalElements = response.totalElements;
         this.noOfferingsMessage = this.allOfferings.length ? '' : 'No offerings found.';
