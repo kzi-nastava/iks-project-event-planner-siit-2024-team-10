@@ -3,13 +3,10 @@ import { Product } from '../model/product.model';
 import { Service } from '../model/service.model';
 import { map, Observable, of } from 'rxjs';
 import { Offering } from '../model/offering.model';
-import { Location } from '../../event/model/location.model';
-import { GetProvider } from '../../user/model/get_provider.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {environment} from '../../../env/environment';
 import { PagedResponse } from '../../event/model/paged-response.model';
-import { Category } from '../model/category.model';
-
+import { Comment } from '../model/comment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +40,10 @@ export class OfferingService {
     return of(this.productList);
   }
 
+  getComments(offeringId: number): Observable<Comment[]> {
+    return this.httpClient.get<Comment[]>(`${environment.apiHost}/offerings/${offeringId}/comments`);
+  }
+  
   getPaginatedOfferings(
       page: number,
       pageSize: number,

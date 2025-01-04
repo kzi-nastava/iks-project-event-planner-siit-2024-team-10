@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
-import { CommentService, Comment } from '../comment-service/comment.service';
+import { CommentService } from '../comment-service/comment.service';
 import { switchMap } from 'rxjs/operators';
 import { Service } from '../model/service.model';
 import { Product } from '../model/product.model';
@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ReservationDialogComponent } from '../reservation-dialog/reservation-dialog.component';
 import { ServiceService } from '../service-service/service.service';
+import { OfferingService } from '../offering-service/offering.service';
+import { Comment } from '../model/comment.model';
 
 @Component({
   selector: 'app-details-page',
@@ -46,6 +48,7 @@ export class DetailsPageComponent implements OnInit {
     private route: ActivatedRoute,
     private serviceService: ServiceService,
     private commentService: CommentService,
+    private offeringService: OfferingService,
     private router: Router,
     private dialog: MatDialog
   ) {}
@@ -67,18 +70,17 @@ export class DetailsPageComponent implements OnInit {
     });
   }  
   
-  // za prikaz podataka koje ima usluga a nema proizvod
   isService(offering: Product | Service): offering is Service {
     const isService = (offering as Service).specification !== undefined;
     return isService;
   }
 
-  // ucitavanje komentara iz servisa
   private loadComments(): void {
     if (this.offering) {
-      this.commentService.getCommentsByOfferingId(this.offering.id)
+      this.offeringService.getComments(this.offering.id)
         .subscribe(comments => {
           this.comments = comments;
+          console.log(comments)
         });
     }
   }

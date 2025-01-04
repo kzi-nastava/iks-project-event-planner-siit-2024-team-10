@@ -198,15 +198,15 @@
       <div class="comments-list">
         <div *ngFor="let comment of comments" class="comment-card">
           <div class="comment-header">
-            <span class="user-name">{{ comment.userName }}</span>
+            <span class="user-name">{{ comment.user }}</span>
             <div class="stars">
               <span *ngFor="let star of getStarArray(comment.rating)">
                 {{ star ? '★' : '☆' }}
               </span>
             </div>
           </div>
-          <p class="comment-text">{{ comment.text }}</p>
-          <span class="comment-date">{{ comment.date | date }}</span>
+          <p class="comment-text">{{ comment.content }}</p>
+          <!-- <span class="comment-date">{{ comment.date | date }}</span> -->
         </div>
       </div>
     </div>  
