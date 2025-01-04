@@ -34,6 +34,7 @@ export class DetailsPageComponent implements OnInit {
   activeImage = 0;
   userRating = 0;
   comments: Comment[] = [];
+  isCommentingEnabled = false; 
   
   newComment = {
     userName: '',
@@ -92,6 +93,10 @@ export class DetailsPageComponent implements OnInit {
   }
 
   submitComment(): void {
+    if (!this.isCommentingEnabled) {
+      return;
+    }
+    
     if (this.offering && this.newComment.userName && this.newComment.text && this.newComment.rating) {
       const newComment = {
         offeringId: this.offering.id,
@@ -169,8 +174,8 @@ navigateToEdit(): void {
     console.log('Viewing provider profile...');
   }
 
-  reportProvider() {
-    console.log('Reporting provider...');
+  chat() {
+    console.log('chat with provider...');
   }
   openReservationDialog(): void {
     const dialogRef = this.dialog.open(ReservationDialogComponent, {
@@ -181,10 +186,10 @@ navigateToEdit(): void {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Reservation data:', result);
+        this.isCommentingEnabled = true; 
       } else {
         console.log('Dialog closed without reservation.');
       }
     });
   }
-  
 }

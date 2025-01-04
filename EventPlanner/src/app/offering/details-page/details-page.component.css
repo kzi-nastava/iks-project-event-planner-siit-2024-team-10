@@ -639,3 +639,25 @@ textarea.input-field {
   color: #ffd700;
 }
 
+.comment-locked-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.comment-locked-message i {
+  font-size: 2rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+.comment-locked-message p {
+  color: #6c757d;
+  text-align: center;
+  margin: 0;
+  font-size: 1.1rem;
+}

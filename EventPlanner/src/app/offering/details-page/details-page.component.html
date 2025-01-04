@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-    
+
   <!-- Price Section -->
   <div class="price-section">
     <div class="price-container">
@@ -141,9 +141,9 @@
             <i class="fas fa-user"></i>
             View Profile
           </button>
-          <button class="report-btn" (click)="reportProvider()">
-            <i class="fas fa-flag"></i>
-            Report
+          <button class="report-btn" (click)="chat()">
+            <i class="fas fa-comment"></i>
+            You need more info? Chat with us
           </button>
         </div>
       </div>
@@ -155,34 +155,43 @@
       
       <!-- Add Comment Form -->
       <div class="comment-form">
-        <h3>Leave a Review</h3>
-        <div class="rating-input">
-          <span>Your Rating:</span>
-          <div class="stars-input">
-            <span 
-              *ngFor="let star of getStarArray(5); let i = index"
-              (click)="setRating(i + 1)"
-              [class.filled]="i < userRating"
-              class="star-icon"
-            >★</span>
+        <ng-container *ngIf="!isCommentingEnabled">
+          <div class="comment-locked-message">
+            <i class="fas fa-lock"></i>
+            <p>Please book this service first to leave a review</p>
           </div>
-        </div>
-        <input 
-          type="text" 
-          [(ngModel)]="newComment.userName" 
-          placeholder="Your Name"
-          class="input-field"
-        >
-        <textarea 
-          [(ngModel)]="newComment.text" 
-          placeholder="Your Review"
-          class="input-field"
-        ></textarea>
-        <button 
-          (click)="submitComment()"
-          class="submit-btn"
-          [disabled]="!newComment.userName || !newComment.text || !newComment.rating"
-        >Submit Review</button>
+        </ng-container>
+    
+        <ng-container *ngIf="isCommentingEnabled">
+          <h3>Leave a Review</h3>
+          <div class="rating-input">
+            <span>Your Rating:</span>
+            <div class="stars-input">
+              <span 
+                *ngFor="let star of getStarArray(5); let i = index"
+                (click)="setRating(i + 1)"
+                [class.filled]="i < userRating"
+                class="star-icon"
+              >★</span>
+            </div>
+          </div>
+          <input 
+            type="text" 
+            [(ngModel)]="newComment.userName" 
+            placeholder="Your Name"
+            class="input-field"
+          >
+          <textarea 
+            [(ngModel)]="newComment.text" 
+            placeholder="Your Review"
+            class="input-field"
+          ></textarea>
+          <button 
+            (click)="submitComment()"
+            class="submit-btn"
+            [disabled]="!newComment.userName || !newComment.text || !newComment.rating"
+          >Submit Review</button>
+        </ng-container>
       </div>
   
       <!-- Existing Comments -->
