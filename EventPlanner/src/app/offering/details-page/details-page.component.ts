@@ -139,8 +139,8 @@ navigateToEdit(): void {
       maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
       reservationPeriod: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
       cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
-      isAvailable: this.offering.isAvailable || false,
-      isVisible: this.offering.isVisible || false,
+      isAvailable: this.offering.available || false,
+      isVisible: this.offering.visible || false,
       autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,    
       eventTypes:this.offering.eventTypes
     };

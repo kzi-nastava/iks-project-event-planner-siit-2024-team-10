@@ -37,30 +37,42 @@
       <h1 class="title">{{offering?.name}}</h1>
       <div class="meta-info">
         <span class="category">{{offering?.category.name}}</span>
-        <div class="availability" [class.available]="offering?.isAvailable">
-          {{offering?.isAvailable ? 'Available' : 'Not Available'}}
+        <div class="availability" [class.available]="offering?.available">
+          {{offering?.available ? 'Available' : 'Not Available'}}
         </div>
       </div>
     </div>
-
-    <!-- Price Section -->
-    <div class="price-section">
-      <div class="price-container">
-        <span class="price">{{offering?.price | currency}}</span>
-        <span class="discount" *ngIf="offering?.discount">
-          -{{offering?.discount}}% OFF
-        </span>
-      </div>
-      <div class="action-buttons">
-        <button class="book-now-btn" [disabled]="!offering?.isAvailable" (click)="openReservationDialog()">
-          <i class="fas fa-calendar-check"></i>
-          Book Now
-        </button>
-        <button class="favorite-btn" [class.active]="isFavorite" (click)="toggleFavorite()">
-          <span class="heart-icon">{{isFavorite ? '❤️' : '🤍'}}</span>
-        </button>
+    
+  <!-- Price Section -->
+  <div class="price-section">
+    <div class="price-container">
+      <div class="prices">
+        <ng-container *ngIf="offering?.discount; else normalPrice">
+          <div class="price-stack">
+            <span class="original-price">{{offering?.price | currency}}</span>
+            <span class="discounted-price">
+              {{(offering?.price * (1 - offering?.discount / 100)) | currency}}
+            </span>
+          </div>
+          <span class="discount-badge">
+            -{{offering?.discount}}% OFF
+          </span>
+        </ng-container>
+        <ng-template #normalPrice>
+          <span class="price">{{offering?.price | currency}}</span>
+        </ng-template>
       </div>
     </div>
+    <div class="action-buttons">
+      <button class="book-now-btn" [disabled]="!offering?.available" (click)="openReservationDialog()">
+        <i class="fas fa-calendar-check"></i>
+        Book Now
+      </button>
+      <button class="favorite-btn" [class.active]="isFavorite" (click)="toggleFavorite()">
+        <span class="heart-icon">{{isFavorite ? '❤️' : '🤍'}}</span>
+      </button>
+    </div>
+  </div>
 
     <!-- Description -->
     <div class="description-section">

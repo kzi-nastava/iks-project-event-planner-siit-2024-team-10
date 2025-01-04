@@ -14,8 +14,8 @@ export interface Offering {
     specification?: string;
     averageRating: string;
     eventTypes?: string[];
-    isAvailable?: boolean;
-    isVisible?: boolean;
+    available?: boolean;
+    visible?: boolean;
     isProduct: boolean;
     deleted:boolean;
 }
