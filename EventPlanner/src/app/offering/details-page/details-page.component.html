@@ -4,8 +4,11 @@
   <div class="carousel-section">
     <div class="carousel-container">
       <div class="main-image-wrapper">
-        <img [src]="images[activeImage]" [alt]="offering?.name" class="main-image">
-        
+        <img 
+        [src]="images[activeImage] || 'placeholder-image.png'" 
+        [alt]="images[activeImage] ? 'Image description' : 'Placeholder image'" 
+        class="main-image">
+              
         <!-- Navigation Arrows -->
         <button class="carousel-nav prev" (click)="setActiveImage((activeImage - 1 + images.length) % images.length)" 
                 *ngIf="images.length > 1">
