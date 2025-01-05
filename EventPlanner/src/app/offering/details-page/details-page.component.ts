@@ -58,6 +58,8 @@ export class DetailsPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.authService.getUserId());
+
     this.route.params.pipe(
       switchMap(params => {
         const id = +params['id'];
@@ -79,7 +81,7 @@ export class DetailsPageComponent implements OnInit {
     return isService;
   }
 
-  private loadComments(): void {
+  loadComments(): void {
     if (this.offering) {
       this.offeringService.getComments(this.offering.id)
         .subscribe(comments => {
@@ -149,31 +151,30 @@ export class DetailsPageComponent implements OnInit {
     this.isFavorite = !this.isFavorite;
 }
 
-// prefill podatke za edit
-navigateToEdit(): void {
-  if (this.offering) {
-    const prefilledData = {
-      id: this.offering.id,
-      serviceCategory: this.offering.category || 'Default Category',
-      name: this.offering.name || '',
-      description: this.offering.description || '',
-      specification: this.isService(this.offering) ? this.offering.specification || '' : '',
-      price: this.offering.price || 0,
-      discount: this.offering.discount || 0,
-      fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
-      minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
-      maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
-      reservationPeriod: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
-      cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
-      isAvailable: this.offering.available || false,
-      isVisible: this.offering.visible || false,
-      autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,    
-      eventTypes:this.offering.eventTypes
-    };
+  navigateToEdit(): void {
+    if (this.offering) {
+      const prefilledData = {
+        id: this.offering.id,
+        serviceCategory: this.offering.category || 'Default Category',
+        name: this.offering.name || '',
+        description: this.offering.description || '',
+        specification: this.isService(this.offering) ? this.offering.specification || '' : '',
+        price: this.offering.price || 0,
+        discount: this.offering.discount || 0,
+        fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
+        minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
+        maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
+        reservationPeriod: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
+        cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
+        isAvailable: this.offering.available || false,
+        isVisible: this.offering.visible || false,
+        autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,    
+        eventTypes:this.offering.eventTypes
+      };
 
-    this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+      this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+      }
     }
-  }
   deleteOffering(): void {
     if (this.offering) {
       const confirmation = confirm('Are you sure you want to delete this offering?');
