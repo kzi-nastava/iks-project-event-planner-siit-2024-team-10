@@ -221,10 +221,17 @@ export class DetailsPageComponent implements OnInit {
     console.log('Viewing provider profile...');
   }
 
-  chat() {
-    console.log('chat with provider...');
-  }
   openReservationDialog(): void {
+    if (!this.authService.isLoggedIn()) {
+      this.snackBar.open('Please log in to make a reservation', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['warning-snackbar']
+      });
+      return;
+    }
+
     const dialogRef = this.dialog.open(ReservationDialogComponent, {
       width: '1000px',
       data: { offering: this.offering }
@@ -238,5 +245,19 @@ export class DetailsPageComponent implements OnInit {
         console.log('Dialog closed without reservation.');
       }
     });
+  }
+
+  chat() {
+    if (!this.authService.isLoggedIn()) {
+      this.snackBar.open('Please log in to chat with the provider', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['warning-snackbar']
+      });
+      return;
+    }
+    
+    console.log('chat with provider...');
   }
 }
