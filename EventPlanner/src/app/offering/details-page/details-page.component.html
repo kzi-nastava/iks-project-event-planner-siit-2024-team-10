@@ -152,47 +152,13 @@
       </div>
     </div>
 
-    <!-- Comments Section -->
-    <div class="comments-section">
-      <h2>Customer Reviews</h2>
-      
-      <!-- Add Comment Form -->
-      <div class="comment-form">
-        <ng-container *ngIf="!isCommentingEnabled">
-          <div class="comment-locked-message">
-            <i class="fas fa-lock"></i>
-            <p>Please book this service first to leave a review</p>
-          </div>
-        </ng-container>
+  <!-- Comments Section -->
+  <div class="comments-section">
+    <h2>Customer Reviews</h2>
     
-        <ng-container *ngIf="isCommentingEnabled">
-          <h3>Leave a Review</h3>
-          <div class="rating-input">
-            <span>Your Rating:</span>
-            <div class="stars-input">
-              <span 
-                *ngFor="let star of getStarArray(5); let i = index"
-                (click)="setRating(i + 1)"
-                [class.filled]="i < userRating"
-                class="star-icon"
-              >★</span>
-            </div>
-          </div>
-          <textarea 
-            [(ngModel)]="newComment.text" 
-            placeholder="Your Review"
-            class="input-field"
-          ></textarea>
-          <button 
-            (click)="submitComment()"
-            class="submit-btn"
-            [disabled]="!newComment.text || !newComment.rating"
-          >Submit Review</button>
-        </ng-container>
-      </div>
-  
-      <!-- Existing Comments -->
-      <div class="comments-list">
+    <!-- Comments list -->
+    <div class="comments-list">
+      <ng-container *ngIf="comments.length > 0; else noReviews">
         <div *ngFor="let comment of comments" class="comment-card">
           <div class="comment-header">
             <span class="user-name">{{ comment.user }}</span>
@@ -203,9 +169,52 @@
             </div>
           </div>
           <p class="comment-text">{{ comment.content }}</p>
-          <!-- <span class="comment-date">{{ comment.date | date }}</span> -->
         </div>
-      </div>
+      </ng-container>
+      
+      <ng-template #noReviews>
+        <div class="no-reviews-message">
+          <p>No reviews yet</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Only show comment form to event organizers -->
+    <div class="comment-form" *ngIf="isEventOrganizer">
+      <ng-container *ngIf="!isCommentingEnabled">
+        <div class="comment-locked-message">
+          <i class="fas fa-lock"></i>
+          <p>Please book this service first to leave a review</p>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isCommentingEnabled">
+        <h3>Leave a Review</h3>
+        <div class="rating-input">
+          <span>Your Rating:</span>
+          <div class="stars-input">
+            <span 
+              *ngFor="let star of getStarArray(5); let i = index"
+              (click)="setRating(i + 1)"
+              [class.filled]="i < userRating"
+              class="star-icon"
+            >★</span>
+          </div>
+        </div>
+        <textarea 
+          [(ngModel)]="newComment.text" 
+          placeholder="Your Review"
+          class="input-field"
+        ></textarea>
+        <button 
+          (click)="submitComment()"
+          class="submit-btn"
+          [disabled]="!newComment.text || !newComment.rating"
+        >Submit Review</button>
+      </ng-container>
+    </div>
+  </div>
+
     <!-- Fab -->
     </div>  
     <div class="fab-container" *ngIf="offering">
