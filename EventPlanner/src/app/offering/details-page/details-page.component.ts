@@ -78,7 +78,7 @@ export class DetailsPageComponent implements OnInit {
             const fileName = photo.split('\\').pop()?.split('/').pop();
             // Construct the URL to your Spring Boot's static resource endpoint
             console.log(fileName);
-            return `${environment.apiHost}/api/images/${fileName}`;
+            return `${environment.apiHost}/images/${fileName}`;
           });
         }
         return offering;
