@@ -7,7 +7,7 @@ export interface Offering {
     category: Category;
     description: string;
     discount?: number;
-    picture?: string[];
+    photos?: string[];
     provider: GetProvider;
     location: Location;
     price: number;

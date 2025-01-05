@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
 import { CommentService } from '../comments/comment.service';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Service } from '../model/service.model';
 import { Product } from '../model/product.model';
 import { Router } from '@angular/router';
@@ -18,6 +18,7 @@ import { Comment } from '../model/comment.model';
 import { CreateCommentDTO } from '../model/create-comment-dto.model';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../../env/environment';
 
 @Component({
   selector: 'app-details-page',
@@ -63,18 +64,34 @@ export class DetailsPageComponent implements OnInit {
     this.route.params.pipe(
       switchMap(params => {
         const id = +params['id'];
-        console.log(id)
+        console.log(id);
         return this.serviceService.getById(id);
+      }),
+      map(offering => {
+        // Transform the photos array to full URLs
+        console.log(offering);
+        console.log(offering.photos);
+        console.log(offering.photos && offering);
+        if (offering && offering.photos) {
+          // Extract just the filename from the full path
+          offering.photos = offering.photos.map(photo => {
+            const fileName = photo.split('\\').pop()?.split('/').pop();
+            // Construct the URL to your Spring Boot's static resource endpoint
+            console.log(fileName);
+            return `${environment.apiHost}/images/${fileName}`;
+          });
+        }
+        return offering;
       })
     ).subscribe(offering => {
       this.offering = offering;
-      console.log('Offering:', this.offering); 
-      if (this.offering) {
-        this.images = Array.isArray(this.offering.picture) ? this.offering.picture : [this.offering.picture];
-        this.loadComments();
+      console.log('Offering:', this.offering);
+      if (this.offering && this.offering.photos) {
+        this.images = this.offering.photos;
       }
+      this.loadComments();
     });
-  }  
+  }
   
   isService(offering: Product | Service): offering is Service {
     const isService = (offering as Service).specification !== undefined;
