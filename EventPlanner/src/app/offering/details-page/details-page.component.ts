@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
-import { CommentService } from '../comment-service/comment.service';
+import { CommentService } from '../comments/comment.service';
 import { switchMap } from 'rxjs/operators';
 import { Service } from '../model/service.model';
 import { Product } from '../model/product.model';
@@ -15,6 +15,9 @@ import { ReservationDialogComponent } from '../reservation-dialog/reservation-di
 import { ServiceService } from '../service-service/service.service';
 import { OfferingService } from '../offering-service/offering.service';
 import { Comment } from '../model/comment.model';
+import { CreateCommentDTO } from '../model/create-comment-dto.model';
+import { AuthService } from '../../infrastructure/auth/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-details-page',
@@ -39,7 +42,6 @@ export class DetailsPageComponent implements OnInit {
   isCommentingEnabled = false; 
   
   newComment = {
-    userName: '',
     rating: 0,
     text: ''
   };
@@ -49,8 +51,10 @@ export class DetailsPageComponent implements OnInit {
     private serviceService: ServiceService,
     private commentService: CommentService,
     private offeringService: OfferingService,
+    private authService: AuthService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -98,25 +102,40 @@ export class DetailsPageComponent implements OnInit {
     if (!this.isCommentingEnabled) {
       return;
     }
-    
-    if (this.offering && this.newComment.userName && this.newComment.text && this.newComment.rating) {
-      const newComment = {
-        offeringId: this.offering.id,
-        userName: this.newComment.userName,
+  
+    if (this.offering && this.newComment.text && this.newComment.rating) {
+      const newComment: CreateCommentDTO = {
         rating: this.newComment.rating,
-        text: this.newComment.text,
-        date: new Date()
+        content: this.newComment.text,
+        account: this.authService.getUserId()
       };
-
-      this.commentService.addComment(newComment)
-        .subscribe(() => {
-          this.loadComments();
-          this.newComment = {
-            userName: '',
-            rating: 0,
-            text: ''
-          };
-          this.userRating = 0;
+  
+      console.log(newComment);
+  
+      this.commentService.add(newComment, this.offering.id)
+        .subscribe({
+          next: () => {
+            this.loadComments();
+            this.newComment = {
+              rating: 0,
+              text: ''
+            };
+            this.userRating = 0;
+            this.snackBar.open('Comment submitted successfully! Waiting for admin approval.', 'Close', {
+              duration: 5000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              panelClass: ['success-snackbar']
+            });
+          },
+          error: (error) => {
+            this.snackBar.open('Error submitting comment. Please try again.', 'Close', {
+              duration: 5000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              panelClass: ['error-snackbar']
+            });
+          }
         });
     }
   }

@@ -661,3 +661,16 @@ textarea.input-field {
   margin: 0;
   font-size: 1.1rem;
 }
+
+::ng-deep .mat-mdc-button:not(:disabled){
+  background-color: white !important ;
+  color: #000000 !important;
+}
+::ng-deep .mat-mdc-button:not(:disabled):hover{
+  background-color: #bebce6 !important ;
+  color: white !important;
+}
+::ng-deep .mat-mdc-snack-bar-container .mat-mdc-snackbar-surface{
+  background-color: #fff !important;
+  color: #000000 !important; 
+}

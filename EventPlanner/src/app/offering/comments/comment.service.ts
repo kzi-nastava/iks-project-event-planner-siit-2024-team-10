@@ -1,17 +1,35 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Comment } from '../model/comment.model';
+import { CreateCommentDTO } from '../model/create-comment-dto.model';
+import { environment } from '../../../env/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
-  private comments: Comment[];
+  private readonly baseUrl = `${environment.apiHost}`;
 
-  constructor(){
+  constructor(private http: HttpClient) {}
+
+  // Add a new comment
+  add(comment: CreateCommentDTO, id:number): Observable<Comment> {
+    return this.http.post<Comment>(this.baseUrl + '/offerings/' + id + '/comments', comment);
   }
 
-  addComment(comment: Omit<Comment, 'id'>): Observable<Comment> {
-    return null;
+  // Get comments for an offering
+  getComments(offeringId: number): Observable<Comment[]> {
+    return this.http.get<Comment[]>(`${this.baseUrl}/offering/${offeringId}/comments`);
+  }
+
+  // Delete a comment
+  delete(commentId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${commentId}`);
+  }
+
+  // Update a comment
+  update(commentId: number, comment: Partial<CreateCommentDTO>): Observable<Comment> {
+    return this.http.put<Comment>(`${this.baseUrl}/${commentId}`, comment);
   }
 }

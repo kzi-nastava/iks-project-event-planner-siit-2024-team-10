@@ -175,12 +175,6 @@
               >★</span>
             </div>
           </div>
-          <input 
-            type="text" 
-            [(ngModel)]="newComment.userName" 
-            placeholder="Your Name"
-            class="input-field"
-          >
           <textarea 
             [(ngModel)]="newComment.text" 
             placeholder="Your Review"
@@ -189,7 +183,7 @@
           <button 
             (click)="submitComment()"
             class="submit-btn"
-            [disabled]="!newComment.userName || !newComment.text || !newComment.rating"
+            [disabled]="!newComment.text || !newComment.rating"
           >Submit Review</button>
         </ng-container>
       </div>
@@ -209,6 +203,8 @@
           <!-- <span class="comment-date">{{ comment.date | date }}</span> -->
         </div>
       </div>
+      
+    <!-- Fab -->
     </div>  
     <div class="fab-container" *ngIf="offering">
       <button class="edit-fab" (click)="navigateToEdit()">
