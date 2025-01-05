@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
 import { CommentService } from '../comments/comment.service';
-import { map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { Service } from '../model/service.model';
 import { Product } from '../model/product.model';
 import { Router } from '@angular/router';
@@ -19,6 +19,7 @@ import { CreateCommentDTO } from '../model/create-comment-dto.model';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../../env/environment';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'app-details-page',
@@ -52,6 +53,7 @@ export class DetailsPageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private serviceService: ServiceService,
+    private productService: ProductService,
     private commentService: CommentService,
     private offeringService: OfferingService,
     private authService: AuthService,
@@ -73,18 +75,18 @@ export class DetailsPageComponent implements OnInit {
       switchMap(params => {
         const id = +params['id'];
         console.log(id);
-        return this.serviceService.getById(id);
+        
+        return this.serviceService.getById(id).pipe(
+          catchError(error => {
+            console.log('Service not found, trying product service');
+            return this.productService.getById(id);
+          })
+        );
       }),
       map(offering => {
-        // Transform the photos array to full URLs
-        console.log(offering);
-        console.log(offering.photos);
-        console.log(offering.photos && offering);
         if (offering && offering.photos) {
-          // Extract just the filename from the full path
           offering.photos = offering.photos.map(photo => {
             const fileName = photo.split('\\').pop()?.split('/').pop();
-            // Construct the URL to your Spring Boot's static resource endpoint
             console.log(fileName);
             return `${environment.apiHost}/images/${fileName}`;
           });
