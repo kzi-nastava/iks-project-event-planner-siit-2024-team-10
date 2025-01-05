@@ -18,7 +18,7 @@
         </button>
       </div>
       <div class="meta-info">
-        <span class="meta-item"> {{ event?.eventType?.name }}</span>
+        <span class="meta-item" *ngIf="event?.eventType!=null"> {{ event?.eventType?.name }}</span>
         <span class="meta-item">★ {{ event?.averageRating }}</span>
       </div>
     </div>

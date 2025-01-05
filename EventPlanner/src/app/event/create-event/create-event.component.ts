@@ -17,6 +17,8 @@ import {CreateLocationDTO} from '../model/create-location-dto.model';
 import {formatDate} from '@angular/common';
 import {EventService} from '../event.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthService} from '../../infrastructure/auth/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-event',
@@ -42,7 +44,9 @@ export class CreateEventComponent implements OnInit{
   snackBar:MatSnackBar = inject(MatSnackBar);
 
   constructor(private eventTypeService: EventTypeService,
-              private eventService:EventService) {}
+              private eventService:EventService,
+              private authService:AuthService,
+              private router:Router) {}
 
   ngOnInit(): void {
     this.createForm.patchValue({eventPublicity:"open",noEventType:false})
@@ -51,7 +55,7 @@ export class CreateEventComponent implements OnInit{
         this.allEventTypes = eventTypes.filter((x) => x.active);
       },
       error: (_) => {
-        console.log("Error loading event types")
+        this.snackBar.open('Error loading event types','OK',{duration:3000});
       }
     });
     this.createForm.get('noEventType')?.valueChanges.subscribe((noEventTypeValue) => {
@@ -74,8 +78,7 @@ export class CreateEventComponent implements OnInit{
     if(this.createForm.valid){
       const event:CreateEventDTO={
         eventTypeId:this.createForm.value.noEventType?null:this.createForm.value.eventType.id,
-        //TODO:enter logged in user id
-        organizerId:1,
+        organizerId:this.authService.getUserId(),
         name:this.createForm.value.name,
         description:this.createForm.value.description,
         maxParticipants:parseInt(this.createForm.value.maxParticipants, 10),
@@ -91,9 +94,10 @@ export class CreateEventComponent implements OnInit{
       this.eventService.add(event).subscribe({
         next: () => {
           this.snackBar.open('Event created successfully','OK',{duration:3000});
+          this.router.navigate(['home']);
         },
         error: () => {
-          console.error("Error creating event")
+          this.snackBar.open('Error creating event','OK',{duration:3000});
         }
       });
     }
