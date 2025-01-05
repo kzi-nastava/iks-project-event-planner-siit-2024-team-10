@@ -41,7 +41,9 @@ export class DetailsPageComponent implements OnInit {
   userRating = 0;
   comments: Comment[] = [];
   isCommentingEnabled = false; 
-  
+  isEventOrganizer = false;
+  role: string = '';
+
   newComment = {
     rating: 0,
     text: ''
@@ -60,6 +62,12 @@ export class DetailsPageComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.authService.getUserId());
+    this.authService.userState.subscribe((result) => {
+          console.log(result);
+          this.role = result;
+        })
+
+    this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
 
     this.route.params.pipe(
       switchMap(params => {
