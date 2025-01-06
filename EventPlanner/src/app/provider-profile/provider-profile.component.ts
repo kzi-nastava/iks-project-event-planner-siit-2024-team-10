@@ -65,10 +65,17 @@ export class ProviderProfileComponent implements OnInit {
   */
 
   get profilePhoto(): string {
-    const photo = this.provider.profilePhoto;
-    console.log(photo);
-    const fileName = photo.split('\\').pop()?.split('/').pop();
-    return `${environment.apiHost}/images/${fileName}`;
+    try{
+      if (!this.provider) {
+        return '';
+      }
+      const photo = this.provider.profilePhoto;
+      console.log(photo);
+      const fileName = photo.split('\\').pop()?.split('/').pop();
+      return `${environment.apiHost}/images/${fileName}`;
+    }catch(e){
+      return `${environment.apiHost}/images/placeholder-image.png`;
+    }
   }
 
   loadOfferingsWithComments(providerId: number) {
