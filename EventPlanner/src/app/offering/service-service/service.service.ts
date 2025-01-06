@@ -21,6 +21,7 @@ export class ServiceService {
       return this.httpClient.get<Service>(environment.apiHost + `/services/` + id);
     }
     add(service:CreateServiceDTO) : Observable<Service> {
+      console.log(service);
       return this.httpClient.post<Service>(environment.apiHost + "/services", service);
     }
     edit(service:EditServiceDTO) : Observable<Service> {
