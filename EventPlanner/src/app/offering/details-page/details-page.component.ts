@@ -266,7 +266,11 @@ export class DetailsPageComponent implements OnInit {
   }
   
   viewProviderProfile() {
-    console.log('Viewing provider profile...');
+    if (this.offering && this.offering.provider) {
+      this.router.navigate(['/provider', this.offering.provider.id], {
+        state: { provider: this.offering.provider }
+      });
+    }
   }
 
   openReservationDialog(): void {

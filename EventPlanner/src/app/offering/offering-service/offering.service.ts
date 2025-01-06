@@ -44,6 +44,10 @@ export class OfferingService {
     return this.httpClient.get<Comment[]>(`${environment.apiHost}/offerings/${offeringId}/comments`);
   }
   
+  getOfferingsByProviderId(providerId: number): Observable<Offering[]> {
+    return this.httpClient.get<Offering[]>(`${environment.apiHost}/offerings/provider/${providerId}`);
+  }
+  
   getPaginatedOfferings(
       page: number,
       pageSize: number,
@@ -80,19 +84,9 @@ export class OfferingService {
       return this.httpClient.get<number>(environment.apiHost+"/offerings/highest-prices", { params: new HttpParams().set('isService', isService.toString()) });
     }
 
-  getServices(): Observable<Service[]> {
-    return of(this.serviceList);
-  }
-
   getOfferingById(id: number): Observable<Offering | undefined> {
     const allOfferings = [...this.productList, ...this.serviceList];
     const offering = allOfferings.find(o => o.id === id);
     return of(offering);
-  }
-  createService(data: any): void {
-    console.log('Service data received:', data);
-  }
-  editService(data: any): void {
-    console.log('Service data received:', data);
   }
 }
