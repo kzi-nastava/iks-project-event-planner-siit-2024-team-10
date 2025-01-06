@@ -16,8 +16,8 @@
               class="company-logo"
             >
             <div class="profile-photo-overlay">
-              <img
-                [src]="provider.profilePhoto || 'profile_photo.png'"
+              <img mat-card-image
+                [src]="profilePhoto || 'profile_photo.png'"
                 [alt]="provider.firstName"
                 class="provider-photo"
               >

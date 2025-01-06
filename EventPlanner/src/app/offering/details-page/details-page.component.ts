@@ -273,6 +273,13 @@ export class DetailsPageComponent implements OnInit {
     }
   }
 
+  get profilePhoto(): string {
+    const photo = this.offering.provider?.profilePhoto;
+    console.log(photo);
+    const fileName = photo.split('\\').pop()?.split('/').pop();
+    return `${environment.apiHost}/images/${fileName}`;
+  }
+
   openReservationDialog(): void {
     if (!this.authService.isLoggedIn()) {
       this.snackBar.open('Please log in to make a reservation', 'Close', {

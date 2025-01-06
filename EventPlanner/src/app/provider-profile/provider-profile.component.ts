@@ -9,6 +9,7 @@ import { Offering } from '../offering/model/offering.model';
 import { forkJoin, map } from 'rxjs';
 import { Comment } from '../offering/model/comment.model';
 import { OfferingService } from '../offering/offering-service/offering.service';
+import { environment } from '../../env/environment';
 
 @Component({
   selector: 'app-provider-profile',
@@ -51,6 +52,23 @@ export class ProviderProfileComponent implements OnInit {
       const providerId = this.route.snapshot.params['id'];
       this.loadOfferingsWithComments(providerId);
     }
+    console.log(this.provider);
+  }
+
+  /*
+  try it when pictures are in db
+  get companyPhoto(): string {
+    const photo = this.provider.company?.photos[0];
+    const fileName = photo.split('\\').pop()?.split('/').pop();
+    return `${environment.apiHost}/images/${fileName}`;
+  }
+  */
+
+  get profilePhoto(): string {
+    const photo = this.provider.profilePhoto;
+    console.log(photo);
+    const fileName = photo.split('\\').pop()?.split('/').pop();
+    return `${environment.apiHost}/images/${fileName}`;
   }
 
   loadOfferingsWithComments(providerId: number) {
