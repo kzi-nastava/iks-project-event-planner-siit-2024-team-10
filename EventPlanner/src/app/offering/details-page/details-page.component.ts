@@ -20,6 +20,9 @@ import { AuthService } from '../../infrastructure/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../../env/environment';
 import { ProductService } from '../product.service';
+import { MatIconModule } from "@angular/material/icon";
+import { AccountService } from '../../account/account.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-details-page',
@@ -31,7 +34,10 @@ import { ProductService } from '../product.service';
     CommonModule,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,  
+    MatIconModule,
   ]
 })
 
@@ -44,6 +50,8 @@ export class DetailsPageComponent implements OnInit {
   isCommentingEnabled = false; 
   isEventOrganizer = false;
   role: string = '';
+  isFavourite = false;
+  loggedInUserId:number;
 
   newComment = {
     rating: 0,
@@ -56,6 +64,7 @@ export class DetailsPageComponent implements OnInit {
     private productService: ProductService,
     private commentService: CommentService,
     private offeringService: OfferingService,
+    private accountService: AccountService,
     private authService: AuthService,
     private router: Router,
     private dialog: MatDialog,
@@ -65,12 +74,13 @@ export class DetailsPageComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.authService.getUserId());
     this.authService.userState.subscribe((result) => {
-          console.log(result);
-          this.role = result;
-        })
+      console.log(result);
+      this.role = result;
+    })
 
     this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
 
+    // Move the route params subscription to the top level
     this.route.params.pipe(
       switchMap(params => {
         const id = +params['id'];
@@ -100,6 +110,19 @@ export class DetailsPageComponent implements OnInit {
         this.images = this.offering.photos;
       }
       this.loadComments();
+      
+      // Move the isInFavouriteEvents call here, after we have the offering
+      if (this.offering) {
+        this.accountService.isInFavouriteEvents(this.offering.id).subscribe({
+          next: (isFavourite: boolean) => {
+            this.isFavourite = isFavourite;
+          },
+          error: (err) => {
+            this.snackBar.open('Error fetching favourite offerings','OK',{duration:5000});
+            console.error('Error fetching favourite offerings:', err);
+          }
+        });
+      }
     });
   }
   
@@ -174,9 +197,33 @@ export class DetailsPageComponent implements OnInit {
   }
   isFavorite: boolean = false;
 
-  toggleFavorite() {
-    this.isFavorite = !this.isFavorite;
-}
+  toggleFavorite(): void {
+    if(this.isFavourite){
+      console.log('Removing offering from favourites...');
+      this.accountService.removeOfferingFromFavourites(this.offering.id).subscribe({
+        next: () => {
+          this.isFavourite = !this.isFavourite;
+          console.log(this.isFavourite);
+        },
+        error: (err) => {
+          this.snackBar.open('Error adding offering to favourites','OK',{duration:5000});
+          console.error('Error adding offering to favourites:', err);
+        }
+      });
+    }
+    else {
+      console.log('Adding offering to favourites...');
+      this.accountService.addOfferingToFavourites(this.offering.id).subscribe({
+        next: () => {
+          this.isFavourite = !this.isFavourite;
+        },
+        error: (err) => {
+          this.snackBar.open('Error removing offering from favourites','OK',{duration:5000});
+          console.error('Error removing offering from favourites:', err);
+        }
+      });
+    }
+  }
 
   navigateToEdit(): void {
     if (this.offering) {

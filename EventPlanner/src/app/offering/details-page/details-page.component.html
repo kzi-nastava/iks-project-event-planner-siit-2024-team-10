@@ -37,7 +37,12 @@
   <div class="content-section">
     <!-- Header Info -->
     <div class="header-info">
+      <div style="display: flex; justify-content: space-between;">
       <h1 class="title">{{offering?.name}}</h1>
+      <button class="favorite-btn" [class.active]="isFavorite" (click)="toggleFavorite()">
+        <span class="heart-icon">{{isFavorite ? '❤️' : '🤍'}}</span>
+      </button>
+    </div>
       <div class="meta-info">
         <span class="category">{{offering?.category.name}}</span>
         <div class="availability" [class.available]="offering?.available">
@@ -70,9 +75,6 @@
       <button class="book-now-btn" [disabled]="!offering?.available" (click)="openReservationDialog()">
         <i class="fas fa-calendar-check"></i>
         Book Now
-      </button>
-      <button class="favorite-btn" [class.active]="isFavorite" (click)="toggleFavorite()">
-        <span class="heart-icon">{{isFavorite ? '❤️' : '🤍'}}</span>
       </button>
     </div>
   </div>
