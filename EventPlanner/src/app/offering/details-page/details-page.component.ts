@@ -80,7 +80,6 @@ export class DetailsPageComponent implements OnInit {
 
     this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
 
-    // Move the route params subscription to the top level
     this.route.params.pipe(
       switchMap(params => {
         const id = +params['id'];
@@ -111,11 +110,11 @@ export class DetailsPageComponent implements OnInit {
       }
       this.loadComments();
       
-      // Move the isInFavouriteEvents call here, after we have the offering
       if (this.offering) {
-        this.accountService.isInFavouriteEvents(this.offering.id).subscribe({
+        this.accountService.isInFavouriteOfferings(this.offering.id).subscribe({
           next: (isFavourite: boolean) => {
             this.isFavourite = isFavourite;
+            console.log('Is favourite:', this.isFavourite);
           },
           error: (err) => {
             this.snackBar.open('Error fetching favourite offerings','OK',{duration:5000});
