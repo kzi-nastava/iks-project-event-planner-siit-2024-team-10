@@ -1,0 +1,10 @@
+<div class="outer-container">
+  <div class="chart-container">
+    <h2 class="chart-title">{{ eventStats.eventName }}</h2>
+    <div class="chart-stats">
+      <span>Average Rating: {{ eventStats.averageRating | number:'1.1-1' }}</span>
+      <span>Total Participants: {{ eventStats.participantsCount }}</span>
+    </div>
+    <div #chartContainer class="chart"></div>
+  </div>
+</div>
