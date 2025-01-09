@@ -39,6 +39,10 @@ export class EventService {
     return this.httpClient.get<AgendaItem[]>(environment.apiHost+'/events/'+eventId+'/agenda');
   }
 
+  getEventStats(eventId:number): Observable<EventStats> {
+    return this.httpClient.get<EventStats>(environment.apiHost+'/events/'+eventId+'/stats');
+  }
+
   addParticipant(eventId:number):Observable<EventStats> {
     return this.httpClient.post<EventStats>(environment.apiHost+'/events/'+eventId+'/stats/participants',null);
   }
