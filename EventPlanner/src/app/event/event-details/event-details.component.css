@@ -287,3 +287,8 @@ textarea.input-field {
   display: flex;
   justify-content: space-between;
 }
+
+.participants-section{
+  display: flex;
+  justify-content: space-between;
+}

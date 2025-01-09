@@ -10,8 +10,9 @@ export interface Event{
     organizer: Organizer;
     description: string;
     maxParticipants: number;
-    isOpen: boolean;
+    open: boolean;
     date: Date;
     location: Location;
     averageRating: number;
+    participantsCount:number;
 }

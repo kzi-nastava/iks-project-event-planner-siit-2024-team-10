@@ -29,6 +29,8 @@ export class EventDetailsComponent implements OnInit {
   isFavourite:boolean=false;
   loggedInUserId:number;
   owner:boolean=false;
+  admin:boolean=false;
+  participating:boolean=false;
   snackBar:MatSnackBar = inject(MatSnackBar)
 
   constructor(
@@ -87,6 +89,7 @@ export class EventDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedInUserId=this.authService.getUserId();
+    this.admin=this.authService.getRole()=='ADMIN';
     this.route.params.subscribe((params) => {
       const id = +params['id'];
       this.eventService.getEvent(id).subscribe({
@@ -188,6 +191,20 @@ export class EventDetailsComponent implements OnInit {
             },
         });
       }
+    });
+  }
+
+  addParticipant():void{
+    this.eventService.addParticipant(this.event.id).subscribe({
+      next: (response) => {
+        this.participating=true;
+        this.event.participantsCount=response.participantsCount;
+        this.snackBar.open('Participation submitted successfully','OK',{duration:3000});
+      },
+      error: (err) => {
+        console.error('Error deleting agenda item:', err)
+        this.snackBar.open('Error submitting participation','OK',{duration:3000});
+      },
     });
   }
 }

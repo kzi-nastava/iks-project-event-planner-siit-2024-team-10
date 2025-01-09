@@ -30,6 +30,15 @@
       <p class="info-item">{{ event?.location?.street }} {{ event?.location?.houseNumber}}, {{ event?.location?.city}}, {{ event?.location?.country }}</p>
       <h2>Date</h2>
       <p class="info-item">{{ event?.date | date: 'dd.MM.yyyy.'}}</p>
+      <div class="participants-section" *ngIf="(owner||admin)&&event?.open">
+        <div>
+          <h2>Participants</h2>
+          <span class="info-it+em">{{event?.participantsCount}} people going</span>
+        </div>
+        <button class="submit-btn" mat-flat-button color (click)="addParticipant()" [disabled]="participating">
+          {{participating?"You're going!":"I Want to Attend"}}
+        </button>
+      </div>
     </div>
 
     <!-- Specifications for Services -->
