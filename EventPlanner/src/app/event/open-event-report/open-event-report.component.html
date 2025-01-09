@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <div class="outer-container">
   <div class="chart-container">
     <h2 class="chart-title">{{ eventStats.eventName }}</h2>
@@ -8,3 +9,7 @@
     <div #chartContainer class="chart"></div>
   </div>
 </div>
+
+<button class="fab" (click)="generateReport()">
+  <i class="fas fa-file-pdf"></i>
+</button>

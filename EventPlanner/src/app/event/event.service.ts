@@ -67,6 +67,12 @@ export class EventService {
     return this.httpClient.delete<void>(environment.apiHost + "/events/"+eventId+"/agenda/"+agendaItemId);
   }
 
+  generateOpenEventReport(eventId:number): Observable<Blob> {
+    return this.httpClient.get(environment.apiHost + '/events/'+eventId+'/reports/open-event',{
+      responseType: 'blob'
+    });
+  }
+
   getPaginatedEvents(
     page: number,
     pageSize: number,

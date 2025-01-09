@@ -21,6 +21,7 @@ interface RatingPoint {
 export class OpenEventReportComponent implements OnInit, AfterViewInit {
   @ViewChild('chartContainer') private chartContainer!: ElementRef;
   eventStats:EventStats;
+  eventId:number;
   svg: any;
   width = 650;
   height = 400;
@@ -34,6 +35,7 @@ export class OpenEventReportComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       const id = +params['eventId'];
+      this.eventId = id;
       this.eventService.getEventStats(id).subscribe({
         next: (eventStats:EventStats) => {
           this.eventStats=eventStats;
@@ -122,4 +124,17 @@ export class OpenEventReportComponent implements OnInit, AfterViewInit {
       .append('title')
       .text((d: RatingPoint) => `Rating: ${d.rating} Stars\nCount: ${d.count}`);
     }
+  generateReport() {
+    this.eventService.generateOpenEventReport(this.eventId).subscribe({
+      next: (pdfBlob: Blob) => {
+        const fileURL = URL.createObjectURL(pdfBlob);
+        window.open(fileURL);
+      },
+      error: (err) => {
+        console.error('Error generating report:', err);
+        this.snackBar.open('Error generating pdf report','OK',{duration:5000});
+        console.error('Error generating pdf report:', err);
+      }
+    });
+  }
   }
