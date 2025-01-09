@@ -1,8 +1,12 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import { select } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
 import {EventStats} from '../model/event.stats.model';
+import {ActivatedRoute} from '@angular/router';
+import {EventService} from '../event.service';
+import {Event} from '../model/event.model';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 interface RatingPoint {
   rating: number;
@@ -16,30 +20,32 @@ interface RatingPoint {
 })
 export class OpenEventReportComponent implements OnInit, AfterViewInit {
   @ViewChild('chartContainer') private chartContainer!: ElementRef;
-  protected eventStats:EventStats;
-  private svg: any;
-  private width = 650;
-  private height = 400;
-  private margin = { top: 20, right: 20, bottom: 40, left: 40 };
+  eventStats:EventStats;
+  svg: any;
+  width = 650;
+  height = 400;
+  margin = { top: 20, right: 20, bottom: 40, left: 40 };
+  snackBar:MatSnackBar = inject(MatSnackBar)
+
+  constructor(private route: ActivatedRoute,
+              private eventService:EventService) {}
+
 
   ngOnInit() {
-    this.eventStats={
-      id: 1,
-      oneStarCount: 10,
-      twoStarCount: 5,
-      threeStarCount: 15,
-      fourStarCount: 30,
-      fiveStarCount: 40,
-      participantsCount: 100,
-      averageRating: 4.2,
-      eventName: "Tech Conference 2025"
-    };
-    if (this.eventStats) {
-      this.createChart();
-    }
+    this.route.params.subscribe((params) => {
+      const id = +params['eventId'];
+      this.eventService.getEventStats(id).subscribe({
+        next: (eventStats:EventStats) => {
+          this.eventStats=eventStats;
+        },
+        error: (err) => {
+          this.snackBar.open('Error fetching event stats','OK',{duration:5000});
+          console.error('Error fetching event stats:', err);
+        }
+      });
+    });
   }
   ngAfterViewInit() {
-    // Move chart creation here after view is initialized
     if (this.eventStats) {
       this.createChart();
     }
