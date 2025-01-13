@@ -9,6 +9,7 @@ import {CreateProductDTO} from '../model/create-product-dto.model';
 import {AuthService} from '../../infrastructure/auth/auth.service';
 import {ProductService} from '../product.service';
 import {Product} from '../../offering/model/product.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-product',
@@ -38,7 +39,8 @@ export class CreateProductComponent implements OnInit{
     private categoryService:CategoryService,
     private http: HttpClient,
     private authService: AuthService,
-    private productService:ProductService){}
+    private productService:ProductService,
+    private router:Router){}
 
   ngOnInit() {
     this.categoryService.getAll().subscribe({
@@ -123,6 +125,7 @@ export class CreateProductComponent implements OnInit{
     this.productService.create(product).subscribe({
       next: (product:Product) => {
         this.snackBar.open("Product created successfully!",'OK', { duration: 3000 });
+        this.router.navigate(['home']);
       },
       error: (_) => {
         this.snackBar.open("Error creating product",'OK', { duration: 3000 });
