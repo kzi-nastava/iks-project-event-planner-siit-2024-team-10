@@ -5,6 +5,10 @@ import {CategoryService} from '../../offering/category-service/category.service'
 import {environment} from '../../../env/environment';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {HttpClient} from '@angular/common/http';
+import {CreateProductDTO} from '../model/create-product-dto.model';
+import {AuthService} from '../../infrastructure/auth/auth.service';
+import {ProductService} from '../product.service';
+import {Product} from '../../offering/model/product.model';
 
 @Component({
   selector: 'app-create-product',
@@ -32,7 +36,9 @@ export class CreateProductComponent implements OnInit{
 
   constructor(
     private categoryService:CategoryService,
-    private http: HttpClient){}
+    private http: HttpClient,
+    private authService: AuthService,
+    private productService:ProductService){}
 
   ngOnInit() {
     this.categoryService.getAll().subscribe({
@@ -94,6 +100,32 @@ export class CreateProductComponent implements OnInit{
       error: (error) => {
         console.error('Error uploading files:', error);
         this.snackBar.open('Failed to upload files', 'Dismiss', { duration: 3000 });
+      }
+    });
+  }
+
+  onSubmit():void{
+    if(!this.createForm.valid)
+      return;
+    const product:CreateProductDTO={
+      categoryId:this.creatingCategory()?null:this.createForm.value.productCategory.id,
+      categoryProposalName:this.creatingCategory()?this.createForm.value.categoryName:null,
+      categoryProposalDescription:this.creatingCategory()?this.createForm.value.categoryDescription:null,
+      providerID:this.authService.getUserId(),
+      name:this.createForm.value.name,
+      description:this.createForm.value.description,
+      price:this.createForm.value.price,
+      discount:this.createForm.value.discount,
+      photos:this.photoPaths,
+      visible:this.createForm.value.isVisible,
+      available:this.createForm.value.isAvailable
+    };
+    this.productService.create(product).subscribe({
+      next: (product:Product) => {
+        this.snackBar.open("Product created successfully!",'OK', { duration: 3000 });
+      },
+      error: (_) => {
+        this.snackBar.open("Error creating product",'OK', { duration: 3000 });
       }
     });
   }
