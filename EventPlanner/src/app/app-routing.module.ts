@@ -15,6 +15,7 @@ import {EventTypesComponent} from './event/event-types/event-types.component';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {AuthGuard} from './infrastructure/auth/auth.guard';
 import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
+import {CreateProductComponent} from './product/create-product/create-product.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
@@ -36,6 +37,8 @@ const routes: Routes = [
     data: {role: ['ADMIN']}},
   {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER']}},
+  {path:'create-product',component:CreateProductComponent, canActivate: [AuthGuard],
+    data: {role: ['PROVIDER']}},
   {path:'activate', component: ActivateComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
