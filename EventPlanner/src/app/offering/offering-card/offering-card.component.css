@@ -80,46 +80,6 @@ mat-card-subtitle {
   font-size: 12px;
   text-transform: uppercase;
 }
-
-.add-to-favorite {
-  text-align: center;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background-color: transparent;
-  border: none;
-}
-.add-to-favorite button{
-  display: flex;
-  align-items: center;
-  padding: 0;
-  justify-content: center;
-  border-radius: 50%;
-  min-width:46px;
-  transition: background-color 0.3s ease-in-out;
-  min-height:46px;
-}
-.add-to-favorite button:hover{
-  background-color: #dac8c8;
-}
-
-.add-to-favorite mat-icon {
-  margin: 0;
-  padding: 0;
-  display: flex;  
-  align-items: center;
-  justify-content: center;
-  vertical-align: middle;
-  color: #721a1a;
-  font-size: 27px;
-  height: 27px;
-  width: 27px;
-}
-
-
-
 button[mat-stroked-button] {
   border-radius: 20px;
   background-color: #5FA3A2;
