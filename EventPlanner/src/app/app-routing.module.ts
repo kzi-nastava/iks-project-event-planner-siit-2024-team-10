@@ -15,6 +15,7 @@ import {EventTypesComponent} from './event/event-types/event-types.component';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {AuthGuard} from './infrastructure/auth/auth.guard';
 import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
+import {OpenEventReportComponent} from './event/open-event-report/open-event-report.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
@@ -32,6 +33,8 @@ const routes: Routes = [
   {path:'pricelist',component:PricelistComponent},
   {path:'offering-categories',component: OfferingCategoryComponent, canActivate: [AuthGuard],
     data: {role: ['ADMIN']}},
+  {path:'open-event-report/:eventId',component:OpenEventReportComponent, canActivate: [AuthGuard],
+  data: {role: ['ADMIN',"EVENT_ORGANIZER"]}},
   {path:'event-types',component:EventTypesComponent, canActivate: [AuthGuard],
     data: {role: ['ADMIN']}},
   {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],

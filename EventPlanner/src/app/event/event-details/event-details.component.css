@@ -191,6 +191,10 @@
   z-index: 1000;
 }
 
+.fab.secondary {
+  bottom: 6rem;
+}
+
 .comments-section {
   background: #f8fafc;
   border-radius: 12px;
@@ -284,6 +288,11 @@ textarea.input-field {
 }
 
 .agenda-item-body{
+  display: flex;
+  justify-content: space-between;
+}
+
+.participants-section{
   display: flex;
   justify-content: space-between;
 }
