@@ -1,0 +1,49 @@
+<div class="outer-container">
+  <div class="user-container">
+    <div class="header-info" *ngIf="hasPersonalDetails()">
+      <div class="header-left">
+        <div class="header-title">
+          <h1 class="title">{{ user?.firstName }} {{ user?.lastName }}</h1>
+        </div>
+        <div class="meta-info">
+          <span class="meta-item">{{ getRole() }}</span>
+        </div>
+      </div>
+      <img src='{{ getProfilePhoto() }}' alt="organizer" class="profile-photo">
+    </div>
+    <div class="info-section" *ngIf="hasPersonalDetails()">
+      <h2>Personal info</h2>
+      <div class="info-item">
+        <h2>Email: </h2>
+        <p class="info-content">{{ user?.email }}</p>
+      </div>
+      <div class="info-item">
+        <h2>Phone: </h2>
+        <p class="info-content">{{ user?.phoneNumber }}</p>
+      </div>
+      <div class="info-item">
+        <h2>Location: </h2>
+        <p class="info-content">{{ user?.location?.street }} {{ user?.location?.houseNumber }}, {{ user?.location?.city }}, {{ user?.location?.country }}</p>
+      </div>
+    </div>
+    <div class="info-section" *ngIf="hasCompanyDetails()">
+      <h2>Company info</h2>
+      <div class="info-item">
+        <h2>Name: </h2>
+        <p class="info-content">{{ user?.company?.name }}</p>
+      </div>
+      <div class="info-item">
+        <h2>Description: </h2>
+        <p class="info-content">{{ user?.company?.description }}</p>
+      </div>
+      <div class="info-item">
+        <h2>Phone: </h2>
+        <p class="info-content">{{ user?.company?.phoneNumber }}</p>
+      </div>
+      <div class="info-item">
+        <h2>Location: </h2>
+        <p class="info-content">{{ user?.company?.location?.street }} {{ user?.company?.location?.houseNumber }}, {{ user?.company?.location?.city }}, {{ user?.company?.location?.country }}</p>
+      </div>
+  </div>
+</div>
+</div>

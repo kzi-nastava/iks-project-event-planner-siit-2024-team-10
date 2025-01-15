@@ -11,7 +11,6 @@ import {
 import {UserService} from '../../../user/user.service';
 import {CreateCompanyDTO} from '../model/create-company-dto.model';
 import {RegisterDTO} from '../model/register-dto.model';
-import {Organizer} from '../../../user/model/organizer.model';
 import {LoginResponseDTO} from '../model/login-response-dto.model';
 import {AuthService} from '../auth.service';
 import {HttpErrorResponse} from '@angular/common/http';
