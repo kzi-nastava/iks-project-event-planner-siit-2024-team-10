@@ -27,10 +27,16 @@ export class EventService {
     return this.httpClient.get<Event[]>(environment.apiHost+'/events/all');
   }
 
-  getTop(): Observable<Event[]> {
-    return this.httpClient.get<Event[]>(environment.apiHost+'/events/top');
+  getTop(accountId: number | null): Observable<Event[]> {
+    const params: any = {};
+  
+    if (accountId !== null) {
+      params.accountId = accountId.toString();
+    }
+  
+    return this.httpClient.get<Event[]>(environment.apiHost + '/events/top', { params: params });
   }
-
+  
   getEvent(id:number): Observable<Event> {
     return this.httpClient.get<Event>(environment.apiHost+'/events/'+id);
   }
