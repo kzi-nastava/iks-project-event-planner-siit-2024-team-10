@@ -39,15 +39,18 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   ) {}
 
   ngOnInit() {
-    console.log(this.loggedInUserId)
     const state = history.state;
     this.loggedInUserId = state.loggedInUserId;
+    this.selectedContactId = state.organizerId;
+    this.loadMessages(this.loggedInUserId, this.selectedContactId);
+
     if(this.loggedInUserId === undefined){
       this.loggedInUserId = this.authService.getAccountId();
     }
     console.log(this.loggedInUserId)
+    console.log(this.selectedContactId)
     this.form = new FormGroup({
-      message: new FormControl(null, [Validators.required])
+    message: new FormControl(null, [Validators.required])
     });
 
     this.initializeWebSocketConnection();

@@ -9,6 +9,7 @@ export interface GetProvider {
     lastName: string;
     profilePhoto?: string;
     location: Location;
-    company: GetCompany
+    company: GetCompany;
+    accountId: number
   }
   
