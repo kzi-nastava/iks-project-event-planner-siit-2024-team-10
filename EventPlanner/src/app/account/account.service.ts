@@ -35,7 +35,7 @@ export class AccountService {
     let accountId:number=this.authService.getAccountId();
     if(accountId == null)
       return null;
-    return this.httpClient.post<void>(environment.apiHost+'/accounts/'+accountId+'/favourite-offerings',{"offeringId":offeringId});
+    return this.httpClient.post<void>(environment.apiHost+'/accounts/'+accountId+'/favourite-offerings/'+ offeringId ,{"offeringId":offeringId});
   }
 
   removeOfferingFromFavourites(offeringId:number): Observable<void> {
