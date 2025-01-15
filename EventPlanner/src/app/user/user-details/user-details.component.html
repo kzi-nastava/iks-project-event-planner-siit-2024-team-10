@@ -1,5 +1,6 @@
 <div class="outer-container">
   <div class="user-container">
+    <h1 *ngIf="!hasPersonalDetails()">Your email: {{ user?.email }}</h1>
     <div class="header-info" *ngIf="hasPersonalDetails()">
       <div class="header-left">
         <div class="header-title">
