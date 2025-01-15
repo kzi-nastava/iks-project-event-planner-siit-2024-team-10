@@ -1,24 +1,18 @@
 import { Injectable } from '@angular/core';
-import {Organizer} from './model/organizer.model';
-import {Provider} from './model/provider.model';
+import {Observable} from 'rxjs';
+import {Event} from '../event/model/event.model';
+import {environment} from '../../env/environment';
+import {GetUserDTO} from './model/get-user-dto.model';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
-  registerOrganizer(organizer: Organizer) : void {
-    console.log(organizer);
-  }
-
-  registerProvider(provider: Provider) : void {
-    console.log(provider);
-  }
-
-  login(email:string, password:string) : void {
-    console.log(email);
-    console.log(password);
+  getUser(accountId:number): Observable<GetUserDTO> {
+    return this.httpClient.get<GetUserDTO>(environment.apiHost+'/users/'+accountId);
   }
 }
