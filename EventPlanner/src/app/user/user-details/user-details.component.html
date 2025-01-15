@@ -44,6 +44,34 @@
         <h2>Location: </h2>
         <p class="info-content">{{ user?.company?.location?.street }} {{ user?.company?.location?.houseNumber }}, {{ user?.company?.location?.city }}, {{ user?.company?.location?.country }}</p>
       </div>
+      <div class="carousel-container" *ngIf="hasCompanyDetails()">
+        <div class="main-image-wrapper">
+          <img
+            src="{{images[activeImage] || 'placeholder-image.png'}}"
+            [alt]="images[activeImage] ? 'Image description' : 'Placeholder image'"
+            class="main-image">
+
+          <!-- Navigation Arrows -->
+          <button class="carousel-nav prev" (click)="setActiveImage((activeImage - 1 + images.length) % images.length)"
+                  *ngIf="images.length > 1">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="carousel-nav next" (click)="setActiveImage((activeImage + 1) % images.length)"
+                  *ngIf="images.length > 1">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="thumbnails" *ngIf="images.length > 1">
+          <div class="thumbnail-container">
+            <div class="thumbnail-wrapper" *ngFor="let image of images; let i = index"
+                 [class.active]="i === activeImage"
+                 (click)="setActiveImage(i)">
+              <img [src]="image" class="thumbnail-image">
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
 </div>
 </div>

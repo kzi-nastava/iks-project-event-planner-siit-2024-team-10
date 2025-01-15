@@ -3,6 +3,7 @@ import { AuthService } from '../../infrastructure/auth/auth.service';
 import {UserService} from '../user.service';
 import {GetUserDTO} from '../model/get-user-dto.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { environment } from '../../../env/environment';
 
 @Component({
   selector: 'app-user-details',
@@ -11,7 +12,10 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class UserDetailsComponent implements OnInit {
   user:GetUserDTO;
-  snackBar:MatSnackBar = inject(MatSnackBar)
+  images:string[]=[];
+  activeImage=0;
+
+  snackBar:MatSnackBar = inject(MatSnackBar);
 
   constructor(private authService:AuthService,
               private userService: UserService){
@@ -22,6 +26,8 @@ export class UserDetailsComponent implements OnInit {
     this.userService.getUser(this.authService.getAccountId()).subscribe({
       next: (user:GetUserDTO) => {
         this.user=user;
+        if(user.role=="PROVIDER")
+          this.loadImages();
       },
       error: (err) => {
         this.snackBar.open('Error fetching account details','OK',{duration:5000});
@@ -40,8 +46,10 @@ export class UserDetailsComponent implements OnInit {
   getProfilePhoto():string{
     if(this.user?.profilePhoto==null)
       return "profile_photo.png"
-    else
-      return this.user?.profilePhoto;
+    else{
+      const fileName = this.user?.profilePhoto.split('\\').pop()?.split('/').pop();
+      return `${environment.apiHost}/images/${fileName}`
+    }
   }
 
   hasPersonalDetails():boolean{
@@ -52,4 +60,15 @@ export class UserDetailsComponent implements OnInit {
     return this.user?.role == "PROVIDER";
   }
 
+  loadImages():void{
+    this.images=this.user?.company?.photos.map(photo => {
+      const fileName = photo.split('\\').pop()?.split('/').pop();
+      return `${environment.apiHost}/images/${fileName}`;
+    });
+    console.log(this.images)
+  }
+
+  setActiveImage(index: number): void {
+    this.activeImage = index;
+  }
 }
