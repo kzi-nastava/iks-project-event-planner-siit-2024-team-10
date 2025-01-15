@@ -43,7 +43,4 @@ export class AccountService {
       return null;
     return this.httpClient.delete<void>(environment.apiHost+'/accounts/'+accountId+'/favourite-events/'+eventId);
   }
-  getAccountId(id:number) :Observable<Event>{
-    return this.httpClient.delete<Event>(environment.apiHost+'/accounts/'+id);
-  }
 }
