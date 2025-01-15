@@ -5,8 +5,9 @@
       <mat-card-subtitle>{{offering.provider.company.name}}</mat-card-subtitle>
       <p class="price">{{offering.price}}€</p>
     </mat-card-title-group>
-    <!-- COMMENTED UNTIL WE PROPERLY ADD THE PICTURES TO THE DATABASE -->
-    <!-- <picture><img [src]="offering.picture[0]" alt="{{offering.name}}"></picture> -->
+    <picture>
+      <img mat-card-image [src]="offeringImage" [alt]="offering.name || 'Offering image'" />
+    </picture>
   </mat-card-header>
   <mat-card-content>
     <div class="card-footer">

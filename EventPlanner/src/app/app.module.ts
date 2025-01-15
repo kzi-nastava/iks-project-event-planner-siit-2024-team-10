@@ -37,6 +37,7 @@ import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {Interceptor} from './infrastructure/auth/interceptor';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {ProductModule} from './product/product.module';
+import { ProviderProfileComponent } from './provider-profile/provider-profile.component';
 
 @NgModule({
   declarations: [

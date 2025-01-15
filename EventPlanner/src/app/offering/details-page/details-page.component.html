@@ -4,8 +4,11 @@
   <div class="carousel-section">
     <div class="carousel-container">
       <div class="main-image-wrapper">
-        <img [src]="images[activeImage]" [alt]="offering?.name" class="main-image">
-        
+        <img 
+        [src]="images[activeImage] || 'placeholder-image.png'" 
+        [alt]="images[activeImage] ? 'Image description' : 'Placeholder image'" 
+        class="main-image">
+              
         <!-- Navigation Arrows -->
         <button class="carousel-nav prev" (click)="setActiveImage((activeImage - 1 + images.length) % images.length)" 
                 *ngIf="images.length > 1">
@@ -34,33 +37,47 @@
   <div class="content-section">
     <!-- Header Info -->
     <div class="header-info">
+      <div style="display: flex; justify-content: space-between;">
       <h1 class="title">{{offering?.name}}</h1>
+      <button class="favorite-btn" [class.active]="isFavourite" (click)="toggleFavorite()">
+        <span class="heart-icon">{{isFavourite ? '❤️' : '🤍'}}</span>
+      </button>
+    </div>
       <div class="meta-info">
         <span class="category">{{offering?.category.name}}</span>
-        <div class="availability" [class.available]="offering?.isAvailable">
-          {{offering?.isAvailable ? 'Available' : 'Not Available'}}
+        <div class="availability" [class.available]="offering?.available">
+          {{offering?.available ? 'Available' : 'Not Available'}}
         </div>
       </div>
     </div>
 
-    <!-- Price Section -->
-    <div class="price-section">
-      <div class="price-container">
-        <span class="price">{{offering?.price | currency}}</span>
-        <span class="discount" *ngIf="offering?.discount">
-          -{{offering?.discount}}% OFF
-        </span>
-      </div>
-      <div class="action-buttons">
-        <button class="book-now-btn" [disabled]="!offering?.isAvailable" (click)="openReservationDialog()">
-          <i class="fas fa-calendar-check"></i>
-          Book Now
-        </button>
-        <button class="favorite-btn" [class.active]="isFavorite" (click)="toggleFavorite()">
-          <span class="heart-icon">{{isFavorite ? '❤️' : '🤍'}}</span>
-        </button>
+  <!-- Price Section -->
+  <div class="price-section">
+    <div class="price-container">
+      <div class="prices">
+        <ng-container *ngIf="offering?.discount; else normalPrice">
+          <div class="price-stack">
+            <span class="original-price">{{offering?.price | currency}}</span>
+            <span class="discounted-price">
+              {{(offering?.price * (1 - offering?.discount / 100)) | currency}}
+            </span>
+          </div>
+          <span class="discount-badge">
+            -{{offering?.discount}}% OFF
+          </span>
+        </ng-container>
+        <ng-template #normalPrice>
+          <span class="price">{{offering?.price | currency}}</span>
+        </ng-template>
       </div>
     </div>
+    <div class="action-buttons">
+      <button class="book-now-btn" [disabled]="!offering?.available" (click)="openReservationDialog()">
+        <i class="fas fa-calendar-check"></i>
+        Book Now
+      </button>
+    </div>
+  </div>
 
     <!-- Description -->
     <div class="description-section">
@@ -101,7 +118,7 @@
     <div class="provider-section">
       <div class="provider-card">
         <div class="provider-info">
-          <img [src]="offering.provider.profilePhoto" alt="Provider" class="provider-avatar">
+          <img [src]="profilePhoto" alt="Provider" class="provider-avatar">
           <div class="provider-details">
             <h3>{{offering.provider.company.name}}</h3>
             <div class="rating">
@@ -129,20 +146,51 @@
             <i class="fas fa-user"></i>
             View Profile
           </button>
-          <button class="report-btn" (click)="reportProvider()">
-            <i class="fas fa-flag"></i>
-            Report
+          <button class="report-btn" (click)="chat()">
+            <i class="fas fa-comment"></i>
+            You need more info? Chat with us
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Comments Section -->
-    <div class="comments-section">
-      <h2>Customer Reviews</h2>
+  <!-- Comments Section -->
+  <div class="comments-section">
+    <h2>Customer Reviews</h2>
+    
+    <!-- Comments list -->
+    <div class="comments-list">
+      <ng-container *ngIf="comments.length > 0; else noReviews">
+        <div *ngFor="let comment of comments" class="comment-card">
+          <div class="comment-header">
+            <span class="user-name">{{ comment.user }}</span>
+            <div class="stars">
+              <span *ngFor="let star of getStarArray(comment.rating)">
+                {{ star ? '★' : '☆' }}
+              </span>
+            </div>
+          </div>
+          <p class="comment-text">{{ comment.content }}</p>
+        </div>
+      </ng-container>
       
-      <!-- Add Comment Form -->
-      <div class="comment-form">
+      <ng-template #noReviews>
+        <div class="no-reviews-message">
+          <p>No reviews yet</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Only show comment form to event organizers -->
+    <div class="comment-form" *ngIf="isEventOrganizer">
+      <ng-container *ngIf="!isCommentingEnabled">
+        <div class="comment-locked-message">
+          <i class="fas fa-lock"></i>
+          <p>Please book this service first to leave a review</p>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isCommentingEnabled">
         <h3>Leave a Review</h3>
         <div class="rating-input">
           <span>Your Rating:</span>
@@ -155,12 +203,6 @@
             >★</span>
           </div>
         </div>
-        <input 
-          type="text" 
-          [(ngModel)]="newComment.userName" 
-          placeholder="Your Name"
-          class="input-field"
-        >
         <textarea 
           [(ngModel)]="newComment.text" 
           placeholder="Your Review"
@@ -169,25 +211,13 @@
         <button 
           (click)="submitComment()"
           class="submit-btn"
-          [disabled]="!newComment.userName || !newComment.text || !newComment.rating"
+          [disabled]="!newComment.text || !newComment.rating"
         >Submit Review</button>
-      </div>
-  
-      <!-- Existing Comments -->
-      <div class="comments-list">
-        <div *ngFor="let comment of comments" class="comment-card">
-          <div class="comment-header">
-            <span class="user-name">{{ comment.userName }}</span>
-            <div class="stars">
-              <span *ngFor="let star of getStarArray(comment.rating)">
-                {{ star ? '★' : '☆' }}
-              </span>
-            </div>
-          </div>
-          <p class="comment-text">{{ comment.text }}</p>
-          <span class="comment-date">{{ comment.date | date }}</span>
-        </div>
-      </div>
+      </ng-container>
+    </div>
+  </div>
+
+    <!-- Fab -->
     </div>  
     <div class="fab-container" *ngIf="offering">
       <button class="edit-fab" (click)="navigateToEdit()">
