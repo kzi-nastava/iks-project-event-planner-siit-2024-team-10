@@ -13,7 +13,7 @@
           <div class="tags-rating">
             <div class="tags">
               <span class="tag">EVENT</span>
-              <span class="tag">{{event.eventType.name}}</span>
+              <span class="tag" *ngIf="event.eventType!=null">{{event.eventType?.name}}</span>
             </div>
             <div class="rating">
               <span class="rating">{{event.averageRating}}★</span>

@@ -35,6 +35,7 @@ import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-to
 import {MatCheckbox} from '@angular/material/checkbox';
 import { CreateAgendaItemComponent } from './create-agenda-item/create-agenda-item.component';
 import { EditAgendaItemComponent } from './edit-agenda-item/edit-agenda-item.component';
+import { OpenEventReportComponent } from './open-event-report/open-event-report.component';
 
 
 
@@ -49,6 +50,7 @@ import { EditAgendaItemComponent } from './edit-agenda-item/edit-agenda-item.com
     EditEventTypeComponent,
     CreateAgendaItemComponent,
     EditAgendaItemComponent,
+    OpenEventReportComponent,
   ],
   imports: [
     CommonModule,
