@@ -16,7 +16,9 @@ import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {AuthGuard} from './infrastructure/auth/auth.guard';
 import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
 import { ChatComponent } from './chat/component/chat.component';
+import { ProviderProfileComponent } from './provider-profile/provider-profile.component';
 import {OpenEventReportComponent} from './event/open-event-report/open-event-report.component';
+
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
@@ -27,6 +29,8 @@ const routes: Routes = [
   {path:'edit-service',component:EditServiceComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   {path:'offering/:id',component:DetailsPageComponent},
+  {path: 'provider/:id',
+    component: ProviderProfileComponent},
   {path:'register',component: RegisterComponent},
   {path:'event/:id',component:EventDetailsComponent},
   {path:'notification-panel',component: NotificationsPageComponent},
