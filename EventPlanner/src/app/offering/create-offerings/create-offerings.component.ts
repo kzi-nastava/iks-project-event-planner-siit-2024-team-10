@@ -66,8 +66,8 @@ export class CreateOfferingsComponent implements OnInit {
       maxTime: [''],
       reservationDeadline: [''],
       cancellationDeadline: [''],
-      isAvailable: [true],
-      isVisible: [true]
+      isAvailable: [false],
+      isVisible: [false]
     });
   }
   
@@ -119,47 +119,47 @@ export class CreateOfferingsComponent implements OnInit {
 
   onSubmit(): void {  
     if (this.createForm.valid) {
-  
+      const formValue = this.createForm.value;
+      const isFixedTime = formValue.timeType === 'fixed';
+
       const service: CreateServiceDTO = {
         category: 1, 
         categoryProposal: "",
         pending: false, 
         provider: 1,
-  
-        name: this.createForm.value.name,
-        description: this.createForm.value.description,
-        specification: this.createForm.value.specification || '',
-  
-        price: parseFloat(this.createForm.value.price),
-        discount: parseFloat(this.createForm.value.discount) || 0,
-  
-        photos: this.createForm.value.photos || [],
-  
-        isVisible: this.createForm.value.isVisible ?? true,
-        isAvailable: this.createForm.value.isAvailable ?? true,
-  
-        // Duration handling
-        maxDuration: parseInt(this.createForm.value.maxTime, 10) || 0,
-        minDuration: parseInt(this.createForm.value.minTime, 10) || 0,
-  
-        cancellationPeriod: parseInt(this.createForm.value.cancellationDeadline, 10) || 0,
-        reservationPeriod: parseInt(this.createForm.value.reservationDeadline, 10) || 0,
-  
-        autoConfirm: false 
+
+        name: formValue.name,
+        description: formValue.description,
+        specification: formValue.specification || '',
+
+        price: parseFloat(formValue.price),
+        discount: parseFloat(formValue.discount) || 0,
+
+        photos: formValue.photos || [],
+
+        isVisible: formValue.isVisible === true,
+        isAvailable: formValue.isAvailable === true,
+
+        maxDuration: isFixedTime ? parseInt(formValue.fixedTime, 10) || 0 : parseInt(formValue.maxTime, 10) || 0,
+        minDuration: isFixedTime ? parseInt(formValue.fixedTime, 10) || 0 : parseInt(formValue.minTime, 10) || 0,
+
+        cancellationPeriod: parseInt(formValue.cancellationDeadline, 10) || 0,
+        reservationPeriod: parseInt(formValue.reservationDeadline, 10) || 0,
+
+        autoConfirm: isFixedTime 
       };
     
+      console.log('Service to create:', service);
+
       this.serviceService.add(service).subscribe({
         next: (response) => {
           this.snackBar.open('Service created successfully', 'OK', { 
             duration: 3000 
           });
-  
           this.createForm.reset();
-          // this.router.navigate(['/services']);
         },
         error: (error) => {
           console.error('Error creating service:', error);
-  
           this.snackBar.open('Failed to create service. Please try again.', 'Dismiss', {
             duration: 3000
           });
@@ -171,16 +171,16 @@ export class CreateOfferingsComponent implements OnInit {
         duration: 3000
       });
     }
-  }  
+  }
+    
+    
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
   
-    
-    private markFormGroupTouched(formGroup: FormGroup) {
-      Object.values(formGroup.controls).forEach(control => {
-        control.markAsTouched();
-    
-        if (control instanceof FormGroup) {
-          this.markFormGroupTouched(control);
-        }
-      });
-    }
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
 }

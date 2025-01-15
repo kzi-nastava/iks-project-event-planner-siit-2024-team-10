@@ -81,12 +81,8 @@
 
       <div *ngIf="createForm.get('timeType')?.value === 'fixed'" class="fixed-duration">
         <mat-form-field appearance="outline">
-          <mat-label>Select Duration</mat-label>
-          <mat-select formControlName="fixedTime">
-            <mat-option *ngFor="let time of timeOptions" [value]="time">
-              {{time}} Hour{{time > 1 ? 's' : ''}}
-            </mat-option>
-          </mat-select>
+          <mat-label>Duration (hours)</mat-label>
+          <input matInput type="number" formControlName="fixedTime" min="1" placeholder="Enter hours">
         </mat-form-field>
       </div>
 
