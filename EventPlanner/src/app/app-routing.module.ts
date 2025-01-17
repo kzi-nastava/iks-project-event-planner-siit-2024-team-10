@@ -17,6 +17,7 @@ import {AuthGuard} from './infrastructure/auth/auth.guard';
 import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
 import {OpenEventReportComponent} from './event/open-event-report/open-event-report.component';
 import {UserDetailsComponent} from './user/user-details/user-details.component';
+import {EditPersonalComponent} from './user/edit-personal/edit-personal.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
@@ -42,6 +43,7 @@ const routes: Routes = [
     data: {role: ['EVENT_ORGANIZER']}},
   {path:'activate', component: ActivateComponent},
   {path:'user-details',component:UserDetailsComponent},
+  {path:'edit-personal',component:EditPersonalComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];

@@ -13,38 +13,56 @@
       <img src='{{ getProfilePhoto() }}' alt="organizer" class="profile-photo">
     </div>
     <div class="info-section" *ngIf="hasPersonalDetails()">
-      <h2>Personal info</h2>
-      <div class="info-item">
-        <h2>Email: </h2>
-        <p class="info-content">{{ user?.email }}</p>
-      </div>
-      <div class="info-item">
-        <h2>Phone: </h2>
-        <p class="info-content">{{ user?.phoneNumber }}</p>
-      </div>
-      <div class="info-item">
-        <h2>Location: </h2>
-        <p class="info-content">{{ user?.location?.street }} {{ user?.location?.houseNumber }}, {{ user?.location?.city }}, {{ user?.location?.country }}</p>
-      </div>
+        <div class="editable-section">
+            <div>
+                <h2>Personal info</h2>
+                <div class="info-item">
+                    <h2>Email: </h2>
+                    <p class="info-content">{{ user?.email }}</p>
+                </div>
+                <div class="info-item">
+                    <h2>Phone: </h2>
+                    <p class="info-content">{{ user?.phoneNumber }}</p>
+                </div>
+                <div class="info-item">
+                    <h2>Location: </h2>
+                    <p class="info-content">{{ user?.location?.street }} {{ user?.location?.houseNumber }}, {{ user?.location?.city }}, {{ user?.location?.country }}</p>
+                </div>
+            </div>
+            <div>
+                <button mat-button [routerLink]="['/edit-personal']">
+                    <mat-icon>create</mat-icon>
+                </button>
+            </div>
+        </div>
     </div>
     <div class="info-section" *ngIf="hasCompanyDetails()">
-      <h2>Company info</h2>
-      <div class="info-item">
-        <h2>Name: </h2>
-        <p class="info-content">{{ user?.company?.name }}</p>
-      </div>
-      <div class="info-item">
-        <h2>Description: </h2>
-        <p class="info-content">{{ user?.company?.description }}</p>
-      </div>
-      <div class="info-item">
-        <h2>Phone: </h2>
-        <p class="info-content">{{ user?.company?.phoneNumber }}</p>
-      </div>
-      <div class="info-item">
-        <h2>Location: </h2>
-        <p class="info-content">{{ user?.company?.location?.street }} {{ user?.company?.location?.houseNumber }}, {{ user?.company?.location?.city }}, {{ user?.company?.location?.country }}</p>
-      </div>
+        <div class="editable-section">
+            <div>
+                <h2>Company info</h2>
+                <div class="info-item">
+                    <h2>Name: </h2>
+                    <p class="info-content">{{ user?.company?.name }}</p>
+                </div>
+                <div class="info-item">
+                    <h2>Description: </h2>
+                    <p class="info-content">{{ user?.company?.description }}</p>
+                </div>
+                <div class="info-item">
+                    <h2>Phone: </h2>
+                    <p class="info-content">{{ user?.company?.phoneNumber }}</p>
+                </div>
+                <div class="info-item">
+                    <h2>Location: </h2>
+                    <p class="info-content">{{ user?.company?.location?.street }} {{ user?.company?.location?.houseNumber }}, {{ user?.company?.location?.city }}, {{ user?.company?.location?.country }}</p>
+                </div>
+            </div>
+            <div>
+                <button mat-button>
+                    <mat-icon>create</mat-icon>
+                </button>
+            </div>
+        </div>
       <div class="carousel-container" *ngIf="hasCompanyDetails()">
         <div class="main-image-wrapper">
           <img

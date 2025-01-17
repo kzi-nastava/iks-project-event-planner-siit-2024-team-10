@@ -61,6 +61,11 @@
   border-radius: 12px;
 }
 
+.editable-section{
+  display: flex;
+  justify-content: space-between;
+}
+
 .info-section h2 {
   font-size: 1.5rem;
   color: #2d3748;
