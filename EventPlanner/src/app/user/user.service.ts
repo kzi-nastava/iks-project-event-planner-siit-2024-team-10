@@ -6,6 +6,8 @@ import {GetUserDTO} from './model/get-user-dto.model';
 import {HttpClient} from '@angular/common/http';
 import {UpdateUserDTO} from './model/update-user-dto.model';
 import {UpdatedUSerDTO} from './model/updated-user-dto.model';
+import {UpdateCompanyDTO} from './model/update-company-dto.model';
+import {UpdatedCompanyDTO} from './model/updated-company-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +22,9 @@ export class UserService {
 
   updateUser(accountId:number, updateUserDTO:UpdateUserDTO):Observable<UpdatedUSerDTO> {
     return this.httpClient.put<UpdatedUSerDTO>(environment.apiHost+'/users/'+accountId, updateUserDTO);
+  }
+
+  updateCompany(accountId:number, updateCompanyDTO:UpdateCompanyDTO):Observable<UpdatedCompanyDTO> {
+    return this.httpClient.put<UpdatedCompanyDTO>(environment.apiHost+'/users/'+accountId+'/company', updateCompanyDTO);
   }
 }
