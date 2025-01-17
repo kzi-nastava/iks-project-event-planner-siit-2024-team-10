@@ -5,6 +5,9 @@ import {MatchValidator} from '../../infrastructure/auth/register/register.compon
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import {UserService} from '../user.service';
 import {GetUserDTO} from '../model/get-user-dto.model';
+import {UpdateUserDTO} from '../model/update-user-dto.model';
+import {UpdatedUSerDTO} from '../model/updated-user-dto.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-edit-personal',
@@ -24,7 +27,9 @@ export class EditPersonalComponent implements OnInit{
   snackBar:MatSnackBar = inject(MatSnackBar);
 
   constructor(private authService:AuthService,
-              private userService:UserService,) {}
+              private userService:UserService,
+              private router:Router)
+  {}
 
   ngOnInit() {
     this.userService.getUser(this.authService.getAccountId()).subscribe({
@@ -42,6 +47,32 @@ export class EditPersonalComponent implements OnInit{
       error: (err) => {
         this.snackBar.open('Error fetching account details','OK',{duration:5000});
         console.error('Error fetching account details:', err);
+      }
+    });
+  }
+
+  submit(){
+    if(this.editForm.invalid)
+      return;
+    const user:UpdateUserDTO = {
+      firstName:this.editForm.value.firstName,
+      lastName:this.editForm.value.lastName,
+      phoneNumber:this.editForm.value.phone,
+      location:{
+        country:this.editForm.value.country,
+        city:this.editForm.value.city,
+        street:this.editForm.value.street,
+        houseNumber:this.editForm.value.houseNumber
+      }
+    }
+    this.userService.updateUser(this.authService.getAccountId(),user).subscribe({
+      next: (updatedUser:UpdatedUSerDTO) => {
+        this.snackBar.open('Successfully updated user details!','OK',{duration:5000});
+        this.router.navigate(['user-details']);
+      },
+      error: (err) => {
+        this.snackBar.open('Error updating user details','OK',{duration:5000});
+        console.error('Error updating user details', err);
       }
     });
   }
