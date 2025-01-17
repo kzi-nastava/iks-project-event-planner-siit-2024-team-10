@@ -8,13 +8,16 @@ import { EditPersonalComponent } from './edit-personal/edit-personal.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {RouterModule} from '@angular/router';
 import {MatInput} from '@angular/material/input';
+import { EditCompanyComponent } from './edit-company/edit-company.component';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 
 
 
 @NgModule({
   declarations: [
     UserDetailsComponent,
-    EditPersonalComponent
+    EditPersonalComponent,
+    EditCompanyComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +26,9 @@ import {MatInput} from '@angular/material/input';
     MatButtonModule,
     MatFormFieldModule,
     RouterModule,
-    MatInput
+    MatInput,
+    MatRadioButton,
+    MatRadioGroup
   ]
 })
 export class UserModule { }

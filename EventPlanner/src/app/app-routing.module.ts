@@ -18,6 +18,7 @@ import {ActivateComponent} from './infrastructure/auth/activate/activate.compone
 import {OpenEventReportComponent} from './event/open-event-report/open-event-report.component';
 import {UserDetailsComponent} from './user/user-details/user-details.component';
 import {EditPersonalComponent} from './user/edit-personal/edit-personal.component';
+import {EditCompanyComponent} from './user/edit-company/edit-company.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
@@ -44,6 +45,7 @@ const routes: Routes = [
   {path:'activate', component: ActivateComponent},
   {path:'user-details',component:UserDetailsComponent},
   {path:'edit-personal',component:EditPersonalComponent},
+  {path:'edit-company',component:EditCompanyComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];
