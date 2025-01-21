@@ -32,4 +32,8 @@ export class UserService {
   changePassword(accountId:number, changePasswordDto:ChangePasswordDto):Observable<void> {
     return this.httpClient.put<void>(environment.apiHost+'/users/'+accountId+'/password', changePasswordDto);
   }
+
+  deactivateAccount(accountId:number):Observable<void>{
+    return this.httpClient.put<void>(environment.apiHost+'/users/'+accountId+'/deactivate',null);
+  }
 }
