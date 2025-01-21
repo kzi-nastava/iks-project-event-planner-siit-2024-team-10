@@ -4,6 +4,9 @@
     <button *ngIf="!hasPersonalDetails()" mat-flat-button (click)="changePassword()" class="primary-button">
       Change password
     </button>
+    <button *ngIf="!hasPersonalDetails()" mat-flat-button (click)="deactivateAccount()" class="primary-button">
+      Deactivate account
+    </button>
     <div class="header-info" *ngIf="hasPersonalDetails()">
       <div class="header-left">
         <div class="header-title">
@@ -12,9 +15,14 @@
         <div class="meta-info">
           <span class="meta-item">{{ getRole() }}</span>
         </div>
-        <button mat-flat-button (click)="changePassword()" class="primary-button">
-          Change password
-        </button>
+        <div>
+          <button mat-flat-button (click)="changePassword()" class="primary-button">
+            Change password
+          </button>
+          <button  mat-flat-button (click)="deactivateAccount()" class="primary-button">
+            Deactivate account
+          </button>
+        </div>
       </div>
       <img src='{{ getProfilePhoto() }}' alt="organizer" class="profile-photo">
     </div>

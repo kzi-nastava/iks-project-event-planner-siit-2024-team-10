@@ -7,6 +7,8 @@ import { environment } from '../../../env/environment';
 import {CreateAgendaItemComponent} from '../../event/create-agenda-item/create-agenda-item.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ChangePasswordComponent} from '../change-password/change-password.component';
+import {Router} from '@angular/router';
+import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-user-details',
@@ -22,7 +24,8 @@ export class UserDetailsComponent implements OnInit {
 
   constructor(private authService:AuthService,
               private userService: UserService,
-              private dialog: MatDialog){
+              private dialog: MatDialog,
+              private router: Router,){
 
   }
 
@@ -79,6 +82,29 @@ export class UserDetailsComponent implements OnInit {
   changePassword(){
     this.dialog.open(ChangePasswordComponent, {
       width: '400px',
+    });
+  }
+
+  deactivateAccount(){
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data:{message:"Are you sure you want to deactivate your account?"}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.deactivateAccount(this.authService.getAccountId()).subscribe({
+          next: () => {
+            this.snackBar.open('Successfully deactivated!','OK',{duration:5000});
+            localStorage.removeItem('user');
+            this.authService.setUser();
+            this.router.navigate(['/login'])
+          },
+          error: (err) => {
+            this.snackBar.open(err.error, 'OK',{duration:5000});
+          },
+        });
+      }
     });
   }
 }
