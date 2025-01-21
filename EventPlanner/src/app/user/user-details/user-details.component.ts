@@ -4,6 +4,9 @@ import {UserService} from '../user.service';
 import {GetUserDTO} from '../model/get-user-dto.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { environment } from '../../../env/environment';
+import {CreateAgendaItemComponent} from '../../event/create-agenda-item/create-agenda-item.component';
+import {MatDialog} from '@angular/material/dialog';
+import {ChangePasswordComponent} from '../change-password/change-password.component';
 
 @Component({
   selector: 'app-user-details',
@@ -18,7 +21,8 @@ export class UserDetailsComponent implements OnInit {
   snackBar:MatSnackBar = inject(MatSnackBar);
 
   constructor(private authService:AuthService,
-              private userService: UserService){
+              private userService: UserService,
+              private dialog: MatDialog){
 
   }
 
@@ -70,5 +74,11 @@ export class UserDetailsComponent implements OnInit {
 
   setActiveImage(index: number): void {
     this.activeImage = index;
+  }
+
+  changePassword(){
+    this.dialog.open(ChangePasswordComponent, {
+      width: '400px',
+    });
   }
 }

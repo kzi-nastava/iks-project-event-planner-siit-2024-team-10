@@ -44,7 +44,7 @@ const routes: Routes = [
     data: {role: ['EVENT_ORGANIZER']}},
   {path:'activate', component: ActivateComponent},
   {path:'user-details',component:UserDetailsComponent, canActivate: [AuthGuard],
-    data: {role: ['EVENT_ORGANIZER','PROVIDER']}},
+    data: {role: ['EVENT_ORGANIZER','PROVIDER','ADMIN','AUTHENTICATED_USER']}},
   {path:'edit-personal',component:EditPersonalComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   {path:'edit-company',component:EditCompanyComponent},

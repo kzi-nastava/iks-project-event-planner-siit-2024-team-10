@@ -182,6 +182,10 @@
   object-fit: cover;
 }
 
+.primary-button{
+  margin:.5em;
+}
+
 ::ng-deep .mat-mdc-button:not(:disabled){
   background-color: white !important ;
   color: #000000 !important;

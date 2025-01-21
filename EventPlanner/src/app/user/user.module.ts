@@ -10,6 +10,10 @@ import {RouterModule} from '@angular/router';
 import {MatInput} from '@angular/material/input';
 import { EditCompanyComponent } from './edit-company/edit-company.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import {MatDialogActions, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
+import {MatOption} from '@angular/material/core';
+import {MatSelect} from '@angular/material/select';
 
 
 
@@ -17,7 +21,8 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
   declarations: [
     UserDetailsComponent,
     EditPersonalComponent,
-    EditCompanyComponent
+    EditCompanyComponent,
+    ChangePasswordComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +33,12 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
     RouterModule,
     MatInput,
     MatRadioButton,
-    MatRadioGroup
+    MatRadioGroup,
+    MatDialogActions,
+    MatDialogContent,
+    MatDialogTitle,
+    MatOption,
+    MatSelect
   ]
 })
 export class UserModule { }

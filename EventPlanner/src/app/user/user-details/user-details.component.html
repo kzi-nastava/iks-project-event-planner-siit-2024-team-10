@@ -1,6 +1,9 @@
 <div class="outer-container">
   <div class="user-container">
     <h1 *ngIf="!hasPersonalDetails()">Your email: {{ user?.email }}</h1>
+    <button *ngIf="!hasPersonalDetails()" mat-flat-button (click)="changePassword()" class="primary-button">
+      Change password
+    </button>
     <div class="header-info" *ngIf="hasPersonalDetails()">
       <div class="header-left">
         <div class="header-title">
@@ -9,6 +12,9 @@
         <div class="meta-info">
           <span class="meta-item">{{ getRole() }}</span>
         </div>
+        <button mat-flat-button (click)="changePassword()" class="primary-button">
+          Change password
+        </button>
       </div>
       <img src='{{ getProfilePhoto() }}' alt="organizer" class="profile-photo">
     </div>
