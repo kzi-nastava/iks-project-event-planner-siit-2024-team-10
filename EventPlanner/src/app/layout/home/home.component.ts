@@ -10,6 +10,8 @@ import { FilterProductDialogComponent } from '../../offering/filter-product-dial
 import { OfferingWarningDialogComponent } from '../offering-warning-dialog/offering-warning-dialog.component';
 import { ComponentType } from '@angular/cdk/overlay';
 import { of } from 'rxjs';
+import { AccountService } from '../../account/account.service';
+import { AuthService } from '../../infrastructure/auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +29,8 @@ export class HomeComponent implements OnInit {
   noEventsMessage: string = '';
   noTopOfferingsMessage: string = '';
   noOfferingsMessage: string = '';
+  accountId:number = null;
+  initialLoad:boolean = true;
 
   sortingDirections = ['Ascending', 'Descending'];
   eventSortingCriteria = ['None', 'Name', 'Date and Time', 'Rating', 'City'];
@@ -78,19 +82,24 @@ export class HomeComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private offeringService: OfferingService,
+    private authService: AuthService,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
+    this.accountId = this.authService.getAccountId();
+
     this.fetchPaginatedEvents();
     this.fetchPaginatedOfferings();
 
     this.loadTopEvents();
     this.loadTopOfferings();
+
+    this.initialLoad = false;
   }
 
   loadTopEvents(): void {
-    this.eventService.getTop().subscribe({
+    this.eventService.getTop(this.accountId).subscribe({
       next: (events) => {
         this.topEvents = events;
         this.noTopEventsMessage = events.length ? '' : 'No events found.';
@@ -102,7 +111,7 @@ export class HomeComponent implements OnInit {
   }
 
   loadTopOfferings(): void {
-    this.offeringService.getTop().subscribe({
+    this.offeringService.getTop(this.accountId).subscribe({
       next: (offerings) => {
         this.topOfferings = offerings;
         this.noTopOfferingsMessage = offerings.length ? '' : 'No offerings found.';
@@ -126,7 +135,7 @@ export class HomeComponent implements OnInit {
         }
       
         this.eventPageProperties.page = 0;
-        this.fetchPaginatedEvents(this.eventFilters);
+        this.fetchPaginatedEvents();
       }else{
         const backendSortBy = this.offeringSortingCriteriaMapping[this.selectedOfferingSortingCriteria];
       
@@ -139,7 +148,7 @@ export class HomeComponent implements OnInit {
         }
       
         this.offeringPageProperties.page = 0;
-        this.fetchPaginatedOfferings(this.offeringFilters);
+        this.fetchPaginatedOfferings();
       }
     }
     
@@ -147,7 +156,7 @@ export class HomeComponent implements OnInit {
   applyFilters(newFilters: any): void {
     this.eventFilters = { ...this.eventFilters, ...newFilters };
     this.eventPageProperties.page = 0;
-    this.fetchPaginatedEvents(this.eventFilters);
+    this.fetchPaginatedEvents();
   }
 
   applyOfferingFilters(newFilters: any): void {
@@ -222,10 +231,14 @@ export class HomeComponent implements OnInit {
     this.fetchPaginatedOfferings();
   }
 
-  fetchPaginatedEvents(eventFilters: any = this.eventFilters): void {
+  fetchPaginatedEvents(): void {
     const { page, pageSize } = this.eventPageProperties;
-  
-    this.eventService.getPaginatedEvents(page, pageSize, eventFilters).subscribe({
+    if (this.initialLoad){
+      this.eventFilters = { ...this.eventFilters, ...{accountId: this.accountId} };
+    }else{
+      delete this.eventFilters.accountId;
+    }
+    this.eventService.getPaginatedEvents(page, pageSize, this.eventFilters).subscribe({
       next: (response) => {
         this.allEvents = response.content;
         this.eventPageProperties.totalPages = response.totalPages;
@@ -239,13 +252,18 @@ export class HomeComponent implements OnInit {
   }
   
 
-  fetchPaginatedOfferings(offeringFilters: any = this.offeringFilters): void {
+  fetchPaginatedOfferings(): void {
     const { page, pageSize } = this.offeringPageProperties;
+    if (this.initialLoad){
+      this.offeringFilters = { ...this.offeringFilters, ...{accountId: this.accountId} };
+    }else{
+      delete this.offeringFilters.accountId;
+    }
     if (this.selectedOfferingType!==null){
-      offeringFilters.isServiceFilter = this.selectedOfferingType === 'services';
+      this.offeringFilters.isServiceFilter = this.selectedOfferingType === 'services';
     }
 
-    this.offeringService.getPaginatedOfferings(page, pageSize, offeringFilters).subscribe({
+    this.offeringService.getPaginatedOfferings(page, pageSize, this.offeringFilters).subscribe({
       next: (response) => {
         this.allOfferings = response.content;
         this.offeringPageProperties.totalPages = response.totalPages;
