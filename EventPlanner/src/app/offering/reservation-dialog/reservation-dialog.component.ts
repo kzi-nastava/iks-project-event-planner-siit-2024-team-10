@@ -1,36 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ReservationService } from '../reservation-service/reservation.service';
+import { AuthService } from '../../infrastructure/auth/auth.service';
+import { Event } from '../../event/model/event.model';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-reservation-dialog',
   templateUrl: './reservation-dialog.component.html',
   styleUrls: ['./reservation-dialog.component.css']
 })
-export class ReservationDialogComponent {
+export class ReservationDialogComponent implements OnInit {
   reservationForm: FormGroup;
+  accountId: string = '';
+  events: Event[] = [];
+  snackBar:MatSnackBar = inject(MatSnackBar);
 
-  dateFilter = (date: Date | null): boolean => {
-    if (!date) return false;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize time to midnight for comparison
-    return date >= today;
-  };
 
-  constructor(private fb: FormBuilder,
-    private dialogRef: MatDialogRef<ReservationDialogComponent>
-  ) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<ReservationDialogComponent>,
+    private reservationService: ReservationService,
+    private authService: AuthService) {
+   {
     this.reservationForm = this.fb.group({
-      selectedDate: [null, Validators.required],
-      eventType: [null, Validators.required],
+      event: [null, Validators.required],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required]
     });
   }
+}
+ngOnInit(): void {
+  this.accountId = this.authService.getAccountId().toString();
 
-  onDateChange(date: Date): void {
-    this.reservationForm.patchValue({ selectedDate: date });
-  }
+  this.reservationService.findEventsByOrganizer(this.accountId).subscribe(events => {
+    this.events = events;
+  });
+}
 
   onBook(): void {
     if (this.reservationForm.valid) {

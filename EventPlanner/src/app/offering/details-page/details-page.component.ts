@@ -296,7 +296,7 @@ export class DetailsPageComponent implements OnInit {
     }
 
     const dialogRef = this.dialog.open(ReservationDialogComponent, {
-      width: '1000px',
+      width: '700px',
       data: { offering: this.offering }
     });
   
