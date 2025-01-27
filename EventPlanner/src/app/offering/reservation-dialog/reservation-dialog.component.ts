@@ -18,9 +18,9 @@ export class ReservationDialogComponent implements OnInit {
   reservationForm: FormGroup;
   accountId: string = '';
   events: Event[] = [];
-  service: any;
   snackBar:MatSnackBar = inject(MatSnackBar);
   errorMsg: string = '';
+  calculatedEndTime: string = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
@@ -37,8 +37,13 @@ export class ReservationDialogComponent implements OnInit {
   }
 }
 ngOnInit(): void {
-  this.service = this.data;
   this.accountId = this.authService.getAccountId().toString();
+
+  const offering = this.data.offering;
+    
+    if (offering.minDuration === offering.maxDuration) {
+      this.reservationForm.get('endTime')?.disable();
+    }
 
   this.reservationService.findEventsByOrganizer(this.accountId).subscribe(events => {
     if (events.length === 0) {
@@ -50,11 +55,18 @@ ngOnInit(): void {
       this.events = events;
     }
   });
+
+  this.reservationForm.get('startTime')?.valueChanges.subscribe(startTime => {
+    if (offering.minDuration === offering.maxDuration && startTime) {
+      this.onStartTimeChange();
+    }
+  });
 }
 
 onBook(): void {
   if (this.reservationForm.valid) {
     const reservationData = this.reservationForm.value;
+    reservationData.endTime = this.reservationForm.get('endTime')?.value; // dont touch this
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
@@ -80,6 +92,7 @@ onBook(): void {
 
   onClose(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      
       width: '400px',
       data: {
         message: "Are you sure you want to close? All your data will be lost."
@@ -91,5 +104,28 @@ onBook(): void {
         this.dialogRef.close();
       }
     });
+  }
+  
+  // In case of a fixed service time, this function calculates the end time based on the start time and the duration of the service
+   onStartTimeChange(): void {
+    const startTime = this.reservationForm.get('startTime')?.value;
+    const minDuration = this.data.offering.minDuration;
+
+    if (startTime && minDuration) {
+      const startDate = new Date(`1970-01-01T${startTime}:00`);
+      const endDate = new Date(startDate.getTime() + minDuration * 60 * 60 * 1000);
+
+      const hours = endDate.getHours().toString().padStart(2, '0');
+      const minutes = endDate.getMinutes().toString().padStart(2, '0');
+      this.calculatedEndTime = `${hours}:${minutes}`;
+      
+    if (!this.reservationForm.contains('endTime')) {
+      this.reservationForm.addControl('endTime', this.fb.control(this.calculatedEndTime, Validators.required));
+    }
+
+    this.reservationForm.get('endTime')?.setValue(this.calculatedEndTime);
+    
+    this.reservationForm.get('endTime')?.updateValueAndValidity();
+    }
   }
 }

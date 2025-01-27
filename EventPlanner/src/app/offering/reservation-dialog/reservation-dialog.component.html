@@ -24,16 +24,36 @@
             Selected event date: {{ reservationForm.get('event')?.value?.date }}
           </p>
         </div>
-
+        <div>
         <div class="form-group time-fields">
           <mat-form-field appearance="fill" class="time-field">
             <mat-label>Start Time</mat-label>
             <input matInput type="time" formControlName="startTime">
           </mat-form-field>
-          <mat-form-field appearance="fill" class="time-field">
+
+          <!-- End Time Input (Disabled when minDuration == maxDuration) -->
+          <mat-form-field appearance="fill" class="time-field" *ngIf="data.offering.minDuration == data.offering.maxDuration">
+            <mat-label>End Time</mat-label>
+            <input matInput type="time" [value]="calculatedEndTime" [disabled]="true">
+          </mat-form-field>
+
+          <!-- Else block for when minDuration != maxDuration -->
+          <mat-form-field appearance="fill" class="time-field" *ngIf="data.offering.minDuration != data.offering.maxDuration">
             <mat-label>End Time</mat-label>
             <input matInput type="time" formControlName="endTime">
           </mat-form-field>
+
+        </div>
+          <p class="time-info" *ngIf="data.offering.minDuration == data.offering.maxDuration; else elseBlock">
+            This service's fixed duration is {{ data.offering.minDuration }} hours.
+          </p>
+          
+          <ng-template #elseBlock>
+            <p class="time-info">
+              This service's duration is between {{ data.offering.minDuration }} and {{ data.offering.maxDuration }} hours.
+            </p>
+          </ng-template>
+          
         </div>
         <p *ngIf="errorMsg" class="error-msg">{{errorMsg}}</p>
         <div class="actions">
