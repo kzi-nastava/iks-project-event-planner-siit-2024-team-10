@@ -1,7 +1,7 @@
 .dialog-container {
     background: #f6f6f6;
     border-radius: 8px;
-    padding: 24px;
+    padding: 20px;
     height: 70vh;
     display: flex;
     flex-direction: column;
@@ -23,7 +23,6 @@
     justify-content: center;
     gap: 16px;
   }
-  
   
   .form-group {
     margin-bottom: 16px;
@@ -66,5 +65,8 @@
   }
   .error-msg{
     color: red;
+  }
+  p{
+    margin:0;
   }
   

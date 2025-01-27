@@ -1,12 +1,15 @@
 <div class="dialog-container">
   <h1>Book a Service</h1>
-  <form [formGroup]="reservationForm" (ngSubmit)="onBook()">
+  <form [formGroup]="reservationForm">
     <div class="content">
       <div class="form-group">
         <mat-form-field appearance="fill">
           <mat-label>Booking Service</mat-label>
           <input matInput disabled value={{data.offering.name}}>
         </mat-form-field>
+        <p class="offering-info">
+          Reservation period: {{ data.offering.reservationPeriod }} hours before the event
+        </p>
       </div>
         <div class="form-group">
           <mat-form-field appearance="fill">
@@ -17,7 +20,7 @@
               </mat-option>
             </mat-select>         
           </mat-form-field>
-          <p class="event-info">
+          <p class="event-info" *ngIf="reservationForm.get('event')?.value">
             Selected event date: {{ reservationForm.get('event')?.value?.date }}
           </p>
         </div>
@@ -32,7 +35,7 @@
             <input matInput type="time" formControlName="endTime">
           </mat-form-field>
         </div>
-        <p class="error-msg">If you see this, you have an error!</p>
+        <p *ngIf="errorMsg" class="error-msg">{{errorMsg}}</p>
         <div class="actions">
           <button mat-raised-button color="primary" [disabled]="!reservationForm.valid" (click)="onBook()">Book</button>
           <button mat-raised-button color="warn" type="button" (click)="onClose()" class="closeBtn">Close</button>
