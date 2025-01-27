@@ -15,6 +15,10 @@ import {EventTypesComponent} from './event/event-types/event-types.component';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {AuthGuard} from './infrastructure/auth/auth.guard';
 import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
+import {CreateProductComponent} from './product/create-product/create-product.component';
+import { ProviderProfileComponent } from './provider-profile/provider-profile.component';
+import {OpenEventReportComponent} from './event/open-event-report/open-event-report.component';
+
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path:'login',component: LoginComponent},
@@ -25,6 +29,8 @@ const routes: Routes = [
   {path:'edit-service',component:EditServiceComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   {path:'offering/:id',component:DetailsPageComponent},
+  {path: 'provider/:id',
+    component: ProviderProfileComponent},
   {path:'register',component: RegisterComponent},
   {path:'event/:id',component:EventDetailsComponent},
   {path:'notification-panel',component: NotificationsPageComponent},
@@ -32,10 +38,14 @@ const routes: Routes = [
   {path:'pricelist',component:PricelistComponent},
   {path:'offering-categories',component: OfferingCategoryComponent, canActivate: [AuthGuard],
     data: {role: ['ADMIN']}},
+  {path:'open-event-report/:eventId',component:OpenEventReportComponent, canActivate: [AuthGuard],
+  data: {role: ['ADMIN',"EVENT_ORGANIZER"]}},
   {path:'event-types',component:EventTypesComponent, canActivate: [AuthGuard],
     data: {role: ['ADMIN']}},
   {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER']}},
+  {path:'create-product',component:CreateProductComponent, canActivate: [AuthGuard],
+    data: {role: ['PROVIDER']}},
   {path:'activate', component: ActivateComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},

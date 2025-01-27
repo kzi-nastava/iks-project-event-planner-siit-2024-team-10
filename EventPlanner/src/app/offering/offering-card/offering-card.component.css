@@ -80,6 +80,7 @@ mat-card-subtitle {
   font-size: 12px;
   text-transform: uppercase;
 }
+
 button[mat-stroked-button] {
   border-radius: 20px;
   background-color: #5FA3A2;

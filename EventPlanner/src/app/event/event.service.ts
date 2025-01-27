@@ -12,6 +12,7 @@ import {CreateEventRatingDTO} from './model/create-event-rating-dto.model';
 import {CreatedEventRatingDTO} from './model/created-event-rating-dto.model';
 import {CreateAgendaItemDTO} from './model/create-agenda-item-dto.model';
 import {UpdateAgendaItemDTO} from './model/update-agenda-item-dto.model';
+import {EventStats} from './model/event.stats.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +27,30 @@ export class EventService {
     return this.httpClient.get<Event[]>(environment.apiHost+'/events/all');
   }
 
-  getTop(): Observable<Event[]> {
-    return this.httpClient.get<Event[]>(environment.apiHost+'/events/top');
+  getTop(accountId: number | null): Observable<Event[]> {
+    const params: any = {};
+  
+    if (accountId !== null) {
+      params.accountId = accountId.toString();
+    }
+  
+    return this.httpClient.get<Event[]>(environment.apiHost + '/events/top', { params: params });
   }
-
+  
   getEvent(id:number): Observable<Event> {
     return this.httpClient.get<Event>(environment.apiHost+'/events/'+id);
   }
 
   getEventAgenda(eventId:number): Observable<AgendaItem[]> {
     return this.httpClient.get<AgendaItem[]>(environment.apiHost+'/events/'+eventId+'/agenda');
+  }
+
+  getEventStats(eventId:number): Observable<EventStats> {
+    return this.httpClient.get<EventStats>(environment.apiHost+'/events/'+eventId+'/stats');
+  }
+
+  addParticipant(eventId:number):Observable<EventStats> {
+    return this.httpClient.post<EventStats>(environment.apiHost+'/events/'+eventId+'/stats/participants',null);
   }
 
   add(event:CreateEventDTO) : Observable<Event> {
@@ -56,6 +71,12 @@ export class EventService {
 
   deleteAgendaItem(eventId:number, agendaItemId:number) : Observable<void> {
     return this.httpClient.delete<void>(environment.apiHost + "/events/"+eventId+"/agenda/"+agendaItemId);
+  }
+
+  generateOpenEventReport(eventId:number): Observable<Blob> {
+    return this.httpClient.get(environment.apiHost + '/events/'+eventId+'/reports/open-event',{
+      responseType: 'blob'
+    });
   }
 
   getPaginatedEvents(

@@ -3,13 +3,10 @@ import { Product } from '../model/product.model';
 import { Service } from '../model/service.model';
 import { map, Observable, of } from 'rxjs';
 import { Offering } from '../model/offering.model';
-import { Location } from '../../event/model/location.model';
-import { GetProvider } from '../../user/model/get_provider.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {environment} from '../../../env/environment';
 import { PagedResponse } from '../../event/model/paged-response.model';
-import { Category } from '../model/category.model';
-
+import { Comment } from '../model/comment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,15 +31,28 @@ export class OfferingService {
     const allOfferings = [...this.productList, ...this.serviceList];
     return of(this.shuffleArray(allOfferings));
   }
-  getTop(): Observable<Offering[]> {
-    console.log("got in");
-      return this.httpClient.get<Offering[]>(environment.apiHost+'/offerings/top');
+  getTop(accountId:number | null): Observable<Offering[]> {
+    const params: any = {};
+  
+    if (accountId !== null) {
+      params.accountId = accountId.toString();
+    }
+  
+      return this.httpClient.get<Offering[]>(environment.apiHost+'/offerings/top',{params: params});
     }
 
   getProducts(): Observable<Product[]> {
     return of(this.productList);
   }
 
+  getComments(offeringId: number): Observable<Comment[]> {
+    return this.httpClient.get<Comment[]>(`${environment.apiHost}/offerings/${offeringId}/comments`);
+  }
+  
+  getOfferingsByProviderId(providerId: number): Observable<Offering[]> {
+    return this.httpClient.get<Offering[]>(`${environment.apiHost}/offerings/provider/${providerId}`);
+  }
+  
   getPaginatedOfferings(
       page: number,
       pageSize: number,
@@ -60,15 +70,6 @@ export class OfferingService {
   
       return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost+"/offerings", { params }).pipe(
             map((response: PagedResponse<Offering>) => {
-              console.log('Paginated response:', response);
-        
-              // Log each service individually
-              if (response.content) {
-                response.content.forEach((service: Offering) => {
-                  console.log('Service:', service);
-                });
-              }
-        
               return response;
             })
           );
@@ -79,19 +80,9 @@ export class OfferingService {
       return this.httpClient.get<number>(environment.apiHost+"/offerings/highest-prices", { params: new HttpParams().set('isService', isService.toString()) });
     }
 
-  getServices(): Observable<Service[]> {
-    return of(this.serviceList);
-  }
-
   getOfferingById(id: number): Observable<Offering | undefined> {
     const allOfferings = [...this.productList, ...this.serviceList];
     const offering = allOfferings.find(o => o.id === id);
     return of(offering);
-  }
-  createService(data: any): void {
-    console.log('Service data received:', data);
-  }
-  editService(data: any): void {
-    console.log('Service data received:', data);
   }
 }
