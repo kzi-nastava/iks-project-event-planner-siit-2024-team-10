@@ -127,7 +127,7 @@
       </div>
     </div>
 
-    <button class="fab" >
+    <button class="fab" (click)="exportToPdf()">
       <i class="fas fa-file-pdf"></i>
     </button>
     <button class="fab secondary" *ngIf="(owner||admin)&&event?.open" [routerLink]="['/open-event-report',event.id]">
