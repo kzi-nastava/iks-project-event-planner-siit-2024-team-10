@@ -8,6 +8,9 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../layout/confirm-dialog/confirm-dialog.component';
+import { CreateReservationDTO } from '../model/create-reservation-dto.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Reservation } from '../model/reservation.model';
 
 @Component({
   selector: 'app-reservation-dialog',
@@ -79,12 +82,26 @@ onBook(): void {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        this.dialogRef.close(reservationData);
-        this.snackBar.open('Email confirmation has been sent!', 'Close', {        
-              duration: 3000
+        let reservation : CreateReservationDTO ={
+          startTime: reservationData.startTime,
+          endTime: reservationData.endTime,
+          event: reservationData.event.id,
+          service: this.data.offering.id
+        }
+
+        this.reservationService.createReservation(reservation).subscribe({
+          next: (response: Reservation) => {
+            this.snackBar.open('Reservation successful! Email confirmation has been sent.', 'OK', { duration: 5000 });
+            this.dialogRef.close(response);
+          },
+          error: (err: Error) => { 
+            this.errorMsg = err.message;
+            this.snackBar.open(this.errorMsg, 'OK', { duration: 5000 });
+          }
+            });
+          }
         });
-      }
-    });
+      
   } else {
     this.errorMsg='Please fill in all fields';
   }
