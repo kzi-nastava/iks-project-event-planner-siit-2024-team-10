@@ -5,7 +5,8 @@ export interface Provider {
   lastName: string;
   profilePhoto?: string | null; // Optional since `null` is a possible value
   phoneNumber: string;
-
+  accountId: number;
+  
   // Personal Address
   location: {
     id: number;
