@@ -9,7 +9,6 @@ import { Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../layout/confirm-dialog/confirm-dialog.component';
 import { CreateReservationDTO } from '../model/create-reservation-dto.model';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Reservation } from '../model/reservation.model';
 
 @Component({
