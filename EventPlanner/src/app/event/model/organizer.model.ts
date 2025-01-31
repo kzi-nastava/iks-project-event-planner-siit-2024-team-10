@@ -8,4 +8,5 @@ export interface Organizer {
   email: string;
   phoneNumber: string;
   profilePhoto: string;
+  accountId:number;
 }

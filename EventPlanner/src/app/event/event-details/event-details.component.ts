@@ -1,5 +1,5 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../event.service';
 import {Event} from '../model/event.model'
 import {AgendaItem} from '../model/agenda-item.model';
@@ -38,7 +38,8 @@ export class EventDetailsComponent implements OnInit {
     private eventService:EventService,
     private accountService: AccountService,
     private authService:AuthService,
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+    private router: Router,) {
   }
 
   getStarArray(rating: number): number[] {
@@ -193,6 +194,19 @@ export class EventDetailsComponent implements OnInit {
       }
     });
   }
+  navigateToChat(): void {
+    const sender = this.authService.getAccountId();
+    const recipient = this.event.organizer.accountId;
+    console.log(sender);
+    console.log(recipient);
+    this.router.navigate(['/chat'], {
+      state: {
+        loggedInUserId: sender,
+        organizerId: recipient
+      }
+    });
+  }  
+  
 
   addParticipant():void{
     this.eventService.addParticipant(this.event.id).subscribe({

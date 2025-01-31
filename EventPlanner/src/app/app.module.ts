@@ -9,6 +9,7 @@ import { OfferingModule } from './offering/offering.module';
 import { WineModule } from './wine/wine.module';
 import { EventModule } from './event/event.module';
 import { NotificationModule } from './notification/notification.module';
+import { ChatModule } from './chat/chat.module';
 
 // Material Imports
 import { MatButtonModule } from '@angular/material/button';
@@ -46,9 +47,10 @@ import { ProviderProfileComponent } from './provider-profile/provider-profile.co
     CreateCategoryDialogComponent,
     CategoryDialogComponent,
     OfferingCategoryComponent,
-    PricelistComponent
+    PricelistComponent,
   ],
   imports: [
+    ChatModule,
     BrowserModule,
     AppRoutingModule,
     LayoutModule,

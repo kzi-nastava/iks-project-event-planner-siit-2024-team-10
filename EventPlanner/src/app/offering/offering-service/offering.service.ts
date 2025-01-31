@@ -31,9 +31,14 @@ export class OfferingService {
     const allOfferings = [...this.productList, ...this.serviceList];
     return of(this.shuffleArray(allOfferings));
   }
-  getTop(): Observable<Offering[]> {
-    console.log("got in");
-      return this.httpClient.get<Offering[]>(environment.apiHost+'/offerings/top');
+  getTop(accountId:number | null): Observable<Offering[]> {
+    const params: any = {};
+  
+    if (accountId !== null) {
+      params.accountId = accountId.toString();
+    }
+  
+      return this.httpClient.get<Offering[]>(environment.apiHost+'/offerings/top',{params: params});
     }
 
   getProducts(): Observable<Product[]> {
@@ -65,15 +70,6 @@ export class OfferingService {
   
       return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost+"/offerings", { params }).pipe(
             map((response: PagedResponse<Offering>) => {
-              console.log('Paginated response:', response);
-        
-              // Log each service individually
-              if (response.content) {
-                response.content.forEach((service: Offering) => {
-                  console.log('Service:', service);
-                });
-              }
-        
               return response;
             })
           );

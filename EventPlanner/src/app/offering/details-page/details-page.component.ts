@@ -321,6 +321,15 @@ export class DetailsPageComponent implements OnInit {
       return;
     }
     
-    console.log('chat with provider...');
+    const sender = this.authService.getAccountId();
+    const recipient = this.offering.provider.accountId;
+    console.log(sender);
+    console.log(recipient);
+    this.router.navigate(['/chat'], {
+      state: {
+        loggedInUserId: sender,
+        organizerId: recipient
+      }
+    });  
   }
 }
