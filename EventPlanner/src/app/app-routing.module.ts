@@ -53,8 +53,9 @@ const routes: Routes = [
   {path:'user-details',component:UserDetailsComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER','PROVIDER','ADMIN','AUTHENTICATED_USER']}},
   {path:'edit-personal',component:EditPersonalComponent, canActivate: [AuthGuard],
+    data: {role: ['PROVIDER','EVENT_ORGANIZER']}},
+  {path:'edit-company',component:EditCompanyComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
-  {path:'edit-company',component:EditCompanyComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];
