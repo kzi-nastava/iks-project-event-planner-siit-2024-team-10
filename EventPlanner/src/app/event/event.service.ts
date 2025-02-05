@@ -29,14 +29,14 @@ export class EventService {
 
   getTop(accountId: number | null): Observable<Event[]> {
     const params: any = {};
-  
+
     if (accountId !== null) {
       params.accountId = accountId.toString();
     }
-  
+
     return this.httpClient.get<Event[]>(environment.apiHost + '/events/top', { params: params });
   }
-  
+
   getEvent(id:number): Observable<Event> {
     return this.httpClient.get<Event>(environment.apiHost+'/events/'+id);
   }
@@ -75,6 +75,12 @@ export class EventService {
 
   generateOpenEventReport(eventId:number): Observable<Blob> {
     return this.httpClient.get(environment.apiHost + '/events/'+eventId+'/reports/open-event',{
+      responseType: 'blob'
+    });
+  }
+
+  generateEventInfoReport(eventId:number): Observable<Blob> {
+    return this.httpClient.get(environment.apiHost + '/events/'+eventId+'/reports/info',{
       responseType: 'blob'
     });
   }
