@@ -276,7 +276,6 @@ export class DetailsPageComponent implements OnInit {
   get profilePhoto(): string {
     try{
       const photo = this.offering.provider?.profilePhoto;
-      console.log(photo);
       const fileName = photo.split('\\').pop()?.split('/').pop();
       return `${environment.apiHost}/images/${fileName}`;
       } catch (error) {
@@ -296,7 +295,7 @@ export class DetailsPageComponent implements OnInit {
     }
 
     const dialogRef = this.dialog.open(ReservationDialogComponent, {
-      width: '1000px',
+      width: '700px',
       data: { offering: this.offering }
     });
   
