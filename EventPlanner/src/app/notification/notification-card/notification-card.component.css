@@ -2,7 +2,7 @@
     margin: 2px 0;
     width: 100%;
     min-height: 80px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
     border: black;
     border-width: 5px;
@@ -30,6 +30,7 @@
         right: 8px;
         background-color: transparent;
         border: none;
+        color: #555;
       }
     }
   
