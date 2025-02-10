@@ -19,12 +19,12 @@ export class NotificationService {
     return this.httpClient.get<PagedResponse<AppNotification>>(environment.apiHost+'/notifications/'+accountId, {params: params});
   }
   readNotification(notificationId: number): Observable<AppNotification> {
-    return this.httpClient.post<AppNotification>('/notifications/'+notificationId+'/read',null);
+    return this.httpClient.put<AppNotification>(environment.apiHost+'/notifications/'+notificationId+'/read',null);
   }
   readAll(accountId: number): Observable<AppNotification[]> {
-    return this.httpClient.post<AppNotification[]>('/notifications/'+accountId+'/readAll',null);
+    return this.httpClient.put<AppNotification[]>(environment.apiHost+'/notifications/'+accountId+'/read-all',null);
   }
   toggleNotification(accountId: number): Observable<AppNotification> {
-    return this.httpClient.post<AppNotification>('/notifications/'+accountId+'/toggle',null);
+    return this.httpClient.put<AppNotification>(environment.apiHost+'/notifications/'+accountId+'/toggle',null);
   }
 }

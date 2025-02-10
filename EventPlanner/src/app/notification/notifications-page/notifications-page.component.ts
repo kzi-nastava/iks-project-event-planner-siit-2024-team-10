@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppNotification } from '../model/notification.model';
 import { NotificationService } from '../notification.service';
 import { AuthService } from '../../infrastructure/auth/auth.service';
@@ -8,7 +8,7 @@ import { AuthService } from '../../infrastructure/auth/auth.service';
   templateUrl: './notifications-page.component.html',
   styleUrl: './notifications-page.component.css'
 })
-export class NotificationsPageComponent implements OnInit {
+export class NotificationsPageComponent implements OnInit, OnDestroy  {
   notifications: AppNotification[] = [];
   accountId: number;
   noNotificationsMessage :string;
@@ -52,6 +52,18 @@ export class NotificationsPageComponent implements OnInit {
     if (this.notificationPageProperties.page > 0) {
       this.notificationPageProperties.page--;
       this.fetchNotifications();
+    }
+  }
+  ngOnDestroy(): void {
+    if (this.notifications.some(notification => !notification.read)) {
+      this.notificationService.readAll(this.accountId).subscribe({
+        next: () => {
+          console.log('Notifications marked as read');
+        },
+        error: (error) => {
+          console.error('Error marking notifications as read:', error);
+        }
+      });
     }
   }
 }
