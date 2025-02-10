@@ -35,7 +35,7 @@
     }
   
     &.read {
-      background-color: #dddddd;
+      background-color: #e8e8e8;
     }
     &:not(.read) .read-icon{
         opacity: 0;
