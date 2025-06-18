@@ -29,7 +29,6 @@ export class NotificationsPageComponent implements OnInit, OnDestroy  {
 
   fetchNotifications(): void {
     const { page, pageSize } = this.notificationPageProperties;
-    console.log(page, pageSize, this.notificationPageProperties.totalPages);
     this.notificationService.getAll(page, pageSize, this.accountId).subscribe({
       next: (response) => {
         this.notifications = response.content;
