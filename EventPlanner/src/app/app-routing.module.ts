@@ -15,9 +15,13 @@ import {EventTypesComponent} from './event/event-types/event-types.component';
 import { PricelistComponent } from './offering/pricelist/pricelist.component';
 import {AuthGuard} from './infrastructure/auth/auth.guard';
 import {ActivateComponent} from './infrastructure/auth/activate/activate.component';
+import { ChatComponent } from './chat/component/chat.component';
 import {CreateProductComponent} from './product/create-product/create-product.component';
 import { ProviderProfileComponent } from './provider-profile/provider-profile.component';
 import {OpenEventReportComponent} from './event/open-event-report/open-event-report.component';
+import {UserDetailsComponent} from './user/user-details/user-details.component';
+import {EditPersonalComponent} from './user/edit-personal/edit-personal.component';
+import {EditCompanyComponent} from './user/edit-company/edit-company.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -47,6 +51,13 @@ const routes: Routes = [
   {path:'create-product',component:CreateProductComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   {path:'activate', component: ActivateComponent},
+  {path:'user-details',component:UserDetailsComponent, canActivate: [AuthGuard],
+    data: {role: ['EVENT_ORGANIZER','PROVIDER','ADMIN','AUTHENTICATED_USER']}},
+  {path:'edit-personal',component:EditPersonalComponent, canActivate: [AuthGuard],
+    data: {role: ['PROVIDER','EVENT_ORGANIZER']}},
+  {path:'edit-company',component:EditCompanyComponent, canActivate: [AuthGuard],
+    data: {role: ['PROVIDER']}},
+  { path: 'chat', component: ChatComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];
