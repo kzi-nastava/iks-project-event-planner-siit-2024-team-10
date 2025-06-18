@@ -284,6 +284,10 @@ export class DetailsPageComponent implements OnInit {
   }
 
   openReservationDialog(): void {
+    if(!this.isService(this.offering)){
+      return
+    }
+    
     if (!this.authService.isLoggedIn()) {
       this.snackBar.open('Please log in to make a reservation', 'Close', {
         duration: 3000,

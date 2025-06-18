@@ -79,8 +79,17 @@ onBook(): void {
       }
     });
 
+
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
+
+        this.snackBar.open('Processing reservation...', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['warning-snackbar']
+      });
+
         let reservation : CreateReservationDTO ={
           startTime: reservationData.startTime,
           endTime: reservationData.endTime,
@@ -90,7 +99,12 @@ onBook(): void {
 
         this.reservationService.createReservation(reservation).subscribe({
           next: (response: Reservation) => {
-            this.snackBar.open('Reservation successful! Email confirmation has been sent.', 'OK', { duration: 5000 });
+            if (response.status == "PENDING"){
+              this.snackBar.open('Reservation request is pending! Email confirmation will been sent.', 'OK', { duration: 5000 });
+            }
+            else{
+              this.snackBar.open('Reservation successful! Email confirmation has been sent.', 'OK', { duration: 5000 });
+            }
             this.dialogRef.close(response);
           },
           error: (err: Error) => { 
