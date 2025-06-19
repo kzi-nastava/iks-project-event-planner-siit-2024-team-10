@@ -7,6 +7,8 @@ import {EventService} from '../event.service';
 import {AuthService} from '../../infrastructure/auth/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Event} from '../model/event.model';
+import {CreateEventDTO} from '../model/create-event-dto.model';
+import {UpdateEventDTO} from '../model/update-event-dto.model';
 
 @Component({
   selector: 'app-edit-event',
@@ -27,9 +29,8 @@ export class EditEventComponent implements OnInit{
     houseNumber: new FormControl('', [Validators.required]),
     date: new FormControl('', [Validators.required]),
   });
-  allEventTypes:EventType[];
+  allEventTypes:EventType[]=[];
   event:Event;
-  today=new Date();
   snackBar:MatSnackBar = inject(MatSnackBar);
   constructor(private eventTypeService: EventTypeService,
               private eventService:EventService,
@@ -72,10 +73,9 @@ export class EditEventComponent implements OnInit{
             city:event.location.city,
             street:event.location.street,
             houseNumber:event.location.houseNumber,
-            date:event.date
+            date:new Date(event.date)
           })
           this.initializeEventType();
-          //todo: select event type
         },
         error: (err) => {
           this.snackBar.open('Error fetching event','OK',{duration:5000});
@@ -96,5 +96,34 @@ export class EditEventComponent implements OnInit{
       this.allEventTypes.push(eventType);
     }
     this.editForm.patchValue({eventType:eventType});
+  }
+
+  save():void{
+    if(this.editForm.valid){
+      const event:UpdateEventDTO={
+        eventTypeId:this.editForm.value.noEventType?null:this.editForm.value.eventType.id,
+        name:this.editForm.value.name,
+        description:this.editForm.value.description,
+        maxParticipants:parseInt(this.editForm.value.maxParticipants, 10),
+        isOpen:this.editForm.value.eventPublicity==='open',
+        date:(new Date(this.editForm.value.date.getTime() - this.editForm.value.date.getTimezoneOffset() * 60000)).toISOString().split('T')[0],
+        location:{
+          country:this.editForm.value.country,
+          city:this.editForm.value.city,
+          street:this.editForm.value.street,
+          houseNumber:this.editForm.value.houseNumber
+        }
+      }
+      this.eventService.update(event,this.event.id).subscribe({
+        next: () => {
+          this.snackBar.open('Event edited successfully','OK',{duration:3000});
+          this.router.navigate(['/event',this.event.id]);
+        },
+        error: (err) => {
+          console.log(err);
+          this.snackBar.open(err.error,'OK',{duration:3000});
+        }
+      });
+    }
   }
 }

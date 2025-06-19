@@ -43,7 +43,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Choose a date</mat-label>
-        <input [min]="today" formControlName="date" matInput [matDatepicker]="picker">
+        <input formControlName="date" matInput [matDatepicker]="picker">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
@@ -52,8 +52,7 @@
         <mat-button-toggle value="open">Open</mat-button-toggle>
         <mat-button-toggle value="closed">Closed</mat-button-toggle>
       </mat-button-toggle-group>
-      <button mat-flat-button class="submit-btn">
-<!--        (click)="save()">-->
+      <button mat-flat-button class="submit-btn" (click)="save()">
         Submit
       </button>
     </form>
