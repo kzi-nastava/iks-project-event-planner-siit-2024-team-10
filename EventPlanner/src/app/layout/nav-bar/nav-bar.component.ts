@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import {AuthService} from '../../infrastructure/auth/auth.service';
 

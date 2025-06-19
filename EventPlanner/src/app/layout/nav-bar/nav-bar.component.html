@@ -25,6 +25,11 @@
         </button>
       </mat-menu>
     </div>
+    <div class="navigation-item" *ngIf="role!=undefined">
+      <button mat-icon-button [routerLink]="['notification-panel']">
+        <mat-icon>notifications</mat-icon>
+      </button>
+    </div>
     <div class="navigation-item">
       <button *ngIf="role!=undefined" mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>menu</mat-icon>
