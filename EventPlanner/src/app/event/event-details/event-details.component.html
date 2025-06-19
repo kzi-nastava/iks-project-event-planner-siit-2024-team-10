@@ -139,5 +139,8 @@
     <button class="fab secondary" *ngIf="(owner||admin)&&event?.open" [routerLink]="['/open-event-report',event.id]">
       <i class="fas fa-chart-line"></i>
     </button>
+    <button class="fab tertiary" *ngIf="owner" [routerLink]="['/edit-event',event.id]">
+      <mat-icon>create</mat-icon>
+    </button>
   </div>
 </div>
