@@ -1,8 +1,17 @@
 <div class="fab-container">
   <a [routerLink]="['/create-offering']">
-    <button class="fab">+</button>
+    <button class="fab offering-fab" mat-fab>
+      <mat-icon>add</mat-icon><mat-icon>handshake</mat-icon>
+    </button>
+  </a>
+
+  <a [routerLink]="['/create-product']">
+    <button style="margin-bottom:70px;" class="fab product-fab" mat-fab>
+      <mat-icon>add</mat-icon> <mat-icon>shopping_bag</mat-icon>
+    </button>
   </a>
 </div>
+
 
 <div class="all-events">
   <div class="offering-bg">
