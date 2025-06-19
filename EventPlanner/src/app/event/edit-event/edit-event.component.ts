@@ -28,6 +28,7 @@ export class EditEventComponent implements OnInit{
     date: new FormControl('', [Validators.required]),
   });
   allEventTypes:EventType[];
+  event:Event;
   today=new Date();
   snackBar:MatSnackBar = inject(MatSnackBar);
   constructor(private eventTypeService: EventTypeService,
@@ -41,6 +42,7 @@ export class EditEventComponent implements OnInit{
     this.eventTypeService.getAll().subscribe({
       next: (eventTypes:EventType[]) => {
         this.allEventTypes = eventTypes.filter((x) => x.active);
+        this.initializeEventType();
       },
       error: (_) => {
         this.snackBar.open('Error loading event types','OK',{duration:3000});
@@ -59,18 +61,20 @@ export class EditEventComponent implements OnInit{
       const id = +params['id'];
       this.eventService.getEvent(id).subscribe({
         next: (event: Event) => {
+          this.event=event;
           this.editForm.patchValue({
             noEventType:event.eventType==null,
             name:event.name,
             description:event.description,
             maxParticipants:event.maxParticipants,
-            eventPublicity:event.open,
+            eventPublicity:event.open?'open':'closed',
             country:event.location.country,
             city:event.location.city,
             street:event.location.street,
             houseNumber:event.location.houseNumber,
             date:event.date
           })
+          this.initializeEventType();
           //todo: select event type
         },
         error: (err) => {
@@ -82,5 +86,15 @@ export class EditEventComponent implements OnInit{
   }
   eventTypesDisplayed():boolean{
     return !this.editForm.value.noEventType;
+  }
+  initializeEventType():void{
+    if(this.event==null||this.allEventTypes?.length==0||this.event.eventType==null)
+      return;
+    let eventType = this.allEventTypes.find(event => event.id === this.event.eventType.id);
+    if(eventType==null){
+      eventType=this.event.eventType;
+      this.allEventTypes.push(eventType);
+    }
+    this.editForm.patchValue({eventType:eventType});
   }
 }
