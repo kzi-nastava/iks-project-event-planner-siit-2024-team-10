@@ -10,6 +10,7 @@ import {AuthService} from '../../infrastructure/auth/auth.service';
 
 export class NavBarComponent {
   role: string = '';
+  hasUnreadNotifications: boolean = false;
   constructor(private authService: AuthService, private router: Router) {
   }
 

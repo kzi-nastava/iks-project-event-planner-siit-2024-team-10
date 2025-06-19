@@ -28,6 +28,7 @@
     <div class="navigation-item" *ngIf="role!=undefined">
       <button mat-icon-button [routerLink]="['notification-panel']">
         <mat-icon>notifications</mat-icon>
+        <span *ngIf="hasUnreadNotifications" class="notification-badge"></span>
       </button>
     </div>
     <div class="navigation-item">

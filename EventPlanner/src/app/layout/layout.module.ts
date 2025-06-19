@@ -20,7 +20,6 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { OfferingWarningDialogComponent } from './offering-warning-dialog/offering-warning-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatBadgeModule } from '@angular/material/badge';
 import { AdminNavBarMenuComponent } from './admin-nav-bar-menu/admin-nav-bar-menu.component';
 import { ProviderNavBarMenuComponent } from './provider-nav-bar-menu/provider-nav-bar-menu.component';
 import { OrganizerNavBarMenuComponent } from './organizer-nav-bar-menu/organizer-nav-bar-menu.component';
@@ -58,8 +57,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
         MatSelectModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatDialogModule,
-        MatBadgeModule
+        MatDialogModule
   ],
   exports: [NavBarComponent]
 })
