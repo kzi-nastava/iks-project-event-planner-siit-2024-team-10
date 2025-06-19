@@ -2,6 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppNotification } from '../model/notification.model';
 import { NotificationService } from '../notification.service';
 import { AuthService } from '../../infrastructure/auth/auth.service';
+import { Subscription } from 'rxjs';
+import * as Stomp from 'stompjs';
+import SockJS from 'sockjs-client';
 
 @Component({
   selector: 'app-notifications-page',
@@ -19,12 +22,21 @@ export class NotificationsPageComponent implements OnInit, OnDestroy  {
     totalElements: 0
   };
 
+    private notificationSubscription: Subscription;
+
   constructor(private notificationService: NotificationService,
               private authService: AuthService) {}
 
   ngOnInit(): void {
     this.accountId = this.authService.getAccountId();
     this.fetchNotifications();
+
+    this.notificationService.connectToNotificationSocket(this.accountId);
+
+    this.notificationSubscription = this.notificationService.notifications$.subscribe((updated) => {
+      this.notifications = updated;
+      this.noNotificationsMessage = this.notifications.length ? '' : 'No notifications to show.';
+    });
   }
 
   fetchNotifications(): void {
@@ -54,15 +66,10 @@ export class NotificationsPageComponent implements OnInit, OnDestroy  {
     }
   }
   ngOnDestroy(): void {
-    if (this.notifications.some(notification => !notification.read)) {
-      this.notificationService.readAll(this.accountId).subscribe({
-        next: () => {
-          console.log('Notifications marked as read');
-        },
-        error: (error) => {
-          console.error('Error marking notifications as read:', error);
-        }
-      });
+    this.notificationSubscription?.unsubscribe();
+    const unread = this.notifications.some(n => !n.read);
+    if (unread) {
+      this.notificationService.readAll(this.accountId).subscribe();
     }
   }
 }
