@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { AppNotification } from './model/notification.model';
 import * as Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
@@ -12,8 +12,12 @@ import { PagedResponse } from '../event/model/paged-response.model';
 })
 export class NotificationService {
   private stompClient: any;
+
   private notificationsSubject = new BehaviorSubject<AppNotification[]>([]);
   public notifications$ = this.notificationsSubject.asObservable();
+
+  private _hasUnreadNotifications = new BehaviorSubject<boolean>(false);
+  public hasUnreadNotifications$ = this._hasUnreadNotifications.asObservable();
 
   constructor(private httpClient: HttpClient) {}
 
@@ -25,12 +29,17 @@ export class NotificationService {
     const topic = `/socket-publisher/notifications/${accountId}`;
     this.stompClient.subscribe(topic, (message: { body: string }) => {
       const notification: AppNotification = JSON.parse(message.body);
-      const current = this.notificationsSubject.getValue();
       this.notificationsSubject.next([notification]);
+      this.checkUnreadState(notification);
     });
   });
-}
+  }
 
+  private checkUnreadState(newNotification: AppNotification) {
+    if (!newNotification.read) {
+      this._hasUnreadNotifications.next(true);
+    }
+  }
 
   getAll(page: number, size: number, accountId: number): Observable<PagedResponse<AppNotification>> {
     const params = new HttpParams()
@@ -40,7 +49,11 @@ export class NotificationService {
   }
 
   readAll(accountId: number): Observable<AppNotification[]> {
-    return this.httpClient.put<AppNotification[]>(`${environment.apiHost}/notifications/${accountId}/read-all`, null);
+    return this.httpClient.put<AppNotification[]>(`${environment.apiHost}/notifications/${accountId}/read-all`, null).pipe(
+      tap(() => {
+        this._hasUnreadNotifications.next(false);
+      })
+    );
   }
 
   readNotification(notificationId: number): Observable<AppNotification> {

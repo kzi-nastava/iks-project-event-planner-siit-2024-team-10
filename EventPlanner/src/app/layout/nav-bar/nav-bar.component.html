@@ -26,7 +26,7 @@
       </mat-menu>
     </div>
     <div class="navigation-item" *ngIf="role!=undefined">
-      <button mat-icon-button [routerLink]="['notification-panel']">
+      <button mat-icon-button [routerLink]="['notification-panel']" (click)="onNotificationClick()">
         <mat-icon>notifications</mat-icon>
         <span *ngIf="hasUnreadNotifications" class="notification-badge"></span>
       </button>
