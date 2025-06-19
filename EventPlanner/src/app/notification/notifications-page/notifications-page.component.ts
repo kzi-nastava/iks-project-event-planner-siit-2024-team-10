@@ -33,9 +33,8 @@ export class NotificationsPageComponent implements OnInit, OnDestroy  {
 
     this.notificationService.connectToNotificationSocket(this.accountId);
 
-    this.notificationSubscription = this.notificationService.notifications$.subscribe((updated) => {
-      this.notifications = updated;
-      this.noNotificationsMessage = this.notifications.length ? '' : 'No notifications to show.';
+    this.notificationSubscription = this.notificationService.notifications$.subscribe(() => {
+      this.fetchNotifications();
     });
   }
 

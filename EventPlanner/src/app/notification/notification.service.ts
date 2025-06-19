@@ -18,7 +18,7 @@ export class NotificationService {
   constructor(private httpClient: HttpClient) {}
 
   connectToNotificationSocket(accountId: number) {
-  const socket = new SockJS('http://localhost:8080/socket'); // ✅ Correct endpoint from backend
+  const socket = new SockJS('http://localhost:8080/socket');
   this.stompClient = Stomp.over(socket);
 
   this.stompClient.connect({}, () => {
@@ -26,7 +26,7 @@ export class NotificationService {
     this.stompClient.subscribe(topic, (message: { body: string }) => {
       const notification: AppNotification = JSON.parse(message.body);
       const current = this.notificationsSubject.getValue();
-      this.notificationsSubject.next([notification, ...current]);
+      this.notificationsSubject.next([notification]);
     });
   });
 }
