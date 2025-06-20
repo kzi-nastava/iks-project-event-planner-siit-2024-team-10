@@ -47,13 +47,13 @@
           <mat-header-cell *matHeaderCellDef> Change Category </mat-header-cell>
           <mat-cell *matCellDef="let element">
             <button 
-            mat-icon-button 
-            color="accent" 
-            (click)="openChangeCategoryDialog(element)"
-            [disabled]="!element.pending"
-          >
-            <mat-icon>swap_horiz</mat-icon>
-          </button>
+              mat-icon-button 
+              color="accent" 
+              (click)="openChangeCategoryDialog(element)"
+              [disabled]="!element.pending || !offeringsByCategory[element.id]?.length"
+            >
+              <mat-icon>swap_horiz</mat-icon>
+            </button>
           </mat-cell>
         </ng-container>
 

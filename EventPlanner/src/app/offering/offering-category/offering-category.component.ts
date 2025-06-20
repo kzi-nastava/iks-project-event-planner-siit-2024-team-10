@@ -126,10 +126,11 @@ export class OfferingCategoryComponent implements OnInit {
   
     dialogRef.afterClosed().subscribe(newCategory => {
       if (newCategory && newCategory.id !== category.id) {
-        this.categoryService.changeCategory(category.id, newCategory.id).subscribe({
+        this.offeringService.changeOfferingCategory(category.id, newCategory.id).subscribe({
           next: () => {
             this.snackBar.open('Category changed successfully.', 'OK', { duration: 3000 });
             this.refreshDataSource();
+            this.loadOfferingsGroupedByCategory();
           },
           error: () => {
             this.snackBar.open('Failed to change category.', 'OK', { duration: 3000 });

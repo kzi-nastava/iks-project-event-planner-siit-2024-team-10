@@ -93,6 +93,7 @@ export class OfferingService {
   }
   
   changeOfferingCategory(offeringId: number, newCategoryId: number): Observable<any> {
-    return this.httpClient.put(environment.apiHost + `/offerings/${offeringId}/change-category`, { newCategoryId });
+    console.log(environment.apiHost + `/offerings/${offeringId}/change/${newCategoryId}`)
+    return this.httpClient.put(environment.apiHost + `/offerings/${offeringId}/change/${newCategoryId}`, { newCategoryId });
   }
 }
