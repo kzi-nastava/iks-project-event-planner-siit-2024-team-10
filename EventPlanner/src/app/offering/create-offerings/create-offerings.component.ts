@@ -141,7 +141,7 @@ export class CreateOfferingsComponent implements OnInit {
       const isFixedTime = formValue.timeType === 'fixed';
 
       const service: CreateServiceDTO = {
-        category: this.creatingCategory() ? null : formValue.serviceCategory.id,
+        categoryId:this.creatingCategory()?null:this.createForm.value.serviceCategory.id,
         categoryProposalName:this.creatingCategory()?this.createForm.value.categoryName:null,
         categoryProposalDescription:this.creatingCategory()?this.createForm.value.categoryDescription:null,
         pending: false,

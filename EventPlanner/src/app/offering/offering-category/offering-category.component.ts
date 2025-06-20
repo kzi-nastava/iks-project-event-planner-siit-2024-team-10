@@ -86,13 +86,15 @@ export class OfferingCategoryComponent implements OnInit {
   }
 
   deleteCategory(category: Category) {
-    this.categoryService.delete(category.id).subscribe({
-      next: (response) => {
-        this.refreshDataSource();
-        this.snackBar.open('Category deleted successfully','OK',{duration:3000});
-      },
-      error: (err) => console.error('Error deleting category:', err),
-    });
+    this.categoryService.delete(category.id).subscribe(success => {
+      if (success) {
+        this.snackBar.open('Category successfully deleted.', 'OK', { duration: 3000 });
+      } else {
+        this.snackBar.open('Category was not deleted because it has related offerings.', 'OK', { duration: 3000 });
+      }
+    }, error => {
+      this.snackBar.open('Category not found.', 'OK', { duration: 3000 });
+    });    
   }
 
   approveCategory(category: Category) {

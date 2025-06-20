@@ -1,5 +1,5 @@
 export interface CreateServiceDTO {
-  category: number;
+  categoryId: number;
   pending: boolean;
   provider: number;
   name: string;
