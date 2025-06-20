@@ -1,13 +1,14 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http'; 
-import { ViewChild, ElementRef } from '@angular/core';
-import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
+import { Category } from '../../offering/model/category.model';
 import { ServiceService } from '../service-service/service.service';
 import { CreateServiceDTO } from '../model/create-service-dto.model';
 import { environment } from '../../../env/environment';
+import { CategoryService } from '../../offering/category-service/category.service';
+import {AuthService} from '../../infrastructure/auth/auth.service';
 
 @Component({
   selector: 'app-create-offerings',
@@ -17,42 +18,58 @@ import { environment } from '../../../env/environment';
 export class CreateOfferingsComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   createForm: FormGroup;
-  serviceCategories = [
-    'Photography', 
-    'Catering', 
-    'DJ Services', 
-    'Event Planning'
-  ];
-  eventTypes = [
-    'Wedding', 
-    'Birthday', 
-    'Corporate', 
-    'Anniversary'
-  ];
   selectedEventTypes: Set<string> = new Set();
   timeOptions = [1, 2, 3, 4, 5];
-  photoPaths: string[];
+  photoPaths: string[] = [];
+  allCategories: Category[] = [];
   snackBar: MatSnackBar = inject(MatSnackBar);
-  
-  constructor(
-    private fb: FormBuilder, 
-    private dialog: MatDialog, 
-    private serviceService: ServiceService,
-    private http: HttpClient 
-  ) {}
 
-  openDialog(){
-    this.dialog.open(CreateCategoryDialogComponent,{
-      width:"350px"
-    })
-  }
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private serviceService: ServiceService,
+    private categoryService: CategoryService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
+
+    this.categoryService.getAll().subscribe({
+      next: (categories: Category[]) => {
+        this.allCategories = categories.filter(c => !c.deleted && !c.pending);
+      },
+      error: () => {
+        console.error("Failed to load categories");
+      }
+    });
+
+    this.createForm.get('createCategory')?.valueChanges.subscribe((createCategoryValue) => {
+      const nameCtrl = this.createForm.get('categoryName');
+      const descCtrl = this.createForm.get('categoryDescription');
+      const selectionCtrl = this.createForm.get('serviceCategory');
+
+      if (createCategoryValue) {
+        nameCtrl?.setValidators([Validators.required]);
+        descCtrl?.setValidators([Validators.required]);
+        selectionCtrl?.clearValidators();
+      } else {
+        nameCtrl?.clearValidators();
+        descCtrl?.clearValidators();
+        selectionCtrl?.setValidators([Validators.required]);
+      }
+
+      nameCtrl?.updateValueAndValidity();
+      descCtrl?.updateValueAndValidity();
+      selectionCtrl?.updateValueAndValidity();
+    });
   }
 
   initForm(): void {
     this.createForm = this.fb.group({
+      createCategory: [false],
+      categoryName: [''],
+      categoryDescription: [''],
       serviceCategory: ['', Validators.required],
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -70,7 +87,10 @@ export class CreateOfferingsComponent implements OnInit {
       isVisible: [false]
     });
   }
-  
+
+  creatingCategory(): boolean {
+    return this.createForm.value.createCategory;
+  }
 
   onPhotoUpload() {
     const files = this.fileInput.nativeElement.files;
@@ -81,19 +101,18 @@ export class CreateOfferingsComponent implements OnInit {
 
   uploadFiles(files: FileList) {
     const formData = new FormData();
-    const productId = 1;  // real id later
-  
+    const fakeId = 1;
+
     for (let i = 0; i < files.length; i++) {
       formData.append('files', files[i]);
     }
-  
-    formData.append('productId', productId.toString());
-  
+
+    formData.append('productId', fakeId.toString());
+
     this.http.post(environment.apiHost + "/upload", formData).subscribe({
       next: (response: any) => {
-        console.log('Files uploaded successfully:', response);
         this.snackBar.open('Files uploaded successfully', 'OK', { duration: 3000 });
-        this.photoPaths = response; 
+        this.photoPaths = response;
         this.createForm.patchValue({ photos: response });
       },
       error: (error) => {
@@ -101,10 +120,8 @@ export class CreateOfferingsComponent implements OnInit {
         this.snackBar.open('Failed to upload files', 'Dismiss', { duration: 3000 });
       }
     });
-  }  
-  
-    
-  
+  }
+
   toggleSelection(type: string): void {
     if (this.selectedEventTypes.has(type)) {
       this.selectedEventTypes.delete(type);
@@ -117,45 +134,38 @@ export class CreateOfferingsComponent implements OnInit {
     return this.selectedEventTypes.has(type);
   }
 
-  onSubmit(): void {  
+  onSubmit(): void {
+    console.log("submit")
     if (this.createForm.valid) {
       const formValue = this.createForm.value;
       const isFixedTime = formValue.timeType === 'fixed';
 
       const service: CreateServiceDTO = {
-        category: 1, 
-        categoryProposal: "",
-        pending: false, 
-        provider: 1,
-
+        category: this.creatingCategory() ? null : formValue.serviceCategory.id,
+        categoryProposalName:this.creatingCategory()?this.createForm.value.categoryName:null,
+        categoryProposalDescription:this.creatingCategory()?this.createForm.value.categoryDescription:null,
+        pending: false,
+        provider: this.authService.getUserId(),
         name: formValue.name,
         description: formValue.description,
         specification: formValue.specification || '',
-
         price: parseFloat(formValue.price),
         discount: parseFloat(formValue.discount) || 0,
-
-        photos: formValue.photos || [],
-
-        isVisible: formValue.isVisible === true,
-        isAvailable: formValue.isAvailable === true,
-
-        maxDuration: isFixedTime ? parseInt(formValue.fixedTime, 10) || 0 : parseInt(formValue.maxTime, 10) || 0,
-        minDuration: isFixedTime ? parseInt(formValue.fixedTime, 10) || 0 : parseInt(formValue.minTime, 10) || 0,
-
-        cancellationPeriod: parseInt(formValue.cancellationDeadline, 10) || 0,
-        reservationPeriod: parseInt(formValue.reservationDeadline, 10) || 0,
-
-        autoConfirm: isFixedTime 
+        photos: this.photoPaths || [],
+        isVisible: !!formValue.isVisible,
+        isAvailable: !!formValue.isAvailable,
+        maxDuration: isFixedTime ? +formValue.fixedTime || 0 : +formValue.maxTime || 0,
+        minDuration: isFixedTime ? +formValue.fixedTime || 0 : +formValue.minTime || 0,
+        cancellationPeriod: +formValue.cancellationDeadline || 0,
+        reservationPeriod: +formValue.reservationDeadline || 0,
+        autoConfirm: isFixedTime
       };
-    
-      console.log('Service to create:', service);
+
+      console.log(service);
 
       this.serviceService.add(service).subscribe({
-        next: (response) => {
-          this.snackBar.open('Service created successfully', 'OK', { 
-            duration: 3000 
-          });
+        next: () => {
+          this.snackBar.open('Service created successfully', 'OK', { duration: 3000 });
           this.createForm.reset();
         },
         error: (error) => {
@@ -172,12 +182,10 @@ export class CreateOfferingsComponent implements OnInit {
       });
     }
   }
-    
-    
+
   private markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
-  
       if (control instanceof FormGroup) {
         this.markFormGroupTouched(control);
       }

@@ -1,24 +1,29 @@
-<div style="background-color: #f6f6f6;">
 <div class="offering-container">
-  <form [formGroup]="createForm" (ngSubmit)="onSubmit()" class="elegant-form">
+  <form [formGroup]="createForm" class="elegant-form">
     <div class="form-header">
-      <h1>Create Your Service</h1>
-      <p>Craft a compelling service that stands out in the market</p>
+      <h1>Create Service</h1>
     </div>
-
     <div class="form-section category-section">
-      <div class="category-selector">
+      <mat-checkbox formControlName="createCategory" color="primary">Create new category</mat-checkbox>
+      <mat-form-field appearance="outline" *ngIf="creatingCategory()">
+        <mat-label>Category Name</mat-label>
+        <input matInput formControlName="categoryName">
+      </mat-form-field>
+      <mat-form-field appearance="outline" *ngIf="creatingCategory()">
+        <mat-label>Category Description</mat-label>
+        <textarea matInput formControlName="categoryDescription" rows="4"></textarea>
+      </mat-form-field>
+      <div class="category-selector" *ngIf="!creatingCategory()">
         <mat-form-field appearance="outline" class="category-dropdown">
           <mat-label>Service Category</mat-label>
           <mat-select formControlName="serviceCategory" class="category-select">
-            <mat-option *ngFor="let category of serviceCategories" [value]="category">
-              {{category}}
+            <mat-option *ngFor="let category of allCategories" [value]="category">
+              {{category?.name}}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-      <p class="subtle-text">Can't find the perfect category? <a id="openDialog" (click)="openDialog()">Create new</a> now!</p>
-      </div>
+    </div>
 
     <div class="form-section details-grid">
       <mat-form-field appearance="outline">
@@ -61,16 +66,6 @@
         </div>
       </div>
     </div>      
-
-    <div class="form-section event-types">
-      <h3 class="small-subtitle">Select Applicable Event Types</h3>
-      <div class="selected-labels">
-        <span *ngFor="let type of eventTypes" 
-              [ngClass]="{'selected-label': isSelected(type)}" 
-              (click)="toggleSelection(type)"
-              class="clickable-label">{{type}}</span>
-      </div>
-    </div>
 
     <div class="form-section time-selection">
       <h3 class="small-subtitle">Service Duration</h3>
@@ -122,10 +117,9 @@
     </div>
 
     <div class="form-section submit-section">
-      <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="!createForm.valid">
+      <button (click)="onSubmit()" mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="!createForm.valid">
         Create Service
       </button>
     </div>
   </form>
-</div>
 </div>

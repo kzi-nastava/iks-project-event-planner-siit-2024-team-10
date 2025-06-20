@@ -1,6 +1,5 @@
 export interface CreateServiceDTO {
   category: number;
-  categoryProposal: string;
   pending: boolean;
   provider: number;
   name: string;
@@ -16,4 +15,6 @@ export interface CreateServiceDTO {
   cancellationPeriod: number;
   reservationPeriod: number;
   autoConfirm: boolean;
+  categoryProposalName: string,
+  categoryProposalDescription: string
 }
