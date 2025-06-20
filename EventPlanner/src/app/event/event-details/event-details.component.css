@@ -195,6 +195,10 @@
   bottom: 6rem;
 }
 
+.fab.tertiary {
+  bottom: 10rem;
+}
+
 .comments-section {
   background: #f8fafc;
   border-radius: 12px;
