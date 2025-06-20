@@ -40,6 +40,9 @@ export class NotificationService {
       this._hasUnreadNotifications.next(true);
     }
   }
+  isNotificationsSilenced(accountId: number): Observable<boolean> {
+    return this.httpClient.get<boolean>(`${environment.apiHost}/notifications/${accountId}/toggle`);
+  }
 
   getAll(page: number, size: number, accountId: number): Observable<PagedResponse<AppNotification>> {
     const params = new HttpParams()
@@ -59,8 +62,8 @@ export class NotificationService {
   readNotification(notificationId: number): Observable<AppNotification> {
     return this.httpClient.put<AppNotification>(`${environment.apiHost}/notifications/read/${notificationId}`, null);
   }
-
-  toggleNotification(accountId: number): Observable<AppNotification> {
-    return this.httpClient.put<AppNotification>(`${environment.apiHost}/notifications/${accountId}/toggle`, null);
+  
+  toggleNotifications(accountId: number): Observable<void> {
+    return this.httpClient.put<void>(`${environment.apiHost}/notifications/${accountId}/change-toggle`, null);
   }
 }

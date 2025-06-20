@@ -3,8 +3,6 @@ import { AppNotification } from '../model/notification.model';
 import { NotificationService } from '../notification.service';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { Subscription } from 'rxjs';
-import * as Stomp from 'stompjs';
-import SockJS from 'sockjs-client';
 
 @Component({
   selector: 'app-notifications-page',
@@ -15,6 +13,7 @@ export class NotificationsPageComponent implements OnInit, OnDestroy  {
   notifications: AppNotification[] = [];
   accountId: number;
   noNotificationsMessage :string;
+  notificationsSilenced : boolean;
   notificationPageProperties = {
     page: 0,
     pageSize: 5,
@@ -35,6 +34,11 @@ export class NotificationsPageComponent implements OnInit, OnDestroy  {
 
     this.notificationSubscription = this.notificationService.notifications$.subscribe(() => {
       this.fetchNotifications();
+    });
+
+    this.notificationService.isNotificationsSilenced(this.accountId).subscribe({
+      next: (silenced) => this.notificationsSilenced = silenced,
+      error: (err) => console.error('Failed to fetch silenced status', err)
     });
   }
 
@@ -63,6 +67,17 @@ export class NotificationsPageComponent implements OnInit, OnDestroy  {
       this.notificationPageProperties.page--;
       this.fetchNotifications();
     }
+  }
+
+  onToggleChange(): void {
+    this.notificationService.toggleNotifications(this.accountId).subscribe({
+      next: () => {
+        this.notificationsSilenced = !this.notificationsSilenced;
+      },
+      error: (err) => {
+        console.error('Failed to toggle notifications', err);
+      }
+    });
   }
   ngOnDestroy(): void {
     this.notificationSubscription?.unsubscribe();
