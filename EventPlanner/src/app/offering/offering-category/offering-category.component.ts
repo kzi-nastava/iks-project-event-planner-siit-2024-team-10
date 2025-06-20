@@ -6,7 +6,7 @@ import { CategoryDialogComponent } from '../category-dialog/category-dialog.comp
 import {Category} from '../model/category.model'; 
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
-import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-category-dialog.component';
+import { ChangeCategoryDialogComponent } from '../../change-category-dialog/change-category-dialog.component';
 import { Offering } from '../model/offering.model';
 import { OfferingService } from '../offering-service/offering.service';
 

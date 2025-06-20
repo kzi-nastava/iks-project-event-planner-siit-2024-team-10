@@ -28,7 +28,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ReservationDialogComponent } from './reservation-dialog/reservation-dialog.component';
 import { MatOptionModule } from '@angular/material/core';
-import { ChangeCategoryDialogComponent } from './change-category-dialog/change-category-dialog.component';
+import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-category-dialog.component';
 @NgModule({
   declarations: [
     ManageOfferingsComponent,

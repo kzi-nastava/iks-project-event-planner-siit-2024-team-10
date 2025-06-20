@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CategoryService } from '../category-service/category.service';
-import { Category } from '../model/category.model';
+import { CategoryService } from '../offering/category-service/category.service';
+import { Category } from '../offering/model/category.model';
 
 @Component({
   selector: 'app-change-category-dialog',
