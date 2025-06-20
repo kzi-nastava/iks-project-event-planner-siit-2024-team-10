@@ -1,7 +1,14 @@
 <div class="notifications-page">
     <div class="notifications-header">
       <h1>Notifications</h1>
-      <mat-slide-toggle class="push-toggle" [checked]="!notificationsSilenced" (change)="onToggleChange()">Push notifications</mat-slide-toggle>
+      <div class="toggle">
+        <mat-icon *ngIf="notificationsSilenced">notifications_off</mat-icon>
+        <mat-icon *ngIf="!notificationsSilenced">notifications_on</mat-icon>
+        <mat-slide-toggle class="push-toggle" [checked]="!notificationsSilenced" (change)="onToggleChange()">
+          Get Notifications
+        </mat-slide-toggle>
+      </div>
+
     </div>
     <p class="no-notifs" *ngIf="noNotificationsMessage">No notifications found</p>
   

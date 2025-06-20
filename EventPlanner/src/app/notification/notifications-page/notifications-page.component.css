@@ -8,6 +8,7 @@
     background-color: #F6F6F6;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 30px;
+}
   
     .notifications-header {
       display: flex;
@@ -31,7 +32,15 @@
       flex-direction: column;
       gap: 10px;
     }
-  }
+    .toggle{
+      display: relative;
+    }
+    .toggle .mat-icon{
+      position: relative;
+      color: gray;
+      top: 10px;
+      margin: 3px;
+    }
   
   .notification-item {
     display: block;
