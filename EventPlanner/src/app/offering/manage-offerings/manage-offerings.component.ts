@@ -41,7 +41,9 @@ export class ManageOfferingsComponent implements OnInit {
     this.service.getPaginatedOfferings(page, pageSize).subscribe({
       next: (response) => {
         if (response && response.content) {
-          this.allOfferings = response.content.filter(offering => !offering.deleted) || [];
+          this.allOfferings = response.content.filter(
+            offering => !offering.deleted && !offering.category.pending
+          ) || [];
           this.filteredOfferings = [...this.allOfferings];
           this.updateDisplayedOfferings();
 
