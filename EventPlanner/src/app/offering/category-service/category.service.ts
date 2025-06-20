@@ -30,4 +30,7 @@ export class CategoryService {
   approve(id:number):Observable<Category>{
     return this.httpClient.put<Category>(environment.apiHost + "/categories/"+id+'/approve',null);
   }
+  changeCategory(oldCategoryId: number, newCategoryId: number): Observable<any> {
+    return this.httpClient.put<any>(environment.apiHost + `/categories/${oldCategoryId}/change/${newCategoryId}`, null);
+  }
 }

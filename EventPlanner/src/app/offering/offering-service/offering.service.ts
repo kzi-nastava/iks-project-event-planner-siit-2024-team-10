@@ -11,6 +11,7 @@ import { Comment } from '../model/comment.model';
 @Injectable({
   providedIn: 'root'
 })
+
 export class OfferingService {
   private productList: Product[] = [];
   private serviceList: Service[] = [];
@@ -28,8 +29,13 @@ export class OfferingService {
   }
 
   getAll(): Observable<Offering[]> {
-    const allOfferings = [...this.productList, ...this.serviceList];
-    return of(this.shuffleArray(allOfferings));
+    const params = new HttpParams()
+      .set('page', '0')
+      .set('size', '10000');       
+    return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost + '/offerings', { params })
+      .pipe(
+        map(response => response.content)
+      );
   }
   getTop(accountId:number | null): Observable<Offering[]> {
     const params: any = {};
@@ -84,5 +90,9 @@ export class OfferingService {
     const allOfferings = [...this.productList, ...this.serviceList];
     const offering = allOfferings.find(o => o.id === id);
     return of(offering);
+  }
+  
+  changeOfferingCategory(offeringId: number, newCategoryId: number): Observable<any> {
+    return this.httpClient.put(environment.apiHost + `/offerings/${offeringId}/change-category`, { newCategoryId });
   }
 }

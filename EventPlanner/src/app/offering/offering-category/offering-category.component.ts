@@ -6,6 +6,10 @@ import { CategoryDialogComponent } from '../category-dialog/category-dialog.comp
 import {Category} from '../model/category.model'; 
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
+import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-category-dialog.component';
+import { Offering } from '../model/offering.model';
+import { OfferingService } from '../offering-service/offering.service';
+
 @Component({
   selector: 'app-offering-category',
   templateUrl: './offering-category.component.html',
@@ -13,20 +17,24 @@ import {MatSort} from '@angular/material/sort';
 })
 
 export class OfferingCategoryComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'description', 'approve', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'approve', 'actions', 'changeCategory','offerings'];
   dataSource: MatTableDataSource<Category>;
   snackBar:MatSnackBar = inject(MatSnackBar);
+  offeringsByCategory: { [categoryId: number]: Offering[] } = {};
+
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private categoryService: CategoryService,
+    private offeringService: OfferingService,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.refreshDataSource();
+    this.loadOfferingsGroupedByCategory();
   }
-
+  
   private refreshDataSource() {
     this.categoryService.getAll().subscribe({
       next: (categories: Category[]) => {
@@ -66,7 +74,6 @@ export class OfferingCategoryComponent implements OnInit {
   }
 
   editCategory(category: Category) {
-    // TODO: notifications
     const dialogRef = this.dialog.open(CategoryDialogComponent, {
       width: '400px',
       data: { mode: 'edit', category: { ...category } }
@@ -89,6 +96,7 @@ export class OfferingCategoryComponent implements OnInit {
     this.categoryService.delete(category.id).subscribe(success => {
       if (success) {
         this.snackBar.open('Category successfully deleted.', 'OK', { duration: 3000 });
+        this.refreshDataSource();
       } else {
         this.snackBar.open('Category was not deleted because it has related offerings.', 'OK', { duration: 3000 });
       }
@@ -109,4 +117,47 @@ export class OfferingCategoryComponent implements OnInit {
       }
     });
   }  
+
+  openChangeCategoryDialog(category: Category) {
+    const dialogRef = this.dialog.open(ChangeCategoryDialogComponent, {
+      width: '400px',
+      data: { currentCategory: category }
+    });
+  
+    dialogRef.afterClosed().subscribe(newCategory => {
+      if (newCategory && newCategory.id !== category.id) {
+        this.categoryService.changeCategory(category.id, newCategory.id).subscribe({
+          next: () => {
+            this.snackBar.open('Category changed successfully.', 'OK', { duration: 3000 });
+            this.refreshDataSource();
+          },
+          error: () => {
+            this.snackBar.open('Failed to change category.', 'OK', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
+  private loadOfferingsGroupedByCategory() {
+    this.offeringService.getAll().subscribe({
+      next: (offerings) => {
+        if (!Array.isArray(offerings)) {
+          console.error('Offerings is not an array!');
+          return;
+        }
+      
+        this.offeringsByCategory = {};
+        for (const offering of offerings) {
+          if (offering.category && !offering.category.deleted) {
+            if (!this.offeringsByCategory[offering.category.id]) {
+              this.offeringsByCategory[offering.category.id] = [];
+            }
+            this.offeringsByCategory[offering.category.id].push(offering);
+          }
+        }
+      }
+      
+    });
+  }
+  
 }
