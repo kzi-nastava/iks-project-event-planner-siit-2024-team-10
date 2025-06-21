@@ -1,20 +1,33 @@
 <div class="notifications-page">
     <div class="notifications-header">
       <h1>Notifications</h1>
-      <mat-slide-toggle class="push-toggle">Push notifications</mat-slide-toggle>
+      <div class="toggle">
+        <mat-icon *ngIf="notificationsSilenced">notifications_off</mat-icon>
+        <mat-icon *ngIf="!notificationsSilenced">notifications_on</mat-icon>
+        <mat-slide-toggle class="push-toggle" [checked]="!notificationsSilenced" (change)="onToggleChange()">
+          Get Notifications
+        </mat-slide-toggle>
+      </div>
+
     </div>
+    <p class="no-notifs" *ngIf="noNotificationsMessage">No notifications found</p>
   
     <div class="notifications-list">
       <app-notification-card
         *ngFor="let notification of notifications"
         [notification]="notification"
-        class="notification-item"
       ></app-notification-card>
     </div>
-    <div class="pagination">
-      <button mat-stroked-button>&lt; Back</button>
-      <p>Page 1 of 10</p>
-      <button mat-stroked-button>Next &gt;</button>
+    <div class="pagination" *ngIf="!noNotificationsMessage">
+      <button mat-stroked-button (click)="previousPage()" [disabled]="notificationPageProperties.page === 0">
+        &lt;
+      </button>
+      <p>
+        Page {{ notificationPageProperties.page + 1 }} of {{ notificationPageProperties.totalPages }}
+      </p>
+      <button mat-stroked-button (click)="nextPage()" [disabled]="notificationPageProperties.page === notificationPageProperties.totalPages - 1">
+        &gt;
+      </button>
     </div>
   </div>
   

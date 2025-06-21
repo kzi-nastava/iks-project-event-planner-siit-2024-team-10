@@ -8,6 +8,7 @@
     background-color: #F6F6F6;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 30px;
+}
   
     .notifications-header {
       display: flex;
@@ -31,7 +32,15 @@
       flex-direction: column;
       gap: 10px;
     }
-  }
+    .toggle{
+      display: relative;
+    }
+    .toggle .mat-icon{
+      position: relative;
+      color: gray;
+      top: 10px;
+      margin: 3px;
+    }
   
   .notification-item {
     display: block;
@@ -41,7 +50,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top:20px;
+    margin-top: 10px;
     gap: 10px;
   }
   .pagination p{
@@ -49,7 +58,7 @@
     color: gray;
     font-family: 'Roboto','serif';
   }
-  
+
   .pagination button {
     padding: 10px 15px;
     color: #545283;
@@ -59,9 +68,23 @@
     font-size: 16px;
     cursor: pointer;
   }
-  
+
   .pagination button:hover {
     background-color: #9c9ac9;
     color: #fff;
+  }
+
+  button[disabled] {
+    background-color: #cccccc !important;
+    color: #9e9e9e !important;
+    box-shadow: none !important;
+    opacity: 0.7 !important;
+    cursor:default !important;
+  }
+  .no-notifs{
+    text-align: center;
+    padding-top:10vh;
+    padding-bottom:10vh;
+    color: #4e4e4e;
   }
   

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import {AuthService} from '../../infrastructure/auth/auth.service';
+import { NotificationService } from '../../notification/notification.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -11,7 +11,8 @@ import {AuthService} from '../../infrastructure/auth/auth.service';
 
 export class NavBarComponent {
   role: string = '';
-  constructor(private authService: AuthService, private router: Router) {
+  hasUnreadNotifications: boolean = false;
+  constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) {
   }
 
   ngOnInit(): void {
@@ -19,6 +20,15 @@ export class NavBarComponent {
       console.log(result);
       this.role = result;
     })
+
+    this.notificationService.hasUnreadNotifications$.subscribe(
+      (hasUnread) => {
+        this.hasUnreadNotifications = hasUnread;
+      }
+    );
+  }
+  onNotificationClick(): void{
+    this.hasUnreadNotifications = false;
   }
 
   logout(): void {
