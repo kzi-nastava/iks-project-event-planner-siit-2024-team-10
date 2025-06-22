@@ -29,13 +29,11 @@ export class OfferingService {
   }
 
   getAll(): Observable<Offering[]> {
-    const params = new HttpParams()
-      .set('page', '0')
-      .set('size', '10000');       
-    return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost + '/offerings', { params })
-      .pipe(
-        map(response => response.content)
-      );
+    const allOfferings = [...this.productList, ...this.serviceList];
+    return of(this.shuffleArray(allOfferings));
+  }
+  getAllNonPaged(): Observable<Offering[]> {
+    return this.httpClient.get<Offering[]>(`${environment.apiHost}/offerings/all-non-paged`);
   }
   getTop(accountId:number | null): Observable<Offering[]> {
     const params: any = {};

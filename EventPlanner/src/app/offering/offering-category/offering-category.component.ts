@@ -140,7 +140,7 @@ export class OfferingCategoryComponent implements OnInit {
     });
   }
   private loadOfferingsGroupedByCategory() {
-    this.offeringService.getAll().subscribe({
+    this.offeringService.getAllNonPaged().subscribe({
       next: (offerings) => {
         if (!Array.isArray(offerings)) {
           console.error('Offerings is not an array!');
