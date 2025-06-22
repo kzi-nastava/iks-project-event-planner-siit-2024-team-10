@@ -1,0 +1,74 @@
+.register-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.outer-container {
+  padding: 2em;
+}
+
+form{
+  margin:0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+mat-form-field {
+  width: 70%;
+}
+
+form > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-header h1 {
+  font-size: 26px;
+  color: #252629;
+  margin-bottom: 5px;
+}
+
+.submit-section {
+  text-align: center;
+}
+
+.submit-btn {
+  width: 50%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+mat-button-toggle-group{
+  margin:1em;
+}
+
+::ng-deep .mat-mdc-button:not(:disabled){
+  background-color: white !important ;
+  color: #000000 !important;
+}
+::ng-deep .mat-mdc-button:not(:disabled):hover{
+  background-color: #bebce6 !important ;
+  color: white !important;
+}
+::ng-deep .mat-mdc-snack-bar-container .mat-mdc-snackbar-surface{
+  background-color: #fff !important; /* Change background color */
+  color: #000000 !important; /* Change text color */
+}

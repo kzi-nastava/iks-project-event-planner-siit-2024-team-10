@@ -57,8 +57,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
         MatSelectModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatDialogModule,
-
+        MatDialogModule
   ],
   exports: [NavBarComponent]
 })

@@ -1,69 +1,69 @@
 import { Injectable } from '@angular/core';
-import { AppNotification } from './model/notification.model'
-import { Observable, of } from 'rxjs';
-
-const NOTIFICATIONS: AppNotification[] = [
-  {
-    id: 1,
-    title: 'New Rating',
-    content: 'User1 has rated your event "Concert at the Park" 4 stars.',
-    date: new Date('2024-11-01T12:00:00'),
-    isRead: false,
-  },
-  {
-    id: 2,
-    title: 'New Comment',
-    content: 'User2 has commented on your event "Charity Run". "Looking forward to it!"',
-    date: new Date('2024-11-02T14:00:00'),
-    isRead: false,
-  },
-  {
-    id: 3,
-    title: 'New Rating',
-    content: 'User3 has rated your event "Music Festival" 5 stars.',
-    date: new Date('2024-11-03T16:00:00'),
-    isRead: true,
-  },
-  {
-    id: 4,
-    title: 'Service Reminder',
-    content: 'Reminder: The service "Live Band" is due 1 hour.',
-    date: new Date('2024-11-04T10:00:00'),
-    isRead: true,
-  },
-  {
-    id: 5,
-    title: 'New Comment',
-    content: 'User4 has commented on your event "Outdoor Movie Night". "Can’t wait for the movie to start!"',
-    date: new Date('2024-11-05T18:30:00'),
-    isRead: true,
-  },
-  {
-    id: 6,
-    title: 'New Rating',
-    content: 'User5 has rated your event "Food Festival" 3 stars.',
-    date: new Date('2024-11-06T09:00:00'),
-    isRead: true,
-  },
-  {
-    id: 7,
-    title: 'New Rating',
-    content: 'User6 has rated your event "Holiday Party" 2 stars.',
-    date: new Date('2024-11-07T11:30:00'),
-    isRead: true,
-  },
-];
-
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { AppNotification } from './model/notification.model';
+import * as Stomp from 'stompjs';
+import SockJS from 'sockjs-client';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../env/environment';
+import { PagedResponse } from '../event/model/paged-response.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
-  private notificationList: AppNotification[];
+  private stompClient: any;
 
-  constructor() {this.notificationList = [...NOTIFICATIONS];}
+  private notificationsSubject = new BehaviorSubject<AppNotification[]>([]);
+  public notifications$ = this.notificationsSubject.asObservable();
 
-  getAll(): Observable<AppNotification[]> {
-    return of(this.notificationList);
+  private _hasUnreadNotifications = new BehaviorSubject<boolean>(false);
+  public hasUnreadNotifications$ = this._hasUnreadNotifications.asObservable();
+
+  constructor(private httpClient: HttpClient) {}
+
+  connectToNotificationSocket(accountId: number) {
+  const socket = new SockJS('http://localhost:8080/socket');
+  this.stompClient = Stomp.over(socket);
+
+  this.stompClient.connect({}, () => {
+    const topic = `/socket-publisher/notifications/${accountId}`;
+    this.stompClient.subscribe(topic, (message: { body: string }) => {
+      const notification: AppNotification = JSON.parse(message.body);
+      this.notificationsSubject.next([notification]);
+      this.checkUnreadState(notification);
+    });
+  });
+  }
+
+  private checkUnreadState(newNotification: AppNotification) {
+    if (!newNotification.read) {
+      this._hasUnreadNotifications.next(true);
+    }
+  }
+  isNotificationsSilenced(accountId: number): Observable<boolean> {
+    return this.httpClient.get<boolean>(`${environment.apiHost}/notifications/${accountId}/toggle`);
+  }
+
+  getAll(page: number, size: number, accountId: number): Observable<PagedResponse<AppNotification>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.httpClient.get<PagedResponse<AppNotification>>(`${environment.apiHost}/notifications/${accountId}`, { params });
+  }
+
+  readAll(accountId: number): Observable<AppNotification[]> {
+    return this.httpClient.put<AppNotification[]>(`${environment.apiHost}/notifications/${accountId}/read-all`, null).pipe(
+      tap(() => {
+        this._hasUnreadNotifications.next(false);
+      })
+    );
+  }
+
+  readNotification(notificationId: number): Observable<AppNotification> {
+    return this.httpClient.put<AppNotification>(`${environment.apiHost}/notifications/read/${notificationId}`, null);
+  }
+  
+  toggleNotifications(accountId: number): Observable<void> {
+    return this.httpClient.put<void>(`${environment.apiHost}/notifications/${accountId}/change-toggle`, null);
   }
 }

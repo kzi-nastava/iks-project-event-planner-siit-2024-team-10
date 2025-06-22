@@ -22,6 +22,7 @@ import {OpenEventReportComponent} from './event/open-event-report/open-event-rep
 import {UserDetailsComponent} from './user/user-details/user-details.component';
 import {EditPersonalComponent} from './user/edit-personal/edit-personal.component';
 import {EditCompanyComponent} from './user/edit-company/edit-company.component';
+import {EditEventComponent} from './event/edit-event/edit-event.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -37,7 +38,8 @@ const routes: Routes = [
     component: ProviderProfileComponent},
   {path:'register',component: RegisterComponent},
   {path:'event/:id',component:EventDetailsComponent},
-  {path:'notification-panel',component: NotificationsPageComponent},
+  {path:'notification-panel',component: NotificationsPageComponent, canActivate: [AuthGuard],
+    data: {role: ['EVENT_ORGANIZER','PROVIDER','ADMIN','AUTHENTICATED_USER']}},
   {path:'offering-categories',component: OfferingCategoryComponent},
   {path:'pricelist',component:PricelistComponent},
   {path:'offering-categories',component: OfferingCategoryComponent, canActivate: [AuthGuard],
@@ -47,6 +49,8 @@ const routes: Routes = [
   {path:'event-types',component:EventTypesComponent, canActivate: [AuthGuard],
     data: {role: ['ADMIN']}},
   {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
+    data: {role: ['EVENT_ORGANIZER']}},
+  {path:'edit-event/:id',component:EditEventComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER']}},
   {path:'create-product',component:CreateProductComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},

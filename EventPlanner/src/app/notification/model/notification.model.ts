@@ -3,5 +3,5 @@ export interface AppNotification{
     title: string;
     content: string;
     date: Date;
-    isRead: boolean;
+    read: boolean;
 }
