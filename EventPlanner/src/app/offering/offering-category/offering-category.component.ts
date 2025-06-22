@@ -9,6 +9,7 @@ import {MatSort} from '@angular/material/sort';
 import { ChangeCategoryDialogComponent } from '../../change-category-dialog/change-category-dialog.component';
 import { Offering } from '../model/offering.model';
 import { OfferingService } from '../offering-service/offering.service';
+import { AuthService } from '../../infrastructure/auth/auth.service';
 
 @Component({
   selector: 'app-offering-category',
@@ -27,6 +28,7 @@ export class OfferingCategoryComponent implements OnInit {
   constructor(
     private categoryService: CategoryService,
     private offeringService: OfferingService,
+    private authService: AuthService,
     private dialog: MatDialog
   ) {}
 
@@ -56,11 +58,11 @@ export class OfferingCategoryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Automatically set pending to true for new categories
         const newCategory = { 
           ...result, 
           pending: true,
-          deleted: false
+          deleted: false,
+          creatorId: this.authService.getAccountId()
         };
         this.categoryService.add(newCategory).subscribe({
           next: (response) => {

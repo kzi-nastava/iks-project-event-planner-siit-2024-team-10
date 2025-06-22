@@ -16,5 +16,6 @@ export interface CreateServiceDTO {
   reservationPeriod: number;
   autoConfirm: boolean;
   categoryProposalName: string,
-  categoryProposalDescription: string
+  categoryProposalDescription: string,
+  creatorId: number;
 }

@@ -142,6 +142,7 @@ export class CreateOfferingsComponent implements OnInit {
 
       const service: CreateServiceDTO = {
         categoryId:this.creatingCategory()?null:this.createForm.value.serviceCategory.id,
+        creatorId: this.creatingCategory() ? this.authService.getAccountId() : null, 
         categoryProposalName:this.creatingCategory()?this.createForm.value.categoryName:null,
         categoryProposalDescription:this.creatingCategory()?this.createForm.value.categoryDescription:null,
         pending: false,
