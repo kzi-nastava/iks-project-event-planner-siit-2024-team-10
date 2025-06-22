@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators
 } from '@angular/forms';
@@ -14,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { Router } from '@angular/router';
 import { EventService } from '../event.service';
+import { BudgetItem } from '../model/budget-item.model';
 
 @Component({
   selector: 'app-create-event',
@@ -25,7 +25,6 @@ export class CreateEventComponent implements OnInit {
   allEventTypes: EventType[] = [];
   today = new Date();
   snackBar: MatSnackBar = inject(MatSnackBar);
-  recommendedCategories: Category[] = [];
 
   constructor(
     private eventTypeService: EventTypeService,
@@ -35,7 +34,7 @@ export class CreateEventComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.createForm = this.fb.group({
-      eventType: ['', Validators.required],
+      eventType: [''],
       noEventType: [false],
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -46,7 +45,7 @@ export class CreateEventComponent implements OnInit {
       street: ['', Validators.required],
       houseNumber: ['', Validators.required],
       date: ['', Validators.required],
-      budgetItems: this.fb.array([]) // FormArray za budžetske stavke
+      budgetItems: this.fb.array([this.createBudgetItemGroup()])
     });
   }
 
@@ -59,42 +58,60 @@ export class CreateEventComponent implements OnInit {
         this.snackBar.open('Error loading event types', 'OK', { duration: 3000 });
       }
     });
-
-    this.createForm.get('noEventType')?.valueChanges.subscribe((noEventTypeValue) => {
-      const eventTypeControl = this.createForm.get('eventType');
-      if (noEventTypeValue) {
-        eventTypeControl?.clearValidators();
-      } else {
-        eventTypeControl?.setValidators([Validators.required]);
-      }
-      eventTypeControl?.updateValueAndValidity();
-    });
-
-    this.createForm.get('eventType')?.valueChanges.subscribe((selectedType: EventType) => {
-      if (selectedType && selectedType.recommendedCategories) {
-        this.recommendedCategories = selectedType.recommendedCategories;
-      } else {
-        this.recommendedCategories = [];
-      }
-      // Resetuj budžetske stavke pri promeni tipa događaja
-      this.budgetItemsFormArray.clear();
-    });
-  }
-
-  eventTypesDisplayed(): boolean {
-    return !this.createForm.value.noEventType;
   }
 
   get budgetItemsFormArray(): FormArray {
     return this.createForm.get('budgetItems') as FormArray;
   }
 
-  addBudgetItem(): void {
-    const group = this.fb.group({
-      category: [null, Validators.required],
-      amount: [null, [Validators.required, Validators.min(1)]]
+  createBudgetItemGroup(): FormGroup {
+    return this.fb.group({
+      category: [null],
+      amount: [null]
     });
-    this.budgetItemsFormArray.push(group);
+  }
+
+  getAvailableCategories(index: number): Category[] {
+    const selectedCategories = this.budgetItemsFormArray.controls
+      .map((group, i) => i !== index ? group.get('category')?.value : null)
+      .filter((val): val is Category => !!val);
+
+    const allCategories = this.allEventTypes.flatMap(et => et.recommendedCategories || []);
+
+    return allCategories.filter((cat, i, self) =>
+      !selectedCategories.some(selected => selected.id === cat.id) &&
+      i === self.findIndex(c => c.id === cat.id)
+    );
+  }
+
+  onBudgetItemKeydown(event: KeyboardEvent, index: number): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+
+      const group = this.budgetItemsFormArray.at(index);
+      const category = group.get('category')?.value;
+      const amount = group.get('amount')?.value;
+
+      if (category && amount) {
+        const item: BudgetItem = {
+          id: 0,
+          amount: +amount,
+          isDeleted: false,
+          category,
+          offerings: []
+        };
+        console.log('Added BudgetItem:', item);
+
+        const isLast = index === this.budgetItemsFormArray.length - 1;
+        const nextEmptyExists = this.budgetItemsFormArray.controls.some((g, i) =>
+          i !== index && !g.get('category')?.value
+        );
+
+        if (isLast && !nextEmptyExists) {
+          this.budgetItemsFormArray.push(this.createBudgetItemGroup());
+        }
+      }
+    }
   }
 
   save(): void {
@@ -102,7 +119,7 @@ export class CreateEventComponent implements OnInit {
       const formValue = this.createForm.value;
 
       const event: CreateEventDTO = {
-        eventTypeId: formValue.noEventType ? null : formValue.eventType.id,
+        eventTypeId: formValue.noEventType ? null : formValue.eventType?.id,
         organizerId: this.authService.getUserId(),
         name: formValue.name,
         description: formValue.description,
@@ -115,13 +132,20 @@ export class CreateEventComponent implements OnInit {
           street: formValue.street,
           houseNumber: formValue.houseNumber
         }
-        // Budžetne stavke možeš dodati u CreateEventDTO ako model to podržava
       };
 
-      // Ispis u konzolu
       console.log('Budget Items:');
       formValue.budgetItems.forEach((item: any, index: number) => {
-        console.log(`Item ${index + 1}:`, item.category.name, item.amount);
+        if (item.category && item.amount) {
+          const budgetItem: BudgetItem = {
+            id: 0,
+            amount: +item.amount,
+            isDeleted: false,
+            category: item.category,
+            offerings: []
+          };
+          console.log(`Item ${index + 1}:`, budgetItem);
+        }
       });
 
       this.eventService.add(event).subscribe({
