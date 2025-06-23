@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EventService } from '../event.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-guest-list',
@@ -8,10 +11,18 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class GuestListComponent implements OnInit {
   guestForm: FormGroup;
+  eventId: number;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private eventService: EventService,
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.eventId = Number(this.route.snapshot.paramMap.get('eventId'));
     this.guestForm = this.fb.group({
       guests: this.fb.array([this.createGuestField()])
     });
@@ -38,8 +49,15 @@ export class GuestListComponent implements OnInit {
   onSubmit(): void {
     if (this.guestForm.valid) {
       const emails = this.guestForm.value.guests.map((g: any) => g.email);
-      console.log('Submitted guest emails:', emails);
-      // TODO: Send emails to backend or proceed to next step
+      this.eventService.sendGuestInvites(this.eventId, emails).subscribe({
+        next: () => {
+          this.snackBar.open('Invitations sent!', 'OK', { duration: 3000 });
+          this.router.navigate(['/home']);
+        },
+        error: () => {
+          this.snackBar.open('Failed to send invitations.', 'OK', { duration: 3000 });
+        }
+      });
     } else {
       this.guestForm.markAllAsTouched();
     }

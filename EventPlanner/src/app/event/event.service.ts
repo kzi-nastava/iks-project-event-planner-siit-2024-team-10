@@ -91,6 +91,10 @@ export class EventService {
     });
   }
 
+  sendGuestInvites(eventId: number, emails: string[]) {
+    return this.httpClient.post(environment.apiHost+'/events/'+eventId+'/invite', emails);
+  }
+
   getPaginatedEvents(
     page: number,
     pageSize: number,
