@@ -37,6 +37,7 @@ import { CreateAgendaItemComponent } from './create-agenda-item/create-agenda-it
 import { EditAgendaItemComponent } from './edit-agenda-item/edit-agenda-item.component';
 import { OpenEventReportComponent } from './open-event-report/open-event-report.component';
 import { EditEventComponent } from './edit-event/edit-event.component';
+import { GuestListFormComponent } from './guest-list-form/guest-list-form.component';
 
 
 
@@ -53,6 +54,7 @@ import { EditEventComponent } from './edit-event/edit-event.component';
     EditAgendaItemComponent,
     OpenEventReportComponent,
     EditEventComponent,
+    GuestListFormComponent,
   ],
   imports: [
     CommonModule,
