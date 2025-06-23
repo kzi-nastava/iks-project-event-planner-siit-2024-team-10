@@ -39,6 +39,8 @@ import { EditAgendaItemComponent } from './edit-agenda-item/edit-agenda-item.com
 import { OpenEventReportComponent } from './open-event-report/open-event-report.component';
 import { EditEventComponent } from './edit-event/edit-event.component';
 import { AddBudgetItemDialogComponent } from './add-budget-item-dialog/add-budget-item-dialog.component';
+import { MatChipsModule } from '@angular/material/chips'; // If you want to use mat-chips
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -60,6 +62,7 @@ import { AddBudgetItemDialogComponent } from './add-budget-item-dialog/add-budge
   imports: [
     CommonModule,
     MatIconModule,
+    MatTooltipModule, 
     MatCardModule,
     MatButtonModule,
     MatDialogModule,
@@ -73,6 +76,7 @@ import { AddBudgetItemDialogComponent } from './add-budget-item-dialog/add-budge
     MatRadioButton,
     MatRadioGroup,
     MatFormFieldModule,
+    MatChipsModule,
     HttpClientModule,
     MatCell,
     MatCellDef,

@@ -1,66 +1,160 @@
-<mat-form-field appearance="fill">
-    <mat-label>Select Event</mat-label>
-    <mat-select [(value)]="selectedEventId" (selectionChange)="onEventChange()">
-      <mat-option *ngFor="let event of events" [value]="event.id">
-        {{ event.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<!-- Enhanced Budget Table Template -->
+<div class="budget-container">
+    <!-- Header Section -->
+    <div class="header-section">
+      <h2 class="page-title">Budget Management</h2>
+      <p class="page-subtitle">Manage your event budget items and allocations</p>
+    </div>
   
-<div class="table-wrapper">
-    <table mat-table [dataSource]="budgetItems" class="mat-elevation-z2" style="width: 100%;">
+    <!-- Event Selection Card -->
+    <div class="selection-card">
+      <mat-form-field appearance="outline" class="event-selector">
+        <mat-label>
+          <mat-icon class="label-icon">event</mat-icon>
+          Select Event
+        </mat-label>
+        <mat-select [(value)]="selectedEventId" (selectionChange)="onEventChange()" class="custom-select">
+          <mat-option *ngFor="let event of events" [value]="event.id" class="custom-option">
+            <div class="option-content">
+              <mat-icon class="option-icon">event_note</mat-icon>
+              <span class="option-text">{{ event.name }}</span>
+            </div>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   
-      <!-- Category -->
-      <ng-container matColumnDef="category">
-        <th mat-header-cell *matHeaderCellDef> Category </th>
-        <td mat-cell *matCellDef="let item"> {{ item.category?.name }} </td>
-      </ng-container>
+    <!-- Budget Table Card -->
+    <div class="table-card">
+      <div class="table-header">
+        <h3 class="table-title">Budget Items</h3>
+        <div class="table-actions">
+          <button mat-raised-button color="primary" (click)="openAddBudgetItemDialog()" class="add-button">
+            <mat-icon>add_circle</mat-icon>
+            Add Budget Item
+          </button>
+        </div>
+      </div>
   
-        <!-- Amount -->
-        <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef> Amount </th>
-            <td mat-cell *matCellDef="let item">
-            <input matInput type="number" [(ngModel)]="item.amount" (blur)="updateAmount(item)" style="width: 80px;">
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="budgetItems" class="budget-table">
+          
+          <!-- Category Column -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">category</mat-icon>
+                Category
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let item" class="data-cell category-cell">
+              <div class="category-badge">
+                <mat-icon class="category-icon">folder</mat-icon>
+                {{ item.category?.name }}
+              </div>
             </td>
-        </ng-container>
+          </ng-container>
+          
+          <!-- Amount Column -->
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">attach_money</mat-icon>
+                Amount
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let item" class="data-cell amount-cell">
+              <mat-form-field appearance="outline" class="amount-input">
+                <mat-label>Amount</mat-label>
+                <input matInput 
+                       type="number" 
+                       [(ngModel)]="item.amount" 
+                       (blur)="updateAmount(item)"
+                       class="currency-input"
+                       placeholder="0.00">
+                <span matPrefix>$&nbsp;</span>
+                <mat-icon matSuffix class="input-icon">money</mat-icon>
+              </mat-form-field>
+            </td>
+          </ng-container>
+          
+          <!-- Offerings Column -->
+          <ng-container matColumnDef="offerings">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">list</mat-icon>
+                Offerings
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let item" class="data-cell offerings-cell">
+              <div class="offerings-container">
+                <div class="offerings-chips" *ngIf="item.offerings?.length > 0; else noOfferings">
+                  <span *ngFor="let offering of item.offerings" class="offering-chip">
+                    <mat-icon class="chip-icon">local_offer</mat-icon>
+                    {{ offering.name }}
+                  </span>
+                </div>
+                <ng-template #noOfferings>
+                  <span class="no-offerings">No offerings</span>
+                </ng-template>
+              </div>
+            </td>
+          </ng-container>
+          
+          <!-- Edit Column -->
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">edit</mat-icon>
+                Edit
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let item" class="data-cell actions-cell">
+              <button mat-icon-button 
+                      color="primary" 
+                      (click)="edit(item)" 
+                      class="action-btn edit-btn"
+                      matTooltip="Edit item">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          
+          <!-- Delete Column -->
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">delete</mat-icon>
+                Delete
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let item" class="data-cell actions-cell">
+              <button mat-icon-button 
+                      color="warn" 
+                      (click)="delete(item)" 
+                      class="action-btn delete-btn"
+                      matTooltip="Delete item">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
+          
+        </table>
         
-      <!-- Offerings -->
-      <ng-container matColumnDef="offerings">
-        <th mat-header-cell *matHeaderCellDef> Offerings </th>
-        <td mat-cell *matCellDef="let item"> 
-          <ul>
-            <li *ngFor="let offering of item.offerings">{{ offering.name }}</li>
-          </ul>
-        </td>
-      </ng-container>
-  
-      <!-- Edit -->
-      <ng-container matColumnDef="edit">
-        <th mat-header-cell *matHeaderCellDef> Edit </th>
-        <td mat-cell *matCellDef="let item">
-          <button mat-icon-button color="primary" (click)="edit(item)">
-            <mat-icon>edit</mat-icon>
+        <!-- Empty State -->
+        <div *ngIf="budgetItems?.length === 0" class="empty-state">
+          <mat-icon class="empty-icon">receipt_long</mat-icon>
+          <h3 class="empty-title">No Budget Items</h3>
+          <p class="empty-message">Add your first budget item to get started</p>
+          <button mat-raised-button color="primary" (click)="openAddBudgetItemDialog()" class="empty-action-btn">
+            <mat-icon>add</mat-icon>
+            Add Budget Item
           </button>
-        </td>
-      </ng-container>
-  
-      <!-- Delete -->
-      <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef> Delete </th>
-        <td mat-cell *matCellDef="let item">
-          <button mat-icon-button color="warn" (click)="delete(item)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-  
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  
-    </table>
+        </div>
+      </div>
+    </div>
   </div>
-  
-  <button mat-raised-button color="primary" (click)="openAddBudgetItemDialog()">
-    Add Budget Item
-  </button>
   
