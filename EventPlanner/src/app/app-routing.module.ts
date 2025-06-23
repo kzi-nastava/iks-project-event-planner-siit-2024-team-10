@@ -23,6 +23,7 @@ import {UserDetailsComponent} from './user/user-details/user-details.component';
 import {EditPersonalComponent} from './user/edit-personal/edit-personal.component';
 import {EditCompanyComponent} from './user/edit-company/edit-company.component';
 import {EditEventComponent} from './event/edit-event/edit-event.component';
+import { GuestListComponent } from './event/guest-list/guest-list.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -49,6 +50,8 @@ const routes: Routes = [
   {path:'event-types',component:EventTypesComponent, canActivate: [AuthGuard],
     data: {role: ['ADMIN']}},
   {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
+    data: {role: ['EVENT_ORGANIZER']}},
+  { path: 'guest-list/:eventId', component: GuestListComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER']}},
   {path:'edit-event/:id',component:EditEventComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER']}},

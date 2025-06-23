@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GuestListFormComponent } from './guest-list-form.component';
+import { GuestListComponent } from './guest-list.component';
 
-describe('GuestListFormComponent', () => {
-  let component: GuestListFormComponent;
-  let fixture: ComponentFixture<GuestListFormComponent>;
+describe('GuestListComponent', () => {
+  let component: GuestListComponent;
+  let fixture: ComponentFixture<GuestListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GuestListFormComponent]
+      declarations: [GuestListComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GuestListFormComponent);
+    fixture = TestBed.createComponent(GuestListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
