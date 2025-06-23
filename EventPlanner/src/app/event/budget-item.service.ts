@@ -26,5 +26,11 @@ export class BudgetItemService {
     console.log(environment.apiHost + "/events/budget/" + eventId);
     return this.httpClient.get<BudgetItem[]>(environment.apiHost + "/events/budget/" + eventId);
   }  
+  updateAmount(eventId:number, budgetItemId: number, budgetItem: UpdateBudgetItemDTO): Observable<BudgetItem> {
+    return this.httpClient.put<BudgetItem>(environment.apiHost + "/events/" + eventId + "/budget/" + budgetItemId, budgetItem);
+  }
+  delete(eventId: number, budgetItemId: number): Observable<boolean> {
+      return this.httpClient.delete<boolean>(`${environment.apiHost}/events/${eventId}/budget/${budgetItemId}`);
+  }    
 }
 

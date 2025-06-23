@@ -21,7 +21,7 @@ export class BudgetManagerComponent implements OnInit {
   displayedColumns: string[] = ['category', 'amount', 'offerings', 'delete'];
   events: Event[] = [];
   selectedEventId: number | null = null;
-  
+
   constructor(
     private budgetItemService: BudgetItemService,
     private eventService: EventService,
@@ -61,16 +61,30 @@ export class BudgetManagerComponent implements OnInit {
   }  
 
   delete(item: BudgetItem): void {
-    // TODO: pozovi DELETE ako postoji ili postavi `isDeleted=true`
-    this.snackBar.open(`Delete clicked for item #${item.id}`, 'OK', { duration: 2000 });
+    console.log(this.budgetItems);
+    this.budgetItemService.delete(this.selectedEventId, item.id).subscribe(success => {
+      if (success) {
+        this.snackBar.open("Budget item deleted", "Close", { duration: 2000 });
+        this.loadBudgetItems();
+      } else {
+        this.snackBar.open("Budget item has not been deleted, you have reserved offerings.", "Close", { duration: 2000 });
+      }
+    });
+    
   }
+
   updateAmount(item: BudgetItem): void {
-    const dto : UpdateBudgetItemDTO = {
+    if (!this.selectedEventId || !item.id) {
+      this.snackBar.open('Invalid event or budget item', 'Close', { duration: 2000 });
+      return;
+    }
+
+    const dto: UpdateBudgetItemDTO = {
       amount: item.amount,
       offeringId: 0 // cuz we only update the amount
     };
   
-    this.budgetItemService.buy(dto).subscribe({
+    this.budgetItemService.updateAmount(this.selectedEventId, item.id, dto).subscribe({
       next: () => this.snackBar.open('Amount updated', 'Close', { duration: 2000 }),
       error: () => this.snackBar.open('Failed to update amount', 'Close', { duration: 2000 })
     });
