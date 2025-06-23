@@ -14,6 +14,8 @@ import { AuthService } from '../../infrastructure/auth/auth.service';
 import { Router } from '@angular/router';
 import { EventService } from '../event.service';
 import { BudgetItem } from '../model/budget-item.model';
+import { CreateBudgetItemDTO } from '../../offering/model/create-budget-item-dto.models';
+import { BudgetItemService } from '../budget-item.service';
 
 @Component({
   selector: 'app-create-event',
@@ -30,6 +32,7 @@ export class CreateEventComponent implements OnInit {
     private eventTypeService: EventTypeService,
     private eventService: EventService,
     private authService: AuthService,
+    private budgetItemService: BudgetItemService,
     private router: Router,
     private fb: FormBuilder
   ) {
@@ -117,7 +120,7 @@ export class CreateEventComponent implements OnInit {
   save(): void {
     if (this.createForm.valid) {
       const formValue = this.createForm.value;
-
+  
       const event: CreateEventDTO = {
         eventTypeId: formValue.noEventType ? null : formValue.eventType?.id,
         organizerId: this.authService.getUserId(),
@@ -133,25 +136,40 @@ export class CreateEventComponent implements OnInit {
           houseNumber: formValue.houseNumber
         }
       };
-
-      console.log('Budget Items:');
-      formValue.budgetItems.forEach((item: any, index: number) => {
-        if (item.category && item.amount) {
-          const budgetItem: BudgetItem = {
-            id: 0,
-            amount: +item.amount,
-            isDeleted: false,
-            category: item.category,
-            offerings: []
-          };
-          console.log(`Item ${index + 1}:`, budgetItem);
-        }
-      });
-
+  
       this.eventService.add(event).subscribe({
-        next: () => {
-          this.snackBar.open('Event created successfully', 'OK', { duration: 3000 });
-          this.router.navigate(['home']);
+        next: (createdEvent) => {
+          const createdEventId = createdEvent.id;
+          const budgetItemsToCreate: CreateBudgetItemDTO[] = [];
+  
+          formValue.budgetItems.forEach((item: any, index: number) => {
+            if (item.category && item.amount) {
+              const dto: CreateBudgetItemDTO = {
+                amount: +item.amount,
+                categoryId: item.category.id,
+                eventId: createdEventId
+              };
+              budgetItemsToCreate.push(dto);
+            }
+          });
+  
+          console.log('Budget Items to create:', budgetItemsToCreate);
+  
+          if (budgetItemsToCreate.length > 0) {
+            for(const budgetItem of budgetItemsToCreate) {
+              this.budgetItemService.add(budgetItem).subscribe({
+                next: () => {
+                  console.log('Budget item created successfully:', budgetItem);
+                },
+                error: (error) => {
+                  console.error('Error creating budget item:', error);
+                }
+              });
+            }
+          } else {
+            this.snackBar.open('Event created successfully', 'OK', { duration: 3000 });
+            this.router.navigate(['home']);
+          }
         },
         error: () => {
           this.snackBar.open('Error creating event', 'OK', { duration: 3000 });
@@ -160,5 +178,5 @@ export class CreateEventComponent implements OnInit {
     } else {
       this.snackBar.open('Please fill in all required fields', 'OK', { duration: 3000 });
     }
-  }
+  }  
 }

@@ -4,7 +4,6 @@ import {EventType} from './model/event-type.model';
 import {Observable} from 'rxjs';
 import {environment} from '../../env/environment';
 import {CreateEventTypeDTO} from './model/create-event-type-dto.model';
-import {EditEventTypeComponent} from './edit-event-type/edit-event-type.component';
 import {EditEventTypeDTO} from './model/edit-event-type-dto.model';
 
 @Injectable({

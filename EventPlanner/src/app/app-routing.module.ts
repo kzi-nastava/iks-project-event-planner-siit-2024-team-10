@@ -23,6 +23,7 @@ import {UserDetailsComponent} from './user/user-details/user-details.component';
 import {EditPersonalComponent} from './user/edit-personal/edit-personal.component';
 import {EditCompanyComponent} from './user/edit-company/edit-company.component';
 import {EditEventComponent} from './event/edit-event/edit-event.component';
+import { BudgetManagerComponent } from './event/budget-manager/budget-manager.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -52,6 +53,8 @@ const routes: Routes = [
     data: {role: ['EVENT_ORGANIZER']}},
   {path:'edit-event/:id',component:EditEventComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER']}},
+  {path:'budget',component:BudgetManagerComponent, canActivate: [AuthGuard],
+      data: {role: ['EVENT_ORGANIZER']}},
   {path:'create-product',component:CreateProductComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   {path:'activate', component: ActivateComponent},

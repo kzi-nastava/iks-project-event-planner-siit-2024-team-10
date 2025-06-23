@@ -15,6 +15,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { EventDetailsComponent } from './event-details/event-details.component';
 import {RouterLink} from '@angular/router';
 import { EventTypesComponent } from './event-types/event-types.component';
+import { BudgetManagerComponent } from './budget-manager/budget-manager.component';
 import { HttpClientModule } from '@angular/common/http';
 import {
   MatCell,
@@ -53,6 +54,7 @@ import { EditEventComponent } from './edit-event/edit-event.component';
     EditAgendaItemComponent,
     OpenEventReportComponent,
     EditEventComponent,
+    BudgetManagerComponent
   ],
   imports: [
     CommonModule,

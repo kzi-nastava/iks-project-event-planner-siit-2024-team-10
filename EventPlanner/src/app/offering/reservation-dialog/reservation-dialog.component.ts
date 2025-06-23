@@ -10,6 +10,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../layout/confirm-dialog/confirm-dialog.component';
 import { CreateReservationDTO } from '../model/create-reservation-dto.model';
 import { Reservation } from '../model/reservation.model';
+import { BudgetItemService } from '../../event/budget-item.service';
+import { UpdateBudgetItemDTO } from '../model/edit-budget-item-dto.model';
 
 @Component({
   selector: 'app-reservation-dialog',
@@ -29,6 +31,7 @@ export class ReservationDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<ReservationDialogComponent>,
     private reservationService: ReservationService,
     private authService: AuthService,
+    private budgetItemService: BudgetItemService,
     private dialog: MatDialog) {
    {
     this.reservationForm = this.fb.group({
@@ -102,9 +105,27 @@ onBook(): void {
             if (response.status == "PENDING"){
               this.snackBar.open('Reservation request is pending! Email confirmation will been sent.', 'OK', { duration: 5000 });
             }
-            else{
+            else {
+              const updateDto: UpdateBudgetItemDTO = {
+                eventId: reservationData.event.id,
+                offeringId: this.data.offering.id,
+                amount: 0, 
+              };
+                        
+              this.budgetItemService.buy(updateDto).subscribe({
+                next: () => {
+                  console.log('Budget updated successfully.');
+                  this.snackBar.open('Reservation successful! Budget updated.', 'OK', { duration: 5000 });
+                },
+                error: () => {
+                  console.error('Failed to update budget.');
+                  this.snackBar.open('Reservation successful, but failed to update budget.', 'OK', { duration: 5000 });
+                }
+              });
+            
               this.snackBar.open('Reservation successful! Email confirmation has been sent.', 'OK', { duration: 5000 });
             }
+            
             this.dialogRef.close(response);
           },
           error: (err: Error) => { 
