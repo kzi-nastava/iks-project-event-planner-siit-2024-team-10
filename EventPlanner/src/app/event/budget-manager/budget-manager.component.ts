@@ -18,7 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class BudgetManagerComponent implements OnInit {
   budgetItems: BudgetItem[] = [];
-  displayedColumns: string[] = ['category', 'amount', 'offerings', 'edit', 'delete'];
+  displayedColumns: string[] = ['category', 'amount', 'offerings', 'delete'];
   events: Event[] = [];
   selectedEventId: number | null = null;
   
@@ -60,11 +60,6 @@ export class BudgetManagerComponent implements OnInit {
     this.loadBudgetItems();
   }  
 
-  edit(item: BudgetItem): void {
-    // TODO: Open dialog/form for editing
-    this.snackBar.open(`Edit clicked for item #${item.id}`, 'OK', { duration: 2000 });
-  }
-
   delete(item: BudgetItem): void {
     // TODO: pozovi DELETE ako postoji ili postavi `isDeleted=true`
     this.snackBar.open(`Delete clicked for item #${item.id}`, 'OK', { duration: 2000 });
@@ -72,7 +67,7 @@ export class BudgetManagerComponent implements OnInit {
   updateAmount(item: BudgetItem): void {
     const dto : UpdateBudgetItemDTO = {
       amount: item.amount,
-      offeringId: item.offerings[0]?.id // ili koristi pravi način da dobiješ offeringId
+      offeringId: 0 // cuz we only update the amount
     };
   
     this.budgetItemService.buy(dto).subscribe({
