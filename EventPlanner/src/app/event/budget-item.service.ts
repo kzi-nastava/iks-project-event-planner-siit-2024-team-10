@@ -13,15 +13,18 @@ export class BudgetItemService {
   constructor(private httpClient: HttpClient) { }
 
   getAll() : Observable<BudgetItem[]> {
-    console.log(environment.apiHost + `/budget-items`);
-    return this.httpClient.get<BudgetItem[]>(environment.apiHost + `/budget-items`);
+    return this.httpClient.get<BudgetItem[]>(environment.apiHost + `/events/budget`);
   }
 
   add(budgetItem:CreateBudgetItemDTO) : Observable<BudgetItem> {
-    return this.httpClient.post<BudgetItem>(environment.apiHost + "/events/" + budgetItem.eventId + "budget", budgetItem);
+    return this.httpClient.post<BudgetItem>(environment.apiHost + "/events/" + budgetItem.eventId + "/budget", budgetItem);
   }
   buy(budgetItem: UpdateBudgetItemDTO): Observable<BudgetItem> {
     return this.httpClient.post<BudgetItem>(environment.apiHost + "/budget-items/" + budgetItem, budgetItem); 
   }
+  getByEvent(eventId: number): Observable<BudgetItem[]> {
+    console.log(environment.apiHost + "/events/budget/" + eventId);
+    return this.httpClient.get<BudgetItem[]>(environment.apiHost + "/events/budget/" + eventId);
+  }  
 }
 

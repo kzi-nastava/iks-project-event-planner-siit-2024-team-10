@@ -107,7 +107,6 @@ onBook(): void {
             }
             else {
               const updateDto: UpdateBudgetItemDTO = {
-                eventId: reservationData.event.id,
                 offeringId: this.data.offering.id,
                 amount: 0, 
               };

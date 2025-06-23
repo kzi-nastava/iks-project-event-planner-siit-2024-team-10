@@ -43,6 +43,11 @@ export class EventService {
     return this.httpClient.get<Event>(environment.apiHost+'/events/'+id);
   }
 
+  getMyEvents(id: number): Observable<Event[]> {
+    const params = new HttpParams().set('accountId', id.toString());
+    return this.httpClient.get<Event[]>(`${environment.apiHost}/events/organizers`, { params });
+  }  
+
   getEventAgenda(eventId:number): Observable<AgendaItem[]> {
     return this.httpClient.get<AgendaItem[]>(environment.apiHost+'/events/'+eventId+'/agenda');
   }

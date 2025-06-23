@@ -1,3 +1,12 @@
+<mat-form-field appearance="fill">
+    <mat-label>Select Event</mat-label>
+    <mat-select [(value)]="selectedEventId" (selectionChange)="onEventChange()">
+      <mat-option *ngFor="let event of events" [value]="event.id">
+        {{ event.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  
 <div class="table-wrapper">
     <table mat-table [dataSource]="budgetItems" class="mat-elevation-z2" style="width: 100%;">
   
@@ -7,12 +16,14 @@
         <td mat-cell *matCellDef="let item"> {{ item.category?.name }} </td>
       </ng-container>
   
-      <!-- Amount -->
-      <ng-container matColumnDef="amount">
-        <th mat-header-cell *matHeaderCellDef> Amount </th>
-        <td mat-cell *matCellDef="let item"> {{ item.amount }} </td>
-      </ng-container>
-  
+        <!-- Amount -->
+        <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef> Amount </th>
+            <td mat-cell *matCellDef="let item">
+            <input matInput type="number" [(ngModel)]="item.amount" (blur)="updateAmount(item)" style="width: 80px;">
+            </td>
+        </ng-container>
+        
       <!-- Offerings -->
       <ng-container matColumnDef="offerings">
         <th mat-header-cell *matHeaderCellDef> Offerings </th>
@@ -48,4 +59,8 @@
   
     </table>
   </div>
+  
+  <button mat-raised-button color="primary" (click)="openAddBudgetItemDialog()">
+    Add Budget Item
+  </button>
   
