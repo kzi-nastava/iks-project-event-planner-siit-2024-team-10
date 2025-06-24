@@ -1,0 +1,23 @@
+<div class="all-events">
+  <div class="all-events-section">
+    <h2>Your Favourite Events</h2>
+    <div class="no-events-message" *ngIf="noEventsMessage">
+      <p>{{ noEventsMessage }}</p>
+    </div>
+    <div class="all-event-cards">
+      <app-event-card *ngFor="let event of favouriteEvents" [event]="event"></app-event-card>
+    </div>
+    <p class="total-elements">Total elements: {{ eventPageProperties.totalElements }}</p>
+    <div class="pagination" *ngIf="!noEventsMessage">
+      <button mat-stroked-button (click)="previousEventPage()" [disabled]="eventPageProperties.page === 0">
+        &lt;
+      </button>
+      <p>
+        Page {{ eventPageProperties.page + 1 }} of {{ eventPageProperties.totalPages }}
+      </p>
+      <button mat-stroked-button (click)="nextEventPage()" [disabled]="eventPageProperties.page === eventPageProperties.totalPages - 1">
+        &gt;
+      </button>
+    </div>
+  </div>
+</div>

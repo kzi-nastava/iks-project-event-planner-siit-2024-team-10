@@ -14,6 +14,8 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import {MatDialogActions, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
 import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
+import { FavouritesComponent } from './favourites/favourites.component';
+import {EventModule} from '../event/event.module';
 
 
 
@@ -22,7 +24,8 @@ import {MatSelect} from '@angular/material/select';
     UserDetailsComponent,
     EditPersonalComponent,
     EditCompanyComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    FavouritesComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +41,8 @@ import {MatSelect} from '@angular/material/select';
     MatDialogContent,
     MatDialogTitle,
     MatOption,
-    MatSelect
+    MatSelect,
+    EventModule
   ]
 })
 export class UserModule { }
