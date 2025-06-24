@@ -15,11 +15,14 @@ export class AccountService {
   constructor(private authService:AuthService,
               private httpClient:HttpClient) { }
 
-  getFavouriteOfferings(): Observable<Offering[]> {
-    let accountId:number=this.authService.getAccountId();
+  getFavouriteOfferings(page: number, pageSize: number): Observable<PagedResponse<Offering>> {
+    let accountId: number = this.authService.getAccountId();
     if(accountId == null)
-      return of([]);
-    return this.httpClient.get<Offering[]>(environment.apiHost+'/accounts/'+accountId+'/favourite-offerings');
+      return of();
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', pageSize.toString());
+    return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost + '/accounts/' + accountId + '/favourite-offerings', {params});
   }
 
   getFavouriteOffering(offeringId:number): Observable<Offering> {
