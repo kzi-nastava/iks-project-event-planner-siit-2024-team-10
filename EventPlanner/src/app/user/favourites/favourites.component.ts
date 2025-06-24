@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AccountService} from '../../account/account.service';
 import { Event } from '../../event/model/event.model';
+import {Offering} from '../../offering/model/offering.model';
 
 @Component({
   selector: 'app-favourites',
@@ -22,6 +23,7 @@ export class FavouritesComponent implements OnInit{
     totalElements: 0
   };
   favouriteEvents: Event[] = [];
+  favouriteOfferings:Offering[]=[];
   noEventsMessage: string = '';
   noOfferingsMessage: string = '';
 
@@ -31,6 +33,7 @@ export class FavouritesComponent implements OnInit{
 
   ngOnInit(): void {
     this.fetchFavouriteEvents();
+    this.fetchFavouriteOfferings();
   }
 
   fetchFavouriteEvents(): void {
@@ -60,6 +63,35 @@ export class FavouritesComponent implements OnInit{
     if (this.eventPageProperties.page > 0) {
       this.eventPageProperties.page--;
       this.fetchFavouriteEvents();
+    }
+  }
+
+  fetchFavouriteOfferings(): void {
+    const { page, pageSize } = this.offeringPageProperties;
+    this.accountService.getFavouriteOfferings(page, pageSize).subscribe({
+      next: (response) => {
+        this.favouriteOfferings = response.content;
+        this.offeringPageProperties.totalPages = response.totalPages;
+        this.offeringPageProperties.totalElements = response.totalElements;
+        this.noOfferingsMessage = this.favouriteOfferings.length ? '' : 'No offerings found.';
+      },
+      error: () => {
+        this.noOfferingsMessage = 'An error occurred while fetching offerings.';
+      }
+    });
+  }
+
+  nextOfferingPage(): void {
+    if (this.offeringPageProperties.page < this.offeringPageProperties.totalPages - 1) {
+      this.offeringPageProperties.page++;
+      this.fetchFavouriteOfferings();
+    }
+  }
+
+  previousOfferingPage(): void {
+    if (this.offeringPageProperties.page > 0) {
+      this.offeringPageProperties.page--;
+      this.fetchFavouriteOfferings();
     }
   }
 }
