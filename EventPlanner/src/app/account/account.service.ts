@@ -21,14 +21,11 @@ export class AccountService {
     return this.httpClient.get<Offering[]>(environment.apiHost+'/accounts/'+accountId+'/favourite-offerings');
   }
 
-  isInFavouriteOfferings(offeringId: number): Observable<boolean> {
-    return this.getFavouriteOfferings().pipe(
-      map((offerings: Offering[]) => offerings.some(offering => offering.id === offeringId)),
-      catchError((err) => {
-        console.error('Error fetching favourite offerings:', err);
-        return of(false);
-      })
-    );
+  getFavouriteOffering(offeringId:number): Observable<Offering> {
+    let accountId:number=this.authService.getAccountId();
+    if(accountId == null)
+      return of();
+    return this.httpClient.get<Offering>(environment.apiHost+'/accounts/'+accountId+'/favourite-offerings/'+offeringId);
   }
 
   addOfferingToFavourites(offeringId:number): Observable<void> {
@@ -51,14 +48,11 @@ export class AccountService {
     return this.httpClient.get<Event[]>(environment.apiHost+'/accounts/'+accountId+'/favourite-events');
   }
 
-  isInFavouriteEvents(eventId: number): Observable<boolean> {
-    return this.getFavouriteEvents().pipe(
-      map((events: Event[]) => events.some(event => event.id === eventId)),
-      catchError((err) => {
-        console.error('Error fetching favourite events:', err);
-        return of(false);
-      })
-    );
+  getFavouriteEvent(eventId:number): Observable<Event> {
+    let accountId:number=this.authService.getAccountId();
+    if(accountId == null)
+      return of();
+    return this.httpClient.get<Event>(environment.apiHost+'/accounts/'+accountId+'/favourite-events/'+eventId);
   }
 
   addEventToFavourites(eventId:number): Observable<void> {
