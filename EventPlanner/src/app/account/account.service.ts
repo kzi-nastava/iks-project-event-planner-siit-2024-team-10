@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {AuthService} from '../infrastructure/auth/auth.service';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {catchError, map, Observable, of} from 'rxjs';
 import {Event} from '../event/model/event.model';
 import {environment} from '../../env/environment';
 import { Offering } from '../offering/model/offering.model';
+import {PagedResponse} from '../event/model/paged-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,11 +42,15 @@ export class AccountService {
       return null;
     return this.httpClient.delete<void>(environment.apiHost+'/accounts/'+accountId+'/favourite-offerings/'+offeringId);
   }
-  getFavouriteEvents(): Observable<Event[]> {
+
+  getFavouriteEvents(page: number, pageSize: number): Observable<PagedResponse<Event>> {
     let accountId:number=this.authService.getAccountId();
     if(accountId == null)
-      return of([]);
-    return this.httpClient.get<Event[]>(environment.apiHost+'/accounts/'+accountId+'/favourite-events');
+      return of();
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', pageSize.toString());
+    return this.httpClient.get<PagedResponse<Event>>(environment.apiHost+'/accounts/'+accountId+'/favourite-events',{params});
   }
 
   getFavouriteEvent(eventId:number): Observable<Event> {
