@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../../user/user.service';
 import {LoginRequestDto} from '../model/login-request-dto.model';
 import {AuthService} from '../auth.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {LoginResponseDTO} from '../model/login-response-dto.model';
 
 @Component({
@@ -29,8 +29,13 @@ export class LoginComponent {
         next: (response: LoginResponseDTO) => {
           localStorage.setItem('user', response.accessToken);
           this.authService.setUser()
-          console.log(this.authService)
-          this.router.navigate(['home'])
+          
+          const inviteToken = localStorage.getItem('event_invite_token');
+          if (inviteToken) {
+            this.router.navigate(['/accept-invite'], { queryParams: { token: inviteToken } });
+          } else {
+            this.router.navigate(['home']);
+          }
         },
         error:(err)=>{
           this.invalidCredentials = true;
