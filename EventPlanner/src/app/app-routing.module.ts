@@ -23,6 +23,7 @@ import {UserDetailsComponent} from './user/user-details/user-details.component';
 import {EditPersonalComponent} from './user/edit-personal/edit-personal.component';
 import {EditCompanyComponent} from './user/edit-company/edit-company.component';
 import {EditEventComponent} from './event/edit-event/edit-event.component';
+import {FavouritesComponent} from './user/favourites/favourites.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -62,6 +63,7 @@ const routes: Routes = [
   {path:'edit-company',component:EditCompanyComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   { path: 'chat', component: ChatComponent },
+  { path: 'favourites', component: FavouritesComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];
