@@ -16,8 +16,13 @@ export class LoginComponent {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)])});
   invalidCredentials=false;
+  inviteToken: string;
 
-  constructor(private authService:AuthService, private router:Router) {}
+  constructor(private authService:AuthService, private router:Router, private route: ActivatedRoute) {}
+
+    ngOnInit(): void{
+      this.inviteToken = this.route.snapshot.queryParamMap.get('invitation-token');
+    }
 
   login(){
     if(this.loginForm.valid){
@@ -30,9 +35,8 @@ export class LoginComponent {
           localStorage.setItem('user', response.accessToken);
           this.authService.setUser()
           
-          const inviteToken = localStorage.getItem('event_invite_token');
-          if (inviteToken) {
-            this.router.navigate(['/accept-invite'], { queryParams: { token: inviteToken } });
+          if (this.inviteToken) {
+            this.router.navigate(['/accept-invite'], { queryParams: { 'invitation-token': this.inviteToken } });
           } else {
             this.router.navigate(['home']);
           }

@@ -20,15 +20,13 @@ export class AcceptInviteComponent implements OnInit {
 
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('invitation-token');
-    console.log(token);
     if (!token) {
       this.router.navigate(['/home']);
       return;
     }
 
     if (!this.authService.isLoggedIn()) {
-      localStorage.setItem('event_invite_token', token);
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login'], { queryParams: { 'invitation-token': token } });
     } else {
       this.acceptInvite(token);
     }
@@ -38,22 +36,18 @@ export class AcceptInviteComponent implements OnInit {
     const email = this.authService.getEmail();
     this.eventService.acceptInvite(token, email).subscribe({
       next: () => {
-        localStorage.removeItem('event_invite_token');
         this.snackBar.open('The event invitation has been accepted','OK',{duration:5000});
-        this.router.navigate(['/home']);
+        this.router.navigate(['/user-details']);
       },
       error: (err) => {
         if (err.status === 400) {
           // User who is logged in is not the user who clicked the invitation -> Log user out
-          localStorage.setItem('event_invite_token', token);
-
           localStorage.removeItem('user');
           this.authService.setUser();
           this.router.navigate(['/login'], { queryParams: { 'invitation-token': token } });
         }
         
         else {
-          localStorage.removeItem('event_invite_token');
           this.snackBar.open('An error occured while trying to accept the request','OK',{duration:5000});
           this.router.navigate(['/home']);
         }
