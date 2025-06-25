@@ -75,7 +75,6 @@ export class DetailsPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.authService.getUserId());
     this.authService.userState.subscribe((result) => {
       console.log(result);
       this.role = result;
@@ -83,10 +82,16 @@ export class DetailsPageComponent implements OnInit {
 
     this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
 
+    const passedOffering = history.state.offering as Product | Service;
+
+  if (passedOffering && passedOffering.id) {
+    this.offering = passedOffering;
+    this.setupOffering(this.offering);
+  } 
+  else{
     this.route.params.pipe(
       switchMap(params => {
         const id = +params['id'];
-        console.log(id);
         
         return this.serviceService.getById(id).pipe(
           catchError(error => {
@@ -99,7 +104,6 @@ export class DetailsPageComponent implements OnInit {
         if (offering && offering.photos) {
           offering.photos = offering.photos.map(photo => {
             const fileName = photo.split('\\').pop()?.split('/').pop();
-            console.log(fileName);
             return `${environment.apiHost}/images/${fileName}`;
           });
         }
@@ -107,7 +111,6 @@ export class DetailsPageComponent implements OnInit {
       })
     ).subscribe(offering => {
       this.offering = offering;
-      console.log('Offering:', this.offering);
       if (this.offering && this.offering.photos) {
         this.images = this.offering.photos;
       }
@@ -127,7 +130,28 @@ export class DetailsPageComponent implements OnInit {
       }
     });
   }
-  
+}
+setupOffering(offering: Product | Service): void {
+  if (!offering) return;
+
+  if (offering.photos) {
+    offering.photos = offering.photos.map(photo => {
+      const fileName = photo.split('\\').pop()?.split('/').pop();
+      return `${environment.apiHost}/images/${fileName}`;
+    });
+  }
+
+  this.offering = offering;
+  this.images = offering.photos || [];
+
+  this.loadComments();
+
+  this.accountService.isInFavouriteOfferings(offering.id).subscribe({
+    next: (isFav) => this.isFavourite = isFav,
+    error: () => this.snackBar.open('Error fetching favourites', 'Close', { duration: 3000 })
+  });
+}
+
   isService(offering: Product | Service): offering is Service {
     const isService = (offering as Service).specification !== undefined;
     return isService;

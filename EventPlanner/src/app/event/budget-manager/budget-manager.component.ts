@@ -12,6 +12,7 @@ import { CategoryService } from '../../offering/category-service/category.servic
 import { MatDialog } from '@angular/material/dialog';
 import { Product } from '../../offering/model/product.model';
 import { Service } from '../../offering/model/service.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-budget-manager',
@@ -31,7 +32,8 @@ export class BudgetManagerComponent implements OnInit {
     private authService: AuthService, 
     private categoryService: CategoryService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -145,7 +147,12 @@ export class BudgetManagerComponent implements OnInit {
     });
   }  
   getAllOfferings(item: BudgetItem): (Product | Service)[] {
-    const offerings = [...(item.products || []), ...(item.services || [])];
+    const offerings = [...(item.services || []),...(item.products || [])];
     return offerings;
   }  
+  openOfferingDetail(offering: Product | Service): void {
+    this.router.navigate(['/offering', offering.id], {
+      state: { offering }
+    });
+      }  
 }

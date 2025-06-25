@@ -1,14 +1,16 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 <div class="main-container">
+
   <!-- Carousel Section -->
   <div class="carousel-section">
     <div class="carousel-container">
       <div class="main-image-wrapper">
         <img 
-        [src]="images[activeImage] || 'placeholder-image.png'" 
-        [alt]="images[activeImage] ? 'Image description' : 'Placeholder image'" 
-        class="main-image">
-              
+          [src]="images[activeImage] || 'placeholder-image.png'" 
+          [alt]="images[activeImage] ? 'Image description' : 'Placeholder image'" 
+          class="main-image">
+
         <!-- Navigation Arrows -->
         <button class="carousel-nav prev" (click)="setActiveImage((activeImage - 1 + images.length) % images.length)" 
                 *ngIf="images.length > 1">
@@ -19,14 +21,14 @@
           <i class="fas fa-chevron-right"></i>
         </button>
       </div>
-      
+
       <!-- Thumbnails -->
       <div class="thumbnails" *ngIf="images.length > 1">
         <div class="thumbnail-container">
           <div class="thumbnail-wrapper" *ngFor="let image of images; let i = index"
                [class.active]="i === activeImage"
                (click)="setActiveImage(i)">
-            <img [src]="image" [alt]="offering?.name" class="thumbnail-image">
+            <img [src]="image" [alt]="offering?.name || 'Thumbnail'" class="thumbnail-image">
           </div>
         </div>
       </div>
@@ -35,54 +37,55 @@
 
   <!-- Content Section -->
   <div class="content-section">
+
     <!-- Header Info -->
     <div class="header-info">
       <div style="display: flex; justify-content: space-between;">
-      <h1 class="title">{{offering?.name}}</h1>
-      <button class="favorite-btn" [class.active]="isFavourite" (click)="toggleFavorite()">
-        <span class="heart-icon">{{isFavourite ? '❤️' : '🤍'}}</span>
-      </button>
-    </div>
+        <h1 class="title">{{offering?.name || 'Untitled Offering'}}</h1>
+        <button class="favorite-btn" [class.active]="isFavourite" (click)="toggleFavorite()">
+          <span class="heart-icon">{{isFavourite ? '❤️' : '🤍'}}</span>
+        </button>
+      </div>
       <div class="meta-info">
-        <span class="category">{{offering?.category.name}}</span>
+        <span class="category">{{offering?.category?.name || 'Unknown Category'}}</span>
         <div class="availability" [class.available]="offering?.available">
           {{offering?.available ? 'Available' : 'Not Available'}}
         </div>
       </div>
     </div>
 
-  <!-- Price Section -->
-  <div class="price-section">
-    <div class="price-container">
-      <div class="prices">
-        <ng-container *ngIf="offering?.discount; else normalPrice">
-          <div class="price-stack">
-            <span class="original-price">{{offering?.price | currency}}</span>
-            <span class="discounted-price">
-              {{(offering?.price * (1 - offering?.discount / 100)) | currency}}
+    <!-- Price Section -->
+    <div class="price-section">
+      <div class="price-container">
+        <div class="prices">
+          <ng-container *ngIf="offering?.discount; else normalPrice">
+            <div class="price-stack">
+              <span class="original-price">{{offering?.price | currency}}</span>
+              <span class="discounted-price">
+                {{(offering?.price * (1 - offering?.discount / 100)) | currency}}
+              </span>
+            </div>
+            <span class="discount-badge">
+              -{{offering?.discount}}% OFF
             </span>
-          </div>
-          <span class="discount-badge">
-            -{{offering?.discount}}% OFF
-          </span>
-        </ng-container>
-        <ng-template #normalPrice>
-          <span class="price">{{offering?.price | currency}}</span>
-        </ng-template>
+          </ng-container>
+          <ng-template #normalPrice>
+            <span class="price">{{offering?.price | currency}}</span>
+          </ng-template>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="book-now-btn" [disabled]="!offering?.available" (click)="openReservationDialog()">
+          <i class="fas fa-calendar-check"></i>
+          Book Now
+        </button>
       </div>
     </div>
-    <div class="action-buttons">
-      <button class="book-now-btn" [disabled]="!offering?.available" (click)="openReservationDialog()">
-        <i class="fas fa-calendar-check"></i>
-        Book Now
-      </button>
-    </div>
-  </div>
 
     <!-- Description -->
     <div class="description-section">
       <h2>Description</h2>
-      <p class="description">{{offering?.description}}</p>
+      <p class="description">{{offering?.description || 'No description provided.'}}</p>
     </div>
 
     <!-- Specifications for Services -->
@@ -91,25 +94,25 @@
       <div class="specs-grid">
         <div class="spec-item">
           <span class="spec-label">Duration:</span>
-          <span class="spec-value">{{offering?.fixedTime || offering?.minDuration + ' - ' + offering?.maxDuration}} hours</span>
+          <span class="spec-value">
+            {{ offering?.fixedTime || (offering?.minDuration + ' - ' + offering?.maxDuration) || 'N/A' }} hours
+          </span>
         </div>
         <div class="spec-item">
           <span class="spec-label">Reservation Period:</span>
-          <span class="spec-value">{{offering?.reservationPeriod}} hours in advance</span>
+          <span class="spec-value">{{offering?.reservationPeriod || 'N/A'}} hours in advance</span>
         </div>
         <div class="spec-item">
           <span class="spec-label">Cancellation Period:</span>
-          <span class="spec-value">{{offering?.cancellationPeriod}} days before</span>
+          <span class="spec-value">{{offering?.cancellationPeriod || 'N/A'}} days before</span>
         </div>
         <div class="spec-item">
           <span class="spec-label">Specification:</span>
-          <span class="spec-value">{{offering?.specification}} days before</span>
+          <span class="spec-value">{{offering?.specification || 'N/A'}}</span>
         </div>
         <div class="spec-item">
           <span class="spec-label">Confirmation:</span>
-          <span class="spec-value">
-            {{ offering?.autoConfirm ? 'Automatic' : 'Manual' }}
-          </span>
+          <span class="spec-value">{{ offering?.autoConfirm ? 'Automatic' : 'Manual' }}</span>
         </div>        
       </div>
     </div>
@@ -120,23 +123,24 @@
         <div class="provider-info">
           <img [src]="profilePhoto" alt="Provider" class="provider-avatar">
           <div class="provider-details">
-            <h3>{{offering.provider.company.name}}</h3>
+            <h3>{{offering?.provider?.company?.name || 'Unknown Company'}}</h3>
             <div class="rating">
               <span class="stars">★★★★☆</span>
-              <span class="rating-number">({{offering.averageRating}})</span>
+              <span class="rating-number">({{offering?.averageRating || 0}})</span>
             </div>
             <p class="provider-location">
               <i class="fas fa-location">📍</i>
-              {{ offering.provider.company.location.city }}, {{ offering.provider.company.location.country }}
+              {{ offering?.provider?.company?.location?.city || '-' }},
+              {{ offering?.provider?.company?.location?.country || '-' }}
             </p>
             <div class="provider-contact">
               <p class="contact-item">
-                <i class="fas fa-email">📧</i>
-                {{ offering.provider.company.email }}
+                <i class="fas fa-envelope">📧</i>
+                {{ offering?.provider?.company?.email || 'N/A' }}
               </p>
               <p class="contact-item">
                 <i class="fas fa-phone"></i>
-                {{ offering.provider.company.phoneNumber }}
+                {{ offering?.provider?.company?.phoneNumber || 'N/A' }}
               </p>
             </div>
           </div>
@@ -154,77 +158,78 @@
       </div>
     </div>
 
-  <!-- Comments Section -->
-  <div class="comments-section">
-    <h2>Customer Reviews</h2>
-    
-    <!-- Comments list -->
-    <div class="comments-list">
-      <ng-container *ngIf="comments.length > 0; else noReviews">
-        <div *ngFor="let comment of comments" class="comment-card">
-          <div class="comment-header">
-            <span class="user-name">{{ comment.user }}</span>
-            <div class="stars">
-              <span *ngFor="let star of getStarArray(comment.rating)">
-                {{ star ? '★' : '☆' }}
-              </span>
+    <!-- Comments Section -->
+    <div class="comments-section">
+      <h2>Customer Reviews</h2>
+      
+      <!-- Comments list -->
+      <div class="comments-list">
+        <ng-container *ngIf="comments.length > 0; else noReviews">
+          <div *ngFor="let comment of comments" class="comment-card">
+            <div class="comment-header">
+              <span class="user-name">{{ comment.user }}</span>
+              <div class="stars">
+                <span *ngFor="let star of getStarArray(comment.rating)">
+                  {{ star ? '★' : '☆' }}
+                </span>
+              </div>
+            </div>
+            <p class="comment-text">{{ comment.content }}</p>
+          </div>
+        </ng-container>
+        
+        <ng-template #noReviews>
+          <div class="no-reviews-message">
+            <p>No reviews yet</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Only show comment form to event organizers -->
+      <div class="comment-form" *ngIf="isEventOrganizer">
+        <ng-container *ngIf="!isCommentingEnabled">
+          <div class="comment-locked-message">
+            <i class="fas fa-lock"></i>
+            <p>Please book this service first to leave a review</p>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="isCommentingEnabled">
+          <h3>Leave a Review</h3>
+          <div class="rating-input">
+            <span>Your Rating:</span>
+            <div class="stars-input">
+              <span 
+                *ngFor="let star of getStarArray(5); let i = index"
+                (click)="setRating(i + 1)"
+                [class.filled]="i < userRating"
+                class="star-icon"
+              >★</span>
             </div>
           </div>
-          <p class="comment-text">{{ comment.content }}</p>
-        </div>
-      </ng-container>
-      
-      <ng-template #noReviews>
-        <div class="no-reviews-message">
-          <p>No reviews yet</p>
-        </div>
-      </ng-template>
-    </div>
-
-    <!-- Only show comment form to event organizers -->
-    <div class="comment-form" *ngIf="isEventOrganizer">
-      <ng-container *ngIf="!isCommentingEnabled">
-        <div class="comment-locked-message">
-          <i class="fas fa-lock"></i>
-          <p>Please book this service first to leave a review</p>
-        </div>
-      </ng-container>
-
-      <ng-container *ngIf="isCommentingEnabled">
-        <h3>Leave a Review</h3>
-        <div class="rating-input">
-          <span>Your Rating:</span>
-          <div class="stars-input">
-            <span 
-              *ngFor="let star of getStarArray(5); let i = index"
-              (click)="setRating(i + 1)"
-              [class.filled]="i < userRating"
-              class="star-icon"
-            >★</span>
-          </div>
-        </div>
-        <textarea 
-          [(ngModel)]="newComment.text" 
-          placeholder="Your Review"
-          class="input-field"
-        ></textarea>
-        <button 
-          (click)="submitComment()"
-          class="submit-btn"
-          [disabled]="!newComment.text || !newComment.rating"
-        >Submit Review</button>
-      </ng-container>
+          <textarea 
+            [(ngModel)]="newComment.text" 
+            placeholder="Your Review"
+            class="input-field"
+          ></textarea>
+          <button 
+            (click)="submitComment()"
+            class="submit-btn"
+            [disabled]="!newComment.text || !newComment.rating"
+          >Submit Review</button>
+        </ng-container>
+      </div>
     </div>
   </div>
 
-    <!-- Fab -->
-    </div>  
-    <div class="fab-container" *ngIf="offering">
-      <button class="edit-fab" (click)="navigateToEdit()">
-        <i class="fas fa-edit"></i> 
-      </button>
-      <button class="edit-fab" style="margin-bottom:70px;" (click)="deleteOffering()">
-        <i class="fas fa-trash"></i> 
-      </button>
-    </div>
-    
+  <!-- Fab -->
+  <div class="fab-container" *ngIf="offering">
+    <button class="edit-fab" (click)="navigateToEdit()">
+      <i class="fas fa-edit"></i> 
+    </button>
+    <button class="edit-fab" style="margin-bottom:70px;" (click)="deleteOffering()">
+      <i class="fas fa-trash"></i> 
+    </button>
+  </div>
+
+</div>

@@ -92,10 +92,10 @@
             <td mat-cell *matCellDef="let item" class="data-cell offerings-cell">
               <div class="offerings-container">
                 <div class="offerings-chips" *ngIf="getAllOfferings(item)?.length > 0; else noOfferings">
-                  <span *ngFor="let offering of getAllOfferings(item)" class="offering-chip">
+                  <span *ngFor="let offering of getAllOfferings(item)" class="offering-chip" (click)="openOfferingDetail(offering)">
                     <mat-icon class="chip-icon">local_offer</mat-icon>
                     {{ offering.name }}
-                  </span>
+                  </span>                  
                 </div>
                 <ng-template #noOfferings>
                   <span class="no-offerings">No offerings</span>

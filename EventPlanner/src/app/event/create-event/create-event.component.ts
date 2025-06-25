@@ -153,9 +153,7 @@ export class CreateEventComponent implements OnInit {
               budgetItemsToCreate.push(dto);
             }
           });
-  
-          console.log('Budget Items to create:', budgetItemsToCreate);
-  
+    
           if (budgetItemsToCreate.length > 0) {
             for(const budgetItem of budgetItemsToCreate) {
               this.budgetItemService.add(budgetItem).subscribe({
