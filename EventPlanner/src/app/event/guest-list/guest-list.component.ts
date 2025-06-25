@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class GuestListComponent implements OnInit {
   guestForm: FormGroup;
   eventId: number;
+  maxParticipants: number;
 
   constructor(
     private fb: FormBuilder,
@@ -22,11 +23,22 @@ export class GuestListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.eventId = Number(this.route.snapshot.paramMap.get('eventId'));
-    this.guestForm = this.fb.group({
-      guests: this.fb.array([this.createGuestField()])
-    });
-  }
+  this.eventId = Number(this.route.snapshot.paramMap.get('eventId'));
+
+  this.eventService.getEvent(this.eventId).subscribe({
+    next: (event) => {
+      this.maxParticipants = event.maxParticipants;
+
+      this.guestForm = this.fb.group({
+        guests: this.fb.array([this.createGuestField()])
+      });
+    },
+    error: () => {
+      this.snackBar.open('Failed to load event.', 'OK', { duration: 3000 });
+      this.router.navigate(['/home']);
+    }
+  });
+}
 
   get guests(): FormArray {
     return this.guestForm.get('guests') as FormArray;
@@ -39,8 +51,12 @@ export class GuestListComponent implements OnInit {
   }
 
   addGuest(): void {
-    this.guests.push(this.createGuestField());
+  if (this.guests.length >= this.maxParticipants) {
+    this.snackBar.open(`You can invite up to ${this.maxParticipants} guests.`, 'OK', { duration: 3000 });
+    return;
   }
+  this.guests.push(this.createGuestField());
+}
 
   removeGuest(index: number): void {
     this.guests.removeAt(index);
