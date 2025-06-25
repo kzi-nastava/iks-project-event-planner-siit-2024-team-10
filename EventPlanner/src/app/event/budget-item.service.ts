@@ -19,15 +19,15 @@ export class BudgetItemService {
   add(budgetItem:CreateBudgetItemDTO) : Observable<BudgetItem> {
     return this.httpClient.post<BudgetItem>(environment.apiHost + "/events/" + budgetItem.eventId + "/budget", budgetItem);
   }
-  buy(budgetItem: UpdateBudgetItemDTO): Observable<BudgetItem> {
-    return this.httpClient.post<BudgetItem>(environment.apiHost + "/budget-items/" + budgetItem, budgetItem); 
+  buy(eventId: number, offeringid: number): Observable<any> {
+    return this.httpClient.put(`${environment.apiHost}/events/${eventId}/budget/buy/${offeringid}`,null);
   }
   getByEvent(eventId: number): Observable<BudgetItem[]> {
     console.log(environment.apiHost + "/events/budget/" + eventId);
     return this.httpClient.get<BudgetItem[]>(environment.apiHost + "/events/budget/" + eventId);
   }  
-  updateAmount(eventId:number, budgetItemId: number, budgetItem: UpdateBudgetItemDTO): Observable<BudgetItem> {
-    return this.httpClient.put<BudgetItem>(environment.apiHost + "/events/" + eventId + "/budget/" + budgetItemId, budgetItem);
+  updateAmount(eventId:number, budgetItemId: number, amount: number): Observable<BudgetItem> {
+    return this.httpClient.put<BudgetItem>(environment.apiHost + "/events/" + eventId + "/budget/" + budgetItemId, amount);
   }
   delete(eventId: number, budgetItemId: number): Observable<boolean> {
       return this.httpClient.delete<boolean>(`${environment.apiHost}/events/${eventId}/budget/${budgetItemId}`);

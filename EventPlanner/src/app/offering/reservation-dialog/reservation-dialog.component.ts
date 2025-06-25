@@ -82,7 +82,6 @@ onBook(): void {
       }
     });
 
-
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
 
@@ -106,18 +105,20 @@ onBook(): void {
               this.snackBar.open('Reservation request is pending! Email confirmation will been sent.', 'OK', { duration: 5000 });
             }
             else {
-              const updateDto: UpdateBudgetItemDTO = {
-                offeringId: this.data.offering.id,
-                amount: 0, 
-              };
-                        
-              this.budgetItemService.buy(updateDto).subscribe({
+              const finalAmount = this.data.offering.discount 
+                ? this.data.offering.price * (1 - this.data.offering.discount / 100)
+                : this.data.offering.price;
+
+              this.budgetItemService.buy(
+                reservationData.event.id, 
+                this.data.offering.id, 
+              ).subscribe({
                 next: () => {
                   console.log('Budget updated successfully.');
                   this.snackBar.open('Reservation successful! Budget updated.', 'OK', { duration: 5000 });
                 },
-                error: () => {
-                  console.error('Failed to update budget.');
+                error: (error) => {
+                  console.error('Failed to update budget:', error);
                   this.snackBar.open('Reservation successful, but failed to update budget.', 'OK', { duration: 5000 });
                 }
               });
@@ -131,9 +132,9 @@ onBook(): void {
             this.errorMsg = err.message;
             this.snackBar.open(this.errorMsg, 'OK', { duration: 5000 });
           }
-            });
-          }
         });
+      }
+    });
       
   } else {
     this.errorMsg='Please fill in all fields';

@@ -101,7 +101,8 @@ export class CreateEventComponent implements OnInit {
           amount: +amount,
           isDeleted: false,
           category,
-          offerings: []
+          services: [],
+          products: []
         };
         console.log('Added BudgetItem:', item);
 
@@ -147,7 +148,7 @@ export class CreateEventComponent implements OnInit {
               const dto: CreateBudgetItemDTO = {
                 amount: +item.amount,
                 categoryId: item.category.id,
-                eventId: createdEventId
+                eventId: createdEventId,
               };
               budgetItemsToCreate.push(dto);
             }

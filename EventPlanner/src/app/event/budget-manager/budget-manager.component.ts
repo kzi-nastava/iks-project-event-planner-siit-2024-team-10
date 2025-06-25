@@ -10,6 +10,8 @@ import { AddBudgetItemDialogComponent } from '../add-budget-item-dialog/add-budg
 import { CreateBudgetItemDTO } from '../../offering/model/create-budget-item-dto.models';
 import { CategoryService } from '../../offering/category-service/category.service';
 import { MatDialog } from '@angular/material/dialog';
+import { Product } from '../../offering/model/product.model';
+import { Service } from '../../offering/model/service.model';
 
 @Component({
   selector: 'app-budget-manager',
@@ -50,11 +52,17 @@ export class BudgetManagerComponent implements OnInit {
   
   loadBudgetItems(): void {
     if (!this.selectedEventId) return;
+  
     this.budgetItemService.getByEvent(this.selectedEventId).subscribe({
-      next: (items) => this.budgetItems = items,
-      error: () => this.snackBar.open('Failed to load budget items', 'Close', { duration: 3000 })
+      next: (items) => {
+        console.log('Vraćene budžetske stavke:', items); // <-- ispis u konzoli
+        this.budgetItems = items;
+      },
+      error: () => {
+        this.snackBar.open('Failed to load budget items', 'Close', { duration: 3000 });
+      }
     });
-  }
+  }  
 
   onEventChange(): void {
     this.loadBudgetItems();
@@ -79,12 +87,7 @@ export class BudgetManagerComponent implements OnInit {
       return;
     }
 
-    const dto: UpdateBudgetItemDTO = {
-      amount: item.amount,
-      offeringId: 0 // cuz we only update the amount
-    };
-  
-    this.budgetItemService.updateAmount(this.selectedEventId, item.id, dto).subscribe({
+    this.budgetItemService.updateAmount(this.selectedEventId, item.id, item.amount).subscribe({
       next: () => this.snackBar.open('Amount updated', 'Close', { duration: 2000 }),
       error: () => this.snackBar.open('Failed to update amount', 'Close', { duration: 2000 })
     });
@@ -113,7 +116,7 @@ export class BudgetManagerComponent implements OnInit {
             const dto: CreateBudgetItemDTO = {
               amount: +result.amount,
               categoryId: result.category.id,
-              eventId: this.selectedEventId!
+              eventId: this.selectedEventId!,
             };
   
             this.budgetItemService.add(dto).subscribe({
@@ -132,5 +135,9 @@ export class BudgetManagerComponent implements OnInit {
         this.snackBar.open('Failed to load categories', 'Close', { duration: 3000 });
       }
     });
+  }  
+  getAllOfferings(item: BudgetItem): (Product | Service)[] {
+    const offerings = [...(item.products || []), ...(item.services || [])];
+    return offerings;
   }  
 }

@@ -23,6 +23,7 @@ import { ProductService } from '../product.service';
 import { MatIconModule } from "@angular/material/icon";
 import { AccountService } from '../../account/account.service';
 import { MatButtonModule } from '@angular/material/button';
+import { BudgetItemService } from '../../event/budget-item.service';
 
 @Component({
   selector: 'app-details-page',
@@ -66,6 +67,7 @@ export class DetailsPageComponent implements OnInit {
     private offeringService: OfferingService,
     private accountService: AccountService,
     private authService: AuthService,
+    private budgetItemService: BudgetItemService,
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
@@ -285,6 +287,8 @@ export class DetailsPageComponent implements OnInit {
 
   openReservationDialog(): void {
     if(!this.isService(this.offering)){
+      // if its product just buy it
+      
       return
     }
     
