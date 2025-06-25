@@ -88,12 +88,18 @@ export class BudgetManagerComponent implements OnInit {
       this.snackBar.open('Invalid event or budget item', 'Close', { duration: 2000 });
       return;
     }
-
+  
     this.budgetItemService.updateAmount(this.selectedEventId, item.id, item.amount).subscribe({
-      next: () => this.snackBar.open('Amount updated', 'Close', { duration: 2000 }),
-      error: () => this.snackBar.open('Failed to update amount', 'Close', { duration: 2000 })
+      next: () => {
+        this.snackBar.open('Amount updated', 'Close', { duration: 2000 });
+        
+        this.totalBudget = this.budgetItems.reduce((sum, bi) => sum + bi.amount, 0);
+      },
+      error: (err) => {
+        this.snackBar.open(err.error?.message || 'Failed to update amount', 'Close', { duration: 2000 });
+      }      
     });
-  }
+  }  
   
   openAddBudgetItemDialog(): void {
     if (!this.selectedEventId) {
