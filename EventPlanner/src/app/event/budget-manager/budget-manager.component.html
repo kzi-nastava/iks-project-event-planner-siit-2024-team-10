@@ -3,7 +3,6 @@
     <!-- Header Section -->
     <div class="header-section">
       <h2 class="page-title">Budget Management</h2>
-      <p class="page-subtitle">Manage your event budget items and allocations</p>
     </div>
   
     <!-- Event Selection Card -->
@@ -20,6 +19,13 @@
         </mat-option>
     </mat-select>
     </mat-form-field>
+
+    <!-- Total Budget Display -->
+    <div class="total-budget-display">
+      <mat-icon color="primary">account_balance_wallet</mat-icon>
+      <span class="total-budget-text">Total Budget: <strong>{{ totalBudget | currency:'USD' }}</strong></span>
+    </div>
+
   
     <!-- Budget Table Card -->
     <div class="table-card">

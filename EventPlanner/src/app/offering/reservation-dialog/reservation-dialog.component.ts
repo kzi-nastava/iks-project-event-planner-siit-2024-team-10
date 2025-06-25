@@ -115,16 +115,14 @@ onBook(): void {
               ).subscribe({
                 next: () => {
                   console.log('Budget updated successfully.');
-                  this.snackBar.open('Reservation successful! Budget updated.', 'OK', { duration: 5000 });
+                  this.snackBar.open('Reservation successful! Budget updated. Email confirmation has been sent.', 'OK', { duration: 5000 });
                 },
                 error: (error) => {
                   console.error('Failed to update budget:', error);
                   this.snackBar.open('Reservation successful, but failed to update budget.', 'OK', { duration: 5000 });
                 }
               });
-            
-              this.snackBar.open('Reservation successful! Email confirmation has been sent.', 'OK', { duration: 5000 });
-            }
+      }
             
             this.dialogRef.close(response);
           },

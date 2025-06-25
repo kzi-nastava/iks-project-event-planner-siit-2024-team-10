@@ -24,6 +24,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { AccountService } from '../../account/account.service';
 import { MatButtonModule } from '@angular/material/button';
 import { BudgetItemService } from '../../event/budget-item.service';
+import { ProductReservationDialogComponent } from '../product-reservation-dialog/product-reservation-dialog.component';
 
 @Component({
   selector: 'app-details-page',
@@ -286,11 +287,32 @@ export class DetailsPageComponent implements OnInit {
   }
 
   openReservationDialog(): void {
-    if(!this.isService(this.offering)){
-      // if its product just buy it
-      
-      return
+    if (!this.authService.isLoggedIn()) {
+      this.snackBar.open('Please log in to make a reservation', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['warning-snackbar']
+      });
+      return;
     }
+    
+    if (!this.isService(this.offering)) {
+      const dialogRef = this.dialog.open(ProductReservationDialogComponent, {
+        width: '600px',
+        data: { offering: this.offering }
+      });
+    
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.snackBar.open('Product reserved successfully!', 'Close', { duration: 3000 });
+          this.isCommentingEnabled = true;
+        } else {
+          console.log('Product reservation cancelled.');
+        }
+      });
+      return;
+    }    
     
     if (!this.authService.isLoggedIn()) {
       this.snackBar.open('Please log in to make a reservation', 'Close', {

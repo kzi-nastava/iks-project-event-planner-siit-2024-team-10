@@ -412,3 +412,12 @@
 ::ng-deep .mat-option.mat-selected {
   background-color: #edf2f7 !important;
 }
+.total-budget-display {
+  margin: 12px 0;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #333;
+}

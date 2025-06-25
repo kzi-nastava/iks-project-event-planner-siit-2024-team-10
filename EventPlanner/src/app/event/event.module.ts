@@ -16,6 +16,7 @@ import { EventDetailsComponent } from './event-details/event-details.component';
 import {RouterLink} from '@angular/router';
 import { EventTypesComponent } from './event-types/event-types.component';
 import { BudgetManagerComponent } from './budget-manager/budget-manager.component';
+
 import { HttpClientModule } from '@angular/common/http';
 import {
   MatCell,

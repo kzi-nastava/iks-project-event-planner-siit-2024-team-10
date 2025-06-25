@@ -23,6 +23,7 @@ export class BudgetManagerComponent implements OnInit {
   displayedColumns: string[] = ['category', 'amount', 'offerings', 'delete'];
   events: Event[] = [];
   selectedEventId: number | null = null;
+  totalBudget: number = 0;
 
   constructor(
     private budgetItemService: BudgetItemService,
@@ -55,8 +56,9 @@ export class BudgetManagerComponent implements OnInit {
   
     this.budgetItemService.getByEvent(this.selectedEventId).subscribe({
       next: (items) => {
-        console.log('Vraćene budžetske stavke:', items); // <-- ispis u konzoli
+        console.log('Vraćene budžetske stavke:', items);
         this.budgetItems = items;
+        this.totalBudget = items.reduce((sum, item) => sum + item.amount, 0);
       },
       error: () => {
         this.snackBar.open('Failed to load budget items', 'Close', { duration: 3000 });
