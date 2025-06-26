@@ -39,3 +39,7 @@
     align-items: center;
     gap: 20px;
 }
+
+.dropdown{
+  margin-bottom: 10px;
+}

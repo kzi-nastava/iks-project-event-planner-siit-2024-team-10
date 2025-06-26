@@ -7,12 +7,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-guest-list',
   templateUrl: './guest-list.component.html',
-  styleUrl: './guest-list.component.css'
+  styleUrls: ['./guest-list.component.css']
 })
 export class GuestListComponent implements OnInit {
   guestForm: FormGroup;
   eventId: number;
   maxParticipants: number;
+  currentGuestList: string[] = [];
+  showGuestForm: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -23,24 +25,37 @@ export class GuestListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-  this.eventId = Number(this.route.snapshot.paramMap.get('eventId'));
+    this.eventId = Number(this.route.snapshot.paramMap.get('eventId'));
 
-  this.eventService.getEvent(this.eventId).subscribe({
-    next: (event) => {
-      this.maxParticipants = event.maxParticipants;
+    this.eventFormSetup();
 
-      this.guestForm = this.fb.group({
-        guests: this.fb.array([this.createGuestField()])
-      });
-    },
-    error: () => {
-      this.snackBar.open('Failed to load event.', 'OK', { duration: 3000 });
-      this.router.navigate(['/home']);
-    }
-  });
-}
+    this.eventService.getEvent(this.eventId).subscribe({
+      next: (event) => {
+        this.maxParticipants = event.maxParticipants;
 
-  get guests(): FormArray {
+        this.eventService.getGuestList(this.eventId).subscribe({
+          next: (guestList) => {
+           this.currentGuestList = guestList?.guests ?? [];
+          },
+          error: () => {
+            this.snackBar.open('Failed to load guest list.', 'OK', { duration: 3000 });
+          }
+        });
+      },
+      error: () => {
+        this.snackBar.open('Failed to load event.', 'OK', { duration: 3000 });
+        this.router.navigate(['/event',this.eventId]);
+      }
+    });
+  }
+
+  eventFormSetup(): void {
+    this.guestForm = this.fb.group({
+      guests: this.fb.array([this.createGuestField()])
+    });
+  }
+
+  get guestControls(): FormArray {
     return this.guestForm.get('guests') as FormArray;
   }
 
@@ -51,15 +66,15 @@ export class GuestListComponent implements OnInit {
   }
 
   addGuest(): void {
-  if (this.guests.length >= this.maxParticipants) {
-    this.snackBar.open(`You can invite up to ${this.maxParticipants} guests.`, 'OK', { duration: 3000 });
-    return;
+    if (this.guestControls.length + this.currentGuestList.length >= this.maxParticipants) {
+      this.snackBar.open(`You can invite up to ${this.maxParticipants} guests.`, 'OK', { duration: 3000 });
+      return;
+    }
+    this.guestControls.push(this.createGuestField());
   }
-  this.guests.push(this.createGuestField());
-}
 
   removeGuest(index: number): void {
-    this.guests.removeAt(index);
+    this.guestControls.removeAt(index);
   }
 
   onSubmit(): void {
@@ -68,7 +83,7 @@ export class GuestListComponent implements OnInit {
       this.eventService.sendGuestInvites(this.eventId, emails).subscribe({
         next: () => {
           this.snackBar.open('Invitations sent!', 'OK', { duration: 3000 });
-          this.router.navigate(['/home']);
+          this.router.navigate(['/event',this.eventId]);
         },
         error: () => {
           this.snackBar.open('Failed to send invitations.', 'OK', { duration: 3000 });
