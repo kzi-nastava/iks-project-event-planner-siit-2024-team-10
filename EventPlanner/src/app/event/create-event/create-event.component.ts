@@ -1,181 +1,105 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {
-  FormArray,
+  AbstractControl,
   FormBuilder,
+  FormControl,
   FormGroup,
+  ValidationErrors,
+  ValidatorFn,
   Validators
 } from '@angular/forms';
-import { Category } from '../../offering/model/category.model';
+import {Category} from '../../offering/model/category.model';
 import { EventType } from '../model/event-type.model';
-import { EventTypeService } from '../event-type.service';
-import { CreateEventDTO } from '../model/create-event-dto.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../infrastructure/auth/auth.service';
-import { Router } from '@angular/router';
-import { EventService } from '../event.service';
-import { BudgetItem } from '../model/budget-item.model';
-import { CreateBudgetItemDTO } from '../../offering/model/create-budget-item-dto.models';
-import { BudgetItemService } from '../budget-item.service';
+import {EventTypeService} from '../event-type.service';
+import {CreateEventTypeDTO} from '../model/create-event-type-dto.model';
+import {CreateEventDTO} from '../model/create-event-dto.model';
+import {CreateLocationDTO} from '../model/create-location-dto.model';
+import {formatDate} from '@angular/common';
+import {EventService} from '../event.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthService} from '../../infrastructure/auth/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-event',
   templateUrl: './create-event.component.html',
-  styleUrls: ['./create-event.component.css']
+  styleUrl: './create-event.component.css'
 })
-export class CreateEventComponent implements OnInit {
-  createForm: FormGroup;
-  allEventTypes: EventType[] = [];
-  today = new Date();
-  snackBar: MatSnackBar = inject(MatSnackBar);
+export class CreateEventComponent implements OnInit{
+  createForm: FormGroup = new FormGroup({
+    eventType: new FormControl('', [Validators.required]),
+    noEventType: new FormControl('', [Validators.required]),
+    name: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.required]),
+    maxParticipants: new FormControl('', [Validators.required,Validators.pattern('^[0-9]+$')]),
+    eventPublicity: new FormControl(true, [Validators.required]),
+    country: new FormControl('', [Validators.required]),
+    city: new FormControl('', [Validators.required]),
+    street: new FormControl('', [Validators.required]),
+    houseNumber: new FormControl('', [Validators.required]),
+    date: new FormControl('', [Validators.required]),
+  });
+  allEventTypes:EventType[];
+  today=new Date();
+  snackBar:MatSnackBar = inject(MatSnackBar);
 
-  constructor(
-    private eventTypeService: EventTypeService,
-    private eventService: EventService,
-    private authService: AuthService,
-    private budgetItemService: BudgetItemService,
-    private router: Router,
-    private fb: FormBuilder
-  ) {
-    this.createForm = this.fb.group({
-      eventType: [''],
-      noEventType: [false],
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      maxParticipants: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      eventPublicity: ['open', Validators.required],
-      country: ['', Validators.required],
-      city: ['', Validators.required],
-      street: ['', Validators.required],
-      houseNumber: ['', Validators.required],
-      date: ['', Validators.required],
-      budgetItems: this.fb.array([this.createBudgetItemGroup()])
-    });
-  }
+  constructor(private eventTypeService: EventTypeService,
+              private eventService:EventService,
+              private authService:AuthService,
+              private router:Router) {}
 
   ngOnInit(): void {
+    this.createForm.patchValue({eventPublicity:"open",noEventType:false})
     this.eventTypeService.getAll().subscribe({
-      next: (eventTypes: EventType[]) => {
+      next: (eventTypes:EventType[]) => {
         this.allEventTypes = eventTypes.filter((x) => x.active);
       },
-      error: () => {
-        this.snackBar.open('Error loading event types', 'OK', { duration: 3000 });
+      error: (_) => {
+        this.snackBar.open('Error loading event types','OK',{duration:3000});
       }
     });
-  }
-
-  get budgetItemsFormArray(): FormArray {
-    return this.createForm.get('budgetItems') as FormArray;
-  }
-
-  createBudgetItemGroup(): FormGroup {
-    return this.fb.group({
-      category: [null],
-      amount: [null]
+    this.createForm.get('noEventType')?.valueChanges.subscribe((noEventTypeValue) => {
+      const eventTypeControl = this.createForm.get('eventType');
+      if (noEventTypeValue) {
+        eventTypeControl?.clearValidators(); // Remove 'required' validator
+      } else {
+        eventTypeControl?.setValidators([Validators.required]); // Add 'required' validator
+      }
+      eventTypeControl?.updateValueAndValidity(); // Re-evaluate validation status
     });
+
   }
 
-  getAvailableCategories(index: number): Category[] {
-    const selectedCategories = this.budgetItemsFormArray.controls
-      .map((group, i) => i !== index ? group.get('category')?.value : null)
-      .filter((val): val is Category => !!val);
-
-    const allCategories = this.allEventTypes.flatMap(et => et.recommendedCategories || []);
-
-    return allCategories.filter((cat, i, self) =>
-      !selectedCategories.some(selected => selected.id === cat.id) &&
-      i === self.findIndex(c => c.id === cat.id)
-    );
+  eventTypesDisplayed():boolean{
+    return !this.createForm.value.noEventType;
   }
 
-  onBudgetItemKeydown(event: KeyboardEvent, index: number): void {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-
-      const group = this.budgetItemsFormArray.at(index);
-      const category = group.get('category')?.value;
-      const amount = group.get('amount')?.value;
-
-      if (category && amount) {
-        const item: BudgetItem = {
-          id: 0,
-          amount: +amount,
-          isDeleted: false,
-          category,
-          services: [],
-          products: []
-        };
-        console.log('Added BudgetItem:', item);
-
-        const isLast = index === this.budgetItemsFormArray.length - 1;
-        const nextEmptyExists = this.budgetItemsFormArray.controls.some((g, i) =>
-          i !== index && !g.get('category')?.value
-        );
-
-        if (isLast && !nextEmptyExists) {
-          this.budgetItemsFormArray.push(this.createBudgetItemGroup());
+  save():void{
+    if(this.createForm.valid){
+      const event:CreateEventDTO={
+        eventTypeId:this.createForm.value.noEventType?null:this.createForm.value.eventType.id,
+        organizerId:this.authService.getUserId(),
+        name:this.createForm.value.name,
+        description:this.createForm.value.description,
+        maxParticipants:parseInt(this.createForm.value.maxParticipants, 10),
+        isOpen:this.createForm.value.eventPublicity==='open',
+        date:(new Date(this.createForm.value.date.getTime() - this.createForm.value.date.getTimezoneOffset() * 60000)).toISOString().split('T')[0],
+        location:{
+          country:this.createForm.value.country,
+          city:this.createForm.value.city,
+          street:this.createForm.value.street,
+          houseNumber:this.createForm.value.houseNumber
         }
       }
-    }
-  }
-
-  save(): void {
-    if (this.createForm.valid) {
-      const formValue = this.createForm.value;
-  
-      const event: CreateEventDTO = {
-        eventTypeId: formValue.noEventType ? null : formValue.eventType?.id,
-        organizerId: this.authService.getUserId(),
-        name: formValue.name,
-        description: formValue.description,
-        maxParticipants: parseInt(formValue.maxParticipants, 10),
-        isOpen: formValue.eventPublicity === 'open',
-        date: (new Date(formValue.date.getTime() - formValue.date.getTimezoneOffset() * 60000)).toISOString().split('T')[0],
-        location: {
-          country: formValue.country,
-          city: formValue.city,
-          street: formValue.street,
-          houseNumber: formValue.houseNumber
-        }
-      };
-  
       this.eventService.add(event).subscribe({
-        next: (createdEvent) => {
-          const createdEventId = createdEvent.id;
-          const budgetItemsToCreate: CreateBudgetItemDTO[] = [];
-  
-          formValue.budgetItems.forEach((item: any, index: number) => {
-            if (item.category && item.amount) {
-              const dto: CreateBudgetItemDTO = {
-                amount: +item.amount,
-                categoryId: item.category.id,
-                eventId: createdEventId,
-              };
-              budgetItemsToCreate.push(dto);
-            }
-          });
-    
-          if (budgetItemsToCreate.length > 0) {
-            for(const budgetItem of budgetItemsToCreate) {
-              this.budgetItemService.add(budgetItem).subscribe({
-                next: () => {
-                  console.log('Budget item created successfully:', budgetItem);
-                },
-                error: (error) => {
-                  console.error('Error creating budget item:', error);
-                }
-              });
-            }
-          } else {
-            this.snackBar.open('Event created successfully', 'OK', { duration: 3000 });
-            this.router.navigate(['home']);
-          }
+        next: () => {
+          this.snackBar.open('Event created successfully','OK',{duration:3000});
+          this.router.navigate(['home']);
         },
         error: () => {
-          this.snackBar.open('Error creating event', 'OK', { duration: 3000 });
+          this.snackBar.open('Error creating event','OK',{duration:3000});
         }
       });
-    } else {
-      this.snackBar.open('Please fill in all required fields', 'OK', { duration: 3000 });
     }
-  }  
+  }
 }

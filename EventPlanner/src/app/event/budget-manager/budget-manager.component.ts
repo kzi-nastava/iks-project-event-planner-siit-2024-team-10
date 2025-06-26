@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Product } from '../../offering/model/product.model';
 import { Service } from '../../offering/model/service.model';
 import { Router } from '@angular/router';
+import { Category } from '../../offering/model/category.model';
 
 @Component({
   selector: 'app-budget-manager',
@@ -39,6 +40,12 @@ export class BudgetManagerComponent implements OnInit {
   ngOnInit(): void {
     this.loadEvents();
   }
+
+  getRecommendedCategories(): Category[] {
+    const selectedEvent = this.events.find(e => e.id === this.selectedEventId);
+    return selectedEvent?.eventType?.recommendedCategories || [];
+  }
+  
   
   loadEvents(): void {
     this.eventService.getMyEvents(this.authService.getUserId()).subscribe({
@@ -47,6 +54,7 @@ export class BudgetManagerComponent implements OnInit {
         if (events.length) {
           this.selectedEventId = events[0].id;
           this.loadBudgetItems();
+          this.getRecommendedCategories();
         }
       },
       error: () => this.snackBar.open('Failed to load events', 'Close', { duration: 3000 })

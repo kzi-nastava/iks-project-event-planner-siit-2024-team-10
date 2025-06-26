@@ -20,6 +20,17 @@
     </mat-select>
     </mat-form-field>
 
+    <!-- Recommended Categories Display -->
+    <div class="recommended-categories" *ngIf="getRecommendedCategories()?.length">
+      <mat-icon class="recommend-icon">tips_and_updates</mat-icon>
+      <span class="recommend-label">Recommended Categories for this Event Type:</span>
+      <div class="category-badges">
+        <span *ngFor="let cat of getRecommendedCategories()" class="category-badge">
+          {{ cat.name }}
+        </span>
+      </div>
+    </div>
+
     <!-- Total Budget Display -->
     <div class="total-budget-display">
       <mat-icon color="primary">account_balance_wallet</mat-icon>
