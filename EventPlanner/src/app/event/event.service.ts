@@ -96,12 +96,12 @@ export class EventService {
     });
   }
 
-  sendGuestInvites(eventId: number, emails: string[]) {
-    return this.httpClient.post(environment.apiHost + '/events/' + eventId + '/invite', emails);
-  }
+  sendGuestInvites(eventId: number, guests: string[]) {
+    return this.httpClient.post(environment.apiHost + '/events/' + eventId + '/invite', { guests });
+  } 
 
   acceptInvite(token: string, email: string) {
-    return this.httpClient.post(environment.apiHost + '/events/accept-invite/' + token, email);
+    return this.httpClient.post(environment.apiHost + '/events/accept-invite/' + token, { email });
   }
 
   getPaginatedEvents(

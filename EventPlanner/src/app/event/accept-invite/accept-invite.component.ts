@@ -18,6 +18,8 @@ export class AcceptInviteComponent implements OnInit {
 
   snackBar:MatSnackBar = inject(MatSnackBar)
 
+  email: string;
+
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('invitation-token');
     if (!token) {
@@ -33,8 +35,8 @@ export class AcceptInviteComponent implements OnInit {
   }
 
   acceptInvite(token: string): void {
-    const email = this.authService.getEmail();
-    this.eventService.acceptInvite(token, email).subscribe({
+    this.email = this.authService.getEmail();
+    this.eventService.acceptInvite(token, this.email).subscribe({
       next: () => {
         this.snackBar.open('The event invitation has been accepted','OK',{duration:5000});
         this.router.navigate(['/user-details']);
