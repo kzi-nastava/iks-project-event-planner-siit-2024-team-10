@@ -93,12 +93,8 @@ export class CreateEventComponent implements OnInit{
       }
       this.eventService.add(event).subscribe({
         next: (createdEvent) => {
-          if (!event.isOpen){
-            this.router.navigate(['guest-list', createdEvent.id]);
-          } else {
-            this.snackBar.open('Event created successfully','OK',{duration:3000});
-            this.router.navigate(['home']);
-          }
+          this.snackBar.open('Event created successfully','OK',{duration:3000});
+          this.router.navigate(['home']);
         },
         error: () => {
           this.snackBar.open('Error creating event','OK',{duration:3000});
