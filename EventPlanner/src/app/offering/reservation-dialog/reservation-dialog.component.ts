@@ -109,19 +109,19 @@ onBook(): void {
                 ? this.data.offering.price * (1 - this.data.offering.discount / 100)
                 : this.data.offering.price;
 
-              this.budgetItemService.buy(
-                reservationData.event.id, 
-                this.data.offering.id, 
-              ).subscribe({
-                next: () => {
-                  console.log('Budget updated successfully.');
-                  this.snackBar.open('Reservation successful! Budget updated. Email confirmation has been sent.', 'OK', { duration: 5000 });
-                },
-                error: (error) => {
-                  console.error('Failed to update budget:', error);
-                  this.snackBar.open('Reservation successful, but failed to update budget.', 'OK', { duration: 5000 });
-                }
-              });
+                this.budgetItemService.buy(reservationData.event.id, this.data.offering.id).subscribe({
+                  next: (success: boolean) => {
+                    if (success) {
+                      this.snackBar.open('Reservation successful! Budget updated. Email confirmation has been sent.', 'OK', { duration: 5000 });
+                    } else {
+                      this.snackBar.open('Reservation successful, but not enough budget to record the purchase.', 'OK', { duration: 5000 });
+                    }
+                  },
+                  error: (error) => {
+                    console.error('Failed to update budget:', error);
+                    this.snackBar.open('Reservation successful, but failed to update budget.', 'OK', { duration: 5000 });
+                  }
+                });                
       }
             
             this.dialogRef.close(response);

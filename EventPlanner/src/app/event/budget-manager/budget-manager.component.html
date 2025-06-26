@@ -105,8 +105,9 @@
                 <div class="offerings-chips" *ngIf="getAllOfferings(item)?.length > 0; else noOfferings">
                   <span *ngFor="let offering of getAllOfferings(item)" class="offering-chip" (click)="openOfferingDetail(offering)">
                     <mat-icon class="chip-icon">local_offer</mat-icon>
-                    {{ offering.name }}
-                  </span>                  
+                    {{ offering.name }} 
+                    <span class="price-text">({{ getFinalPrice(offering) | currency:'USD' }})</span>
+                  </span>                                   
                 </div>
                 <ng-template #noOfferings>
                   <span class="no-offerings">No offerings</span>

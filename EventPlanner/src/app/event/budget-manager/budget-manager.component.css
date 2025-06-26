@@ -465,3 +465,9 @@
   font-size: 14px;
   border: 1px solid #90caf9;
 }
+.price-text {
+  font-weight: 500;
+  margin-left: 4px;
+  color: #4caf50;
+  font-size: 13px;
+}

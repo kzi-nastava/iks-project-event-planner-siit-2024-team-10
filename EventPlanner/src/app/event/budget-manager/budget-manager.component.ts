@@ -164,5 +164,11 @@ export class BudgetManagerComponent implements OnInit {
     this.router.navigate(['/offering', offering.id], {
       state: { offering }
     });
-      }  
+  }  
+  getFinalPrice(offering: Product | Service): number {
+    return offering.discount
+      ? +(offering.price * (1 - offering.discount / 100)).toFixed(2)
+      : offering.price;
+  }
+      
 }
