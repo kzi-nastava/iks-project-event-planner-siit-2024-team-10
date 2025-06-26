@@ -199,6 +199,10 @@
   bottom: 10rem;
 }
 
+.fab.quaternary{
+  bottom: 14rem;
+}
+
 .comments-section {
   background: #f8fafc;
   border-radius: 12px;
