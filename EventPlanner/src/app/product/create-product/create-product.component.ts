@@ -120,7 +120,8 @@ export class CreateProductComponent implements OnInit{
       discount:this.createForm.value.discount,
       photos:this.photoPaths,
       visible:this.createForm.value.isVisible,
-      available:this.createForm.value.isAvailable
+      available:this.createForm.value.isAvailable,
+      creatorId: this.authService.getAccountId()
     };
     this.productService.create(product).subscribe({
       next: (product:Product) => {
