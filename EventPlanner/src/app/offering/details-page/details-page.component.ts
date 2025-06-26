@@ -54,7 +54,7 @@ export class DetailsPageComponent implements OnInit {
   role: string = '';
   isFavourite = false;
   loggedInUserId:number;
-
+  canEditOffering: boolean = false;
   newComment = {
     rating: 0,
     text: ''
@@ -83,8 +83,7 @@ export class DetailsPageComponent implements OnInit {
     this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
 
     const passedOffering = history.state.offering as Product | Service;
-
-    console.log(passedOffering);
+    console.log(passedOffering)
 
   if (passedOffering && passedOffering.id) {
     this.offering = passedOffering;
@@ -118,6 +117,9 @@ export class DetailsPageComponent implements OnInit {
       }
       this.loadComments();
       
+      console.log('Offering loaded:', this.offering);
+      this.canEditOffering = this.offering?.provider?.accountId === this.authService.getAccountId();
+
       if (this.offering) {
         this.accountService.isInFavouriteOfferings(this.offering.id).subscribe({
           next: (isFavourite: boolean) => {
@@ -133,6 +135,7 @@ export class DetailsPageComponent implements OnInit {
     });
   }
 }
+
 setupOffering(offering: Product | Service): void {
   if (!offering) return;
 
@@ -273,7 +276,7 @@ setupOffering(offering: Product | Service): void {
         autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,    
         eventTypes:this.offering.eventTypes
       };
-
+      
       this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
       }
     }

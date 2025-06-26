@@ -83,6 +83,7 @@ export class EditServiceComponent implements OnInit {
         ...this.offeringForm.value,
       };
 
+      console.log(formData);
       this.serviceService.edit(formData).subscribe({
         next: (response) => {
           this.snackBar.open('Service edited successfully', 'OK', { 

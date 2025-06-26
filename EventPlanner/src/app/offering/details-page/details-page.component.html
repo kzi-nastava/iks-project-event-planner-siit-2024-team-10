@@ -223,7 +223,7 @@
   </div>
 
   <!-- Fab -->
-  <div class="fab-container" *ngIf="offering">
+  <div class="fab-container" *ngIf="canEditOffering">
     <button class="edit-fab" (click)="navigateToEdit()">
       <i class="fas fa-edit"></i> 
     </button>
@@ -231,5 +231,6 @@
       <i class="fas fa-trash"></i> 
     </button>
   </div>
+
 
 </div>
