@@ -84,6 +84,8 @@ export class DetailsPageComponent implements OnInit {
 
     const passedOffering = history.state.offering as Product | Service;
 
+    console.log(passedOffering);
+
   if (passedOffering && passedOffering.id) {
     this.offering = passedOffering;
     this.setupOffering(this.offering);

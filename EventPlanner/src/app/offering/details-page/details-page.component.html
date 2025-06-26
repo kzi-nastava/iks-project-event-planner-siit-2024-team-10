@@ -118,7 +118,7 @@
     </div>
 
     <!-- Provider Section -->
-    <div class="provider-section">
+    <div class="provider-section" *ngIf="offering?.provider?.company">
       <div class="provider-card">
         <div class="provider-info">
           <img [src]="profilePhoto" alt="Provider" class="provider-avatar">

@@ -148,9 +148,11 @@ export class BudgetManagerComponent implements OnInit {
   }  
   getAllOfferings(item: BudgetItem): (Product | Service)[] {
     const offerings = [...(item.services || []),...(item.products || [])];
+    console.log('All offerings for budget item:', item.id, offerings);
     return offerings;
   }  
   openOfferingDetail(offering: Product | Service): void {
+    console.log('Opening offering detail for:', offering);
     this.router.navigate(['/offering', offering.id], {
       state: { offering }
     });
