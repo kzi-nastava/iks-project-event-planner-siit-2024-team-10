@@ -68,11 +68,11 @@
           <div *ngIf="offeringForm.get('timeType')?.value === 'flexible'" class="price-section">
             <mat-form-field style="padding-right: 20px;" appearance="outline">
               <mat-label>Minimum Hours</mat-label>
-              <input matInput type="number" formControlName="minTime">
+              <input matInput type="number" formControlName="minDuration">
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label style="padding-left: 20px;" >Maximum Hours</mat-label>
-              <input matInput type="number" formControlName="maxTime">
+              <input matInput type="number" formControlName="maxDuration">
             </mat-form-field>
           </div>
         </div>
@@ -82,26 +82,24 @@
             <div class="price-section">
               <mat-form-field style="padding-right: 10px;" appearance="outline">
                 <mat-label>Reservation Deadline</mat-label>
-                <input matInput formControlName="reservationDeadline" type="number" min="0">
+                <input matInput formControlName="reservationPeriod" type="number" min="0">
               </mat-form-field>
         
               <mat-form-field style="padding-left: 10px;" appearance="outline">
                 <mat-label>Cancellation Deadline</mat-label>
-                <input matInput formControlName="cancellationDeadline" type="number" min="0">
+                <input matInput formControlName="cancellationPeriod" type="number" min="0">
               </mat-form-field>
           </div>
         </div>        
     
-        <div class="form-section toggles">
-          <h3 class="small-subtitle">Service Availability</h3>
-          <div class="toggle-container">
-            <mat-slide-toggle 
-            formControlName="isAvailable" 
-            color="primary"
-            [checked]="offeringForm.get('isAvailable')?.value">Service Available</mat-slide-toggle>
-            <mat-slide-toggle formControlName="isVisible" color="accent">Service Visible</mat-slide-toggle>
-          </div>
-        </div>
+        <mat-slide-toggle formControlName="isAvailable" color="primary">
+          Service Available
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="isVisible" color="accent">
+          Service Visible
+        </mat-slide-toggle>
+        
     
         <div class="form-section submit-section">
           <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="!offeringForm.valid">

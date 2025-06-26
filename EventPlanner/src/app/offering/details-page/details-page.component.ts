@@ -280,22 +280,36 @@ setupOffering(offering: Product | Service): void {
       this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
       }
     }
-  deleteOffering(): void {
-    if (this.offering) {
-      const confirmation = confirm('Are you sure you want to delete this offering?');
-      if (confirmation) {
-        this.serviceService.delete(this.offering.id).subscribe(
-          () => {
-            console.log('Offering deleted successfully');
-            this.router.navigate(['/manage-offerings']); 
-          },
-          error => {
-            console.error('Error deleting offering:', error);
-          }
-        );
+    deleteOffering(): void {
+      if (this.offering) {
+        const confirmation = confirm('Are you sure you want to delete this offering?');
+        if (confirmation) {
+          this.serviceService.delete(this.offering.id).subscribe({
+            next: () => {
+              this.snackBar.open('Offering deleted successfully.', 'OK', {
+                duration: 3000
+              });
+              this.router.navigate(['/manage-offerings']);
+            },
+            error: (error) => {
+              if (error.status === 404) {
+                this.snackBar.open('Service not found.', 'Dismiss', { duration: 3000 });
+              } else if (error.status === 409) {
+                this.snackBar.open('Service cannot be deleted because it has reservations.', 'Dismiss', {
+                  duration: 4000
+                });
+              } else {
+                this.snackBar.open('Failed to delete offering.', 'Dismiss', {
+                  duration: 3000
+                });
+              }
+              console.error('Error deleting offering:', error);
+            }
+          });
+        }
       }
     }
-  }
+    
   
   viewProviderProfile() {
     if (this.offering && this.offering.provider) {
