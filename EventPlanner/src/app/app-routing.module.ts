@@ -25,6 +25,7 @@ import {EditCompanyComponent} from './user/edit-company/edit-company.component';
 import {EditEventComponent} from './event/edit-event/edit-event.component';
 import { GuestListComponent } from './event/guest-list/guest-list.component';
 import { AcceptInviteComponent } from './event/accept-invite/accept-invite.component';
+import {FavouritesComponent} from './user/favourites/favourites.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -67,6 +68,7 @@ const routes: Routes = [
   {path:'edit-company',component:EditCompanyComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   { path: 'chat', component: ChatComponent },
+  { path: 'favourites', component: FavouritesComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];
