@@ -19,6 +19,10 @@
           <mat-icon>favorite</mat-icon>
           <span>Favourites</span>
         </button>
+        <button mat-menu-item [routerLink]="['calendar']">
+          <mat-icon>calendar_today</mat-icon>
+          <span>Calendar</span>
+        </button>
         <button mat-menu-item (click)="logout()">
           <mat-icon>logout</mat-icon>
           <span>Log out</span>

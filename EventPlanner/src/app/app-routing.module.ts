@@ -70,7 +70,8 @@ const routes: Routes = [
     data: {role: ['PROVIDER']}},
   { path: 'chat', component: ChatComponent },
   {path:'calendar',component:CalendarComponent},
-  { path: 'favourites', component: FavouritesComponent },
+  { path: 'favourites', component: FavouritesComponent , canActivate: [AuthGuard],
+    data: {role: ['EVENT_ORGANIZER','PROVIDER','ADMIN','AUTHENTICATED_USER']}},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];
