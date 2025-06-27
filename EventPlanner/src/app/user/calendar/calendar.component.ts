@@ -19,6 +19,7 @@ export class CalendarComponent implements OnInit {
               private authService: AuthService) {
   }
 
+  role:string;
   snackBar:MatSnackBar = inject(MatSnackBar)
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin],
@@ -32,6 +33,7 @@ export class CalendarComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.role=this.authService.getRole();
     this.accountService.getCalendar(this.authService.getAccountId()).subscribe({
       next: (calendar:CalendarItem[]) => {
         let events=[]
