@@ -1,0 +1,14 @@
+full-calendar{
+  padding: 10px;
+}
+
+::ng-deep .fc .fc-button {
+  background-color: #3a2d30;
+  border-color: #3a2d30;
+  color: #fff;
+}
+
+::ng-deep .fc .fc-button:hover {
+  background-color: #5b4246;
+  border-color: #5b4246;
+}

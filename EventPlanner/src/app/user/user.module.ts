@@ -17,6 +17,8 @@ import {MatSelect} from '@angular/material/select';
 import { FavouritesComponent } from './favourites/favourites.component';
 import {EventModule} from '../event/event.module';
 import {OfferingModule} from '../offering/offering.module';
+import { CalendarComponent } from './calendar/calendar.component';
+import {FullCalendarModule} from '@fullcalendar/angular';
 
 
 
@@ -26,7 +28,8 @@ import {OfferingModule} from '../offering/offering.module';
     EditPersonalComponent,
     EditCompanyComponent,
     ChangePasswordComponent,
-    FavouritesComponent
+    FavouritesComponent,
+    CalendarComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +47,8 @@ import {OfferingModule} from '../offering/offering.module';
     MatOption,
     MatSelect,
     EventModule,
-    OfferingModule
+    OfferingModule,
+    FullCalendarModule
   ]
 })
 export class UserModule { }
