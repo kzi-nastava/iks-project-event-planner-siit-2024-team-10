@@ -1,6 +1,3 @@
-full-calendar{
-  padding: 10px;
-}
 
 ::ng-deep .fc .fc-button {
   background-color: #3a2d30;
@@ -8,7 +5,31 @@ full-calendar{
   color: #fff;
 }
 
+.calendar-container {
+  padding: 10px;
+}
+
 ::ng-deep .fc .fc-button:hover {
   background-color: #5b4246;
   border-color: #5b4246;
+}
+
+.calendar-legend {
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+  font-family: Arial, sans-serif;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-color {
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  display: inline-block;
 }

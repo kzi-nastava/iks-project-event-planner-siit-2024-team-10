@@ -1,3 +1,21 @@
-<full-calendar
-  [options]="calendarOptions">
-</full-calendar>
+
+<div class="calendar-container">
+  <full-calendar
+    [options]="calendarOptions">
+  </full-calendar>
+  <div class="calendar-legend">
+    <div class="legend-item">
+      <span class="legend-color" [style.backgroundColor]="getCalendarItemColor('ACCEPTED_EVENT')"></span>
+      <span>Accepted Event</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-color" [style.backgroundColor]="getCalendarItemColor('CREATED_EVENT')"></span>
+      <span>Created Event</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-color" [style.backgroundColor]="getCalendarItemColor('RESERVATION')"></span>
+      <span>Reservation</span>
+    </div>
+  </div>
+</div>
+

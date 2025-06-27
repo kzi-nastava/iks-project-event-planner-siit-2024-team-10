@@ -23,11 +23,6 @@ export class CalendarComponent implements OnInit {
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin],
     initialView: 'dayGridMonth',
-    events: [{title: 'Project Meeting',
-    start: '2025-07-27T10:00:00',
-    end: '2025-07-27T12:30:00',
-      url:'event/3'
-    }],
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
@@ -46,7 +41,8 @@ export class CalendarComponent implements OnInit {
             start:calendarItem.startTime,
             end:calendarItem.endTime,
             url:'event/'+calendarItem.eventId,
-            allDay:calendarItem.type=='CREATED_EVENT'||calendarItem.type=='ACCEPTED_EVENT'
+            allDay:calendarItem.type=='CREATED_EVENT'||calendarItem.type=='ACCEPTED_EVENT',
+            backgroundColor:this.getCalendarItemColor(calendarItem.type)
           });
         }
         this.calendarOptions.events=events;
@@ -56,5 +52,15 @@ export class CalendarComponent implements OnInit {
         console.error('Error fetching calendar:', err);
       }
     });
+  }
+
+  getCalendarItemColor(itemType:string):string{
+    if(itemType=='ACCEPTED_EVENT')
+      return 'red'
+    if(itemType=='CREATED_EVENT')
+      return 'green'
+    if(itemType=='RESERVATION')
+      return 'blue'
+    return 'black'
   }
 }
