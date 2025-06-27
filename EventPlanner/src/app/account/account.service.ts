@@ -6,6 +6,7 @@ import {Event} from '../event/model/event.model';
 import {environment} from '../../env/environment';
 import { Offering } from '../offering/model/offering.model';
 import {PagedResponse} from '../event/model/paged-response.model';
+import {CalendarItem} from '../user/model/calendar-item.model';
 
 @Injectable({
   providedIn: 'root'
@@ -75,5 +76,9 @@ export class AccountService {
     if(accountId == null)
       return null;
     return this.httpClient.delete<void>(environment.apiHost+'/accounts/'+accountId+'/favourite-events/'+eventId);
+  }
+
+  getCalendar(accountId:number):Observable<CalendarItem[]>{
+    return this.httpClient.get<CalendarItem[]>(environment.apiHost+'/accounts/'+accountId+'/calendar');
   }
 }
