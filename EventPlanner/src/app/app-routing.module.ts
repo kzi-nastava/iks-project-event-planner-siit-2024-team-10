@@ -23,6 +23,8 @@ import {UserDetailsComponent} from './user/user-details/user-details.component';
 import {EditPersonalComponent} from './user/edit-personal/edit-personal.component';
 import {EditCompanyComponent} from './user/edit-company/edit-company.component';
 import {EditEventComponent} from './event/edit-event/edit-event.component';
+import { GuestListComponent } from './event/guest-list/guest-list.component';
+import { AcceptInviteComponent } from './event/accept-invite/accept-invite.component';
 import {FavouritesComponent} from './user/favourites/favourites.component';
 
 const routes: Routes = [
@@ -51,11 +53,14 @@ const routes: Routes = [
     data: {role: ['ADMIN']}},
   {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER']}},
+  { path: 'guest-list/:eventId', component: GuestListComponent, canActivate: [AuthGuard],
+    data: {role: ['EVENT_ORGANIZER']}},
   {path:'edit-event/:id',component:EditEventComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER']}},
   {path:'create-product',component:CreateProductComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   {path:'activate', component: ActivateComponent},
+  {path:'accept-invite', component: AcceptInviteComponent},
   {path:'user-details',component:UserDetailsComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER','PROVIDER','ADMIN','AUTHENTICATED_USER']}},
   {path:'edit-personal',component:EditPersonalComponent, canActivate: [AuthGuard],

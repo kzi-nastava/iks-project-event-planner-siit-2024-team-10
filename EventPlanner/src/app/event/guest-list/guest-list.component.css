@@ -1,0 +1,45 @@
+.guest-list-container {
+  max-width: 800px;
+  margin-top: 2em !important;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.subheading {
+  margin-bottom: 1.5rem;
+  color: #666;
+}
+
+.guest-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.email-input {
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.remove-btn {
+    bottom: 10px;
+}
+
+.add-btn {
+    background-color: #bda6d0 !important;
+    color: white !important;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+}
+
+.dropdown{
+  margin-bottom: 10px;
+}

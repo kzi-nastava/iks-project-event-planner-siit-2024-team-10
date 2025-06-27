@@ -15,6 +15,7 @@ import {UpdateAgendaItemDTO} from './model/update-agenda-item-dto.model';
 import {EventStats} from './model/event.stats.model';
 import {UpdateEventDTO} from './model/update-event-dto.model';
 import {UpdatedEventDTO} from './model/updated-event-dto.model';
+import { GuestList } from './model/guest-list.model';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,10 @@ export class EventService {
 
   getEventStats(eventId:number): Observable<EventStats> {
     return this.httpClient.get<EventStats>(environment.apiHost+'/events/'+eventId+'/stats');
+  }
+
+  getGuestList(eventId: number): Observable<GuestList>{
+    return this.httpClient.get<GuestList>(environment.apiHost + '/events/' + eventId + '/guests');
   }
 
   addParticipant(eventId:number):Observable<EventStats> {
@@ -89,6 +94,14 @@ export class EventService {
     return this.httpClient.get(environment.apiHost + '/events/'+eventId+'/reports/info',{
       responseType: 'blob'
     });
+  }
+
+  sendGuestInvites(eventId: number, guests: string[]) {
+    return this.httpClient.post(environment.apiHost + '/events/' + eventId + '/invite', { guests });
+  } 
+
+  acceptInvite(token: string, email: string) {
+    return this.httpClient.post(environment.apiHost + '/events/accept-invite/' + token, { email });
   }
 
   getPaginatedEvents(
