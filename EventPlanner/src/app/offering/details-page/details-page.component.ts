@@ -25,6 +25,7 @@ import { AccountService } from '../../account/account.service';
 import { MatButtonModule } from '@angular/material/button';
 import { BudgetItemService } from '../../event/budget-item.service';
 import { ProductReservationDialogComponent } from '../product-reservation-dialog/product-reservation-dialog.component';
+import {Offering} from '../model/offering.model';
 
 @Component({
   selector: 'app-details-page',
@@ -38,7 +39,7 @@ import { ProductReservationDialogComponent } from '../product-reservation-dialog
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule,  
+    MatButtonModule,
     MatIconModule,
   ]
 })
@@ -49,7 +50,7 @@ export class DetailsPageComponent implements OnInit {
   activeImage = 0;
   userRating = 0;
   comments: Comment[] = [];
-  isCommentingEnabled = false; 
+  isCommentingEnabled = false;
   isEventOrganizer = false;
   role: string = '';
   isFavourite = false;
@@ -93,7 +94,8 @@ export class DetailsPageComponent implements OnInit {
     this.route.params.pipe(
       switchMap(params => {
         const id = +params['id'];
-        
+        console.log(id);
+
         return this.serviceService.getById(id).pipe(
           catchError(error => {
             console.log('Service not found, trying product service');
@@ -121,14 +123,17 @@ export class DetailsPageComponent implements OnInit {
       this.canEditOffering = this.offering?.provider?.accountId === this.authService.getAccountId();
 
       if (this.offering) {
-        this.accountService.isInFavouriteOfferings(this.offering.id).subscribe({
-          next: (isFavourite: boolean) => {
-            this.isFavourite = isFavourite;
-            console.log('Is favourite:', this.isFavourite);
+        this.accountService.getFavouriteOffering(this.offering.id).subscribe({
+          next: (offering:Offering) => {
+            this.isFavourite = true;
           },
           error: (err) => {
-            this.snackBar.open('Error fetching favourite offerings','OK',{duration:5000});
-            console.error('Error fetching favourite offerings:', err);
+            if(err.status===404)
+              this.isFavourite = false;
+            else{
+              this.snackBar.open('Error fetching favourite offerings','OK',{duration:5000});
+              console.error('Error fetching favourite offerings:', err);
+            }
           }
         });
       }
@@ -185,16 +190,16 @@ setupOffering(offering: Product | Service): void {
     if (!this.isCommentingEnabled) {
       return;
     }
-  
+
     if (this.offering && this.newComment.text && this.newComment.rating) {
       const newComment: CreateCommentDTO = {
         rating: this.newComment.rating,
         content: this.newComment.text,
         account: this.authService.getUserId()
       };
-  
+
       console.log(newComment);
-  
+
       this.commentService.add(newComment, this.offering.id)
         .subscribe({
           next: () => {
@@ -273,7 +278,7 @@ setupOffering(offering: Product | Service): void {
         cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
         isAvailable: this.offering.available || false,
         isVisible: this.offering.visible || false,
-        autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,    
+        autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,
         eventTypes:this.offering.eventTypes
       };
       
@@ -371,11 +376,11 @@ setupOffering(offering: Product | Service): void {
       width: '700px',
       data: { offering: this.offering }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Reservation data:', result);
-        this.isCommentingEnabled = true; 
+        this.isCommentingEnabled = true;
       } else {
         console.log('Dialog closed without reservation.');
       }
@@ -392,7 +397,7 @@ setupOffering(offering: Product | Service): void {
       });
       return;
     }
-    
+
     const sender = this.authService.getAccountId();
     const recipient = this.offering.provider.accountId;
     console.log(sender);
@@ -402,6 +407,6 @@ setupOffering(offering: Product | Service): void {
         loggedInUserId: sender,
         organizerId: recipient
       }
-    });  
+    });
   }
 }

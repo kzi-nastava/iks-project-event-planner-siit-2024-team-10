@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import {AuthService} from '../infrastructure/auth/auth.service';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {catchError, map, Observable, of} from 'rxjs';
 import {Event} from '../event/model/event.model';
 import {environment} from '../../env/environment';
 import { Offering } from '../offering/model/offering.model';
+import {PagedResponse} from '../event/model/paged-response.model';
+import {CalendarItem} from '../user/model/calendar-item.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,21 +16,21 @@ export class AccountService {
   constructor(private authService:AuthService,
               private httpClient:HttpClient) { }
 
-  getFavouriteOfferings(): Observable<Offering[]> {
-    let accountId:number=this.authService.getAccountId();
+  getFavouriteOfferings(page: number, pageSize: number): Observable<PagedResponse<Offering>> {
+    let accountId: number = this.authService.getAccountId();
     if(accountId == null)
-      return of([]);
-    return this.httpClient.get<Offering[]>(environment.apiHost+'/accounts/'+accountId+'/favourite-offerings');
+      return of();
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', pageSize.toString());
+    return this.httpClient.get<PagedResponse<Offering>>(environment.apiHost + '/accounts/' + accountId + '/favourite-offerings', {params});
   }
 
-  isInFavouriteOfferings(offeringId: number): Observable<boolean> {
-    return this.getFavouriteOfferings().pipe(
-      map((offerings: Offering[]) => offerings.some(offering => offering.id === offeringId)),
-      catchError((err) => {
-        console.error('Error fetching favourite offerings:', err);
-        return of(false);
-      })
-    );
+  getFavouriteOffering(offeringId:number): Observable<Offering> {
+    let accountId:number=this.authService.getAccountId();
+    if(accountId == null)
+      return of();
+    return this.httpClient.get<Offering>(environment.apiHost+'/accounts/'+accountId+'/favourite-offerings/'+offeringId);
   }
 
   addOfferingToFavourites(offeringId:number): Observable<void> {
@@ -44,21 +46,22 @@ export class AccountService {
       return null;
     return this.httpClient.delete<void>(environment.apiHost+'/accounts/'+accountId+'/favourite-offerings/'+offeringId);
   }
-  getFavouriteEvents(): Observable<Event[]> {
+
+  getFavouriteEvents(page: number, pageSize: number): Observable<PagedResponse<Event>> {
     let accountId:number=this.authService.getAccountId();
     if(accountId == null)
-      return of([]);
-    return this.httpClient.get<Event[]>(environment.apiHost+'/accounts/'+accountId+'/favourite-events');
+      return of();
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', pageSize.toString());
+    return this.httpClient.get<PagedResponse<Event>>(environment.apiHost+'/accounts/'+accountId+'/favourite-events',{params});
   }
 
-  isInFavouriteEvents(eventId: number): Observable<boolean> {
-    return this.getFavouriteEvents().pipe(
-      map((events: Event[]) => events.some(event => event.id === eventId)),
-      catchError((err) => {
-        console.error('Error fetching favourite events:', err);
-        return of(false);
-      })
-    );
+  getFavouriteEvent(eventId:number): Observable<Event> {
+    let accountId:number=this.authService.getAccountId();
+    if(accountId == null)
+      return of();
+    return this.httpClient.get<Event>(environment.apiHost+'/accounts/'+accountId+'/favourite-events/'+eventId);
   }
 
   addEventToFavourites(eventId:number): Observable<void> {
@@ -73,5 +76,9 @@ export class AccountService {
     if(accountId == null)
       return null;
     return this.httpClient.delete<void>(environment.apiHost+'/accounts/'+accountId+'/favourite-events/'+eventId);
+  }
+
+  getCalendar(accountId:number):Observable<CalendarItem[]>{
+    return this.httpClient.get<CalendarItem[]>(environment.apiHost+'/accounts/'+accountId+'/calendar');
   }
 }

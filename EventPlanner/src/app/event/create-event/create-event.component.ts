@@ -92,7 +92,7 @@ export class CreateEventComponent implements OnInit{
         }
       }
       this.eventService.add(event).subscribe({
-        next: () => {
+        next: (createdEvent) => {
           this.snackBar.open('Event created successfully','OK',{duration:3000});
           this.router.navigate(['home']);
         },

@@ -39,6 +39,9 @@ import { CreateAgendaItemComponent } from './create-agenda-item/create-agenda-it
 import { EditAgendaItemComponent } from './edit-agenda-item/edit-agenda-item.component';
 import { OpenEventReportComponent } from './open-event-report/open-event-report.component';
 import { EditEventComponent } from './edit-event/edit-event.component';
+import { GuestListComponent } from './guest-list/guest-list.component';
+import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
+
 import { AddBudgetItemDialogComponent } from './add-budget-item-dialog/add-budget-item-dialog.component';
 import { MatChipsModule } from '@angular/material/chips'; 
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -57,6 +60,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     EditAgendaItemComponent,
     OpenEventReportComponent,
     EditEventComponent,
+    GuestListComponent,
+    AcceptInviteComponent,
     BudgetManagerComponent,
     AddBudgetItemDialogComponent
   ],

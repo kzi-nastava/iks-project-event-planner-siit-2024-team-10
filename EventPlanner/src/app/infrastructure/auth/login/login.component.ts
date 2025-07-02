@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../../user/user.service';
 import {LoginRequestDto} from '../model/login-request-dto.model';
 import {AuthService} from '../auth.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {LoginResponseDTO} from '../model/login-response-dto.model';
 
 @Component({
@@ -16,8 +16,13 @@ export class LoginComponent {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)])});
   invalidCredentials=false;
+  inviteToken: string;
 
-  constructor(private authService:AuthService, private router:Router) {}
+  constructor(private authService:AuthService, private router:Router, private route: ActivatedRoute) {}
+
+    ngOnInit(): void{
+      this.inviteToken = this.route.snapshot.queryParamMap.get('invitation-token');
+    }
 
   login(){
     if(this.loginForm.valid){
@@ -29,8 +34,12 @@ export class LoginComponent {
         next: (response: LoginResponseDTO) => {
           localStorage.setItem('user', response.accessToken);
           this.authService.setUser()
-          console.log(this.authService)
-          this.router.navigate(['home'])
+          
+          if (this.inviteToken) {
+            this.router.navigate(['/accept-invite'], { queryParams: { 'invitation-token': this.inviteToken } });
+          } else {
+            this.router.navigate(['home']);
+          }
         },
         error:(err)=>{
           this.invalidCredentials = true;

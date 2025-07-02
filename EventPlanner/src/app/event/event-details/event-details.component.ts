@@ -95,9 +95,7 @@ export class EventDetailsComponent implements OnInit {
       const id = +params['id'];
       this.eventService.getEvent(id).subscribe({
         next: (event: Event) => {
-          console.log(event);
           this.event=event;
-          console.log(this.loggedInUserId);
           this.owner=event.organizer.id==this.loggedInUserId;
           this.refreshAgenda();
         },
@@ -106,13 +104,17 @@ export class EventDetailsComponent implements OnInit {
           console.error('Error fetching event:', err);
         }
       });
-      this.accountService.isInFavouriteEvents(id).subscribe({
-        next: (isFavourite: boolean) => {
-          this.isFavourite = isFavourite;
+      this.accountService.getFavouriteEvent(id).subscribe({
+        next: (event:Event) => {
+          this.isFavourite = true;
         },
         error: (err) => {
-          this.snackBar.open('Error fetching favourite event','OK',{duration:5000});
-          console.error('Error fetching favourite event:', err);
+          if(err.status===404)
+            this.isFavourite = false;
+          else{
+            this.snackBar.open('Error fetching favourite event','OK',{duration:5000});
+            console.error('Error fetching favourite event:', err);
+          }
         }
       });
     })
@@ -205,8 +207,8 @@ export class EventDetailsComponent implements OnInit {
         organizerId: recipient
       }
     });
-  }  
-  
+  }
+
 
   addParticipant():void{
     this.eventService.addParticipant(this.event.id).subscribe({
