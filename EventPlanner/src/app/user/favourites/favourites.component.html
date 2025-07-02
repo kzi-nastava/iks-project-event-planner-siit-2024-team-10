@@ -1,0 +1,47 @@
+<div class="all-events">
+  <div class="all-events-section">
+    <h2>Your Favourite Events</h2>
+    <div class="no-events-message" *ngIf="noEventsMessage">
+      <p>{{ noEventsMessage }}</p>
+    </div>
+    <div class="all-event-cards">
+      <app-event-card *ngFor="let event of favouriteEvents" [event]="event"></app-event-card>
+    </div>
+    <p class="total-elements">Total elements: {{ eventPageProperties.totalElements }}</p>
+    <div class="pagination" *ngIf="!noEventsMessage">
+      <button mat-stroked-button (click)="previousEventPage()" [disabled]="eventPageProperties.page === 0">
+        &lt;
+      </button>
+      <p>
+        Page {{ eventPageProperties.page + 1 }} of {{ eventPageProperties.totalPages }}
+      </p>
+      <button mat-stroked-button (click)="nextEventPage()" [disabled]="eventPageProperties.page === eventPageProperties.totalPages - 1">
+        &gt;
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="all-events">
+  <div class="all-events-section">
+    <h2>Your Favourite Offerings</h2>
+    <div class="no-events-message" *ngIf="noOfferingsMessage">
+      <p>{{ noOfferingsMessage }}</p>
+    </div>
+    <div class="all-event-cards">
+      <app-offering-card *ngFor="let offering of favouriteOfferings" [offering]="offering"></app-offering-card>
+    </div>
+    <p class="total-elements">Total elements: {{ offeringPageProperties.totalElements }}</p>
+    <div class="pagination" *ngIf="!noOfferingsMessage">
+      <button mat-stroked-button (click)="previousOfferingPage()" [disabled]="offeringPageProperties.page === 0">
+        &lt;
+      </button>
+      <p>
+        Page {{ offeringPageProperties.page + 1 }} of {{ offeringPageProperties.totalPages }}
+      </p>
+      <button mat-stroked-button (click)="nextOfferingPage()" [disabled]="offeringPageProperties.page === offeringPageProperties.totalPages - 1">
+        &gt;
+      </button>
+    </div>
+  </div>
+</div>
