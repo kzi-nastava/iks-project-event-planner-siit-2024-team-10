@@ -23,6 +23,10 @@ import {UserDetailsComponent} from './user/user-details/user-details.component';
 import {EditPersonalComponent} from './user/edit-personal/edit-personal.component';
 import {EditCompanyComponent} from './user/edit-company/edit-company.component';
 import {EditEventComponent} from './event/edit-event/edit-event.component';
+import { GuestListComponent } from './event/guest-list/guest-list.component';
+import { AcceptInviteComponent } from './event/accept-invite/accept-invite.component';
+import {FavouritesComponent} from './user/favourites/favourites.component';
+import {CalendarComponent} from './user/calendar/calendar.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -50,11 +54,14 @@ const routes: Routes = [
     data: {role: ['ADMIN']}},
   {path:'create-event',component:CreateEventComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER']}},
+  { path: 'guest-list/:eventId', component: GuestListComponent, canActivate: [AuthGuard],
+    data: {role: ['EVENT_ORGANIZER']}},
   {path:'edit-event/:id',component:EditEventComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER']}},
   {path:'create-product',component:CreateProductComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   {path:'activate', component: ActivateComponent},
+  {path:'accept-invite', component: AcceptInviteComponent},
   {path:'user-details',component:UserDetailsComponent, canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER','PROVIDER','ADMIN','AUTHENTICATED_USER']}},
   {path:'edit-personal',component:EditPersonalComponent, canActivate: [AuthGuard],
@@ -62,6 +69,9 @@ const routes: Routes = [
   {path:'edit-company',component:EditCompanyComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   { path: 'chat', component: ChatComponent },
+  {path:'calendar',component:CalendarComponent},
+  { path: 'favourites', component: FavouritesComponent , canActivate: [AuthGuard],
+    data: {role: ['EVENT_ORGANIZER','PROVIDER','ADMIN','AUTHENTICATED_USER']}},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];

@@ -23,6 +23,7 @@ import { ProductService } from '../product.service';
 import { MatIconModule } from "@angular/material/icon";
 import { AccountService } from '../../account/account.service';
 import { MatButtonModule } from '@angular/material/button';
+import {Offering} from '../model/offering.model';
 
 @Component({
   selector: 'app-details-page',
@@ -36,7 +37,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule,  
+    MatButtonModule,
     MatIconModule,
   ]
 })
@@ -47,7 +48,7 @@ export class DetailsPageComponent implements OnInit {
   activeImage = 0;
   userRating = 0;
   comments: Comment[] = [];
-  isCommentingEnabled = false; 
+  isCommentingEnabled = false;
   isEventOrganizer = false;
   role: string = '';
   isFavourite = false;
@@ -84,7 +85,7 @@ export class DetailsPageComponent implements OnInit {
       switchMap(params => {
         const id = +params['id'];
         console.log(id);
-        
+
         return this.serviceService.getById(id).pipe(
           catchError(error => {
             console.log('Service not found, trying product service');
@@ -109,22 +110,25 @@ export class DetailsPageComponent implements OnInit {
         this.images = this.offering.photos;
       }
       this.loadComments();
-      
+
       if (this.offering) {
-        this.accountService.isInFavouriteOfferings(this.offering.id).subscribe({
-          next: (isFavourite: boolean) => {
-            this.isFavourite = isFavourite;
-            console.log('Is favourite:', this.isFavourite);
+        this.accountService.getFavouriteOffering(this.offering.id).subscribe({
+          next: (offering:Offering) => {
+            this.isFavourite = true;
           },
           error: (err) => {
-            this.snackBar.open('Error fetching favourite offerings','OK',{duration:5000});
-            console.error('Error fetching favourite offerings:', err);
+            if(err.status===404)
+              this.isFavourite = false;
+            else{
+              this.snackBar.open('Error fetching favourite offerings','OK',{duration:5000});
+              console.error('Error fetching favourite offerings:', err);
+            }
           }
         });
       }
     });
   }
-  
+
   isService(offering: Product | Service): offering is Service {
     const isService = (offering as Service).specification !== undefined;
     return isService;
@@ -153,16 +157,16 @@ export class DetailsPageComponent implements OnInit {
     if (!this.isCommentingEnabled) {
       return;
     }
-  
+
     if (this.offering && this.newComment.text && this.newComment.rating) {
       const newComment: CreateCommentDTO = {
         rating: this.newComment.rating,
         content: this.newComment.text,
         account: this.authService.getUserId()
       };
-  
+
       console.log(newComment);
-  
+
       this.commentService.add(newComment, this.offering.id)
         .subscribe({
           next: () => {
@@ -241,7 +245,7 @@ export class DetailsPageComponent implements OnInit {
         cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
         isAvailable: this.offering.available || false,
         isVisible: this.offering.visible || false,
-        autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,    
+        autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,
         eventTypes:this.offering.eventTypes
       };
 
@@ -255,7 +259,7 @@ export class DetailsPageComponent implements OnInit {
         this.serviceService.delete(this.offering.id).subscribe(
           () => {
             console.log('Offering deleted successfully');
-            this.router.navigate(['/manage-offerings']); 
+            this.router.navigate(['/manage-offerings']);
           },
           error => {
             console.error('Error deleting offering:', error);
@@ -264,7 +268,7 @@ export class DetailsPageComponent implements OnInit {
       }
     }
   }
-  
+
   viewProviderProfile() {
     if (this.offering && this.offering.provider) {
       this.router.navigate(['/provider', this.offering.provider.id], {
@@ -287,7 +291,7 @@ export class DetailsPageComponent implements OnInit {
     if(!this.isService(this.offering)){
       return
     }
-    
+
     if (!this.authService.isLoggedIn()) {
       this.snackBar.open('Please log in to make a reservation', 'Close', {
         duration: 3000,
@@ -302,11 +306,11 @@ export class DetailsPageComponent implements OnInit {
       width: '700px',
       data: { offering: this.offering }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Reservation data:', result);
-        this.isCommentingEnabled = true; 
+        this.isCommentingEnabled = true;
       } else {
         console.log('Dialog closed without reservation.');
       }
@@ -323,7 +327,7 @@ export class DetailsPageComponent implements OnInit {
       });
       return;
     }
-    
+
     const sender = this.authService.getAccountId();
     const recipient = this.offering.provider.accountId;
     console.log(sender);
@@ -333,6 +337,6 @@ export class DetailsPageComponent implements OnInit {
         loggedInUserId: sender,
         organizerId: recipient
       }
-    });  
+    });
   }
 }

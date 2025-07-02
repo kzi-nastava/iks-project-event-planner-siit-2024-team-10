@@ -9,6 +9,7 @@ import { OfferingModule } from './offering/offering.module';
 import { EventModule } from './event/event.module';
 import { NotificationModule } from './notification/notification.module';
 import { ChatModule } from './chat/chat.module';
+import dayGridPlugin from '@fullcalendar/daygrid';
 
 // Material Imports
 import { MatButtonModule } from '@angular/material/button';
@@ -39,6 +40,7 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {UserModule} from './user/user.module';
 import {ProductModule} from './product/product.module';
 import { ProviderProfileComponent } from './provider-profile/provider-profile.component';
+import {FullCalendarModule} from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [

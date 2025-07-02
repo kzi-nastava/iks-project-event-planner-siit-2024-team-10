@@ -142,5 +142,8 @@
     <button class="fab tertiary" *ngIf="(owner||admin)&&event?.open" [routerLink]="['/open-event-report',event.id]">
       <i class="fas fa-chart-line"></i>
     </button>
+    <button class="fab quaternary" *ngIf="owner&&!event?.open" [routerLink]="['/guest-list',event.id]">
+      <mat-icon>group</mat-icon>
+    </button>
   </div>
 </div>

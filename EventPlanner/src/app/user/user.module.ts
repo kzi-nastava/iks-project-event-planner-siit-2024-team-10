@@ -14,6 +14,11 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import {MatDialogActions, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
 import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
+import { FavouritesComponent } from './favourites/favourites.component';
+import {EventModule} from '../event/event.module';
+import {OfferingModule} from '../offering/offering.module';
+import { CalendarComponent } from './calendar/calendar.component';
+import {FullCalendarModule} from '@fullcalendar/angular';
 
 
 
@@ -22,7 +27,9 @@ import {MatSelect} from '@angular/material/select';
     UserDetailsComponent,
     EditPersonalComponent,
     EditCompanyComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    FavouritesComponent,
+    CalendarComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +45,10 @@ import {MatSelect} from '@angular/material/select';
     MatDialogContent,
     MatDialogTitle,
     MatOption,
-    MatSelect
+    MatSelect,
+    EventModule,
+    OfferingModule,
+    FullCalendarModule
   ]
 })
 export class UserModule { }
