@@ -53,7 +53,7 @@ export class DetailsPageComponent implements OnInit {
   isCommentingEnabled = false;
   isEventOrganizer = false;
   role: string = '';
-  isFavourite = false;
+  isFavourite:boolean=false;
   loggedInUserId:number;
   canEditOffering: boolean = false;
   newComment = {
@@ -156,9 +156,18 @@ setupOffering(offering: Product | Service): void {
 
   this.loadComments();
 
-  this.accountService.isInFavouriteOfferings(offering.id).subscribe({
-    next: (isFav) => this.isFavourite = isFav,
-    error: () => this.snackBar.open('Error fetching favourites', 'Close', { duration: 3000 })
+  this.accountService.getFavouriteOffering(offering.id).subscribe({
+    next: (offering:Offering) => {
+      this.isFavourite = true;
+    },
+    error: (err) => {
+      if(err.status===404)
+        this.isFavourite = false;
+      else{
+        this.snackBar.open('Error fetching favourite offering','OK',{duration:5000});
+        console.error('Error fetching favourite offering:', err);
+      }
+    }
   });
 }
 
