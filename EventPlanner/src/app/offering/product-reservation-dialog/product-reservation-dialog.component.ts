@@ -72,7 +72,7 @@ export class ProductReservationDialogComponent implements OnInit {
               if (success) {
                 this.snackBar.open('Product successfully added to budget.', 'OK', { duration: 5000 });
               } else {
-                this.snackBar.open('Product not purchased', 'warning', { duration: 5000 });
+                this.snackBar.open('Product not purchased', 'Close', { duration: 5000 });
               }
               this.dialogRef.close(success);
             },

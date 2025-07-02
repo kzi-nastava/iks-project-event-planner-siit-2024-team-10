@@ -12,10 +12,6 @@ export class BudgetItemService {
   
   constructor(private httpClient: HttpClient) { }
 
-  getAll() : Observable<BudgetItem[]> {
-    return this.httpClient.get<BudgetItem[]>(environment.apiHost + `/events/budget`);
-  }
-
   add(budgetItem:CreateBudgetItemDTO) : Observable<BudgetItem> {
     return this.httpClient.post<BudgetItem>(environment.apiHost + "/events/" + budgetItem.eventId + "/budget", budgetItem);
   }
