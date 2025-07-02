@@ -24,9 +24,9 @@ export class CategoryService {
     return this.httpClient.put<Category>(environment.apiHost + "/categories/"+category.id, category);
   }
   
-  delete(id:number):Observable<Category>{
-    return this.httpClient.delete<Category>(environment.apiHost + "/categories/"+id);
-  }
+  delete(id: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(environment.apiHost + "/categories/" + id);
+  }  
   approve(id:number):Observable<Category>{
     return this.httpClient.put<Category>(environment.apiHost + "/categories/"+id+'/approve',null);
   }

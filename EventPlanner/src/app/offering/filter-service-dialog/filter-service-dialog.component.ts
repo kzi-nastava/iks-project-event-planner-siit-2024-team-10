@@ -25,7 +25,7 @@ export class FilterServiceDialogComponent {
     private offeringService: OfferingService
   ) {
     this.categories = this.categoryService.getAll().pipe(
-      map(categories => [{ id: -1, name: 'Any' }, ...categories])
+      map(categories => [{ id: -1, name: 'Any', creatorId: -1 }, ...categories])
     );
 
     this.filterForm = this.fb.group({

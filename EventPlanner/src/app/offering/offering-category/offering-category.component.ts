@@ -6,6 +6,11 @@ import { CategoryDialogComponent } from '../category-dialog/category-dialog.comp
 import {Category} from '../model/category.model'; 
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
+import { ChangeCategoryDialogComponent } from '../../change-category-dialog/change-category-dialog.component';
+import { Offering } from '../model/offering.model';
+import { OfferingService } from '../offering-service/offering.service';
+import { AuthService } from '../../infrastructure/auth/auth.service';
+
 @Component({
   selector: 'app-offering-category',
   templateUrl: './offering-category.component.html',
@@ -13,20 +18,25 @@ import {MatSort} from '@angular/material/sort';
 })
 
 export class OfferingCategoryComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'description', 'approve', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'approve', 'actions', 'changeCategory','offerings'];
   dataSource: MatTableDataSource<Category>;
   snackBar:MatSnackBar = inject(MatSnackBar);
+  offeringsByCategory: { [categoryId: number]: Offering[] } = {};
+
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private categoryService: CategoryService,
+    private offeringService: OfferingService,
+    private authService: AuthService,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.refreshDataSource();
+    this.loadOfferingsGroupedByCategory();
   }
-
+  
   private refreshDataSource() {
     this.categoryService.getAll().subscribe({
       next: (categories: Category[]) => {
@@ -48,11 +58,11 @@ export class OfferingCategoryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Automatically set pending to true for new categories
         const newCategory = { 
           ...result, 
           pending: true,
-          deleted: false
+          deleted: false,
+          creatorId: this.authService.getAccountId()
         };
         this.categoryService.add(newCategory).subscribe({
           next: (response) => {
@@ -66,7 +76,6 @@ export class OfferingCategoryComponent implements OnInit {
   }
 
   editCategory(category: Category) {
-    // TODO: notifications
     const dialogRef = this.dialog.open(CategoryDialogComponent, {
       width: '400px',
       data: { mode: 'edit', category: { ...category } }
@@ -86,13 +95,16 @@ export class OfferingCategoryComponent implements OnInit {
   }
 
   deleteCategory(category: Category) {
-    this.categoryService.delete(category.id).subscribe({
-      next: (response) => {
+    this.categoryService.delete(category.id).subscribe(success => {
+      if (success) {
+        this.snackBar.open('Category successfully deleted.', 'OK', { duration: 3000 });
         this.refreshDataSource();
-        this.snackBar.open('Category deleted successfully','OK',{duration:3000});
-      },
-      error: (err) => console.error('Error deleting category:', err),
-    });
+      } else {
+        this.snackBar.open('Category was not deleted because it has related offerings.', 'OK', { duration: 3000 });
+      }
+    }, error => {
+      this.snackBar.open('Category not found.', 'OK', { duration: 3000 });
+    });    
   }
 
   approveCategory(category: Category) {
@@ -107,4 +119,48 @@ export class OfferingCategoryComponent implements OnInit {
       }
     });
   }  
+
+  openChangeCategoryDialog(category: Category) {
+    const dialogRef = this.dialog.open(ChangeCategoryDialogComponent, {
+      width: '400px',
+      data: { currentCategory: category }
+    });
+  
+    dialogRef.afterClosed().subscribe(newCategory => {
+      if (newCategory && newCategory.id !== category.id) {
+        this.offeringService.changeOfferingCategory(category.id, newCategory.id).subscribe({
+          next: () => {
+            this.snackBar.open('Category changed successfully.', 'OK', { duration: 3000 });
+            this.refreshDataSource();
+            this.loadOfferingsGroupedByCategory();
+          },
+          error: () => {
+            this.snackBar.open('Failed to change category.', 'OK', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
+  private loadOfferingsGroupedByCategory() {
+    this.offeringService.getAllNonPaged().subscribe({
+      next: (offerings) => {
+        if (!Array.isArray(offerings)) {
+          console.error('Offerings is not an array!');
+          return;
+        }
+      
+        this.offeringsByCategory = {};
+        for (const offering of offerings) {
+          if (offering.category && !offering.category.deleted) {
+            if (!this.offeringsByCategory[offering.category.id]) {
+              this.offeringsByCategory[offering.category.id] = [];
+            }
+            this.offeringsByCategory[offering.category.id].push(offering);
+          }
+        }
+      }
+      
+    });
+  }
+  
 }
