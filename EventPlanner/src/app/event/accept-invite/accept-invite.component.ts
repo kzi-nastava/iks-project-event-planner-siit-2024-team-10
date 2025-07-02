@@ -29,31 +29,27 @@ export class AcceptInviteComponent implements OnInit {
 
     if (!this.authService.isLoggedIn()) {
       this.router.navigate(['/login'], { queryParams: { 'invitation-token': token } });
-    } else {
-      this.acceptInvite(token);
+      return;
     }
-  }
 
-  acceptInvite(token: string): void {
-    this.email = this.authService.getEmail();
-    this.eventService.acceptInvite(token, this.email).subscribe({
+    const email = this.authService.getEmail();
+
+    this.eventService.processInvitation(token, email).subscribe({
       next: () => {
-        this.snackBar.open('The event invitation has been accepted','OK',{duration:5000});
+        this.snackBar.open('You joined the event!', 'OK', { duration: 5000 });
         this.router.navigate(['/user-details']);
       },
       error: (err) => {
         if (err.status === 400) {
-          // User who is logged in is not the user who clicked the invitation -> Log user out
+          // user mismatch, force re-login
           localStorage.removeItem('user');
           this.authService.setUser();
           this.router.navigate(['/login'], { queryParams: { 'invitation-token': token } });
-        }
-        
-        else {
-          this.snackBar.open('An error occured while trying to accept the request','OK',{duration:5000});
-          this.router.navigate(['/home']);
+        } else {
+          this.snackBar.open('Something went wrong.', 'OK', { duration: 5000 });
         }
       }
     });
   }
+
 }
