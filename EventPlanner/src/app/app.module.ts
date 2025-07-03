@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from './layout/layout.module';
 import { OfferingModule } from './offering/offering.module';
-import { WineModule } from './wine/wine.module';
 import { EventModule } from './event/event.module';
 import { NotificationModule } from './notification/notification.module';
 import { ChatModule } from './chat/chat.module';
@@ -56,7 +55,6 @@ import {FullCalendarModule} from '@fullcalendar/angular';
     BrowserModule,
     AppRoutingModule,
     LayoutModule,
-    WineModule,
     EventModule,
     OfferingModule,
     NotificationModule,

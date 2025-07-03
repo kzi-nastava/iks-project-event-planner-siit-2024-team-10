@@ -28,6 +28,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ReservationDialogComponent } from './reservation-dialog/reservation-dialog.component';
 import { ProductReservationDialogComponent } from './product-reservation-dialog/product-reservation-dialog.component';
+import { MatOptionModule } from '@angular/material/core';
+import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-category-dialog.component';
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
@@ -39,6 +41,7 @@ import { ProductReservationDialogComponent } from './product-reservation-dialog/
     FilterProvidersOfferingsDialogComponent,
     ReservationDialogComponent,
     ProductReservationDialogComponent
+    ChangeCategoryDialogComponent
   ],
   imports: [
     CommonModule,
@@ -61,7 +64,8 @@ import { ProductReservationDialogComponent } from './product-reservation-dialog/
     MatRadioButton, MatRadioGroup,
     MatSliderModule,
     MatButtonToggleModule,
-    DatePipe
+    DatePipe,
+    MatOptionModule
   ],
   exports: [
     ManageOfferingsComponent,

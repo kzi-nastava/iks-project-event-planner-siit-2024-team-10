@@ -3,5 +3,6 @@ export interface Category{
     name: string,
     description?: string,
     deleted?: boolean,
-    pending?: boolean
+    pending?: boolean,
+    creatorId: number;
 }

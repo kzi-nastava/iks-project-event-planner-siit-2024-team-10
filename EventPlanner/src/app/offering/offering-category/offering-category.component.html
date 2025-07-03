@@ -42,6 +42,38 @@
           </mat-cell>
         </ng-container>
         
+        <!-- Change Category Column -->
+        <ng-container matColumnDef="changeCategory">
+          <mat-header-cell *matHeaderCellDef> Change Category </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button 
+              mat-icon-button 
+              color="accent" 
+              (click)="openChangeCategoryDialog(element)"
+              [disabled]="!element.pending || !offeringsByCategory[element.id]?.length"
+            >
+              <mat-icon>swap_horiz</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Offerings Column -->
+        <ng-container matColumnDef="offerings">
+          <mat-header-cell *matHeaderCellDef> Offerings </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div *ngIf="offeringsByCategory[element.id]?.length > 0; else noOfferings">
+              <ul>
+                <li *ngFor="let offering of offeringsByCategory[element.id]">
+                  {{offering.name}}
+                </li>
+              </ul>
+            </div>
+            <ng-template #noOfferings>
+              <span>No offerings</span>
+            </ng-template>
+          </mat-cell>
+        </ng-container>
+
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>

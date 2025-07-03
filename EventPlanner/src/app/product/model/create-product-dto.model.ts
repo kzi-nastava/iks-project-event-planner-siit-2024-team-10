@@ -10,4 +10,5 @@ export interface CreateProductDTO {
   photos:string[];
   visible:boolean;
   available:boolean;
+  creatorId: number;
 }
