@@ -11,6 +11,9 @@ import {RegisterDTO} from './model/register-dto.model';
   providedIn: 'root'
 })
 export class AuthService {
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }  
 
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',

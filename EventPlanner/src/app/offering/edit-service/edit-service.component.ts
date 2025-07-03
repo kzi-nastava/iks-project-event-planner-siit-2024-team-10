@@ -40,10 +40,10 @@ export class EditServiceComponent implements OnInit {
       photos: [[]],
       timeType: ['fixed'], 
       fixedTime: [''],
-      minTime: [''],
-      maxTime: [''],
-      reservationDeadline: [''],
-      cancellationDeadline: [''],
+      minDuration: [''],
+      maxDuration: [''],
+      reservationPeriod: [''],
+      cancellationPeriod: [''],
       isAvailable: [true],
       isVisible: [true]
     });
@@ -60,10 +60,10 @@ export class EditServiceComponent implements OnInit {
       discount: data.discount || 0,
       timeType,
       fixedTime: timeType === 'fixed' ? data.fixedTime : '',
-      minTime: timeType === 'flexible' ? data.minTime : '',
-      maxTime: timeType === 'flexible' ? data.maxTime : '',
-      reservationDeadline: data.reservationPeriod || 0, 
-      cancellationDeadline: data.cancellationPeriod || 0, 
+      minDuration: timeType === 'flexible' ? data.minTime : '',
+      maxDuration: timeType === 'flexible' ? data.maxTime : '',
+      reservationPeriod: data.reservationPeriod || 0, 
+      cancellationPeriod: data.cancellationPeriod || 0, 
       isAvailable: data.isAvailable !== undefined ? data.isAvailable : true,
       isVisible: data.isVisible !== undefined ? data.isVisible : true,
     });
@@ -83,6 +83,7 @@ export class EditServiceComponent implements OnInit {
         ...this.offeringForm.value,
       };
 
+      console.log(formData);
       this.serviceService.edit(formData).subscribe({
         next: (response) => {
           this.snackBar.open('Service edited successfully', 'OK', { 

@@ -27,6 +27,7 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ReservationDialogComponent } from './reservation-dialog/reservation-dialog.component';
+import { ProductReservationDialogComponent } from './product-reservation-dialog/product-reservation-dialog.component';
 import { MatOptionModule } from '@angular/material/core';
 import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-category-dialog.component';
 @NgModule({
@@ -39,6 +40,7 @@ import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-
     FilterProductDialogComponent,
     FilterProvidersOfferingsDialogComponent,
     ReservationDialogComponent,
+    ProductReservationDialogComponent
     ChangeCategoryDialogComponent
   ],
   imports: [
