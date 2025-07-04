@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {ActivateComponent} from './activate/activate.component';
+import { NotificationService } from '../../notification/notification.service';
 
 
 
@@ -9,7 +10,8 @@ import {ActivateComponent} from './activate/activate.component';
     ActivateComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    NotificationService
   ]
 })
 export class AuthModule { }
