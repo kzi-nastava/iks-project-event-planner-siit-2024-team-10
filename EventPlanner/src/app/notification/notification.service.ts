@@ -22,20 +22,32 @@ export class NotificationService {
   constructor(private httpClient: HttpClient) {}
 
   connectToNotificationSocket(accountId: number) {
-  const socket = new SockJS('http://localhost:8080/socket');
-  this.stompClient = Stomp.over(socket);
+    const socket = new SockJS('http://localhost:8080/socket');
+    this.stompClient = Stomp.over(socket);
 
-  this.stompClient.connect({}, () => {
-    const topic = `/socket-publisher/notifications/${accountId}`;
-    this.stompClient.subscribe(topic, (message: { body: string }) => {
-      const notification: AppNotification = JSON.parse(message.body);
-      this.notificationsSubject.next([notification]);
-      this.checkUnreadState(notification);
+    this.hasUnreadNotifications(accountId).subscribe((hasUnread: boolean) => {
+      this._hasUnreadNotifications.next(hasUnread);
     });
-  });
+
+    this.stompClient.connect({}, () => {
+      const topic = `/socket-publisher/notifications/${accountId}`;
+      this.stompClient.subscribe(topic, (message: { body: string }) => {
+        const notification: AppNotification = JSON.parse(message.body);
+        this.notificationsSubject.next([notification]);
+        this.checkUnreadState(notification);
+      });
+    });
   }
 
-  private checkUnreadState(newNotification: AppNotification) {
+  disconnectSocket(): void {
+    if (this.stompClient && this.stompClient.connected) {
+      this.stompClient.disconnect(() => {
+        console.log('WebSocket disconnected');
+      });
+    }
+  }
+
+  checkUnreadState(newNotification: AppNotification) {
     if (!newNotification.read) {
       this._hasUnreadNotifications.next(true);
     }
@@ -65,5 +77,9 @@ export class NotificationService {
   
   toggleNotifications(accountId: number): Observable<void> {
     return this.httpClient.put<void>(`${environment.apiHost}/notifications/${accountId}/change-toggle`, null);
+  }
+
+  hasUnreadNotifications(accountId: number): Observable<boolean> {
+    return this.httpClient.get<boolean>(`${environment.apiHost}/notifications/${accountId}/has-unread`);
   }
 }
