@@ -28,6 +28,7 @@ import { GuestListComponent } from './event/guest-list/guest-list.component';
 import { AcceptInviteComponent } from './event/accept-invite/accept-invite.component';
 import {FavouritesComponent} from './user/favourites/favourites.component';
 import {CalendarComponent} from './user/calendar/calendar.component';
+import { ReservationConfirmationComponent } from './offering/reservation-confirmation/reservation-confirmation.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -75,6 +76,8 @@ const routes: Routes = [
   {path:'calendar',component:CalendarComponent},
   { path: 'favourites', component: FavouritesComponent , canActivate: [AuthGuard],
     data: {role: ['EVENT_ORGANIZER','PROVIDER','ADMIN','AUTHENTICATED_USER']}},
+  { path: 'reservation-confirmation', component: ReservationConfirmationComponent, canActivate: [AuthGuard],
+    data: {role: ['PROVIDER']}},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];
