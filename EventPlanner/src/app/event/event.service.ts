@@ -105,9 +105,9 @@ export class EventService {
     return this.httpClient.post(environment.apiHost + '/events/' + eventId + '/invite', { guests });
   } 
 
-  acceptInvite(token: string, email: string) {
-    return this.httpClient.post(environment.apiHost + '/events/accept-invite/' + token, { email });
-  }
+  processInvitation(token: string, email: string) {
+  return this.httpClient.post<void>(environment.apiHost + '/events/process-invitation?invitation-token=' + token, { email });
+}
 
   getPaginatedEvents(
     page: number,
