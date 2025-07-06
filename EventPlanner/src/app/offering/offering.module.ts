@@ -16,7 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon'; 
+import { MatIconModule } from '@angular/material/icon';
 import { CreateOfferingsComponent } from './create-offerings/create-offerings.component';
 import { EditServiceComponent } from './edit-service/edit-service.component';
 import { FilterServiceDialogComponent } from './filter-service-dialog/filter-service-dialog.component';
@@ -40,7 +40,7 @@ import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-
     FilterProductDialogComponent,
     FilterProvidersOfferingsDialogComponent,
     ReservationDialogComponent,
-    ProductReservationDialogComponent
+    ProductReservationDialogComponent,
     ChangeCategoryDialogComponent
   ],
   imports: [
