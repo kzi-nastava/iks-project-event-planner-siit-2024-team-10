@@ -30,6 +30,9 @@ import { ReservationDialogComponent } from './reservation-dialog/reservation-dia
 import { ProductReservationDialogComponent } from './product-reservation-dialog/product-reservation-dialog.component';
 import { MatOptionModule } from '@angular/material/core';
 import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-category-dialog.component';
+import { ReservationConfirmationComponent } from './reservation-confirmation/reservation-confirmation.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
@@ -40,8 +43,9 @@ import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-
     FilterProductDialogComponent,
     FilterProvidersOfferingsDialogComponent,
     ReservationDialogComponent,
-    ProductReservationDialogComponent
-    ChangeCategoryDialogComponent
+    ProductReservationDialogComponent,
+    ChangeCategoryDialogComponent,
+    ReservationConfirmationComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +69,9 @@ import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-
     MatSliderModule,
     MatButtonToggleModule,
     DatePipe,
-    MatOptionModule
+    MatOptionModule,
+    MatTableModule,
+    MatSortModule
   ],
   exports: [
     ManageOfferingsComponent,
