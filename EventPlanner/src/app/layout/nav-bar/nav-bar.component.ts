@@ -21,6 +21,10 @@ export class NavBarComponent {
       this.role = result;
     })
 
+    if(this.notificationService.hasUnreadNotifications){
+      this.hasUnreadNotifications = true;
+    }
+
     this.notificationService.hasUnreadNotifications$.subscribe(
       (hasUnread) => {
         this.hasUnreadNotifications = hasUnread;
@@ -34,6 +38,7 @@ export class NavBarComponent {
   logout(): void {
     localStorage.removeItem('user');
     this.authService.setUser();
+    this.notificationService.disconnectSocket();
     this.router.navigate(['login']);
   }
 

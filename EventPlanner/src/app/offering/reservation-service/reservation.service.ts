@@ -25,5 +25,15 @@ export class ReservationService {
       })
     );
   }
-  
+  getPendingReservations(accountId: number): Observable<Reservation[]> {
+    return this.httpClient.get<Reservation[]>(environment.apiHost+'/reservations/'+accountId+'/pending');
+  }
+
+  acceptReservation(reservationId: number): Observable<void> {
+  return this.httpClient.put<void>(environment.apiHost + `/reservations/${reservationId}/accept`, {});
+}
+
+  denyReservation(reservationId: number): Observable<void> {
+    return this.httpClient.put<void>(environment.apiHost + `/reservations/${reservationId}/reject`, {});
+  }
 }

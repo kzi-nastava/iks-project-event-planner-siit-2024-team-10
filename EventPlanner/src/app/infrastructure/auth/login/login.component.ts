@@ -5,6 +5,7 @@ import {LoginRequestDto} from '../model/login-request-dto.model';
 import {AuthService} from '../auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LoginResponseDTO} from '../model/login-response-dto.model';
+import { NotificationService } from '../../../notification/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent {
   invalidCredentials=false;
   inviteToken: string;
 
-  constructor(private authService:AuthService, private router:Router, private route: ActivatedRoute) {}
+  constructor(private authService:AuthService, private router:Router, private route: ActivatedRoute, private notificationService: NotificationService) {}
 
     ngOnInit(): void{
       this.inviteToken = this.route.snapshot.queryParamMap.get('invitation-token');
@@ -34,7 +35,7 @@ export class LoginComponent {
         next: (response: LoginResponseDTO) => {
           localStorage.setItem('user', response.accessToken);
           this.authService.setUser()
-          
+          this.notificationService.connectToNotificationSocket(this.authService.getAccountId());
           if (this.inviteToken) {
             this.router.navigate(['/accept-invite'], { queryParams: { 'invitation-token': this.inviteToken } });
           } else {
