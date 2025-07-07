@@ -5,6 +5,9 @@ import { FilterServiceDialogComponent } from '../filter-service-dialog/filter-se
 import { FilterProductDialogComponent } from '../filter-product-dialog/filter-product-dialog.component';
 import { OfferingWarningDialogComponent } from '../../layout/offering-warning-dialog/offering-warning-dialog.component';
 import { ServiceService } from '../service-service/service.service';
+import {AuthService} from '../../infrastructure/auth/auth.service';
+import {OfferingService} from '../offering-service/offering.service';
+import {ComponentType} from '@angular/cdk/overlay';
 @Component({
   selector: 'app-manage-offerings',
   templateUrl: './manage-offerings.component.html',
@@ -12,16 +15,28 @@ import { ServiceService } from '../service-service/service.service';
 })
 export class ManageOfferingsComponent implements OnInit {
   allOfferings: Offering[] = [];
-  displayedOfferings: Offering[] = [];
-  filteredOfferings: Offering[] = [];
-  selectedOfferingType: 'services' | 'products' = 'services';
   noOfferingsMessage: string = '';
+  userId: number = null;
+  accountId: number = null;
+  initialLoad: boolean = true;
+
   sortingDirections = ['Ascending', 'Descending'];
   offeringSortingCriteria = ['None', 'Name', 'Rating', 'City', 'Price'];
+  offeringSortingCriteriaMapping: { [key: string]: string } = {
+    'None': '',
+    'Name': 'name',
+    'Price': 'price',
+    'Rating': 'averageRating',
+    'City': 'location.city'
+  };
 
   selectedSortingDirection: string = 'Ascending';
   selectedOfferingSortingCriteria: string = 'None';
+  selectedOfferingType: 'services' | 'products' | null = null;
+
+  offeringFilters: any = {};
   searchOfferingQuery: string = '';
+
   offeringPageProperties = {
     page: 0,
     pageSize: 6,
@@ -29,91 +44,119 @@ export class ManageOfferingsComponent implements OnInit {
     totalElements: 0,
   };
 
-  constructor(private service: ServiceService, private dialog:MatDialog) {}
+  constructor(
+    private offeringService: OfferingService,
+    private authService: AuthService,
+    private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
+    this.userId = this.authService.getUserId();
+    this.accountId = this.authService.getAccountId();
     this.fetchPaginatedOfferings();
+    this.initialLoad = false;
   }
 
   fetchPaginatedOfferings(): void {
-    const { page, pageSize } = this.offeringPageProperties;
+    const {page, pageSize} = this.offeringPageProperties;
+    if (this.initialLoad) {
+      this.offeringFilters = {...this.offeringFilters, ...{accountId: this.accountId}};
+    } else {
+      delete this.offeringFilters.accountId;
+    }
+    if (this.selectedOfferingType !== null) {
+      this.offeringFilters.isServiceFilter = this.selectedOfferingType === 'services';
+    }
 
-    this.service.getPaginatedOfferings(page, pageSize).subscribe({
+    this.offeringFilters = {...this.offeringFilters, ...{providerId: this.userId}};
+
+    this.offeringService.getPaginatedOfferings(page, pageSize, this.offeringFilters).subscribe({
       next: (response) => {
-        if (response && response.content) {
-          this.allOfferings = response.content.filter(
-            offering => !offering.deleted && !offering.category.pending
-          ) || [];
-          this.filteredOfferings = [...this.allOfferings];
-          this.updateDisplayedOfferings();
-
-          this.offeringPageProperties.totalPages = response.totalPages || 0;
-          this.offeringPageProperties.totalElements = response.totalElements || 0;
-
-        } else {
-          console.warn('Unexpected API response format:', response);
-          this.noOfferingsMessage = 'An error occurred while fetching offerings.';
-        }
+        this.allOfferings = response.content;
+        this.offeringPageProperties.totalPages = response.totalPages;
+        this.offeringPageProperties.totalElements = response.totalElements;
+        this.noOfferingsMessage = this.allOfferings.length ? '' : 'No offerings found.';
       },
-      error: (err) => {
-        console.error('Error fetching paginated offerings:', err);
+      error: () => {
         this.noOfferingsMessage = 'An error occurred while fetching offerings.';
       }
     });
   }
 
-  updateDisplayedOfferings(): void {
-    const { page, pageSize } = this.offeringPageProperties;
-    this.displayedOfferings = this.filteredOfferings.slice(page * pageSize, (page + 1) * pageSize);
+  applySorting(): void {
+    const backendSortBy = this.offeringSortingCriteriaMapping[this.selectedOfferingSortingCriteria];
+    if (backendSortBy) {
+      this.offeringFilters.sortBy = backendSortBy;
+      this.offeringFilters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
+    } else {
+      delete this.offeringFilters.sortBy;
+      delete this.offeringFilters.sortDirection;
+    }
+
+    this.offeringPageProperties.page = 0;
+    this.fetchPaginatedOfferings();
   }
-  
+
+  applyOfferingFilters(newFilters: any): void {
+    this.offeringFilters = { ...this.offeringFilters, ...newFilters };
+    this.offeringPageProperties.page = 0;
+    this.fetchPaginatedOfferings();
+  }
+
+  openFilterDialog(): void {
+    const dialogComponent: ComponentType<any> = this.selectedOfferingType === 'services'
+      ? FilterServiceDialogComponent
+      : this.selectedOfferingType === 'products'
+        ? FilterProductDialogComponent
+        : OfferingWarningDialogComponent;
+
+    const dialogWidth = dialogComponent === OfferingWarningDialogComponent ? '400px' : '600px';
+    const dialogRef = this.dialog.open(dialogComponent, { width: dialogWidth });
+
+    dialogRef.afterClosed().subscribe((newFilters) => {
+      if (newFilters) {
+        this.applyOfferingFilters(newFilters);
+      }
+    });
+  }
+
+  resetOfferingFilter(): void{
+    this.searchOfferingQuery = '';
+    this.offeringFilters = {};
+    this.offeringPageProperties.page = 0;
+    this.fetchPaginatedOfferings();
+  }
+
+  toggleOfferingType(type: 'services' | 'products'): void {
+    this.selectedOfferingType = type;
+    if (type === 'services') {
+      this.offeringFilters.isServiceFilter = true;
+    } else if (type === 'products') {
+      this.offeringFilters.isServiceFilter = false;
+    } else{
+      delete this.offeringFilters.isServiceFilter;
+      this.selectedOfferingType = null;
+    }
+    this.resetOfferingFilter();
+  }
+
+  searchOffering(): void {
+    this.offeringPageProperties.page = 0;
+    this.offeringFilters.name = this.searchOfferingQuery;
+    this.fetchPaginatedOfferings();
+  }
+
   nextOfferingPage(): void {
     if (this.offeringPageProperties.page < this.offeringPageProperties.totalPages - 1) {
       this.offeringPageProperties.page++;
       this.fetchPaginatedOfferings();
     }
   }
-  
+
   previousOfferingPage(): void {
     if (this.offeringPageProperties.page > 0) {
       this.offeringPageProperties.page--;
       this.fetchPaginatedOfferings();
     }
-  }
-  
-  openFilterDialog(): void {
-    if (this.selectedOfferingType === 'services') {
-      this.dialog.open(FilterServiceDialogComponent, {
-        width: '600px',
-      });
-    } else if (this.selectedOfferingType === 'products') {
-      this.dialog.open(FilterProductDialogComponent, {
-        width: '600px',
-      });
-    } else {
-      this.dialog.open(OfferingWarningDialogComponent, {
-        width: '400px',
-      });
-    }
-  }
-  toggleOfferingType(type: 'services' | 'products') {
-    this.selectedOfferingType = type;
-    this.filterOfferings();
-  }
-
-  filterOfferings() {
-    if (this.selectedOfferingType === 'services') {
-      console.log('Filtering Services...');
-    } else if (this.selectedOfferingType === 'products') {
-      console.log('Filtering Products...');
-    } else {
-      console.log('No Offering Type Selected.');
-    }
-  }
-  applySorting(type: 'event' | 'offering') {
-    console.log(`Sorting Offerings by ${this.selectedOfferingSortingCriteria} in ${this.selectedSortingDirection} order.`);
-  }
-  searchOffering() {
-    console.log('Search Query:', this.searchOfferingQuery);
   }
 }
