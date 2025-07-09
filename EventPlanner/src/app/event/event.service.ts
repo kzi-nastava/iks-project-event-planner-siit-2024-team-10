@@ -47,7 +47,7 @@ export class EventService {
   getMyEvents(id: number): Observable<Event[]> {
     const params = new HttpParams().set('accountId', id.toString());
     return this.httpClient.get<Event[]>(`${environment.apiHost}/events/organizers`, { params });
-  }  
+  }
 
   getEventAgenda(eventId:number): Observable<AgendaItem[]> {
     return this.httpClient.get<AgendaItem[]>(environment.apiHost+'/events/'+eventId+'/agenda');
@@ -71,6 +71,10 @@ export class EventService {
 
   update(event:UpdateEventDTO, eventId:number):Observable<UpdatedEventDTO>{
     return this.httpClient.put<UpdatedEventDTO>(environment.apiHost + "/events/"+eventId, event);
+  }
+
+  delete(eventId:number):Observable<void>{
+    return this.httpClient.delete<void>(environment.apiHost + "/events/"+eventId);
   }
 
   addRating(eventId:number,rating:CreateEventRatingDTO) : Observable<CreatedEventRatingDTO> {
@@ -103,7 +107,7 @@ export class EventService {
 
   sendGuestInvites(eventId: number, guests: string[]) {
     return this.httpClient.post(environment.apiHost + '/events/' + eventId + '/invite', { guests });
-  } 
+  }
 
   processInvitation(token: string, email: string) {
   return this.httpClient.post<void>(environment.apiHost + '/events/process-invitation?invitation-token=' + token, { email });
