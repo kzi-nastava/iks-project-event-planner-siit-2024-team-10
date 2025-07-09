@@ -136,14 +136,18 @@
     <button class="fab" (click)="exportToPdf()">
       <i class="fas fa-file-pdf"></i>
     </button>
-    <button class="fab secondary" *ngIf="owner" [routerLink]="['/edit-event',event.id]">
-      <mat-icon>create</mat-icon>
-    </button>
-    <button class="fab tertiary" *ngIf="(owner||admin)&&event?.open" [routerLink]="['/open-event-report',event.id]">
+    <button class="fab secondary" *ngIf="(owner||admin)&&event?.open" [routerLink]="['/open-event-report',event.id]">
       <i class="fas fa-chart-line"></i>
     </button>
-    <button class="fab quaternary" *ngIf="owner&&!event?.open" [routerLink]="['/guest-list',event.id]">
+    <button class="fab secondary" *ngIf="owner&&!event?.open" [routerLink]="['/guest-list',event.id]">
       <mat-icon>group</mat-icon>
+    </button>
+
+    <button class="fab left" *ngIf="owner" [routerLink]="['/edit-event',event.id]">
+      <mat-icon>create</mat-icon>
+    </button>
+    <button class="fab left secondary" *ngIf="owner" (click)="deleteEvent()">
+      <mat-icon>delete</mat-icon>
     </button>
   </div>
 </div>
