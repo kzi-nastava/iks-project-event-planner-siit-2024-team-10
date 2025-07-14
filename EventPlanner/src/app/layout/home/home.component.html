@@ -53,6 +53,9 @@
   <div class="all-events-section">
     <div class="no-events-message" *ngIf="noEventsMessage">
       <p>{{ noEventsMessage }}</p>
+        <button mat-stroked-button (click)="seeAllEvents()">
+           See All Events
+        </button>
     </div>
     <div class="all-event-cards">
       <app-event-card *ngFor="let event of allEvents" [event]="event"></app-event-card>
@@ -133,6 +136,9 @@
   <div class="all-events-section">
     <div class="no-events-message" *ngIf="noOfferingsMessage">
       <p>{{ noOfferingsMessage }}</p>
+      <button mat-stroked-button (click)="seeAllOfferings()">
+           See All Offerings
+        </button>
     </div>
     <div class="all-event-cards">
       <app-offering-card *ngFor="let offering of allOfferings" [offering]="offering"></app-offering-card>
