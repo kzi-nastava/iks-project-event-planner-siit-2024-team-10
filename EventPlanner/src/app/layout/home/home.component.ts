@@ -30,7 +30,8 @@ export class HomeComponent implements OnInit {
   noTopOfferingsMessage: string = '';
   noOfferingsMessage: string = '';
   accountId:number = null;
-  initialLoad:boolean = true;
+  initialLoadEvents: boolean = true;
+  initialLoadOfferings: boolean = true;
 
   sortingDirections = ['Ascending', 'Descending'];
   eventSortingCriteria = ['None', 'Name', 'Date and Time', 'Rating', 'City'];
@@ -95,7 +96,8 @@ export class HomeComponent implements OnInit {
     this.loadTopEvents();
     this.loadTopOfferings();
 
-    this.initialLoad = false;
+    this.initialLoadEvents = true;
+    this.initialLoadOfferings = true;
   }
 
   loadTopEvents(): void {
@@ -154,12 +156,18 @@ export class HomeComponent implements OnInit {
     
 
   applyFilters(newFilters: any): void {
+    if (newFilters) {
+      this.initialLoadEvents = false;
+    }
     this.eventFilters = { ...this.eventFilters, ...newFilters };
     this.eventPageProperties.page = 0;
     this.fetchPaginatedEvents();
   }
 
   applyOfferingFilters(newFilters: any): void {
+    if (newFilters) {
+      this.initialLoadOfferings = false;
+    }
     this.offeringFilters = { ...this.offeringFilters, ...newFilters };
     this.offeringPageProperties.page = 0;
     this.fetchPaginatedOfferings();
@@ -196,6 +204,16 @@ export class HomeComponent implements OnInit {
     this.fetchPaginatedOfferings();
   }
 
+  seeAllEvents(): void{
+    this.initialLoadEvents = false;
+    this.resetEventFilter();
+  }
+
+  seeAllOfferings(): void{
+    this.initialLoadOfferings = false;
+    this.resetOfferingFilter();
+  }
+
   openEventFilterDialog(): void {
     const dialogRef = this.dialog.open(FilterEventsDialogComponent, { width: '600px' });
   
@@ -220,20 +238,28 @@ export class HomeComponent implements OnInit {
   }
 
   searchEvent(): void {
+    if (this.searchEventQuery == ''){
+      return
+    }
     this.eventPageProperties.page = 0;
     this.eventFilters.name = this.searchEventQuery;
+    this.initialLoadEvents = false;
     this.fetchPaginatedEvents();
   }
 
   searchOffering(): void {
+    if (this.searchOfferingQuery == ''){
+      return
+    }
     this.offeringPageProperties.page = 0;
     this.offeringFilters.name = this.searchOfferingQuery;
+    this.initialLoadOfferings = false;
     this.fetchPaginatedOfferings();
   }
 
   fetchPaginatedEvents(): void {
     const { page, pageSize } = this.eventPageProperties;
-    if (this.initialLoad){
+    if (this.initialLoadEvents){
       this.eventFilters = { ...this.eventFilters, ...{accountId: this.accountId} };
     }else{
       delete this.eventFilters.accountId;
@@ -244,6 +270,10 @@ export class HomeComponent implements OnInit {
         this.eventPageProperties.totalPages = response.totalPages;
         this.eventPageProperties.totalElements = response.totalElements;
         this.noEventsMessage = this.allEvents.length ? '' : 'No events found.';
+
+        if(this.noEventsMessage && this.initialLoadEvents){
+          this.noEventsMessage = 'No events found in your area.';
+        }
       },
       error: () => {
         this.noEventsMessage = 'An error occurred while fetching events.';
@@ -254,7 +284,7 @@ export class HomeComponent implements OnInit {
 
   fetchPaginatedOfferings(): void {
     const { page, pageSize } = this.offeringPageProperties;
-    if (this.initialLoad){
+    if (this.initialLoadOfferings){
       this.offeringFilters = { ...this.offeringFilters, ...{accountId: this.accountId} };
     }else{
       delete this.offeringFilters.accountId;
@@ -269,6 +299,10 @@ export class HomeComponent implements OnInit {
         this.offeringPageProperties.totalPages = response.totalPages;
         this.offeringPageProperties.totalElements = response.totalElements;
         this.noOfferingsMessage = this.allOfferings.length ? '' : 'No offerings found.';
+
+        if(this.noOfferingsMessage && this.initialLoadOfferings){
+          this.noOfferingsMessage = 'No offerings found in your area';
+        }
       },
       error: () => {
         this.noOfferingsMessage = 'An error occurred while fetching offerings.';
