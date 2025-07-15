@@ -44,6 +44,7 @@ export class AcceptInviteComponent implements OnInit {
           // user mismatch, force re-login
           localStorage.removeItem('user');
           this.authService.setUser();
+          this.snackBar.open(err.error, 'OK', { duration: 5000 });
           this.router.navigate(['/login'], { queryParams: { 'invitation-token': token } });
         } else {
           this.snackBar.open('Something went wrong.', 'OK', { duration: 5000 });

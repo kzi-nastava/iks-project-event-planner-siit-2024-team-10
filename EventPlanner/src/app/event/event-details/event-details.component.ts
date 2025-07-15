@@ -237,4 +237,26 @@ export class EventDetailsComponent implements OnInit {
       }
     });
   }
+
+  deleteEvent(){
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data:{message:"Are you sure you want to delete this event?"}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.eventService.delete(this.event.id).subscribe({
+          next: () => {
+            this.snackBar.open('Event deleted successfully','OK',{duration:3000});
+            this.router.navigate(['home']);
+          },
+          error: (err) => {
+            console.log(err);
+            this.snackBar.open(err.error,'OK',{duration:3000});
+          }
+        });
+      }
+    });
+  }
 }

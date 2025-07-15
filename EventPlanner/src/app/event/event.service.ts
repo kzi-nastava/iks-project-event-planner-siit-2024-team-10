@@ -73,6 +73,10 @@ export class EventService {
     return this.httpClient.put<UpdatedEventDTO>(environment.apiHost + "/events/"+eventId, event);
   }
 
+  delete(eventId:number):Observable<void>{
+    return this.httpClient.delete<void>(environment.apiHost + "/events/"+eventId);
+  }
+
   addRating(eventId:number,rating:CreateEventRatingDTO) : Observable<CreatedEventRatingDTO> {
     return this.httpClient.post<CreatedEventRatingDTO>(environment.apiHost + "/events/"+eventId+"/ratings", rating);
   }
