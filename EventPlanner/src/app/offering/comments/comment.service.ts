@@ -23,9 +23,17 @@ export class CommentService {
     return this.http.get<Comment[]>(`${this.baseUrl}/offering/${offeringId}/comments`);
   }
 
+  getPendingComments(): Observable<Comment[]> {
+    return this.http.get<Comment[]>(this.baseUrl + '/offerings/comments/pending');
+  }
+
+  approve(commentId: number): Observable<void>{
+    return this.http.get<void>(this.baseUrl + '/offerings/comments/' + commentId +'/approve');
+  }
+
   // Delete a comment
   delete(commentId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${commentId}`);
+    return this.http.delete<void>(this.baseUrl + '/offerings/comments/' + commentId);
   }
 
   // Update a comment
