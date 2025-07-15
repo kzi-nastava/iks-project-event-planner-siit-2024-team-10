@@ -93,4 +93,18 @@ export class GuestListComponent implements OnInit {
       this.guestForm.markAllAsTouched();
     }
   }
+
+  exportToPdf() {
+    this.eventService.generateGuestlistReport(this.eventId).subscribe({
+      next: (pdfBlob: Blob) => {
+        const fileURL = URL.createObjectURL(pdfBlob);
+        window.open(fileURL);
+      },
+      error: (err) => {
+        console.error('Error generating report:', err);
+        this.snackBar.open('Error generating pdf report','OK',{duration:5000});
+        console.error('Error generating pdf report:', err);
+      }
+    });
+  }
 }

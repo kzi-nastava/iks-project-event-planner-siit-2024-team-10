@@ -47,7 +47,7 @@ export class EventService {
   getMyEvents(id: number): Observable<Event[]> {
     const params = new HttpParams().set('accountId', id.toString());
     return this.httpClient.get<Event[]>(`${environment.apiHost}/events/organizers`, { params });
-  }  
+  }
 
   getEventAgenda(eventId:number): Observable<AgendaItem[]> {
     return this.httpClient.get<AgendaItem[]>(environment.apiHost+'/events/'+eventId+'/agenda');
@@ -101,9 +101,15 @@ export class EventService {
     });
   }
 
+  generateGuestlistReport(eventId:number): Observable<Blob> {
+    return this.httpClient.get(environment.apiHost + '/events/'+eventId+'/reports/guestlist',{
+      responseType: 'blob'
+    });
+  }
+
   sendGuestInvites(eventId: number, guests: string[]) {
     return this.httpClient.post(environment.apiHost + '/events/' + eventId + '/invite', { guests });
-  } 
+  }
 
   processInvitation(token: string, email: string) {
   return this.httpClient.post<void>(environment.apiHost + '/events/process-invitation?invitation-token=' + token, { email });
