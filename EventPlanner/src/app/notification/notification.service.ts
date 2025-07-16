@@ -34,7 +34,7 @@ export class NotificationService {
       this.stompClient.subscribe(topic, (message: { body: string }) => {
         const notification: AppNotification = JSON.parse(message.body);
         this.notificationsSubject.next([notification]);
-        this.checkUnreadState(notification);
+        this.checkUnreadState(notification, accountId);
       });
     });
   }
@@ -47,11 +47,15 @@ export class NotificationService {
     }
   }
 
-  checkUnreadState(newNotification: AppNotification) {
-    if (!newNotification.read) {
-      this._hasUnreadNotifications.next(true);
-    }
+ checkUnreadState(newNotification: AppNotification, accountId: number) {
+  if (!newNotification.read) {
+    this.isNotificationsSilenced(accountId).subscribe(isSilenced => {
+      if (!isSilenced) {
+        this._hasUnreadNotifications.next(true);
+      }
+    });
   }
+}
   isNotificationsSilenced(accountId: number): Observable<boolean> {
     return this.httpClient.get<boolean>(`${environment.apiHost}/notifications/${accountId}/toggle`);
   }
