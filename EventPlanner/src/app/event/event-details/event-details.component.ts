@@ -259,4 +259,12 @@ export class EventDetailsComponent implements OnInit {
       }
     });
   }
+
+  reportUser(user: string): void {
+    console.log('Reported user:', user);
+
+    this.snackBar.open('User reported.', 'Close', {
+      duration: 3000
+      });
+  }
 }

@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ChatComponent } from './component/chat.component';
 import { ChatService } from './service/chat.service';
 import { FilterPipe } from './filter-pipe';
+import { MatIcon } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { FilterPipe } from './filter-pipe';
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIcon
   ],
   exports: [
     ChatComponent

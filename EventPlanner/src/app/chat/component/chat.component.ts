@@ -175,4 +175,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.myScrollContainer.nativeElement.scrollHeight;
     } catch(err) {}
   }
+  reportUser(user: string): void {
+    console.log('Reported user:', user);
+  }
 }

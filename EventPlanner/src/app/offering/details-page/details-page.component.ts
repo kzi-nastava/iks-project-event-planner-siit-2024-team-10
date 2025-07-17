@@ -418,4 +418,12 @@ setupOffering(offering: Product | Service): void {
       }
     });
   }
+
+reportUser(user: string): void {
+  console.log('Reported user:', user);
+
+  this.snackBar.open('User reported.', 'Close', {
+    duration: 3000
+    });
+  }
 }

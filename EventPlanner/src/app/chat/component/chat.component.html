@@ -27,6 +27,11 @@
   <div class="chat-container" *ngIf="selectedContactId">
     <div class="chat-header">
       <h3>{{ getSelectedContactName() }}</h3>
+      <div class="report-chatter" *ngIf="getSelectedContactName()">
+            <button class="icon-btn report" (click)="reportUser(getSelectedContactName())" >
+                <mat-icon>flag</mat-icon>
+            </button>
+      </div>
     </div>
     
     <div class="chat-messages" #scrollMe>
