@@ -144,8 +144,8 @@
               </p>
             </div>
           </div>
-          <div class="report-provider">
-            <button class="icon-btn report" (click)="reportUser(offering?.provider?.email)" >
+          <div *ngIf="loggedInAccountId != offering?.provider?.accountId">
+            <button class="icon-btn report" (click)="reportAccount(offering?.provider?.accountId)" >
                 <mat-icon>flag</mat-icon>
             </button>
           </div>    
@@ -182,7 +182,7 @@
             <div class="content-and-report">
               <p class="comment-text">{{ comment.content }}</p>
 
-              <button class="icon-btn report" (click)="reportUser(comment.user)">
+              <button *ngIf="loggedInAccountId != comment.accountId" class="icon-btn report" (click)="reportAccount(comment.accountId)">
                 <mat-icon>flag</mat-icon>
               </button>
             </div>            

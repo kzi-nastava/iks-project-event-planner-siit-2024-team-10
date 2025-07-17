@@ -260,10 +260,10 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  reportUser(user: string): void {
-    console.log('Reported user:', user);
+  reportAccount(accountId: number): void {
+    console.log('Reported account:', accountId);
 
-    this.snackBar.open('User reported.', 'Close', {
+    this.snackBar.open('Account reported.', 'Close', {
       duration: 3000
       });
   }

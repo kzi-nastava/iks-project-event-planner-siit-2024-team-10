@@ -55,6 +55,7 @@ export class DetailsPageComponent implements OnInit {
   role: string = '';
   isFavourite:boolean=false;
   loggedInUserId:number;
+  loggedInAccountId: number;
   canEditOffering: boolean = false;
   newComment = {
     rating: 0,
@@ -72,7 +73,7 @@ export class DetailsPageComponent implements OnInit {
     private budgetItemService: BudgetItemService,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -80,6 +81,8 @@ export class DetailsPageComponent implements OnInit {
       console.log(result);
       this.role = result;
     })
+
+    this.loggedInAccountId = this.authService.getAccountId();
 
     this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
 
@@ -419,11 +422,7 @@ setupOffering(offering: Product | Service): void {
     });
   }
 
-reportUser(user: string): void {
-  console.log('Reported user:', user);
-
-  this.snackBar.open('User reported.', 'Close', {
-    duration: 3000
-    });
+  reportAccount(accountId: number): void {
+    console.log('Reported account:', accountId);
   }
 }
