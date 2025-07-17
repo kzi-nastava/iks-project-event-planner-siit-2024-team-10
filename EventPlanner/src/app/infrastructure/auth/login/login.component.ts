@@ -35,12 +35,29 @@ export class LoginComponent {
         next: (response: LoginResponseDTO) => {
           localStorage.setItem('user', response.accessToken);
           this.authService.setUser()
-          this.notificationService.connectToNotificationSocket(this.authService.getAccountId());
-          if (this.inviteToken) {
-            this.router.navigate(['/accept-invite'], { queryParams: { 'invitation-token': this.inviteToken } });
-          } else {
-            this.router.navigate(['home']);
-          }
+
+          const accountId = this.authService.getAccountId();
+
+          this.authService.getSuspensionStatus(accountId).subscribe({
+            next: (suspension) => {
+              if (suspension.suspended) {
+                alert("Your account is suspended until " + new Date(suspension.suspendedUntil).toLocaleString());
+              } else {
+                this.notificationService.connectToNotificationSocket(accountId);
+                if (this.inviteToken) {
+                  this.router.navigate(['/accept-invite'], {
+                    queryParams: { 'invitation-token': this.inviteToken }
+                  });
+                } else {
+                  this.router.navigate(['home']);
+                }
+              }
+            },
+            error: (err) => {
+              console.error("Suspension status check failed", err);
+              this.router.navigate(['home']);
+            }
+          });
         },
         error:(err)=>{
           this.invalidCredentials = true;
