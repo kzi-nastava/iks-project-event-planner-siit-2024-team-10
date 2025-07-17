@@ -28,12 +28,12 @@ export class CommentService {
   }
 
   approve(commentId: number): Observable<void>{
-    return this.http.get<void>(this.baseUrl + '/offerings/comments/' + commentId +'/approve');
+    return this.http.put<void>(this.baseUrl + '/offerings/comments/' + commentId +'/approve', null);
   }
 
   // Delete a comment
   delete(commentId: number): Observable<void> {
-    return this.http.delete<void>(this.baseUrl + '/offerings/comments/' + commentId);
+    return this.http.put<void>(this.baseUrl + '/offerings/comments/' + commentId +'/reject', null);
   }
 
   // Update a comment
