@@ -40,9 +40,9 @@
       </button>
     </div>
     <div class="navigation-item">
-      <button *ngIf="role!=undefined" mat-icon-button [matMenuTriggerFor]="menu">
+      <button *ngIf="role!=undefined" id="menu-button" mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>menu</mat-icon>
-      </button>
+      </button>      
       <mat-menu #menu="matMenu">
         <app-admin-nav-bar-menu *ngIf="role=='ADMIN'"></app-admin-nav-bar-menu>
         <app-organizer-nav-bar-menu *ngIf="role=='EVENT_ORGANIZER'"></app-organizer-nav-bar-menu>
