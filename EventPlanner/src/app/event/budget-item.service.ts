@@ -15,12 +15,20 @@ export class BudgetItemService {
   add(budgetItem:CreateBudgetItemDTO) : Observable<BudgetItem> {
     return this.httpClient.post<BudgetItem>(environment.apiHost + "/events/" + budgetItem.eventId + "/budget", budgetItem);
   }
-  buy(eventId: number, offeringId: number): Observable<boolean> {
+  buy(eventId: number, offeringId: number, pending: boolean): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      `${environment.apiHost}/events/${eventId}/budget/buy/${offeringId}`, null
+      `${environment.apiHost}/events/${eventId}/budget/buy/${offeringId}`, 
+      false
     );
   }
   
+  canAfford(eventId: number, offeringId: number, pending: boolean): Observable<boolean> {
+    return this.httpClient.put<boolean>(
+      `${environment.apiHost}/events/${eventId}/budget/buy/${offeringId}`, 
+      true
+    );
+  }
+    
   getByEvent(eventId: number): Observable<BudgetItem[]> {
     console.log(environment.apiHost + "/events/budget/" + eventId);
     return this.httpClient.get<BudgetItem[]>(environment.apiHost + "/events/budget/" + eventId);
