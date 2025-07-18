@@ -6,7 +6,7 @@ import {LoginRequestDto} from './model/login-request-dto.model';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {LoginResponseDTO} from './model/login-response-dto.model';
 import {RegisterDTO} from './model/register-dto.model';
-import { SuspensionStatusDTO } from './model/suspension-status-dto.model';
+import { SuspensionStatusDTO } from '../../suspension/model/suspension-status-dto.model';
 
 @Injectable({
   providedIn: 'root'
