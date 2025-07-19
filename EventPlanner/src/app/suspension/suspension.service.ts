@@ -12,7 +12,27 @@ export class SuspensionService {
 
   constructor(private httpClient: HttpClient) {}
 
-  sendReport(report:CreateAccountReportDTO): Observable<AccountReport>{
-    return this.httpClient.post<AccountReport>(environment.apiHost + "/reports", report);
+  sendReport(report: CreateAccountReportDTO): Observable<AccountReport> {
+    return this.httpClient.post<AccountReport>(
+      environment.apiHost + "/reports", report
+    );
+  }
+
+  getAllReports(): Observable<AccountReport[]> {
+    return this.httpClient.get<AccountReport[]>(
+      environment.apiHost + "/reports"
+    );
+  }
+
+  acceptReport(reportId: number): Observable<void> {
+    return this.httpClient.put<void>(
+      environment.apiHost + `/reports/${reportId}/accept`, {}
+    );
+  }
+
+  rejectReport(reportId: number): Observable<void> {
+    return this.httpClient.put<void>(
+      environment.apiHost + `/reports/${reportId}/reject`, {}
+    );
   }
 }
