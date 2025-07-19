@@ -6,6 +6,7 @@ import {AuthService} from '../auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LoginResponseDTO} from '../model/login-response-dto.model';
 import { NotificationService } from '../../../notification/notification.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -18,8 +19,9 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(8)])});
   invalidCredentials=false;
   inviteToken: string;
+  suspensionMessage: string | null = null;
 
-  constructor(private authService:AuthService, private router:Router, private route: ActivatedRoute, private notificationService: NotificationService) {}
+  constructor(private authService:AuthService, private router:Router, private route: ActivatedRoute, private notificationService: NotificationService, private dialog: MatDialog) {}
 
     ngOnInit(): void{
       this.inviteToken = this.route.snapshot.queryParamMap.get('invitation-token');
@@ -37,30 +39,24 @@ export class LoginComponent {
           this.authService.setUser()
 
           const accountId = this.authService.getAccountId();
-
-          this.authService.getSuspensionStatus(accountId).subscribe({
-            next: (suspension) => {
-              if (suspension.suspended) {
-                alert("Your account is suspended until " + new Date(suspension.suspendedUntil).toLocaleString());
-              } else {
-                this.notificationService.connectToNotificationSocket(accountId);
-                if (this.inviteToken) {
-                  this.router.navigate(['/accept-invite'], {
-                    queryParams: { 'invitation-token': this.inviteToken }
-                  });
-                } else {
-                  this.router.navigate(['home']);
-                }
-              }
-            },
-            error: (err) => {
-              console.error("Suspension status check failed", err);
-              this.router.navigate(['home']);
-            }
-          });
+          this.notificationService.connectToNotificationSocket(accountId);
+          if (this.inviteToken) {
+            this.router.navigate(['/accept-invite'], {
+              queryParams: { 'invitation-token': this.inviteToken }
+            });
+          } else {
+            this.router.navigate(['home']);
+          }
         },
-        error:(err)=>{
-          this.invalidCredentials = true;
+        error: (err) => {
+          this.invalidCredentials = false;
+          this.suspensionMessage = null;
+
+          if (err.error?.includes("suspended")) {
+            this.suspensionMessage = err.error.replace(/\n/g, '<br>');
+          } else {
+            this.invalidCredentials = true;
+          }
         }
       })
       console.log(this.authService.getUserId)
