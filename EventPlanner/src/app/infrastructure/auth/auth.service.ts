@@ -6,7 +6,6 @@ import {LoginRequestDto} from './model/login-request-dto.model';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {LoginResponseDTO} from './model/login-response-dto.model';
 import {RegisterDTO} from './model/register-dto.model';
-import { SuspensionStatusDTO } from '../../suspension/model/suspension-status-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -88,7 +87,4 @@ export class AuthService {
     return helper.decodeToken(accessToken).user_id;
   }
 
-  getSuspensionStatus(accountId: number): Observable<SuspensionStatusDTO> {
-  return this.http.get<SuspensionStatusDTO>(environment.apiHost+`/reports/${accountId}/suspension-status`)
-}
 }
