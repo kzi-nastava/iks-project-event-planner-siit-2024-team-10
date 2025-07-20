@@ -1,0 +1,58 @@
+
+<div class="offering-container">
+  <form [formGroup]="editForm" class="elegant-form">
+    <div class="form-header">
+      <h1>Edit Product</h1>
+    </div>
+    <div class="form-section details-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Product Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="4"></textarea>
+      </mat-form-field>
+
+      <div class="price-section">
+        <mat-form-field style="padding-right: 10px;" appearance="outline">
+          <mat-label>Price</mat-label>
+          <input matInput type="number" formControlName="price" placeholder="0.00">
+          <span matSuffix class="currency-suffix">$</span>
+        </mat-form-field>
+
+        <mat-form-field style="padding-left: 10px;" appearance="outline">
+          <mat-label>Discount</mat-label>
+          <input matInput type="number" formControlName="discount" placeholder="0">
+          <span matSuffix class="currency-suffix">%</span>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-section photo-upload">
+      <div class="upload-container">
+        <input type="file" #fileInput multiple (change)="onPhotoUpload()" accept="image/*" class="file-input">
+        <div class="upload-area" (click)="fileInput.click()">
+          <mat-icon class="upload-icon">cloud_upload</mat-icon>
+          <p>Drag & Drop or Click to Upload Photos</p>
+          <small>Maximum 5 images, PNG or JPEG</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section toggles">
+      <h3 class="small-subtitle">Product Availability</h3>
+      <div class="toggle-container">
+        <mat-slide-toggle formControlName="isAvailable" color="primary">Product Available</mat-slide-toggle>
+        <mat-slide-toggle formControlName="isVisible" color="accent">Product Visible</mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="form-section submit-section">
+      <button mat-raised-button color="primary" type="submit" class="submit-btn" (click)="onSubmit()">
+        Edit Product
+      </button>
+    </div>
+  </form>
+</div>
