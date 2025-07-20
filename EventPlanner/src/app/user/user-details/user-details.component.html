@@ -83,6 +83,9 @@
             </div>
         </div>
       <div class="carousel-container" *ngIf="hasCompanyDetails()">
+        <button mat-flat-button (click)="updateCompanyPhotos()" class="primary-button">
+          Update company photos
+        </button>
         <div class="main-image-wrapper">
           <img
             src="{{images[activeImage] || 'placeholder-image.png'}}"

@@ -10,6 +10,7 @@ import {ChangePasswordComponent} from '../change-password/change-password.compon
 import {Router} from '@angular/router';
 import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog.component';
 import {UpdateProfilePhotoComponent} from '../update-profile-photo/update-profile-photo.component';
+import {UpdateCompanyPhotosComponent} from '../update-company-photos/update-company-photos.component';
 
 @Component({
   selector: 'app-user-details',
@@ -95,6 +96,19 @@ export class UserDetailsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.user.profilePhoto=result;
+      }
+    });
+  }
+
+  updateCompanyPhotos(){
+    const dialogRef = this.dialog.open(UpdateCompanyPhotosComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.user.company.photos=result;
+        this.loadImages();
       }
     });
   }
