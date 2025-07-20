@@ -33,6 +33,7 @@ import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-
 import { ReservationConfirmationComponent } from './reservation-confirmation/reservation-confirmation.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { CommentApprovalComponent } from './comment-approval/comment-approval.component';
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
@@ -45,7 +46,8 @@ import { MatSortModule } from '@angular/material/sort';
     ReservationDialogComponent,
     ProductReservationDialogComponent,
     ChangeCategoryDialogComponent,
-    ReservationConfirmationComponent
+    ReservationConfirmationComponent,
+    CommentApprovalComponent
   ],
   imports: [
     CommonModule,
