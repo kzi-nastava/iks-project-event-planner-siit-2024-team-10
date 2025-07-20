@@ -11,6 +11,8 @@ import {UpdatedCompanyDTO} from './model/updated-company-dto.model';
 import {ChangePasswordDto} from './model/change-password-dto.model';
 import {UpdateProfilePhotoDTO} from './model/update-profile-photo-dto.model';
 import {UpdatedProfilePhotoDTO} from './model/updated-profile-photo-dto.model';
+import {UpdateCompanyPhotosDTO} from './model/update-company-photos-dto.model';
+import {UpdatedCompanyPhotosDTO} from './model/updated-company-photos-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +35,10 @@ export class UserService {
 
   updateCompany(accountId:number, updateCompanyDTO:UpdateCompanyDTO):Observable<UpdatedCompanyDTO> {
     return this.httpClient.put<UpdatedCompanyDTO>(environment.apiHost+'/users/'+accountId+'/company', updateCompanyDTO);
+  }
+
+  updateCompanyPhotos(accountId:number, updateCompanyPhotosDTO:UpdateCompanyPhotosDTO):Observable<UpdatedCompanyPhotosDTO> {
+    return this.httpClient.put<UpdatedCompanyPhotosDTO>(environment.apiHost+'/users/'+accountId+'/company/photos', updateCompanyPhotosDTO);
   }
 
   changePassword(accountId:number, changePasswordDto:ChangePasswordDto):Observable<void> {
