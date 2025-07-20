@@ -24,7 +24,12 @@
           </button>
         </div>
       </div>
-      <img src='{{ getProfilePhoto() }}' alt="organizer" class="profile-photo">
+      <div class="header-right">
+        <img src='{{ getProfilePhoto() }}' alt="organizer" class="profile-photo">
+        <button mat-flat-button (click)="updateProfilePhoto()" class="primary-button">
+          Change profile photo
+        </button>
+      </div>
     </div>
     <div class="info-section" *ngIf="hasPersonalDetails()">
         <div class="editable-section">
