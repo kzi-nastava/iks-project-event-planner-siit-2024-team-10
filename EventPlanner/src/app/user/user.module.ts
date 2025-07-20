@@ -20,6 +20,7 @@ import {OfferingModule} from '../offering/offering.module';
 import { CalendarComponent } from './calendar/calendar.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import { UpdateProfilePhotoComponent } from './update-profile-photo/update-profile-photo.component';
+import { UpdateCompanyPhotosComponent } from './update-company-photos/update-company-photos.component';
 
 
 
@@ -31,7 +32,8 @@ import { UpdateProfilePhotoComponent } from './update-profile-photo/update-profi
     ChangePasswordComponent,
     FavouritesComponent,
     CalendarComponent,
-    UpdateProfilePhotoComponent
+    UpdateProfilePhotoComponent,
+    UpdateCompanyPhotosComponent
   ],
   imports: [
     CommonModule,
