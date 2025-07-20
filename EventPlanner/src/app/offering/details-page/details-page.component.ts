@@ -19,13 +19,13 @@ import { CreateCommentDTO } from '../model/create-comment-dto.model';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../../env/environment';
-import { ProductService } from '../product.service';
 import { MatIconModule } from "@angular/material/icon";
 import { AccountService } from '../../account/account.service';
 import { MatButtonModule } from '@angular/material/button';
 import { BudgetItemService } from '../../event/budget-item.service';
 import { ProductReservationDialogComponent } from '../product-reservation-dialog/product-reservation-dialog.component';
 import {Offering} from '../model/offering.model';
+import {ProductService} from '../../product/product.service';
 
 @Component({
   selector: 'app-details-page',
@@ -89,7 +89,7 @@ export class DetailsPageComponent implements OnInit {
   if (passedOffering && passedOffering.id) {
     this.offering = passedOffering;
     this.setupOffering(this.offering);
-  } 
+  }
   else{
     this.route.params.pipe(
       switchMap(params => {
@@ -99,7 +99,7 @@ export class DetailsPageComponent implements OnInit {
         return this.serviceService.getById(id).pipe(
           catchError(error => {
             console.log('Service not found, trying product service');
-            return this.productService.getById(id);
+            return this.productService.get(id);
           })
         );
       }),
@@ -118,7 +118,7 @@ export class DetailsPageComponent implements OnInit {
         this.images = this.offering.photos;
       }
       this.loadComments();
-      
+
       console.log('Offering loaded:', this.offering);
       this.canEditOffering = this.offering?.provider?.accountId === this.authService.getAccountId();
 
@@ -272,26 +272,30 @@ setupOffering(offering: Product | Service): void {
 
   navigateToEdit(): void {
     if (this.offering) {
-      const prefilledData = {
-        id: this.offering.id,
-        serviceCategory: this.offering.category || 'Default Category',
-        name: this.offering.name || '',
-        description: this.offering.description || '',
-        specification: this.isService(this.offering) ? this.offering.specification || '' : '',
-        price: this.offering.price || 0,
-        discount: this.offering.discount || 0,
-        fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
-        minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
-        maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
-        reservationPeriod: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
-        cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
-        isAvailable: this.offering.available || false,
-        isVisible: this.offering.visible || false,
-        autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,
-        eventTypes:this.offering.eventTypes
-      };
-      
-      this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+      if(this.isService(this.offering)) {
+        const prefilledData = {
+          id: this.offering.id,
+          serviceCategory: this.offering.category || 'Default Category',
+          name: this.offering.name || '',
+          description: this.offering.description || '',
+          specification: this.isService(this.offering) ? this.offering.specification || '' : '',
+          price: this.offering.price || 0,
+          discount: this.offering.discount || 0,
+          fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
+          minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
+          maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
+          reservationPeriod: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
+          cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
+          isAvailable: this.offering.available || false,
+          isVisible: this.offering.visible || false,
+          autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,
+          eventTypes:this.offering.eventTypes
+        };
+        this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+      }
+      else {
+        this.router.navigate(['/edit-product',this.offering.id]);
+      }
       }
     }
     deleteOffering(): void {
@@ -323,8 +327,8 @@ setupOffering(offering: Product | Service): void {
         }
       }
     }
-    
-  
+
+
   viewProviderProfile() {
     if (this.offering && this.offering.provider) {
       this.router.navigate(['/provider', this.offering.provider.id], {
@@ -353,13 +357,13 @@ setupOffering(offering: Product | Service): void {
       });
       return;
     }
-    
+
     if (!this.isService(this.offering)) {
       const dialogRef = this.dialog.open(ProductReservationDialogComponent, {
         width: '600px',
         data: { offering: this.offering }
       });
-    
+
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.snackBar.open('Product reserved successfully!', 'Close', { duration: 3000 });
@@ -369,8 +373,8 @@ setupOffering(offering: Product | Service): void {
         }
       });
       return;
-    }    
-    
+    }
+
     if (!this.authService.isLoggedIn()) {
       this.snackBar.open('Please log in to make a reservation', 'Close', {
         duration: 3000,

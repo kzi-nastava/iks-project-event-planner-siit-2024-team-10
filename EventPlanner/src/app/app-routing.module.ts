@@ -30,6 +30,7 @@ import {FavouritesComponent} from './user/favourites/favourites.component';
 import {CalendarComponent} from './user/calendar/calendar.component';
 import { ReservationConfirmationComponent } from './offering/reservation-confirmation/reservation-confirmation.component';
 import { CommentApprovalComponent } from './offering/comment-approval/comment-approval.component';
+import {EditProductComponent} from './product/edit-product/edit-product.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -39,6 +40,8 @@ const routes: Routes = [
   {path:'create-offering',component:CreateOfferingsComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   {path:'edit-service',component:EditServiceComponent, canActivate: [AuthGuard],
+    data: {role: ['PROVIDER']}},
+  {path:'edit-product/:id',component:EditProductComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
   {path:'offering/:id',component:DetailsPageComponent},
   {path: 'provider/:id',
