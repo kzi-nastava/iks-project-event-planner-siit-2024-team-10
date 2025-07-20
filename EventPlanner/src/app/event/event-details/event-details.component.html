@@ -91,7 +91,7 @@
     <div class="organizer-section">
       <div class="organizer-card">
         <div class="organizer-info">
-          <img [src]="event?.organizer?.profilePhoto?event?.organizer?.profilePhoto:'profile_photo.png'" alt="organizer" class="organizer-avatar">
+          <img [src]=getProfilePhoto() alt="organizer" class="organizer-avatar">
           <div class="organizer-details">
             <h3>{{ event?.organizer?.firstName}} {{ event?.organizer?.lastName}}</h3>
             <p class="organizer-location">
