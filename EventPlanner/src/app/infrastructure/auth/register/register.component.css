@@ -55,3 +55,20 @@ form > div {
   border-radius: 5px;
   cursor: pointer;
 }
+
+.photo-upload .upload-area {
+  background: #c0bfbf;
+  border: 2px dashed #9c555d;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.photo-upload {
+  margin:2em;
+}
+
+.upload-area:hover {
+  background: #bb9d98;
+}

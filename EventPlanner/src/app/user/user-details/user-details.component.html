@@ -24,7 +24,12 @@
           </button>
         </div>
       </div>
-      <img src='{{ getProfilePhoto() }}' alt="organizer" class="profile-photo">
+      <div class="header-right">
+        <img src='{{ getProfilePhoto() }}' alt="organizer" class="profile-photo">
+        <button mat-flat-button (click)="updateProfilePhoto()" class="primary-button">
+          Change profile photo
+        </button>
+      </div>
     </div>
     <div class="info-section" *ngIf="hasPersonalDetails()">
         <div class="editable-section">
@@ -78,6 +83,9 @@
             </div>
         </div>
       <div class="carousel-container" *ngIf="hasCompanyDetails()">
+        <button mat-flat-button (click)="updateCompanyPhotos()" class="primary-button">
+          Update company photos
+        </button>
         <div class="main-image-wrapper">
           <img
             src="{{images[activeImage] || 'placeholder-image.png'}}"
