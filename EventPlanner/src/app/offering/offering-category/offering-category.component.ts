@@ -120,15 +120,15 @@ export class OfferingCategoryComponent implements OnInit {
     });
   }  
 
-  openChangeCategoryDialog(category: Category) {
+  openChangeCategoryDialog(offering: Offering) {
     const dialogRef = this.dialog.open(ChangeCategoryDialogComponent, {
       width: '400px',
-      data: { currentCategory: category }
+      data: { currentCategory: offering.category }
     });
   
     dialogRef.afterClosed().subscribe(newCategory => {
-      if (newCategory && newCategory.id !== category.id) {
-        this.offeringService.changeOfferingCategory(category.id, newCategory.id).subscribe({
+      if (newCategory && newCategory.id !== offering.id) {
+        this.offeringService.changeOfferingCategory(offering.id, newCategory.id).subscribe({
           next: () => {
             this.snackBar.open('Category changed successfully.', 'OK', { duration: 3000 });
             this.refreshDataSource();
