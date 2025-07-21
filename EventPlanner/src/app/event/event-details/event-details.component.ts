@@ -16,6 +16,7 @@ import {EventType} from '../model/event-type.model';
 import {EditEventTypeComponent} from '../edit-event-type/edit-event-type.component';
 import {EditAgendaItemComponent} from '../edit-agenda-item/edit-agenda-item.component';
 import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog.component';
+import {environment} from '../../../env/environment';
 import { ReportFormComponent } from '../../suspension/report-form/report-form.component';
 import { SuspensionService } from '../../suspension/suspension.service';
 import { CreateAccountReportDTO } from '../../suspension/model/create-account-report-dto.model';
@@ -264,6 +265,14 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
+  getProfilePhoto():string{
+    if(this.event?.organizer?.profilePhoto==null)
+      return "profile_photo.png"
+    else{
+      const fileName = this.event?.organizer?.profilePhoto.split('\\').pop()?.split('/').pop();
+      return `${environment.apiHost}/images/${fileName}`
+    }
+    
   reportAccount(accountId: number): void {
     this.dialog.open(ReportFormComponent, {
       data: {
