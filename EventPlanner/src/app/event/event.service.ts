@@ -21,9 +21,6 @@ import { GuestList } from './model/guest-list.model';
   providedIn: 'root'
 })
 export class EventService {
-  private eventList: Event[] = [];
-  private topEventList: Event[] = [];
-
   constructor(private httpClient: HttpClient) {}
 
   getAll(): Observable<Event[]> {
