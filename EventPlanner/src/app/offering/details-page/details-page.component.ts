@@ -26,6 +26,7 @@ import { BudgetItemService } from '../../event/budget-item.service';
 import { ProductReservationDialogComponent } from '../product-reservation-dialog/product-reservation-dialog.component';
 import {Offering} from '../model/offering.model';
 import {ProductService} from '../../product/product.service';
+import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-details-page',
@@ -299,33 +300,58 @@ setupOffering(offering: Product | Service): void {
       }
     }
     deleteOffering(): void {
-      if (this.offering) {
-        const confirmation = confirm('Are you sure you want to delete this offering?');
-        if (confirmation) {
-          this.serviceService.delete(this.offering.id).subscribe({
-            next: () => {
-              this.snackBar.open('Offering deleted successfully.', 'OK', {
-                duration: 3000
-              });
-              this.router.navigate(['/manage-offerings']);
-            },
-            error: (error) => {
-              if (error.status === 404) {
-                this.snackBar.open('Service not found.', 'Dismiss', { duration: 3000 });
-              } else if (error.status === 409) {
-                this.snackBar.open('Service cannot be deleted because it has reservations.', 'Dismiss', {
-                  duration: 4000
+      if (!this.offering)
+        return;
+
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '400px',
+        data:{message:"Are you sure you want to delete this offering?"}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          if(this.isService(this.offering)) {
+            this.serviceService.delete(this.offering.id).subscribe({
+              next: () => {
+                this.snackBar.open('Offering deleted successfully.', 'OK', {
+                  duration: 3000
                 });
-              } else {
+                this.router.navigate(['/manage-offerings']);
+              },
+              error: (error) => {
+                if (error.status === 404) {
+                  this.snackBar.open('Service not found.', 'Dismiss', { duration: 3000 });
+                } else if (error.status === 409) {
+                  this.snackBar.open('Service cannot be deleted because it has reservations.', 'Dismiss', {
+                    duration: 4000
+                  });
+                } else {
+                  this.snackBar.open('Failed to delete offering.', 'Dismiss', {
+                    duration: 3000
+                  });
+                }
+                console.error('Error deleting offering:', error);
+              }
+            });
+          }
+          else {
+            this.productService.delete(this.offering.id).subscribe({
+              next: () => {
+                this.snackBar.open('Offering deleted successfully.', 'OK', {
+                  duration: 3000
+                });
+                this.router.navigate(['/manage-offerings']);
+              },
+              error: (error) => {
                 this.snackBar.open('Failed to delete offering.', 'Dismiss', {
                   duration: 3000
                 });
+                console.error('Error deleting offering:', error);
               }
-              console.error('Error deleting offering:', error);
-            }
-          });
+            });
+          }
         }
-      }
+      });
     }
 
 
