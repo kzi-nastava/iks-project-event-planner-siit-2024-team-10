@@ -85,6 +85,9 @@
 .chat-header {
   padding: 20px;
   border-bottom: 1px solid #eee;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .chat-header h3 {
@@ -291,4 +294,20 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 20px;
+  color: #d32f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  color: #b71c1c;
 }

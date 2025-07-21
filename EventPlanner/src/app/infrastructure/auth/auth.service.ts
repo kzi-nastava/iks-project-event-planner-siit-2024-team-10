@@ -86,4 +86,5 @@ export class AuthService {
     const helper = new JwtHelperService();
     return helper.decodeToken(accessToken).user_id;
   }
+
 }

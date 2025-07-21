@@ -346,3 +346,20 @@ textarea.input-field {
   display: flex;
   justify-content: space-between;
 }
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 20px;
+  color: #d32f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  color: #b71c1c;
+}
+
