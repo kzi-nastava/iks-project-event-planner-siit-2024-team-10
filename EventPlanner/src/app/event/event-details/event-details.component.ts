@@ -16,6 +16,9 @@ import {EventType} from '../model/event-type.model';
 import {EditEventTypeComponent} from '../edit-event-type/edit-event-type.component';
 import {EditAgendaItemComponent} from '../edit-agenda-item/edit-agenda-item.component';
 import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog.component';
+import { ReportFormComponent } from '../../suspension/report-form/report-form.component';
+import { SuspensionService } from '../../suspension/suspension.service';
+import { CreateAccountReportDTO } from '../../suspension/model/create-account-report-dto.model';
 
 @Component({
   selector: 'app-event-details',
@@ -39,7 +42,8 @@ export class EventDetailsComponent implements OnInit {
     private accountService: AccountService,
     private authService:AuthService,
     private dialog: MatDialog,
-    private router: Router,) {
+    private router: Router,
+    private reportService: SuspensionService) {
   }
 
   getStarArray(rating: number): number[] {
@@ -254,6 +258,33 @@ export class EventDetailsComponent implements OnInit {
           error: (err) => {
             console.log(err);
             this.snackBar.open(err.error,'OK',{duration:3000});
+          }
+        });
+      }
+    });
+  }
+
+  reportAccount(accountId: number): void {
+    this.dialog.open(ReportFormComponent, {
+      data: {
+        reporterId: this.authService.getAccountId(),
+        reporteeId: accountId
+      }
+    }).afterClosed().subscribe((result: CreateAccountReportDTO) => {
+      if (result) {
+        this.reportService.sendReport(result).subscribe({
+          next: () => {
+            this.snackBar.open('User reported successfully.', 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-success']
+            });
+          },
+          error: (err) => {
+            const errorMsg = err?.error ?? 'Failed to report user.';
+            this.snackBar.open(errorMsg, 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-error']
+            });
           }
         });
       }

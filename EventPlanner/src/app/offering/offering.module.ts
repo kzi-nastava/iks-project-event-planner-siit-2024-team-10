@@ -33,6 +33,7 @@ import { ChangeCategoryDialogComponent } from '../change-category-dialog/change-
 import { ReservationConfirmationComponent } from './reservation-confirmation/reservation-confirmation.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { SuspensionModule } from '../suspension/suspension.module';
 import { CommentApprovalComponent } from './comment-approval/comment-approval.component';
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { CommentApprovalComponent } from './comment-approval/comment-approval.co
     DatePipe,
     MatOptionModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    SuspensionModule
   ],
   exports: [
     ManageOfferingsComponent,

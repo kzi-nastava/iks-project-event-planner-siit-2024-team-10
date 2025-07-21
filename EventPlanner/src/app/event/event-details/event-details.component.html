@@ -115,6 +115,11 @@
               </button>
             </div>
           </div>
+          <div *ngIf="!owner && loggedInUserId">
+            <button class="icon-btn report" (click)="reportAccount(event?.organizer?.id)" >
+                <mat-icon>flag</mat-icon>
+            </button>
+          </div>
         </div>
     </div>
 </div>

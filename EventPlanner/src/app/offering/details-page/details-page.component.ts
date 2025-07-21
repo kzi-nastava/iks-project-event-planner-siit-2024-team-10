@@ -26,6 +26,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { BudgetItemService } from '../../event/budget-item.service';
 import { ProductReservationDialogComponent } from '../product-reservation-dialog/product-reservation-dialog.component';
 import {Offering} from '../model/offering.model';
+import { ReportFormComponent } from '../../suspension/report-form/report-form.component';
+import { SuspensionService } from '../../suspension/suspension.service';
+import { CreateAccountReportDTO } from '../../suspension/model/create-account-report-dto.model';
 
 @Component({
   selector: 'app-details-page',
@@ -55,6 +58,7 @@ export class DetailsPageComponent implements OnInit {
   role: string = '';
   isFavourite:boolean=false;
   loggedInUserId:number;
+  loggedInAccountId: number;
   canEditOffering: boolean = false;
   newComment = {
     rating: 0,
@@ -72,7 +76,8 @@ export class DetailsPageComponent implements OnInit {
     private budgetItemService: BudgetItemService,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private reportService: SuspensionService,
   ) {}
 
   ngOnInit(): void {
@@ -80,6 +85,8 @@ export class DetailsPageComponent implements OnInit {
       console.log(result);
       this.role = result;
     })
+
+    this.loggedInAccountId = this.authService.getAccountId();
 
     this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
 
@@ -418,4 +425,31 @@ setupOffering(offering: Product | Service): void {
       }
     });
   }
+
+  reportAccount(accountId: number): void {
+      this.dialog.open(ReportFormComponent, {
+        data: {
+          reporterId: this.authService.getAccountId(),
+          reporteeId: accountId
+        }
+      }).afterClosed().subscribe((result: CreateAccountReportDTO) => {
+        if (result) {
+          this.reportService.sendReport(result).subscribe({
+            next: () => {
+              this.snackBar.open('User reported successfully.', 'Close', {
+                duration: 3000,
+                panelClass: ['snackbar-success']
+              });
+            },
+            error: (err) => {
+              const errorMsg = err?.error ?? 'Failed to report user.';
+              this.snackBar.open(errorMsg, 'Close', {
+                duration: 3000,
+                panelClass: ['snackbar-error']
+              });
+            }
+          });
+        }
+      });
+    }
 }
