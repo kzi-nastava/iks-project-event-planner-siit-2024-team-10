@@ -34,6 +34,7 @@ import { ReservationConfirmationComponent } from './reservation-confirmation/res
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { SuspensionModule } from '../suspension/suspension.module';
+import { CommentApprovalComponent } from './comment-approval/comment-approval.component';
 @NgModule({
   declarations: [
     ManageOfferingsComponent,
@@ -46,7 +47,8 @@ import { SuspensionModule } from '../suspension/suspension.module';
     ReservationDialogComponent,
     ProductReservationDialogComponent,
     ChangeCategoryDialogComponent,
-    ReservationConfirmationComponent
+    ReservationConfirmationComponent,
+    CommentApprovalComponent
   ],
   imports: [
     CommonModule,
