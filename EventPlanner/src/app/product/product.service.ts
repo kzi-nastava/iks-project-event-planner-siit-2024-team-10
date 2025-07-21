@@ -27,4 +27,8 @@ export class ProductService {
   get(id:number) : Observable<Product> {
     return this.httpClient.get<Product>(environment.apiHost + `/products/` + id);
   }
+
+  delete(id:number):Observable<void>{
+    return this.httpClient.delete<void>(environment.apiHost + "/products/"+id);
+  }
 }
