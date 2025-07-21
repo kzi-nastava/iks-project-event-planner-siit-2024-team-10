@@ -272,6 +272,7 @@ export class EventDetailsComponent implements OnInit {
       const fileName = this.event?.organizer?.profilePhoto.split('\\').pop()?.split('/').pop();
       return `${environment.apiHost}/images/${fileName}`
     }
+  }
     
   reportAccount(accountId: number): void {
     this.dialog.open(ReportFormComponent, {
