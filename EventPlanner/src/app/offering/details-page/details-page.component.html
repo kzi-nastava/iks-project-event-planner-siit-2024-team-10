@@ -144,7 +144,7 @@
               </p>
             </div>
           </div>
-          <div *ngIf="loggedInAccountId != offering?.provider?.accountId">
+          <div *ngIf="loggedInAccountId != offering?.provider?.accountId && loggedInAccountId">
             <button class="icon-btn report" (click)="reportAccount(offering?.provider?.accountId)" >
                 <mat-icon>flag</mat-icon>
             </button>
@@ -182,7 +182,7 @@
             <div class="content-and-report">
               <p class="comment-text">{{ comment.content }}</p>
 
-              <button *ngIf="loggedInAccountId != comment.accountId" class="icon-btn report" (click)="reportAccount(comment.accountId)">
+              <button *ngIf="loggedInAccountId != comment.accountId && loggedInAccountId" class="icon-btn report" (click)="reportAccount(comment.accountId)">
                 <mat-icon>flag</mat-icon>
               </button>
             </div>            
