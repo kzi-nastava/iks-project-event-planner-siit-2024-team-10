@@ -69,6 +69,10 @@ ngOnInit(): void {
 }
 
 onBook(): void {
+  const finalAmount = this.data.offering.discount 
+    ? this.data.offering.price * (1 - this.data.offering.discount / 100)
+    : this.data.offering.price;
+
   if (this.reservationForm.valid) {
     const reservationData = this.reservationForm.value;
     reservationData.endTime = this.reservationForm.get('endTime')?.value; // dont touch this
@@ -102,14 +106,25 @@ onBook(): void {
         this.reservationService.createReservation(reservation).subscribe({
           next: (response: Reservation) => {
             if (response.status == "PENDING"){
-              this.snackBar.open('Reservation request is pending! Email confirmation will been sent.', 'OK', { duration: 5000 });
+              this.budgetItemService.canAfford(reservationData.event.id, this.data.offering.id, true).subscribe({
+                next: (canAfford: boolean) => {
+                  if (canAfford) {
+                    this.snackBar.open('Reservation request is pending! Email confirmation will been sent.', 'OK', { duration: 5000 });
+                  } else {
+                    this.snackBar.open('Not enough budget to record the purchase.', 'OK', { duration: 5000 });
+                  }
+                },
+                error: (error) => {
+                  this.snackBar.open('Not enough budget to record the purchase.', 'OK', { duration: 5000 });
+                }
+              });
             }
             else {
               const finalAmount = this.data.offering.discount 
                 ? this.data.offering.price * (1 - this.data.offering.discount / 100)
                 : this.data.offering.price;
 
-                this.budgetItemService.buy(reservationData.event.id, this.data.offering.id).subscribe({
+                this.budgetItemService.buy(reservationData.event.id, this.data.offering.id,true).subscribe({
                   next: (success: boolean) => {
                     if (success) {
                       this.snackBar.open('Reservation successful! Budget updated. Email confirmation has been sent.', 'OK', { duration: 5000 });
