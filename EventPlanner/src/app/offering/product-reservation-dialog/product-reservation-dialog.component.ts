@@ -77,7 +77,7 @@ export class ProductReservationDialogComponent implements OnInit {
               this.dialogRef.close(success);
             },
             error: (err) => {
-              this.snackBar.open('Error while updating budget.', 'Close', { duration: 5000 });
+              this.snackBar.open(err.error, 'Close', { duration: 5000 });
               console.error(err);
             }
           });          

@@ -9,6 +9,7 @@ import {MatSort} from '@angular/material/sort';
 import { ChangeCategoryDialogComponent } from '../../change-category-dialog/change-category-dialog.component';
 import { Offering } from '../model/offering.model';
 import { OfferingService } from '../offering-service/offering.service';
+import { ChangeOfferingCategoryDTO } from '../model/change-category-dto.model';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 
 @Component({
@@ -127,8 +128,8 @@ export class OfferingCategoryComponent implements OnInit {
     });
   
     dialogRef.afterClosed().subscribe(newCategory => {
-      if (newCategory && newCategory.id !== offering.id) {
-        this.offeringService.changeOfferingCategory(offering.id, newCategory.id).subscribe({
+      if (newCategory && newCategory.id !== offering.category.id) {
+        this.offeringService.changeOfferingCategory(offering.id, { categoryId: newCategory.id }).subscribe({
           next: () => {
             this.snackBar.open('Category changed successfully.', 'OK', { duration: 3000 });
             this.refreshDataSource();
@@ -139,7 +140,7 @@ export class OfferingCategoryComponent implements OnInit {
           }
         });
       }
-    });
+    });    
   }
   private loadOfferingsGroupedByCategory() {
     this.offeringService.getAllNonPaged().subscribe({

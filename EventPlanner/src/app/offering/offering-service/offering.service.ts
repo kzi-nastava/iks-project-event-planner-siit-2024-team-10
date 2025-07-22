@@ -7,6 +7,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import {environment} from '../../../env/environment';
 import { PagedResponse } from '../../event/model/paged-response.model';
 import { Comment } from '../model/comment.model';
+import { ChangeOfferingCategoryDTO } from '../model/change-category-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -89,8 +90,7 @@ export class OfferingService {
     const offering = allOfferings.find(o => o.id === id);
     return of(offering);
   }
-  
-  changeOfferingCategory(offeringId: number, newCategoryId: number): Observable<any> {
-    return this.httpClient.put(environment.apiHost + `/offerings/${offeringId}/category`, { newCategoryId });
-  }
+  changeOfferingCategory(offeringId: number, dto: ChangeOfferingCategoryDTO): Observable<any> {
+    return this.httpClient.put(environment.apiHost + `/offerings/${offeringId}/category`, dto);
+  }  
 }
