@@ -20,6 +20,8 @@ import {environment} from '../../../env/environment';
 import { ReportFormComponent } from '../../suspension/report-form/report-form.component';
 import { SuspensionService } from '../../suspension/suspension.service';
 import { CreateAccountReportDTO } from '../../suspension/model/create-account-report-dto.model';
+import { MapService } from '../map.service';
+import L from 'leaflet';
 
 @Component({
   selector: 'app-event-details',
@@ -36,6 +38,8 @@ export class EventDetailsComponent implements OnInit {
   admin:boolean=false;
   participating:boolean=false;
   snackBar:MatSnackBar = inject(MatSnackBar)
+  map: L.Map;
+  mapAvailable: boolean=true;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,7 +48,8 @@ export class EventDetailsComponent implements OnInit {
     private authService:AuthService,
     private dialog: MatDialog,
     private router: Router,
-    private reportService: SuspensionService) {
+    private reportService: SuspensionService,
+    private mapService: MapService) {
   }
 
   getStarArray(rating: number): number[] {
@@ -103,6 +108,7 @@ export class EventDetailsComponent implements OnInit {
           this.event=event;
           this.owner=event.organizer.id==this.loggedInUserId;
           this.refreshAgenda();
+          this.initMapWithSearch();
         },
         error: (err) => {
           this.snackBar.open('Error fetching event','OK',{duration:5000});
@@ -297,6 +303,46 @@ export class EventDetailsComponent implements OnInit {
             });
           }
         });
+      }
+    });
+  }
+
+  initMapWithSearch(): void {
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'marker-icon-2x.png',
+      iconUrl: 'marker-icon.png',
+      shadowUrl: 'marker-shadow.png'
+    }); 
+
+    const address = this.event.location.street + " " +
+                this.event.location.houseNumber + ", " +
+                this.event.location.city + ", " +
+                this.event.location.country;
+
+    this.mapService.search(address).subscribe({
+      next: (results) => {
+        if (results.length === 0) {
+          this.mapAvailable = false;
+          return;
+        }
+
+        const lat = results[0].lat;
+        const lon = results[0].lon;
+
+        this.map = L.map('eventMap').setView([lat, lon], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(this.map);
+
+        L.marker([lat, lon])
+          .addTo(this.map)
+          .bindPopup(address)
+          .openPopup();
+      },
+      error: (err) => {
+        this.mapAvailable = false;
       }
     });
   }
