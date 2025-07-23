@@ -28,7 +28,8 @@ export class ReservationConfirmationComponent implements OnInit{
   private refreshDataSource() {
     this.service.getPendingReservations(this.accountId).subscribe({
       next: (reservations: Reservation[]) => {
-        reservations.sort((a, b) => a.service.localeCompare(b.service));
+          console.log("Reservations:", reservations); // dodaj ovo
+        reservations.sort((a, b) => a.service.name.localeCompare(b.service.name));
         this.dataSource = new MatTableDataSource<Reservation>(reservations);
         this.dataSource.sort = this.sort;
       },
