@@ -45,6 +45,7 @@ import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
 import { AddBudgetItemDialogComponent } from './add-budget-item-dialog/add-budget-item-dialog.component';
 import { MatChipsModule } from '@angular/material/chips'; 
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { SuspensionModule } from '../suspension/suspension.module';
 
 
 @NgModule({
@@ -100,7 +101,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatButtonToggleGroup,
     MatButtonToggle,
     FormsModule,
-    MatCheckbox
+    MatCheckbox,
+    SuspensionModule
   ],
   exports: [
     EventCardComponent,

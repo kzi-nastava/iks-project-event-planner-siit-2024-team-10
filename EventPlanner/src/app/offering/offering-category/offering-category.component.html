@@ -49,11 +49,12 @@
             <button 
               mat-icon-button 
               color="accent" 
-              (click)="openChangeCategoryDialog(element)"
-              [disabled]="!element.pending || !offeringsByCategory[element.id]?.length"
+              (click)="openChangeCategoryDialog(offeringsByCategory[element.id][0])"
+              [disabled]="!element.pending || (offeringsByCategory[element.id]?.length !== 1)"
             >
               <mat-icon>swap_horiz</mat-icon>
             </button>
+
           </mat-cell>
         </ng-container>
 

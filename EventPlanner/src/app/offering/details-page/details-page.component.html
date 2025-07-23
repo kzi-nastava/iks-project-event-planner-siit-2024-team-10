@@ -144,6 +144,11 @@
               </p>
             </div>
           </div>
+          <div *ngIf="loggedInAccountId != offering?.provider?.accountId && loggedInAccountId">
+            <button class="icon-btn report" (click)="reportAccount(offering?.provider?.accountId)" >
+                <mat-icon>flag</mat-icon>
+            </button>
+          </div>    
         </div>
         <div class="provider-actions">
           <button class="view-profile-btn" (click)="viewProviderProfile()">
@@ -165,7 +170,7 @@
       <!-- Comments list -->
       <div class="comments-list">
         <ng-container *ngIf="comments.length > 0; else noReviews">
-          <div *ngFor="let comment of comments" class="comment-card">
+          <div *ngFor="let comment of comments; let i = index" class="comment-card">
             <div class="comment-header">
               <span class="user-name">{{ comment.user }}</span>
               <div class="stars">
@@ -174,7 +179,13 @@
                 </span>
               </div>
             </div>
-            <p class="comment-text">{{ comment.content }}</p>
+            <div class="content-and-report">
+              <p class="comment-text">{{ comment.content }}</p>
+
+              <button *ngIf="loggedInAccountId != comment.accountId && loggedInAccountId" class="icon-btn report" (click)="reportAccount(comment.accountId)">
+                <mat-icon>flag</mat-icon>
+              </button>
+            </div>            
           </div>
         </ng-container>
         

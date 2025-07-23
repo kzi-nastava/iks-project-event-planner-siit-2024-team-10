@@ -99,7 +99,7 @@ export class BudgetManagerComponent implements OnInit {
       return;
     }
   
-    this.budgetItemService.updateAmount(this.selectedEventId, item.id, item.amount).subscribe({
+    this.budgetItemService.updateAmount(this.selectedEventId, item.id, { amount: item.amount } as UpdateBudgetItemDTO).subscribe({
       next: () => {
         this.snackBar.open('Amount updated', 'Close', { duration: 2000 });
         

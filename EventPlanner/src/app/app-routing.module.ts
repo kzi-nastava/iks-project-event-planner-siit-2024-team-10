@@ -29,6 +29,7 @@ import { AcceptInviteComponent } from './event/accept-invite/accept-invite.compo
 import {FavouritesComponent} from './user/favourites/favourites.component';
 import {CalendarComponent} from './user/calendar/calendar.component';
 import { ReservationConfirmationComponent } from './offering/reservation-confirmation/reservation-confirmation.component';
+import { ReportManagementComponent } from './suspension/report-management/report-management.component';
 import { CommentApprovalComponent } from './offering/comment-approval/comment-approval.component';
 import {EditProductComponent} from './product/edit-product/edit-product.component';
 
@@ -82,6 +83,8 @@ const routes: Routes = [
     data: {role: ['EVENT_ORGANIZER','PROVIDER','ADMIN','AUTHENTICATED_USER']}},
   { path: 'reservation-confirmation', component: ReservationConfirmationComponent, canActivate: [AuthGuard],
     data: {role: ['PROVIDER']}},
+  { path: 'report-management', component: ReportManagementComponent, canActivate: [AuthGuard],
+  data: {role: ['ADMIN']}},
   { path: 'comment-approval', component: CommentApprovalComponent, canActivate: [AuthGuard],
     data: {role: ['ADMIN']}},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
