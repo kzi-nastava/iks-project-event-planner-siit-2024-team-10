@@ -7,6 +7,7 @@ import {environment} from '../../env/environment';
 import { Offering } from '../offering/model/offering.model';
 import {PagedResponse} from '../event/model/paged-response.model';
 import {CalendarItem} from '../user/model/calendar-item.model';
+import { BlockStatusDto } from '../user/model/block-status-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -80,5 +81,23 @@ export class AccountService {
 
   getCalendar(accountId:number):Observable<CalendarItem[]>{
     return this.httpClient.get<CalendarItem[]>(environment.apiHost+'/accounts/'+accountId+'/calendar');
+  }
+
+  blockAccount(accountId: number): Observable<void> {
+    let loggedInAccountId:number=this.authService.getAccountId();
+    if(loggedInAccountId == null)
+      return null;
+    return this.httpClient.post<void>(environment.apiHost+'/accounts/'+loggedInAccountId+'/block/'+accountId, null);
+  }
+
+  unblockAccount(accountId: number): Observable<void> {
+    let loggedInAccountId:number=this.authService.getAccountId();
+    if(loggedInAccountId == null)
+      return null;
+    return this.httpClient.delete<void>(environment.apiHost+'/accounts/'+loggedInAccountId+'/unblock/'+accountId);
+  }
+
+  isAccountBlocked(blockerId: number, blockedId: number): Observable<BlockStatusDto>{
+    return this.httpClient.get<BlockStatusDto>(environment.apiHost+'/accounts/'+blockerId+'/blocked-accounts/'+blockedId);
   }
 }
