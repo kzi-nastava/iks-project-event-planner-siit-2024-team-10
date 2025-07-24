@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewChecked, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChatService } from '../service/chat.service';
 import * as Stomp from 'stompjs';
@@ -19,12 +19,13 @@ export interface ChatContact {
   content?: string;
   timestamp?: Date;
 }
+
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, AfterViewChecked {
+export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   private serverUrl = 'http://localhost:8080/socket';
   private stompClient: any;
   form!: FormGroup;
@@ -33,7 +34,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   messages: Message[] = [];
   contacts: ChatContact[] = []; 
   
-  loggedInUserId: number;
+  loggedInUserId!: number;
   selectedContactId: number | null = null;
   
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
@@ -50,19 +51,27 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     const state = history.state;
     this.loggedInUserId = state.loggedInUserId;
     this.selectedContactId = state.organizerId;
-    this.loadMessages(this.loggedInUserId, this.selectedContactId);
 
-    if(this.loggedInUserId === undefined){
+    if (this.loggedInUserId === undefined) {
       this.loggedInUserId = this.authService.getAccountId();
     }
-    console.log(this.loggedInUserId)
-    console.log(this.selectedContactId)
+
     this.form = new FormGroup({
-    message: new FormControl(null, [Validators.required])
+      message: new FormControl(null, [Validators.required])
     });
 
     this.initializeWebSocketConnection();
     this.loadContacts();
+
+    if (this.selectedContactId) {
+      this.loadMessages(this.loggedInUserId, this.selectedContactId);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.stompClient && this.stompClient.connected) {
+      this.stompClient.disconnect();
+    }
   }
 
   getSelectedContactName(): string {
@@ -74,7 +83,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.socketService.getContacts(this.loggedInUserId).subscribe({
       next: (contacts) => {
         this.contacts = contacts;
-        console.log(contacts)
         if (contacts.length > 0 && !this.selectedContactId) {
           this.selectContact(contacts[0]);
         }
@@ -86,7 +94,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   selectContact(contact: ChatContact) {
-    console.log(contact.user)
     this.selectedContactId = contact.user;
     this.loadMessages(this.loggedInUserId, contact.user);
   }
@@ -96,7 +103,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   loadMessages(senderId: number, receiverId: number) {
-    console.log(senderId,receiverId)
     this.socketService.getMessages(senderId, receiverId).subscribe({
       next: (messages) => {
         this.messages = messages;
@@ -110,28 +116,50 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   sendMessageUsingSocket() {
     if (this.form.valid && this.selectedContactId) {
-      const message: Message = {
-        content: this.form.value.message,
+      const messageContent = this.form.value.message;
+
+      const socketMessage = {
+        fromId: this.loggedInUserId,
+        toId: this.selectedContactId,
+        message: messageContent,
+        timestamp: new Date().toISOString()
+      };
+
+      const createMessage: CreateMessage = {
+        content: messageContent,
+        sender: this.loggedInUserId,
+        receiver: this.selectedContactId
+      };
+
+      // Slanje preko WebSocket-a
+      if (this.stompClient && this.stompClient.connected) {
+        this.stompClient.send("/socket-subscriber/send/message", {}, JSON.stringify(socketMessage));
+      }
+
+      // Odmah prikaži poruku u UI
+      const localMessage: Message = {
+        content: messageContent,
         senderId: this.loggedInUserId,
         receiverId: this.selectedContactId,
         timestamp: new Date()
       };
+      this.messages.push(localMessage);
+      setTimeout(() => this.scrollToBottom(), 100);
 
-      const createMessage: CreateMessage = {
-        content: message.content,
-        sender: message.senderId,
-        receiver: message.receiverId
-      };
-
-      this.stompClient.send("/socket-subscriber/send/message", {}, JSON.stringify(message));
+      // Resetuj formu
       this.form.reset();
 
+      // REST API poziv
       this.socketService.add(createMessage).subscribe({
         next: (response) => {
-          console.log('Message sent successfully:', response);
+          console.log('Message saved to database:', response);
         },
         error: (err) => {
-          console.error('Error sending message:', err);
+          console.error('Error saving message to database:', err);
+          this.snackBar.open('Failed to send message. Please try again.', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error']
+          });
         }
       });
     }
@@ -140,16 +168,33 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   initializeWebSocketConnection() {
     const ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
+
+    this.stompClient.debug = (str: string) => {
+      console.log('STOMP Debug:', str);
+    };
     
-    this.stompClient.connect({}, () => {
-      this.isLoaded = true;
-      this.openGlobalSocket();
-    });
+    this.stompClient.connect({}, 
+      () => {
+        console.log('WebSocket connected successfully');
+        this.isLoaded = true;
+        this.subscribeToUserMessages();
+      },
+      (error: any) => {
+        console.error('WebSocket connection error:', error);
+        this.isLoaded = false;
+        setTimeout(() => {
+          console.log('Retrying WebSocket connection...');
+          this.initializeWebSocketConnection();
+        }, 5000);
+      }
+    );
   }
 
-  openGlobalSocket() {
-    if (this.isLoaded) {
-      this.stompClient.subscribe("/socket-publisher", (message: { body: string }) => {
+  subscribeToUserMessages() {
+    if (this.isLoaded && this.stompClient.connected) {
+      const userTopic = `/socket-publisher/${this.loggedInUserId}`;
+      this.stompClient.subscribe(userTopic, (message: { body: string }) => {
+        console.log(message);
         this.handleResult(message);
       });
     }
@@ -157,15 +202,45 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   handleResult(message: { body: string }) {
     if (message.body) {
-      const messageResult: Message = JSON.parse(message.body);
-      // Only add message if it's part of the current conversation
-      if (this.isPartOfCurrentConversation(messageResult)) {
-        this.messages.push(messageResult);
-        setTimeout(() => this.scrollToBottom(), 100);
+      try {
+        const messageData = JSON.parse(message.body);
+
+        const messageResult: Message = {
+          content: messageData.message || messageData.content,
+          senderId: messageData.fromId || messageData.senderId,
+          receiverId: messageData.toId || messageData.receiverId,
+          timestamp: messageData.timestamp ? new Date(messageData.timestamp) : new Date()
+        };
+
+        if (this.isPartOfCurrentConversation(messageResult)) {
+          const messageExists = this.messages.some(msg => 
+            msg.content === messageResult.content &&
+            msg.senderId === messageResult.senderId &&
+            msg.receiverId === messageResult.receiverId &&
+            Math.abs(new Date(msg.timestamp).getTime() - messageResult.timestamp.getTime()) < 1000
+          );
+
+          if (!messageExists) {
+            this.messages.push(messageResult);
+            setTimeout(() => this.scrollToBottom(), 100);
+          }
+        }
+
+        this.updateContactsDebounced();
+      } catch (error) {
+        console.error('Error parsing WebSocket message:', error);
       }
-      // Refresh contacts list to update latest messages
-      this.loadContacts();
     }
+  }
+
+  private contactUpdateTimeout: any;
+  updateContactsDebounced() {
+    if (this.contactUpdateTimeout) {
+      clearTimeout(this.contactUpdateTimeout);
+    }
+    this.contactUpdateTimeout = setTimeout(() => {
+      this.loadContacts();
+    }, 1000);
   }
 
   isPartOfCurrentConversation(message: Message): boolean {
@@ -174,41 +249,46 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    if (this.messages.length > 0 && this.myScrollContainer) {
+      this.scrollToBottom();
+    }
   }
 
   scrollToBottom(): void {
     try {
-      this.myScrollContainer.nativeElement.scrollTop = 
-        this.myScrollContainer.nativeElement.scrollHeight;
-    } catch(err) {}
+      if (this.myScrollContainer && this.myScrollContainer.nativeElement) {
+        this.myScrollContainer.nativeElement.scrollTop = 
+          this.myScrollContainer.nativeElement.scrollHeight;
+      }
+    } catch(err) {
+      console.error('Error scrolling to bottom:', err);
+    }
   }
 
   reportAccount(accountId: number): void {
-  this.dialog.open(ReportFormComponent, {
-    data: {
-      reporterId: this.loggedInUserId,
-      reporteeId: accountId
-    }
-  }).afterClosed().subscribe((result: CreateAccountReportDTO) => {
-    if (result) {
-      this.reportService.sendReport(result).subscribe({
-        next: () => {
-          this.snackBar.open('User reported successfully.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-success']
-          });
-        },
-        error: (err) => {
-          const errorMsg = err?.error ?? 'Failed to report user.';
-          this.snackBar.open(errorMsg, 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error']
-          });
-        }
-      });
-    }
-  });
-}
-
+    this.dialog.open(ReportFormComponent, {
+      data: {
+        reporterId: this.loggedInUserId,
+        reporteeId: accountId
+      }
+    }).afterClosed().subscribe((result: CreateAccountReportDTO) => {
+      if (result) {
+        this.reportService.sendReport(result).subscribe({
+          next: () => {
+            this.snackBar.open('User reported successfully.', 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-success']
+            });
+          },
+          error: (err) => {
+            const errorMsg = err?.error ?? 'Failed to report user.';
+            this.snackBar.open(errorMsg, 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-error']
+            });
+          }
+        });
+      }
+    });
+  }
 }
