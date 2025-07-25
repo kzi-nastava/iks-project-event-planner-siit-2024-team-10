@@ -19,13 +19,14 @@ import { CreateCommentDTO } from '../model/create-comment-dto.model';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../../env/environment';
-import { ProductService } from '../product.service';
 import { MatIconModule } from "@angular/material/icon";
 import { AccountService } from '../../account/account.service';
 import { MatButtonModule } from '@angular/material/button';
 import { BudgetItemService } from '../../event/budget-item.service';
 import { ProductReservationDialogComponent } from '../product-reservation-dialog/product-reservation-dialog.component';
 import {Offering} from '../model/offering.model';
+import {ProductService} from '../../product/product.service';
+import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog.component';
 import { ReportFormComponent } from '../../suspension/report-form/report-form.component';
 import { SuspensionService } from '../../suspension/suspension.service';
 import { CreateAccountReportDTO } from '../../suspension/model/create-account-report-dto.model';
@@ -96,7 +97,7 @@ export class DetailsPageComponent implements OnInit {
   if (passedOffering && passedOffering.id) {
     this.offering = passedOffering;
     this.setupOffering(this.offering);
-  } 
+  }
   else{
     this.route.params.pipe(
       switchMap(params => {
@@ -106,7 +107,7 @@ export class DetailsPageComponent implements OnInit {
         return this.serviceService.getById(id).pipe(
           catchError(error => {
             console.log('Service not found, trying product service');
-            return this.productService.getById(id);
+            return this.productService.get(id);
           })
         );
       }),
@@ -125,7 +126,7 @@ export class DetailsPageComponent implements OnInit {
         this.images = this.offering.photos;
       }
       this.loadComments();
-      
+
       console.log('Offering loaded:', this.offering);
       this.canEditOffering = this.offering?.provider?.accountId === this.authService.getAccountId();
 
@@ -279,59 +280,88 @@ setupOffering(offering: Product | Service): void {
 
   navigateToEdit(): void {
     if (this.offering) {
-      const prefilledData = {
-        id: this.offering.id,
-        serviceCategory: this.offering.category || 'Default Category',
-        name: this.offering.name || '',
-        description: this.offering.description || '',
-        specification: this.isService(this.offering) ? this.offering.specification || '' : '',
-        price: this.offering.price || 0,
-        discount: this.offering.discount || 0,
-        fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
-        minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
-        maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
-        reservationPeriod: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
-        cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
-        isAvailable: this.offering.available || false,
-        isVisible: this.offering.visible || false,
-        autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,
-        eventTypes:this.offering.eventTypes
-      };
-      
-      this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+      if(this.isService(this.offering)) {
+        const prefilledData = {
+          id: this.offering.id,
+          serviceCategory: this.offering.category || 'Default Category',
+          name: this.offering.name || '',
+          description: this.offering.description || '',
+          specification: this.isService(this.offering) ? this.offering.specification || '' : '',
+          price: this.offering.price || 0,
+          discount: this.offering.discount || 0,
+          fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
+          minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
+          maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
+          reservationPeriod: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
+          cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
+          isAvailable: this.offering.available || false,
+          isVisible: this.offering.visible || false,
+          autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,
+          eventTypes:this.offering.eventTypes
+        };
+        this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+      }
+      else {
+        this.router.navigate(['/edit-product',this.offering.id]);
+      }
       }
     }
     deleteOffering(): void {
-      if (this.offering) {
-        const confirmation = confirm('Are you sure you want to delete this offering?');
-        if (confirmation) {
-          this.serviceService.delete(this.offering.id).subscribe({
-            next: () => {
-              this.snackBar.open('Offering deleted successfully.', 'OK', {
-                duration: 3000
-              });
-              this.router.navigate(['/manage-offerings']);
-            },
-            error: (error) => {
-              if (error.status === 404) {
-                this.snackBar.open('Service not found.', 'Dismiss', { duration: 3000 });
-              } else if (error.status === 409) {
-                this.snackBar.open('Service cannot be deleted because it has reservations.', 'Dismiss', {
-                  duration: 4000
+      if (!this.offering)
+        return;
+
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '400px',
+        data:{message:"Are you sure you want to delete this offering?"}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          if(this.isService(this.offering)) {
+            this.serviceService.delete(this.offering.id).subscribe({
+              next: () => {
+                this.snackBar.open('Offering deleted successfully.', 'OK', {
+                  duration: 3000
                 });
-              } else {
+                this.router.navigate(['/manage-offerings']);
+              },
+              error: (error) => {
+                if (error.status === 404) {
+                  this.snackBar.open('Service not found.', 'Dismiss', { duration: 3000 });
+                } else if (error.status === 409) {
+                  this.snackBar.open('Service cannot be deleted because it has reservations.', 'Dismiss', {
+                    duration: 4000
+                  });
+                } else {
+                  this.snackBar.open('Failed to delete offering.', 'Dismiss', {
+                    duration: 3000
+                  });
+                }
+                console.error('Error deleting offering:', error);
+              }
+            });
+          }
+          else {
+            this.productService.delete(this.offering.id).subscribe({
+              next: () => {
+                this.snackBar.open('Offering deleted successfully.', 'OK', {
+                  duration: 3000
+                });
+                this.router.navigate(['/manage-offerings']);
+              },
+              error: (error) => {
                 this.snackBar.open('Failed to delete offering.', 'Dismiss', {
                   duration: 3000
                 });
+                console.error('Error deleting offering:', error);
               }
-              console.error('Error deleting offering:', error);
-            }
-          });
+            });
+          }
         }
-      }
+      });
     }
-    
-  
+
+
   viewProviderProfile() {
     if (this.offering && this.offering.provider) {
       this.router.navigate(['/provider', this.offering.provider.id], {
@@ -360,13 +390,13 @@ setupOffering(offering: Product | Service): void {
       });
       return;
     }
-    
+
     if (!this.isService(this.offering)) {
       const dialogRef = this.dialog.open(ProductReservationDialogComponent, {
         width: '600px',
         data: { offering: this.offering }
       });
-    
+
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.snackBar.open('Product reserved successfully!', 'Close', { duration: 3000 });
@@ -376,8 +406,8 @@ setupOffering(offering: Product | Service): void {
         }
       });
       return;
-    }    
-    
+    }
+
     if (!this.authService.isLoggedIn()) {
       this.snackBar.open('Please log in to make a reservation', 'Close', {
         duration: 3000,
