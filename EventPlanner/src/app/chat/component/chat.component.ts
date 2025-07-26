@@ -12,6 +12,9 @@ import { ReportFormComponent } from '../../suspension/report-form/report-form.co
 import { SuspensionService } from '../../suspension/suspension.service';
 import { CreateAccountReportDTO } from '../../suspension/model/create-account-report-dto.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../layout/confirm-dialog/confirm-dialog.component';
+import { AccountService } from '../../account/account.service';
+import { firstValueFrom } from 'rxjs';
 
 export interface ChatContact {
   user: number;
@@ -36,6 +39,9 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   
   loggedInUserId!: number;
   selectedContactId: number | null = null;
+
+  isChatterBlocked: boolean = false;
+  chatterBlockedMsg: string = "";
   
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
 
@@ -43,6 +49,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     private socketService: ChatService,
     private authService: AuthService,
     private reportService: SuspensionService,
+    private accountService: AccountService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
@@ -51,13 +58,15 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     const state = history.state;
     this.loggedInUserId = state.loggedInUserId;
     this.selectedContactId = state.organizerId;
+    this.loadMessages(this.loggedInUserId, this.selectedContactId);
 
     if (this.loggedInUserId === undefined) {
       this.loggedInUserId = this.authService.getAccountId();
     }
-
+    console.log(this.loggedInUserId)
+    console.log(this.selectedContactId)
     this.form = new FormGroup({
-      message: new FormControl(null, [Validators.required])
+    message: new FormControl(null, [Validators.required])
     });
 
     this.initializeWebSocketConnection();
@@ -103,6 +112,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   loadMessages(senderId: number, receiverId: number) {
+    this.checkBlockedStatus(senderId, receiverId);
     this.socketService.getMessages(senderId, receiverId).subscribe({
       next: (messages) => {
         this.messages = messages;
@@ -266,22 +276,87 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   reportAccount(accountId: number): void {
-    this.dialog.open(ReportFormComponent, {
-      data: {
-        reporterId: this.loggedInUserId,
-        reporteeId: accountId
-      }
-    }).afterClosed().subscribe((result: CreateAccountReportDTO) => {
-      if (result) {
-        this.reportService.sendReport(result).subscribe({
+  this.dialog.open(ReportFormComponent, {
+    data: {
+      reporterId: this.loggedInUserId,
+      reporteeId: accountId
+    }
+  }).afterClosed().subscribe((result: CreateAccountReportDTO) => {
+    if (result) {
+      this.reportService.sendReport(result).subscribe({
+        next: () => {
+          this.snackBar.open('User reported successfully.', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-success']
+          });
+        },
+        error: (err) => {
+          const errorMsg = err?.error ?? 'Failed to report user.';
+          this.snackBar.open(errorMsg, 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      });
+    }
+  });
+}
+
+blockAccount(accountId: number): void {
+  // Prevent blocking back if the user has already been blocked
+  if (this.chatterBlockedMsg === "You have been blocked by this user") {
+    this.snackBar.open('You cannot block a user who has already blocked you.', 'Close', {
+      duration: 3000,
+      panelClass: ['snackbar-error']
+    });
+    return;
+  }
+
+  const isCurrentlyBlockedByYou = this.chatterBlockedMsg === "You have blocked this user";
+  const dialogMsg = isCurrentlyBlockedByYou
+    ? "Are you sure you want to unblock this account?"
+    : "Are you sure you want to block this account?";
+
+  this.dialog.open(ConfirmDialogComponent, {
+    data: {
+      message: dialogMsg
+    }
+  }).afterClosed().subscribe(result => {
+    if (result) {
+      if (isCurrentlyBlockedByYou) {
+        // Unblock flow
+        this.accountService.unblockAccount(accountId).subscribe({
           next: () => {
-            this.snackBar.open('User reported successfully.', 'Close', {
+            this.snackBar.open('User unblocked successfully.', 'Close', {
               duration: 3000,
               panelClass: ['snackbar-success']
             });
+            if (this.loggedInUserId && this.selectedContactId) {
+              this.checkBlockedStatus(this.loggedInUserId, this.selectedContactId);
+            }
           },
           error: (err) => {
-            const errorMsg = err?.error ?? 'Failed to report user.';
+            const errorMsg = err?.error ?? 'Failed to unblock user.';
+            this.snackBar.open(errorMsg, 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-error']
+            });
+          }
+        });
+      } else {
+        // Block flow
+        this.accountService.blockAccount(accountId).subscribe({
+          next: () => {
+            this.snackBar.open('User blocked successfully.', 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-success']
+            });
+            if (this.loggedInUserId && this.selectedContactId) {
+              this.checkBlockedStatus(this.loggedInUserId, this.selectedContactId);
+            }
+          },
+          error: (err) => {
+            const errorMsg = err?.error ?? 'Failed to block user.';
             this.snackBar.open(errorMsg, 'Close', {
               duration: 3000,
               panelClass: ['snackbar-error']
@@ -289,6 +364,33 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
           }
         });
       }
-    });
-  }
+    }
+  });
+}
+
+  checkBlockedStatus(senderId: number, receiverId: number): void {
+  const blockedByYou$ = this.accountService.isAccountBlocked(senderId, receiverId);
+  const blockedByOther$ = this.accountService.isAccountBlocked(receiverId, senderId);
+
+  Promise.all([
+    firstValueFrom(blockedByYou$),
+    firstValueFrom(blockedByOther$)
+  ]).then(([youBlocked, theyBlocked]) => {
+    if (youBlocked.blocked) {
+      this.chatterBlockedMsg = "You have blocked this user";
+      this.isChatterBlocked = true;
+    } else if (theyBlocked.blocked) {
+      this.chatterBlockedMsg = "You have been blocked by this user";
+      this.isChatterBlocked = true;
+    } else {
+      this.chatterBlockedMsg = "";
+      this.isChatterBlocked = false;
+    }
+  }).catch(err => {
+    console.error('Error checking blocked status:', err);
+    this.chatterBlockedMsg = "";
+    this.isChatterBlocked = false;
+  });
+}
+
 }

@@ -27,14 +27,20 @@
   <div class="chat-container" *ngIf="selectedContactId">
     <div class="chat-header">
       <h3>{{ getSelectedContactName() }}</h3>
-      <div *ngIf="getSelectedContactName()">
-            <button class="icon-btn report" (click)="reportAccount(selectedContactId)" >
+      <div *ngIf="getSelectedContactName()" class="action-buttons">
+            <button class="report-btn report" (click)="reportAccount(selectedContactId)" >
                 <mat-icon>flag</mat-icon>
+            </button>
+            <button class="block-btn" (click)="blockAccount(selectedContactId)" >
+                <mat-icon>block</mat-icon>
             </button>
       </div>
     </div>
     
-    <div class="chat-messages" #scrollMe>
+    <div class="block-overlay" *ngIf="isChatterBlocked">
+      {{chatterBlockedMsg}}
+    </div>
+    <div class="chat-messages" #scrollMe [class.blurred]="isChatterBlocked">
       <ng-container *ngFor="let message of messages">
         <div class="message-row"
              [class.sent]="isSentByCurrentUser(message.senderId)"
@@ -51,8 +57,8 @@
     
     <div class="chat-input">
       <form [formGroup]="form" (ngSubmit)="sendMessageUsingSocket()">
-        <input type="text" formControlName="message" placeholder="Type a message...">
-        <button type="submit" [disabled]="!form.valid">Send</button>
+        <input type="text" formControlName="message" placeholder="Type a message..." [disabled]="isChatterBlocked">
+        <button type="submit" [disabled]="!form.valid || isChatterBlocked">Send</button>
       </form>
     </div>
   </div>
