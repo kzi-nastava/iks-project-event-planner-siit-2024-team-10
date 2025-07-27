@@ -66,7 +66,6 @@ export class BudgetManagerComponent implements OnInit {
   
     this.budgetItemService.getByEvent(this.selectedEventId).subscribe({
       next: (items) => {
-        console.log('Vraćene budžetske stavke:', items);
         this.budgetItems = items;
         this.totalBudget = items.reduce((sum, item) => sum + item.amount, 0);
       },
@@ -81,15 +80,20 @@ export class BudgetManagerComponent implements OnInit {
   }  
 
   delete(item: BudgetItem): void {
-    console.log(this.budgetItems);
-    this.budgetItemService.delete(this.selectedEventId, item.id).subscribe(success => {
-      if (success) {
+    this.budgetItemService.delete(this.selectedEventId, item.id).subscribe({
+      next: () => {
         this.snackBar.open("Budget item deleted", "Close", { duration: 2000 });
         this.loadBudgetItems();
-      } else {
-        this.snackBar.open("Budget item has not been deleted, you have reserved offerings.", "Close", { duration: 2000 });
+      },
+      error: (err) => {
+        this.snackBar.open(
+          err.error?.message || "Failed to delete budget item",
+          "Close",
+          { duration: 2000 }
+        );
       }
     });
+    
     
   }
 
@@ -156,11 +160,9 @@ export class BudgetManagerComponent implements OnInit {
   }  
   getAllOfferings(item: BudgetItem): (Product | Service)[] {
     const offerings = [...(item.services || []),...(item.products || [])];
-    console.log('All offerings for budget item:', item.id, offerings);
     return offerings;
   }  
   openOfferingDetail(offering: Product | Service): void {
-    console.log('Opening offering detail for:', offering);
     this.router.navigate(['/offering', offering.id], {
       state: { offering }
     });

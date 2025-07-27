@@ -63,8 +63,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     if (this.loggedInUserId === undefined) {
       this.loggedInUserId = this.authService.getAccountId();
     }
-    console.log(this.loggedInUserId)
-    console.log(this.selectedContactId)
     this.form = new FormGroup({
     message: new FormControl(null, [Validators.required])
     });
@@ -95,9 +93,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
         if (contacts.length > 0 && !this.selectedContactId) {
           this.selectContact(contacts[0]);
         }
-      },
-      error: (err) => {
-        console.error('Error loading contacts:', err);
       }
     });
   }
@@ -117,9 +112,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
       next: (messages) => {
         this.messages = messages;
         setTimeout(() => this.scrollToBottom(), 100);
-      },
-      error: (err) => {
-        console.error('Error fetching messages:', err);
       }
     });
   }
@@ -162,10 +154,8 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
       // REST API poziv
       this.socketService.add(createMessage).subscribe({
         next: (response) => {
-          console.log('Message saved to database:', response);
         },
         error: (err) => {
-          console.error('Error saving message to database:', err);
           this.snackBar.open('Failed to send message. Please try again.', 'Close', {
             duration: 3000,
             panelClass: ['snackbar-error']
@@ -180,20 +170,16 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.stompClient = Stomp.over(ws);
 
     this.stompClient.debug = (str: string) => {
-      console.log('STOMP Debug:', str);
     };
     
     this.stompClient.connect({}, 
       () => {
-        console.log('WebSocket connected successfully');
         this.isLoaded = true;
         this.subscribeToUserMessages();
       },
       (error: any) => {
-        console.error('WebSocket connection error:', error);
         this.isLoaded = false;
         setTimeout(() => {
-          console.log('Retrying WebSocket connection...');
           this.initializeWebSocketConnection();
         }, 5000);
       }
@@ -204,7 +190,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     if (this.isLoaded && this.stompClient.connected) {
       const userTopic = `/socket-publisher/${this.loggedInUserId}`;
       this.stompClient.subscribe(userTopic, (message: { body: string }) => {
-        console.log(message);
         this.handleResult(message);
       });
     }
@@ -238,7 +223,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
 
         this.updateContactsDebounced();
       } catch (error) {
-        console.error('Error parsing WebSocket message:', error);
       }
     }
   }
@@ -271,7 +255,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
           this.myScrollContainer.nativeElement.scrollHeight;
       }
     } catch(err) {
-      console.error('Error scrolling to bottom:', err);
     }
   }
 
@@ -387,7 +370,6 @@ blockAccount(accountId: number): void {
       this.isChatterBlocked = false;
     }
   }).catch(err => {
-    console.error('Error checking blocked status:', err);
     this.chatterBlockedMsg = "";
     this.isChatterBlocked = false;
   });

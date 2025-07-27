@@ -68,17 +68,13 @@ export class ProductReservationDialogComponent implements OnInit {
           });
 
           this.budgetItemService.buy(selectedEvent.id, this.data.offering.id).subscribe({
-            next: (success: boolean) => {
-              if (success) {
-                this.snackBar.open('Product successfully added to budget.', 'OK', { duration: 5000 });
-              } else {
-                this.snackBar.open('Product not purchased', 'Close', { duration: 5000 });
-              }
-              this.dialogRef.close(success);
+            next: () => {
+              this.snackBar.open('Product successfully added to budget.', 'OK', { duration: 5000 });
+              this.dialogRef.close();
             },
-            error: (err) => {
-              this.snackBar.open(err.error, 'Close', { duration: 5000 });
-              console.error(err);
+            error: (error) => {
+              const errorMessage = error?.error || 'An unexpected error occurred.';
+              this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
             }
           });          
         }
