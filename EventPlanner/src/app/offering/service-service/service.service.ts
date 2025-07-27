@@ -21,7 +21,6 @@ export class ServiceService {
       return this.httpClient.get<Service>(environment.apiHost + `/services/` + id);
     }
     add(service:CreateServiceDTO) : Observable<Service> {
-      console.log(service);
       return this.httpClient.post<Service>(environment.apiHost + "/services", service);
     }
     edit(service:EditServiceDTO) : Observable<Service> {
@@ -47,12 +46,10 @@ export class ServiceService {
   
       return this.httpClient.get<PagedResponse<Service>>(environment.apiHost+"/services", { params }).pipe(
       map((response: PagedResponse<Service>) => {
-        console.log('Paginated response:', response);
   
         // Log each service individually
         if (response.content) {
           response.content.forEach((service: Service) => {
-            console.log('Service:', service);
           });
         }
   

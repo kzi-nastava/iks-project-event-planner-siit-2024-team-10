@@ -42,7 +42,6 @@ export class OpenEventReportComponent implements OnInit, AfterViewInit {
         },
         error: (err) => {
           this.snackBar.open('Error fetching event stats','OK',{duration:5000});
-          console.error('Error fetching event stats:', err);
         }
       });
     });
@@ -131,9 +130,7 @@ export class OpenEventReportComponent implements OnInit, AfterViewInit {
         window.open(fileURL);
       },
       error: (err) => {
-        console.error('Error generating report:', err);
         this.snackBar.open('Error generating pdf report','OK',{duration:5000});
-        console.error('Error generating pdf report:', err);
       }
     });
   }

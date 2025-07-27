@@ -44,9 +44,6 @@ export class OfferingCategoryComponent implements OnInit {
         const activeCategories = categories.filter(category => !category.deleted);
         activeCategories.sort((a, b) => a.name.localeCompare(b.name));
         this.dataSource = new MatTableDataSource<Category>(activeCategories);
-      },
-      error: (_) => {
-        console.error("Error loading categories");
       }
     });
   }
@@ -70,7 +67,6 @@ export class OfferingCategoryComponent implements OnInit {
             this.refreshDataSource();
             this.snackBar.open('Category added successfully','OK',{duration:3000});
           },
-          error: (err) => console.error('Error adding category:', err),
         });
       }
     });
@@ -89,7 +85,6 @@ export class OfferingCategoryComponent implements OnInit {
             this.refreshDataSource();
             this.snackBar.open('Category updated successfully','OK',{duration:3000});
           },
-          error: (err) => console.error('Error updating category:', err),
         });
       }
     });  
@@ -115,7 +110,6 @@ export class OfferingCategoryComponent implements OnInit {
         this.snackBar.open('Category approved successfully', 'OK', { duration: 3000 });
       },
       error: (err) => {
-        console.error('Error approving category:', err);
         this.snackBar.open('Error approving category', 'OK', { duration: 3000 });
       }
     });
@@ -146,7 +140,6 @@ export class OfferingCategoryComponent implements OnInit {
     this.offeringService.getAllNonPaged().subscribe({
       next: (offerings) => {
         if (!Array.isArray(offerings)) {
-          console.error('Offerings is not an array!');
           return;
         }
       

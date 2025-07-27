@@ -12,7 +12,6 @@ export class PricelistService {
 
   constructor(private httpClient: HttpClient) { }
   getAll(): Observable<PricelistItem[]> {
-    console.log("got into service")
     return this.httpClient.get<PricelistItem[]>(environment.apiHost+'/pricelists');
   }
   edit(item:EditPricelistItemDTO) : Observable<PricelistItem> {

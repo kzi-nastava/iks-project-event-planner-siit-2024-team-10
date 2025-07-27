@@ -48,12 +48,10 @@ export class UpdateCompanyPhotosComponent {
 
     this.fileService.uploadPhotos(formData).subscribe({
       next: (response: string[]) => {
-        console.log(response)
         this.snackBar.open('Files uploaded successfully', 'OK', { duration: 3000 });
         this.photoPaths = response;
       },
       error: (error) => {
-        console.error('Error uploading files:', error);
         this.snackBar.open('Failed to upload files', 'Dismiss', { duration: 3000 });
       }
     });
@@ -68,7 +66,6 @@ export class UpdateCompanyPhotosComponent {
           this.dialogRef.close(this.photoPaths);
         },
         error: (error) => {
-          console.error('Error uploading files:', error);
           this.snackBar.open('Failed to update company photos', 'Dismiss', { duration: 3000 });
           this.dialogRef.close(null);
         }

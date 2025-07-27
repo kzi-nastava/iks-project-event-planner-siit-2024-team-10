@@ -32,7 +32,6 @@ export class EditEventTypeComponent implements OnInit{
 
   onSave(): void {
     if(this.editForm.valid) {
-      console.log(this.editForm.value.name)
       const eventType: EditEventTypeDTO = {
         id:this.data.id,
         description: this.editForm.value.description,
@@ -63,9 +62,6 @@ export class EditEventTypeComponent implements OnInit{
           name: this.data.name,
           description: this.data.description,
         });
-      },
-      error: (_) => {
-        console.log("Error loading categories")
       }
     });
   }

@@ -68,7 +68,6 @@ export class EventDetailsComponent implements OnInit {
         },
         error: (err) => {
           this.snackBar.open('Error adding event to favourites','OK',{duration:5000});
-          console.error('Error adding event to favourites:', err);
         }
       });
     }
@@ -79,7 +78,6 @@ export class EventDetailsComponent implements OnInit {
         },
         error: (err) => {
           this.snackBar.open('Error removing event from favourites','OK',{duration:5000});
-          console.error('Error removing event from favourites:', err);
         }
       });
     }
@@ -93,7 +91,6 @@ export class EventDetailsComponent implements OnInit {
       },
       error: (err) => {
         this.snackBar.open('Error rating event','OK',{duration:5000});
-        console.error('Error rating event:', err);
       }
     });
   }
@@ -112,7 +109,6 @@ export class EventDetailsComponent implements OnInit {
         },
         error: (err) => {
           this.snackBar.open('Error fetching event','OK',{duration:5000});
-          console.error('Error fetching event:', err);
         }
       });
       this.accountService.getFavouriteEvent(id).subscribe({
@@ -124,7 +120,6 @@ export class EventDetailsComponent implements OnInit {
             this.isFavourite = false;
           else{
             this.snackBar.open('Error fetching favourite event','OK',{duration:5000});
-            console.error('Error fetching favourite event:', err);
           }
         }
       });
@@ -138,7 +133,6 @@ export class EventDetailsComponent implements OnInit {
       },
       error: (err) => {
         this.snackBar.open('Error fetching event agenda','OK',{duration:5000});
-        console.error('Error fetching event agenda:', err);
       }
     });
   }
@@ -156,7 +150,6 @@ export class EventDetailsComponent implements OnInit {
             this.snackBar.open('Agenda item created successfully','OK',{duration:3000});
           },
           error: (err) => {
-            console.error('Error adding agenda item:', err);
             this.snackBar.open('Error adding agenda item','OK',{duration:3000});
           },
         });
@@ -178,7 +171,6 @@ export class EventDetailsComponent implements OnInit {
             this.snackBar.open('Agenda item updated successfully','OK',{duration:3000});
           },
           error: (err) => {
-            console.error('Error updating agenda item:', err)
             this.snackBar.open('Error updating agenda item','OK',{duration:3000});
           }
         });
@@ -200,7 +192,6 @@ export class EventDetailsComponent implements OnInit {
             this.snackBar.open('Agenda item deleted successfully','OK',{duration:3000});
           },
           error: (err) => {
-            console.error('Error deleting agenda item:', err)
             this.snackBar.open('Error deleting agenda item','OK',{duration:3000});
             },
         });
@@ -210,8 +201,6 @@ export class EventDetailsComponent implements OnInit {
   navigateToChat(): void {
     const sender = this.authService.getAccountId();
     const recipient = this.event.organizer.accountId;
-    console.log(sender);
-    console.log(recipient);
     this.router.navigate(['/chat'], {
       state: {
         loggedInUserId: sender,
@@ -229,7 +218,6 @@ export class EventDetailsComponent implements OnInit {
         this.snackBar.open('Participation submitted successfully','OK',{duration:3000});
       },
       error: (err) => {
-        console.error('Error deleting agenda item:', err)
         this.snackBar.open('Error submitting participation','OK',{duration:3000});
       },
     });
@@ -242,9 +230,7 @@ export class EventDetailsComponent implements OnInit {
         window.open(fileURL);
       },
       error: (err) => {
-        console.error('Error generating report:', err);
         this.snackBar.open('Error generating pdf report','OK',{duration:5000});
-        console.error('Error generating pdf report:', err);
       }
     });
   }
@@ -263,7 +249,6 @@ export class EventDetailsComponent implements OnInit {
             this.router.navigate(['home']);
           },
           error: (err) => {
-            console.log(err);
             this.snackBar.open(err.error,'OK',{duration:3000});
           }
         });

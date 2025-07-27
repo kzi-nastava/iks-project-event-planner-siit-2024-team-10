@@ -32,11 +32,9 @@ export class ChatService {
   }
 
   getMessages(senderId: number, receiverId: number): Observable<Message[]> {
-    console.log(environment.apiHost + `/messages/`+ senderId + "/"+ receiverId)
     return this.http.get<Message[]>(environment.apiHost + `/messages/`+ senderId + "/"+ receiverId);
   }
   add(message:CreateMessage) : Observable<Message> {
-    console.log(message)
     return this.http.post<Message>(environment.apiHost + "/messages", message);
   }
   getContacts(userId: number): Observable<ChatContact[]> {

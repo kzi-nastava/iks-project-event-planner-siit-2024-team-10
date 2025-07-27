@@ -46,9 +46,6 @@ export class CreateProductComponent implements OnInit{
     this.categoryService.getAll().subscribe({
       next: (categories:Category[]) => {
         this.allCategories=categories.filter(x=>(!x.deleted && !x.pending));
-      },
-      error: (_) => {
-        console.log("Error loading categories")
       }
     });
 
@@ -94,13 +91,11 @@ export class CreateProductComponent implements OnInit{
 
     this.http.post(environment.apiHost + "/upload", formData).subscribe({
       next: (response: any) => {
-        console.log('Files uploaded successfully:', response);
         this.snackBar.open('Files uploaded successfully', 'OK', { duration: 3000 });
         this.photoPaths = response;
         this.createForm.patchValue({ photos: response });
       },
       error: (error) => {
-        console.error('Error uploading files:', error);
         this.snackBar.open('Failed to upload files', 'Dismiss', { duration: 3000 });
       }
     });

@@ -38,9 +38,6 @@ export class CreateOfferingsComponent implements OnInit {
     this.categoryService.getAll().subscribe({
       next: (categories: Category[]) => {
         this.allCategories = categories.filter(c => !c.deleted && !c.pending);
-      },
-      error: () => {
-        console.error("Failed to load categories");
       }
     });
 
@@ -116,7 +113,6 @@ export class CreateOfferingsComponent implements OnInit {
         this.createForm.patchValue({ photos: response });
       },
       error: (error) => {
-        console.error('Error uploading files:', error);
         this.snackBar.open('Failed to upload files', 'Dismiss', { duration: 3000 });
       }
     });
@@ -135,7 +131,6 @@ export class CreateOfferingsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log("submit")
     if (this.createForm.valid) {
       const formValue = this.createForm.value;
       const isFixedTime = formValue.timeType === 'fixed';
@@ -162,15 +157,12 @@ export class CreateOfferingsComponent implements OnInit {
         autoConfirm: isFixedTime
       };
 
-      console.log(service);
-
       this.serviceService.add(service).subscribe({
         next: () => {
           this.snackBar.open('Service created successfully', 'OK', { duration: 3000 });
           this.createForm.reset();
         },
         error: (error) => {
-          console.error('Error creating service:', error);
           this.snackBar.open('Failed to create service. Please try again.', 'Dismiss', {
             duration: 3000
           });

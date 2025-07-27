@@ -46,7 +46,6 @@ export class EditPersonalComponent implements OnInit{
       },
       error: (err) => {
         this.snackBar.open('Error fetching account details','OK',{duration:5000});
-        console.error('Error fetching account details:', err);
       }
     });
   }
@@ -72,7 +71,6 @@ export class EditPersonalComponent implements OnInit{
       },
       error: (err) => {
         this.snackBar.open('Error updating user details','OK',{duration:5000});
-        console.error('Error updating user details', err);
       }
     });
   }
