@@ -155,10 +155,10 @@
             <i class="fas fa-user"></i>
             View Profile
           </button>
-          <button class="report-btn" (click)="chat()">
+          <button *ngIf="isEventOrganizer" class="report-btn" (click)="chat()">
             <i class="fas fa-comment"></i>
             You need more info? Chat with us
-          </button>
+          </button>          
         </div>
       </div>
     </div>
