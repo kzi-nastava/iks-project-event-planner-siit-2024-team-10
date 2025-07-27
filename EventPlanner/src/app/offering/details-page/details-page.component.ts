@@ -425,10 +425,7 @@ setupOffering(offering: Product | Service): void {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Reservation data:', result);
         this.isCommentingEnabled = true;
-      } else {
-        console.log('Dialog closed without reservation.');
       }
     });
   }

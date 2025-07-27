@@ -87,7 +87,7 @@ export class AccountService {
     let loggedInAccountId:number=this.authService.getAccountId();
     if(loggedInAccountId == null)
       return null;
-    return this.httpClient.post<void>(environment.apiHost+'/accounts/'+loggedInAccountId+'/block/'+accountId, null);
+    return this.httpClient.put<void>(environment.apiHost+'/accounts/'+loggedInAccountId+'/block/'+accountId, null);
   }
 
   unblockAccount(accountId: number): Observable<void> {

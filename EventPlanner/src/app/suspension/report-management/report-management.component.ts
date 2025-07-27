@@ -38,15 +38,14 @@ export class ReportManagementComponent implements OnInit{
     })
   }
 
-
     accept(reportId: number) {
       this.service.acceptReport(reportId).subscribe({
         next: () => {
           this.snackBar.open("Account report accepted", "Close", { duration: 3000 });
           this.refreshDataSource();
         },
-        error: () => {
-          this.snackBar.open("Failed to accept reservation", "Close", { duration: 3000 });
+        error: (err) => {
+          this.snackBar.open(err.error, "Close", { duration: 3000 });
         }
       });
     }
