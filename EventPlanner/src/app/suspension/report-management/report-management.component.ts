@@ -31,14 +31,12 @@ export class ReportManagementComponent implements OnInit{
         reports.sort((a, b) => a.reporteeEmail.localeCompare(b.reporteeEmail));
         this.dataSource = new MatTableDataSource<AccountReport>(reports);
         this.dataSource.sort = this.sort;
-        console.log(reports)
       },
       error: (_) => {
-        console.error("Error loading reports");
+        this.snackBar.open("There has been an error loading reports", "Close", { duration: 5000 });
       }
     })
   }
-
 
     accept(reportId: number) {
       this.service.acceptReport(reportId).subscribe({
@@ -46,8 +44,8 @@ export class ReportManagementComponent implements OnInit{
           this.snackBar.open("Account report accepted", "Close", { duration: 3000 });
           this.refreshDataSource();
         },
-        error: () => {
-          this.snackBar.open("Failed to accept reservation", "Close", { duration: 3000 });
+        error: (err) => {
+          this.snackBar.open(err.error, "Close", { duration: 3000 });
         }
       });
     }
