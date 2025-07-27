@@ -31,10 +31,9 @@ export class ReportManagementComponent implements OnInit{
         reports.sort((a, b) => a.reporteeEmail.localeCompare(b.reporteeEmail));
         this.dataSource = new MatTableDataSource<AccountReport>(reports);
         this.dataSource.sort = this.sort;
-        console.log(reports)
       },
       error: (_) => {
-        console.error("Error loading reports");
+        this.snackBar.open("There has been an error loading reports", "Close", { duration: 5000 });
       }
     })
   }
