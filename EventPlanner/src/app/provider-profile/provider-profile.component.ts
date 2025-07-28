@@ -76,8 +76,6 @@ export class ProviderProfileComponent implements OnInit {
       let totalCommentsCount = 0;
       let totalRatings = 0;
 
-      console.log('Offerings loaded:', this.offerings);
-
       const commentsObservables = offerings.map((offering) =>
         this.offeringService.getComments(offering.id).pipe(
           map((comments) => {

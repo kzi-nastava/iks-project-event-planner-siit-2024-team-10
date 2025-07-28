@@ -447,7 +447,6 @@ setupOffering(offering: Product | Service): void {
       });
     }
     checkIfUserPurchasedOffering(offeringId: number): void {
-      console.log('Checking if user has purchased offering:', offeringId);
       if (!this.isEventOrganizer) {
         this.isCommentingEnabled = false;
         return;
