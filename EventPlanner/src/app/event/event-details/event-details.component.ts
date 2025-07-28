@@ -34,7 +34,7 @@ export class EventDetailsComponent implements OnInit {
   agenda:AgendaItem[];
   userRating:number;
   isFavourite:boolean=false;
-  loggedInUserId:number = 0;
+  loggedInUserId:number;
   owner:boolean=false;
   admin:boolean=false;
   participating:boolean=false;
