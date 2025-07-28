@@ -462,6 +462,5 @@ setupOffering(offering: Product | Service): void {
             this.isCommentingEnabled = false;
           }
         });
-        console.log('isCommentingEnabled:', this.isCommentingEnabled);
     }
 }

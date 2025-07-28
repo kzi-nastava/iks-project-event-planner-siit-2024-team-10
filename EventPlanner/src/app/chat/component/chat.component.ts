@@ -103,7 +103,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.loadMessages(this.loggedInUserId, this.selectedContactId);
       }
     } catch (error) {
-      console.error('Failed to initialize chat:', error);
     }
   }
 
@@ -144,9 +143,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
         if (contacts.length > 0 && !this.selectedContactId) {
           this.selectContact(contacts[0]);
         }
-      },
-      error: (error) => {
-        console.error('Failed to load contacts:', error);
       }
     });
   }
@@ -164,9 +160,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.messages = messages;
         this.chatService.updateMessages(messages);
         setTimeout(() => this.scrollToBottom(), 100);
-      },
-      error: (error) => {
-        console.error('Failed to load messages:', error);
       }
     });
   }
@@ -246,9 +239,8 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.myScrollContainer.nativeElement.scrollTop = 
           this.myScrollContainer.nativeElement.scrollHeight;
       }
-    } catch(err) {
-      console.error('Error scrolling to bottom:', err);
-    }
+    }catch(err) { 
+    } 
   }
 
   // Report & Block Methods (keep in component as they're UI-specific)
@@ -341,7 +333,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.isChatterBlocked = false;
       }
     }).catch(err => {
-      console.error('Error checking blocked status:', err);
       this.chatterBlockedMsg = "";
       this.isChatterBlocked = false;
     });

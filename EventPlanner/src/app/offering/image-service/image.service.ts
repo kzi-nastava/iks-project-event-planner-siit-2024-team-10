@@ -18,7 +18,6 @@ export class ImageService {
   }
 
   getImageUrls(filenames: string[]): string[] {
-    console.log(filenames.map(name => `${environment.apiHost}/images/${name}`));
     return filenames.map(name => `${environment.apiHost}/images/${name}`);
   }
   
@@ -26,7 +25,6 @@ export class ImageService {
   // Vraća jedan URL (ili placeholder ako je undefined/null)
   getImageUrl(name: string | undefined | null): string {
     if (!name) {
-      console.log(`${environment.apiHost}/images/placeholder-image.png`);
       return `${environment.apiHost}/images/placeholder-image.png`;
     }
     return `${environment.apiHost}/images/${name}`;

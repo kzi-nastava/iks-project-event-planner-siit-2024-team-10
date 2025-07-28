@@ -57,11 +57,9 @@ ngOnInit(): void {
           this.snackBar.open('No events found', 'Close', { duration: 3000 });
         } else {
           this.events = events;
-          console.log('Events fetched successfully:', this.events);
         }
       },
       error: (err) => {
-        console.error('Error fetching events:', err);
         this.snackBar.open('Error fetching your events.', 'Close', { duration: 3000 });
       }
     });

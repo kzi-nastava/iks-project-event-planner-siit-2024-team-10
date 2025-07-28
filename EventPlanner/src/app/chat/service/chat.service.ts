@@ -85,7 +85,6 @@ export class ChatService {
         
         this.messageSubject.next(messageResult);
       } catch (error) {
-        console.error('Error parsing incoming message:', error);
       }
     }
   }
