@@ -75,10 +75,14 @@
         </div>
       </div>
       <div class="action-buttons">
-        <button class="book-now-btn" [disabled]="!offering?.available" (click)="openReservationDialog()">
-          <i class="fas fa-calendar-check"></i>
-          Buy
-        </button>
+        <button 
+  class="book-now-btn"
+  [disabled]="!offering?.available || !isEventOrganizer"
+  (click)="openReservationDialog()">
+  <i class="fas fa-calendar-check"></i>
+  Buy
+</button>
+
       </div>
     </div>
 
