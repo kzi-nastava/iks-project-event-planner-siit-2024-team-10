@@ -11,10 +11,7 @@
     <input type="password" matInput formControlName="password">
   </mat-form-field>
   <mat-error *ngIf="invalidCredentials">
-    Incorrect username or password
-  </mat-error>
-  <mat-error class="suspension-error" *ngIf="suspensionMessage">
-    <div [innerHTML]="suspensionMessage"></div>
+    <div [innerHTML]="errorMessage"></div>
   </mat-error>
   <button mat-flat-button (click)="login()" class="login-button">Login</button>
   <p>Don't have account yet? <a [routerLink]="['/register']">Register now!</a></p>

@@ -3,8 +3,7 @@
   <!-- Carousel Section -->
   <div class="map-section">
     <div class="map-container">
-      <p *ngIf="!mapAvailable">Location cannot be displayed for this event</p>
-      <div id="eventMap" style="height: 400px;"></div>
+      <img src="map.png" class="map">
     </div>
   </div>
 
@@ -109,7 +108,7 @@
                 {{ event?.organizer?.phoneNumber }}
               </p>
             </div>
-            <div class="provider-actions" style="width: 200px;">
+            <div *ngIf="!owner && loggedInUserId" class="provider-actions" style="width: 200px;">
               <button class="view-profile-btn" (click)="navigateToChat()">
                 <i class="fas fa-comment"></i>
                 Chat with organizer

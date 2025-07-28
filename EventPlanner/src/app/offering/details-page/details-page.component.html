@@ -128,10 +128,7 @@
           <img [src]="profilePhoto" alt="Provider" class="provider-avatar">
           <div class="provider-details">
             <h3>{{offering?.provider?.company?.name || 'Unknown Company'}}</h3>
-            <div class="rating">
-              <span class="stars">★★★★☆</span>
-              <span class="rating-number">({{offering?.averageRating || 0}})</span>
-            </div>
+          
             <p class="provider-location">
               <i class="fas fa-location">📍</i>
               {{ offering?.provider?.company?.location?.city || '-' }},

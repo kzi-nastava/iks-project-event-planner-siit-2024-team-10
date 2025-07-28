@@ -22,6 +22,7 @@ import { SuspensionService } from '../../suspension/suspension.service';
 import { CreateAccountReportDTO } from '../../suspension/model/create-account-report-dto.model';
 import { MapService } from '../map.service';
 import L from 'leaflet';
+import { ImageService } from '../../offering/image-service/image.service';
 
 @Component({
   selector: 'app-event-details',
@@ -33,7 +34,7 @@ export class EventDetailsComponent implements OnInit {
   agenda:AgendaItem[];
   userRating:number;
   isFavourite:boolean=false;
-  loggedInUserId:number;
+  loggedInUserId:number = 0;
   owner:boolean=false;
   admin:boolean=false;
   participating:boolean=false;
@@ -49,6 +50,7 @@ export class EventDetailsComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private reportService: SuspensionService,
+    private imageService:ImageService,
     private mapService: MapService) {
   }
 
@@ -257,12 +259,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   getProfilePhoto():string{
-    if(this.event?.organizer?.profilePhoto==null)
-      return "profile_photo.png"
-    else{
-      const fileName = this.event?.organizer?.profilePhoto.split('\\').pop()?.split('/').pop();
-      return `${environment.apiHost}/images/${fileName}`
-    }
+    return this.imageService.getImageUrl(this.event?.organizer?.profilePhoto);
   }
     
   reportAccount(accountId: number): void {

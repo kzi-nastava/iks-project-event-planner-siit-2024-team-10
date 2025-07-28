@@ -19,7 +19,7 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(8)])});
   invalidCredentials=false;
   inviteToken: string;
-  suspensionMessage: string | null = null;
+  errorMessage:string=null;
 
   constructor(private authService:AuthService, private router:Router, private route: ActivatedRoute, private notificationService: NotificationService, private dialog: MatDialog) {}
 
@@ -49,14 +49,8 @@ export class LoginComponent {
           }
         },
         error: (err) => {
-          this.invalidCredentials = false;
-          this.suspensionMessage = null;
-
-          if (err.error?.includes("suspended")) {
-            this.suspensionMessage = err.error.replace(/\n/g, '<br>');
-          } else {
-            this.invalidCredentials = true;
-          }
+          this.invalidCredentials = true;
+          this.errorMessage=err.error;
         }
       })
     }

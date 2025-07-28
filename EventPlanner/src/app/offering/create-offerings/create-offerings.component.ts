@@ -10,6 +10,7 @@ import { environment } from '../../../env/environment';
 import { CategoryService } from '../../offering/category-service/category.service';
 import {AuthService} from '../../infrastructure/auth/auth.service';
 import { ImageService } from '../image-service/image.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-offerings',
   templateUrl: './create-offerings.component.html',
@@ -30,8 +31,8 @@ export class CreateOfferingsComponent implements OnInit {
     private serviceService: ServiceService,
     private categoryService: CategoryService,
     private imageService:ImageService,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    private router:Router){}  
 
   ngOnInit(): void {
     this.initForm();
@@ -152,7 +153,7 @@ export class CreateOfferingsComponent implements OnInit {
       this.serviceService.add(service).subscribe({
         next: () => {
           this.snackBar.open('Service created successfully', 'OK', { duration: 3000 });
-          this.createForm.reset();
+          this.router.navigate(['home']);
         },
         error: (error) => {
           this.snackBar.open('Failed to create service. Please try again.', 'Dismiss', {
