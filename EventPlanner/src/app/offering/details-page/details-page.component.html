@@ -99,9 +99,13 @@
         <div class="spec-item">
           <span class="spec-label">Duration:</span>
           <span class="spec-value">
-            {{ offering?.fixedTime || (offering?.minDuration + ' - ' + offering?.maxDuration) || 'N/A' }} hours
+            {{ offering?.fixedTime 
+                || (offering?.minDuration === offering?.maxDuration 
+                    ? offering?.minDuration 
+                    : offering?.minDuration + ' - ' + offering?.maxDuration) 
+                || 'N/A' }} hours
           </span>
-        </div>
+        </div>        
         <div class="spec-item">
           <span class="spec-label">Reservation Period:</span>
           <span class="spec-value">{{offering?.reservationPeriod || 'N/A'}} hours in advance</span>

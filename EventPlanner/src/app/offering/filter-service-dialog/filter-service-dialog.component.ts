@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { map, Observable } from 'rxjs';
@@ -19,6 +19,7 @@ export class FilterServiceDialogComponent {
   maxPrice: number = 100000;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public isOfferingManagement:boolean,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<FilterServiceDialogComponent>,
     private categoryService: CategoryService,
