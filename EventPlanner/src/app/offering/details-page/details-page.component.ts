@@ -453,7 +453,7 @@ setupOffering(offering: Product | Service): void {
         return;
       }
     
-      this.offeringService.hasUserPurchasedOffering(this.authService.getAccountId(), offeringId)
+      this.offeringService.hasUserPurchasedOffering(this.authService.getUserId(), offeringId)
         .subscribe({
           next: (purchased: boolean) => {
             this.isCommentingEnabled = purchased;
