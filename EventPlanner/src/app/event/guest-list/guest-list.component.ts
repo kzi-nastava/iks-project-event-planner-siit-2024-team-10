@@ -101,9 +101,7 @@ export class GuestListComponent implements OnInit {
         window.open(fileURL);
       },
       error: (err) => {
-        console.error('Error generating report:', err);
         this.snackBar.open('Error generating pdf report','OK',{duration:5000});
-        console.error('Error generating pdf report:', err);
       }
     });
   }

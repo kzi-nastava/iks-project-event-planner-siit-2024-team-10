@@ -45,10 +45,7 @@ export class FilterProductDialogComponent implements OnInit {
       next: (price) => {
         this.maxPrice = price || 10000;
         this.filterForm.get('priceRange.endPrice')?.setValue(this.maxPrice);
-      },
-      error: (err) => {
-        console.error('Failed to fetch max price:', err);
-      },
+      }
     });
   }
 

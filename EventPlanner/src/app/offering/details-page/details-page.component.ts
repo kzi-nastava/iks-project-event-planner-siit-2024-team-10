@@ -30,6 +30,7 @@ import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog
 import { ReportFormComponent } from '../../suspension/report-form/report-form.component';
 import { SuspensionService } from '../../suspension/suspension.service';
 import { CreateAccountReportDTO } from '../../suspension/model/create-account-report-dto.model';
+import { ImageService } from '../image-service/image.service';
 
 @Component({
   selector: 'app-details-page',
@@ -79,47 +80,44 @@ export class DetailsPageComponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private reportService: SuspensionService,
+    private imageService:ImageService
   ) {}
 
   ngOnInit(): void {
     this.authService.userState.subscribe((result) => {
-      console.log(result);
       this.role = result;
-    })
+      this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
+    });
+    
 
     this.loggedInAccountId = this.authService.getAccountId();
 
     this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
 
     const passedOffering = history.state.offering as Product | Service;
-    console.log(passedOffering)
 
   if (passedOffering && passedOffering.id) {
     this.offering = passedOffering;
+    this.checkIfUserPurchasedOffering(this.offering.id);
     this.setupOffering(this.offering);
   }
   else{
     this.route.params.pipe(
       switchMap(params => {
         const id = +params['id'];
-        console.log(id);
 
         return this.serviceService.getById(id).pipe(
           catchError(error => {
-            console.log('Service not found, trying product service');
             return this.productService.get(id);
           })
         );
       }),
       map(offering => {
         if (offering && offering.photos) {
-          offering.photos = offering.photos.map(photo => {
-            const fileName = photo.split('\\').pop()?.split('/').pop();
-            return `${environment.apiHost}/images/${fileName}`;
-          });
+          offering.photos = this.imageService.getImageUrls(offering.photos);
         }
         return offering;
-      })
+      })      
     ).subscribe(offering => {
       this.offering = offering;
       if (this.offering && this.offering.photos) {
@@ -127,7 +125,6 @@ export class DetailsPageComponent implements OnInit {
       }
       this.loadComments();
 
-      console.log('Offering loaded:', this.offering);
       this.canEditOffering = this.offering?.provider?.accountId === this.authService.getAccountId();
 
       if (this.offering) {
@@ -138,10 +135,6 @@ export class DetailsPageComponent implements OnInit {
           error: (err) => {
             if(err.status===404)
               this.isFavourite = false;
-            else{
-              this.snackBar.open('Error fetching favourite offerings','OK',{duration:5000});
-              console.error('Error fetching favourite offerings:', err);
-            }
           }
         });
       }
@@ -152,11 +145,10 @@ export class DetailsPageComponent implements OnInit {
 setupOffering(offering: Product | Service): void {
   if (!offering) return;
 
+  this.checkIfUserPurchasedOffering(offering.id);
+
   if (offering.photos) {
-    offering.photos = offering.photos.map(photo => {
-      const fileName = photo.split('\\').pop()?.split('/').pop();
-      return `${environment.apiHost}/images/${fileName}`;
-    });
+    offering.photos = this.imageService.getImageUrls(offering.photos);
   }
 
   this.offering = offering;
@@ -165,17 +157,8 @@ setupOffering(offering: Product | Service): void {
   this.loadComments();
 
   this.accountService.getFavouriteOffering(offering.id).subscribe({
-    next: (offering:Offering) => {
-      this.isFavourite = true;
-    },
-    error: (err) => {
-      if(err.status===404)
-        this.isFavourite = false;
-      else{
-        this.snackBar.open('Error fetching favourite offering','OK',{duration:5000});
-        console.error('Error fetching favourite offering:', err);
-      }
-    }
+    next: () => this.isFavourite = true,
+    error: (err) => this.isFavourite = err.status === 404 ? false : this.isFavourite
   });
 }
 
@@ -185,11 +168,12 @@ setupOffering(offering: Product | Service): void {
   }
 
   loadComments(): void {
+    this.checkIfUserPurchasedOffering(this.offering.id);
+
     if (this.offering) {
       this.offeringService.getComments(this.offering.id)
         .subscribe(comments => {
           this.comments = comments;
-          console.log(comments)
         });
     }
   }
@@ -214,8 +198,6 @@ setupOffering(offering: Product | Service): void {
         content: this.newComment.text,
         account: this.authService.getUserId()
       };
-
-      console.log(newComment);
 
       this.commentService.add(newComment, this.offering.id)
         .subscribe({
@@ -252,27 +234,22 @@ setupOffering(offering: Product | Service): void {
 
   toggleFavorite(): void {
     if(this.isFavourite){
-      console.log('Removing offering from favourites...');
       this.accountService.removeOfferingFromFavourites(this.offering.id).subscribe({
         next: () => {
           this.isFavourite = !this.isFavourite;
-          console.log(this.isFavourite);
         },
         error: (err) => {
           this.snackBar.open('Error adding offering to favourites','OK',{duration:5000});
-          console.error('Error adding offering to favourites:', err);
         }
       });
     }
     else {
-      console.log('Adding offering to favourites...');
       this.accountService.addOfferingToFavourites(this.offering.id).subscribe({
         next: () => {
           this.isFavourite = !this.isFavourite;
         },
         error: (err) => {
           this.snackBar.open('Error removing offering from favourites','OK',{duration:5000});
-          console.error('Error removing offering from favourites:', err);
         }
       });
     }
@@ -297,7 +274,8 @@ setupOffering(offering: Product | Service): void {
           isAvailable: this.offering.available || false,
           isVisible: this.offering.visible || false,
           autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,
-          eventTypes:this.offering.eventTypes
+          eventTypes:this.offering.eventTypes,
+          photos: this.offering.photos || []
         };
         this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
       }
@@ -337,7 +315,6 @@ setupOffering(offering: Product | Service): void {
                     duration: 3000
                   });
                 }
-                console.error('Error deleting offering:', error);
               }
             });
           }
@@ -353,7 +330,6 @@ setupOffering(offering: Product | Service): void {
                 this.snackBar.open('Failed to delete offering.', 'Dismiss', {
                   duration: 3000
                 });
-                console.error('Error deleting offering:', error);
               }
             });
           }
@@ -371,15 +347,10 @@ setupOffering(offering: Product | Service): void {
   }
 
   get profilePhoto(): string {
-    try{
-      const photo = this.offering.provider?.profilePhoto;
-      const fileName = photo.split('\\').pop()?.split('/').pop();
-      return `${environment.apiHost}/images/${fileName}`;
-      } catch (error) {
-        return `${environment.apiHost}/images/placeholder-image.png`;
-    }
+    return this.imageService.getImageUrl(this.offering.provider?.profilePhoto);
   }
-
+  
+  
   openReservationDialog(): void {
     if (!this.authService.isLoggedIn()) {
       this.snackBar.open('Please log in to make a reservation', 'Close', {
@@ -401,9 +372,7 @@ setupOffering(offering: Product | Service): void {
         if (result) {
           this.snackBar.open('Product reserved successfully!', 'Close', { duration: 3000 });
           this.isCommentingEnabled = true;
-        } else {
-          console.log('Product reservation cancelled.');
-        }
+        } 
       });
       return;
     }
@@ -443,8 +412,6 @@ setupOffering(offering: Product | Service): void {
 
     const sender = this.authService.getAccountId();
     const recipient = this.offering.provider.accountId;
-    console.log(sender);
-    console.log(recipient);
     this.router.navigate(['/chat'], {
       state: {
         loggedInUserId: sender,
@@ -478,5 +445,22 @@ setupOffering(offering: Product | Service): void {
           });
         }
       });
+    }
+    checkIfUserPurchasedOffering(offeringId: number): void {
+      console.log('Checking if user has purchased offering:', offeringId);
+      if (!this.isEventOrganizer) {
+        this.isCommentingEnabled = false;
+        return;
+      }
+    
+      this.offeringService.hasUserPurchasedOffering(this.authService.getUserId(), offeringId)
+        .subscribe({
+          next: (purchased: boolean) => {
+            this.isCommentingEnabled = purchased;
+          },
+          error: () => {
+            this.isCommentingEnabled = false;
+          }
+        });
     }
 }

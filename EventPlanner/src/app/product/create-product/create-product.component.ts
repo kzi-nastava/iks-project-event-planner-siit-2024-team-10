@@ -10,6 +10,7 @@ import {AuthService} from '../../infrastructure/auth/auth.service';
 import {ProductService} from '../product.service';
 import {Product} from '../../offering/model/product.model';
 import {Router} from '@angular/router';
+import { ImageService } from '../../offering/image-service/image.service';
 
 @Component({
   selector: 'app-create-product',
@@ -40,15 +41,13 @@ export class CreateProductComponent implements OnInit{
     private http: HttpClient,
     private authService: AuthService,
     private productService:ProductService,
+    private imageService:ImageService,
     private router:Router){}
 
   ngOnInit() {
     this.categoryService.getAll().subscribe({
       next: (categories:Category[]) => {
         this.allCategories=categories.filter(x=>(!x.deleted && !x.pending));
-      },
-      error: (_) => {
-        console.log("Error loading categories")
       }
     });
 
@@ -57,11 +56,11 @@ export class CreateProductComponent implements OnInit{
       const categoryDescriptionControl = this.createForm.get('categoryDescription');
       const categorySelectionControl = this.createForm.get('productCategory');
       if (createCategoryValue) {
-        categoryNameControl?.setValidators([Validators.required]); // Add 'required' validator
+        categoryNameControl?.setValidators([Validators.required]);
         categoryDescriptionControl?.setValidators([Validators.required]);
         categorySelectionControl?.clearValidators();
       } else {
-        categoryNameControl?.clearValidators(); // Remove 'required' validator
+        categoryNameControl?.clearValidators(); 
         categoryDescriptionControl?.clearValidators();
         categorySelectionControl?.setValidators([Validators.required]);
       }
@@ -83,28 +82,17 @@ export class CreateProductComponent implements OnInit{
   }
 
   uploadFiles(files: FileList) {
-    const formData = new FormData();
-    const productId = 1;  // real id later
-
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
-    }
-
-    formData.append('productId', productId.toString());
-
-    this.http.post(environment.apiHost + "/upload", formData).subscribe({
-      next: (response: any) => {
-        console.log('Files uploaded successfully:', response);
+    this.imageService.uploadFiles(files).subscribe({
+      next: (response: string[]) => {
         this.snackBar.open('Files uploaded successfully', 'OK', { duration: 3000 });
         this.photoPaths = response;
         this.createForm.patchValue({ photos: response });
       },
-      error: (error) => {
-        console.error('Error uploading files:', error);
+      error: (_) => {
         this.snackBar.open('Failed to upload files', 'Dismiss', { duration: 3000 });
       }
     });
-  }
+  }  
 
   onSubmit():void{
     if(!this.createForm.valid)

@@ -27,9 +27,6 @@ export class CreateEventTypeComponent implements OnInit{
     this.categoryService.getAll().subscribe({
       next: (categories:Category[]) => {
         this.allCategories=categories.filter(x=>!x.deleted);
-      },
-      error: (_) => {
-        console.log("Error loading categories")
       }
     });
   }

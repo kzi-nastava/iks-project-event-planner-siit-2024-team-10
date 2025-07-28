@@ -157,7 +157,6 @@ export class RegisterComponent implements OnInit{
         this.profilePhoto = response[0];
       },
       error: (error) => {
-        console.error('Error uploading files:', error);
         this.snackBar.open('Failed to upload file', 'Dismiss', {duration: 3000});
       }
     });
@@ -183,7 +182,6 @@ export class RegisterComponent implements OnInit{
         this.companyPhotos = response;
       },
       error: (error) => {
-        console.error('Error uploading files:', error);
         this.snackBar.open('Failed to upload files', 'Dismiss', {duration: 3000});
       }
     });

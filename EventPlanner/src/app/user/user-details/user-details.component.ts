@@ -40,7 +40,6 @@ export class UserDetailsComponent implements OnInit {
       },
       error: (err) => {
         this.snackBar.open('Error fetching account details','OK',{duration:5000});
-        console.error('Error fetching account details:', err);
       }
     });
   }
@@ -57,7 +56,6 @@ export class UserDetailsComponent implements OnInit {
       return "profile_photo.png"
     else{
       const fileName = this.user?.profilePhoto.split('\\').pop()?.split('/').pop();
-      console.log(fileName)
       return `${environment.apiHost}/images/${fileName}`
     }
   }
@@ -75,7 +73,6 @@ export class UserDetailsComponent implements OnInit {
       const fileName = photo.split('\\').pop()?.split('/').pop();
       return `${environment.apiHost}/images/${fileName}`;
     });
-    console.log(this.images)
   }
 
   setActiveImage(index: number): void {

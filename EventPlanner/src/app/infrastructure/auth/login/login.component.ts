@@ -59,8 +59,6 @@ export class LoginComponent {
           }
         }
       })
-      console.log(this.authService.getUserId)
     }
-
   }
 }

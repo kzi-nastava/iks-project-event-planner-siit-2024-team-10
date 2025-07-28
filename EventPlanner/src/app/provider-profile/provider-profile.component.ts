@@ -52,7 +52,6 @@ export class ProviderProfileComponent implements OnInit {
       const providerId = this.route.snapshot.params['id'];
       this.loadOfferingsWithComments(providerId);
     }
-    console.log(this.provider);
   }
 
   /*
@@ -70,7 +69,6 @@ export class ProviderProfileComponent implements OnInit {
         return '';
       }
       const photo = this.provider.profilePhoto;
-      console.log(photo);
       const fileName = photo.split('\\').pop()?.split('/').pop();
       return `${environment.apiHost}/images/${fileName}`;
     }catch(e){

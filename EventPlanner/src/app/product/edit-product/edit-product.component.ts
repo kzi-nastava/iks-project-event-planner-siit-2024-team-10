@@ -56,7 +56,6 @@ export class EditProductComponent implements OnInit{
         },
         error: (err) => {
           this.snackBar.open('Error fetching product','OK',{duration:5000});
-          console.error('Error fetching product:', err);
         }
       });
     })
@@ -82,7 +81,6 @@ export class EditProductComponent implements OnInit{
         this.photoPaths = response;
       },
       error: (error) => {
-        console.error('Error uploading files:', error);
         this.snackBar.open('Failed to upload files', 'Dismiss', { duration: 3000 });
       }
     });
@@ -106,7 +104,6 @@ export class EditProductComponent implements OnInit{
         this.router.navigate(['/offering',this.productId]);
       },
       error: (error) => {
-        console.error('Error update product:', error);
         this.snackBar.open('Failed to update product', 'Dismiss', { duration: 3000 });
       }
     });

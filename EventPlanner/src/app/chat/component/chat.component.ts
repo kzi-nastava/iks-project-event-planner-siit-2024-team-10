@@ -1,10 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewChecked, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChatService } from '../service/chat.service';
-import * as Stomp from 'stompjs';
-import SockJS from 'sockjs-client';
 import { Message } from '../model/message.model';
-import { ActivatedRoute } from '@angular/router';
 import { CreateMessage } from '../model/create-message.model';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,7 +11,7 @@ import { CreateAccountReportDTO } from '../../suspension/model/create-account-re
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../layout/confirm-dialog/confirm-dialog.component';
 import { AccountService } from '../../account/account.service';
-import { firstValueFrom } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 export interface ChatContact {
   user: number;
@@ -29,24 +26,25 @@ export interface ChatContact {
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
-  private serverUrl = 'http://localhost:8080/socket';
-  private stompClient: any;
   form!: FormGroup;
   
+  // State
   isLoaded: boolean = false;
   messages: Message[] = [];
   contacts: ChatContact[] = []; 
-  
   loggedInUserId!: number;
   selectedContactId: number | null = null;
-
   isChatterBlocked: boolean = false;
   chatterBlockedMsg: string = "";
+  
+  // Subscriptions
+  private subscriptions: Subscription[] = [];
+  private contactUpdateTimeout: any;
   
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
 
   constructor(
-    private socketService: ChatService,
+    private chatService: ChatService,
     private authService: AuthService,
     private reportService: SuspensionService,
     private accountService: AccountService,
@@ -55,196 +53,172 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const state = history.state;
-    this.loggedInUserId = state.loggedInUserId;
-    this.selectedContactId = state.organizerId;
-    this.loadMessages(this.loggedInUserId, this.selectedContactId);
-
-    if (this.loggedInUserId === undefined) {
-      this.loggedInUserId = this.authService.getAccountId();
-    }
-    console.log(this.loggedInUserId)
-    console.log(this.selectedContactId)
-    this.form = new FormGroup({
-    message: new FormControl(null, [Validators.required])
-    });
-
-    this.initializeWebSocketConnection();
-    this.loadContacts();
-
-    if (this.selectedContactId) {
-      this.loadMessages(this.loggedInUserId, this.selectedContactId);
-    }
+    this.initializeComponent();
+    this.setupForm();
+    this.setupSubscriptions();
+    this.initializeChat();
   }
 
   ngOnDestroy() {
-    if (this.stompClient && this.stompClient.connected) {
-      this.stompClient.disconnect();
+    this.cleanup();
+  }
+
+  private initializeComponent(): void {
+    const state = history.state;
+    this.loggedInUserId = state.loggedInUserId || this.authService.getAccountId();
+    this.selectedContactId = state.organizerId;
+  }
+
+  private setupForm(): void {
+    this.form = new FormGroup({
+      message: new FormControl(null, [Validators.required])
+    });
+  }
+
+  private setupSubscriptions(): void {
+    // Subscribe to connection status
+    const connectionSub = this.chatService.isConnected$.subscribe(isConnected => {
+      this.isLoaded = isConnected;
+    });
+
+    // Subscribe to incoming messages
+    const messageSub = this.chatService.messages$.subscribe(message => {
+      this.handleIncomingMessage(message);
+    });
+
+    // Subscribe to contacts updates
+    const contactsSub = this.chatService.contacts$.subscribe(contacts => {
+      this.contacts = contacts;
+    });
+
+    this.subscriptions.push(connectionSub, messageSub, contactsSub);
+  }
+
+  private async initializeChat(): Promise<void> {
+    try {
+      await this.chatService.initializeWebSocketConnection(this.loggedInUserId);
+      this.loadContacts();
+      
+      if (this.selectedContactId) {
+        this.loadMessages(this.loggedInUserId, this.selectedContactId);
+      }
+    } catch (error) {
     }
   }
 
+  private handleIncomingMessage(message: Message): void {
+    if (this.isPartOfCurrentConversation(message)) {
+      const messageExists = this.chatService.isMessageDuplicate(message, this.messages);
+      
+      if (!messageExists) {
+        this.messages.push(message);
+        setTimeout(() => this.scrollToBottom(), 100);
+      }
+    }
+    
+    this.updateContactsDebounced();
+  }
+
+  private cleanup(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.chatService.disconnect();
+    
+    if (this.contactUpdateTimeout) {
+      clearTimeout(this.contactUpdateTimeout);
+    }
+  }
+
+  // UI Methods
   getSelectedContactName(): string {
     const selectedContact = this.contacts.find(contact => contact.user === this.selectedContactId);
     return selectedContact?.name || '';
   }
 
-  loadContacts() {
-    this.socketService.getContacts(this.loggedInUserId).subscribe({
+  loadContacts(): void {
+    this.chatService.getContacts(this.loggedInUserId).subscribe({
       next: (contacts) => {
         this.contacts = contacts;
+        this.chatService.updateContacts(contacts);
+        
         if (contacts.length > 0 && !this.selectedContactId) {
           this.selectContact(contacts[0]);
         }
-      },
-      error: (err) => {
-        console.error('Error loading contacts:', err);
       }
     });
   }
 
-  selectContact(contact: ChatContact) {
+  selectContact(contact: ChatContact): void {
     this.selectedContactId = contact.user;
     this.loadMessages(this.loggedInUserId, contact.user);
   }
 
-  isSentByCurrentUser(senderId: number): boolean {
-    return senderId === this.loggedInUserId;
-  }
-
-  loadMessages(senderId: number, receiverId: number) {
+  loadMessages(senderId: number, receiverId: number): void {
     this.checkBlockedStatus(senderId, receiverId);
-    this.socketService.getMessages(senderId, receiverId).subscribe({
+    
+    this.chatService.getMessages(senderId, receiverId).subscribe({
       next: (messages) => {
         this.messages = messages;
+        this.chatService.updateMessages(messages);
         setTimeout(() => this.scrollToBottom(), 100);
-      },
-      error: (err) => {
-        console.error('Error fetching messages:', err);
       }
     });
   }
 
-  sendMessageUsingSocket() {
-    if (this.form.valid && this.selectedContactId) {
-      const messageContent = this.form.value.message;
-
-      const socketMessage = {
-        fromId: this.loggedInUserId,
-        toId: this.selectedContactId,
-        message: messageContent,
-        timestamp: new Date().toISOString()
-      };
-
-      const createMessage: CreateMessage = {
-        content: messageContent,
-        sender: this.loggedInUserId,
-        receiver: this.selectedContactId
-      };
-
-      // Slanje preko WebSocket-a
-      if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send("/socket-subscriber/send/message", {}, JSON.stringify(socketMessage));
-      }
-
-      // Odmah prikaži poruku u UI
-      const localMessage: Message = {
-        content: messageContent,
-        senderId: this.loggedInUserId,
-        receiverId: this.selectedContactId,
-        timestamp: new Date()
-      };
-      this.messages.push(localMessage);
-      setTimeout(() => this.scrollToBottom(), 100);
-
-      // Resetuj formu
-      this.form.reset();
-
-      // REST API poziv
-      this.socketService.add(createMessage).subscribe({
-        next: (response) => {
-          console.log('Message saved to database:', response);
-        },
-        error: (err) => {
-          console.error('Error saving message to database:', err);
-          this.snackBar.open('Failed to send message. Please try again.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error']
-          });
-        }
-      });
+  sendMessageUsingSocket(): void {
+    if (!this.form.valid || !this.selectedContactId) {
+      return;
     }
-  }
 
-  initializeWebSocketConnection() {
-    const ws = new SockJS(this.serverUrl);
-    this.stompClient = Stomp.over(ws);
+    const messageContent = this.form.value.message;
+    const createMessage: CreateMessage = {
+      content: messageContent,
+      sender: this.loggedInUserId,
+      receiver: this.selectedContactId
+    };
 
-    this.stompClient.debug = (str: string) => {
-      console.log('STOMP Debug:', str);
+    // Send via WebSocket
+    this.chatService.sendMessageViaSocket(this.loggedInUserId, this.selectedContactId, messageContent);
+
+    // Add to local UI immediately
+    const localMessage: Message = {
+      content: messageContent,
+      senderId: this.loggedInUserId,
+      receiverId: this.selectedContactId,
+      timestamp: new Date()
     };
     
-    this.stompClient.connect({}, 
-      () => {
-        console.log('WebSocket connected successfully');
-        this.isLoaded = true;
-        this.subscribeToUserMessages();
+    this.messages.push(localMessage);
+    this.chatService.addMessage(localMessage);
+    setTimeout(() => this.scrollToBottom(), 100);
+
+    // Reset form
+    this.form.reset();
+
+    // Send via REST API for persistence
+    this.chatService.sendMessage(createMessage).subscribe({
+      next: (response) => {
+        // Message sent successfully
       },
-      (error: any) => {
-        console.error('WebSocket connection error:', error);
-        this.isLoaded = false;
-        setTimeout(() => {
-          console.log('Retrying WebSocket connection...');
-          this.initializeWebSocketConnection();
-        }, 5000);
+      error: (err) => {
+        this.snackBar.open('Failed to send message. Please try again.', 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error']
+        });
       }
-    );
+    });
   }
 
-  subscribeToUserMessages() {
-    if (this.isLoaded && this.stompClient.connected) {
-      const userTopic = `/socket-publisher/${this.loggedInUserId}`;
-      this.stompClient.subscribe(userTopic, (message: { body: string }) => {
-        console.log(message);
-        this.handleResult(message);
-      });
-    }
+  // Helper Methods
+  isSentByCurrentUser(senderId: number): boolean {
+    return senderId === this.loggedInUserId;
   }
 
-  handleResult(message: { body: string }) {
-    if (message.body) {
-      try {
-        const messageData = JSON.parse(message.body);
-
-        const messageResult: Message = {
-          content: messageData.message || messageData.content,
-          senderId: messageData.fromId || messageData.senderId,
-          receiverId: messageData.toId || messageData.receiverId,
-          timestamp: messageData.timestamp ? new Date(messageData.timestamp) : new Date()
-        };
-
-        if (this.isPartOfCurrentConversation(messageResult)) {
-          const messageExists = this.messages.some(msg => 
-            msg.content === messageResult.content &&
-            msg.senderId === messageResult.senderId &&
-            msg.receiverId === messageResult.receiverId &&
-            Math.abs(new Date(msg.timestamp).getTime() - messageResult.timestamp.getTime()) < 1000
-          );
-
-          if (!messageExists) {
-            this.messages.push(messageResult);
-            setTimeout(() => this.scrollToBottom(), 100);
-          }
-        }
-
-        this.updateContactsDebounced();
-      } catch (error) {
-        console.error('Error parsing WebSocket message:', error);
-      }
-    }
+  private isPartOfCurrentConversation(message: Message): boolean {
+    return (message.senderId === this.loggedInUserId && message.receiverId === this.selectedContactId) ||
+           (message.senderId === this.selectedContactId && message.receiverId === this.loggedInUserId);
   }
 
-  private contactUpdateTimeout: any;
-  updateContactsDebounced() {
+  private updateContactsDebounced(): void {
     if (this.contactUpdateTimeout) {
       clearTimeout(this.contactUpdateTimeout);
     }
@@ -253,12 +227,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     }, 1000);
   }
 
-  isPartOfCurrentConversation(message: Message): boolean {
-    return (message.senderId === this.loggedInUserId && message.receiverId === this.selectedContactId) ||
-           (message.senderId === this.selectedContactId && message.receiverId === this.loggedInUserId);
-  }
-
-  ngAfterViewChecked() {
+  ngAfterViewChecked(): void {
     if (this.messages.length > 0 && this.myScrollContainer) {
       this.scrollToBottom();
     }
@@ -266,97 +235,32 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   scrollToBottom(): void {
     try {
-      if (this.myScrollContainer && this.myScrollContainer.nativeElement) {
+      if (this.myScrollContainer?.nativeElement) {
         this.myScrollContainer.nativeElement.scrollTop = 
           this.myScrollContainer.nativeElement.scrollHeight;
       }
-    } catch(err) {
-      console.error('Error scrolling to bottom:', err);
-    }
+    }catch(err) { 
+    } 
   }
 
+  // Report & Block Methods (keep in component as they're UI-specific)
   reportAccount(accountId: number): void {
-  this.dialog.open(ReportFormComponent, {
-    data: {
-      reporterId: this.loggedInUserId,
-      reporteeId: accountId
-    }
-  }).afterClosed().subscribe((result: CreateAccountReportDTO) => {
-    if (result) {
-      this.reportService.sendReport(result).subscribe({
-        next: () => {
-          this.snackBar.open('User reported successfully.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-success']
-          });
-        },
-        error: (err) => {
-          const errorMsg = err?.error ?? 'Failed to report user.';
-          this.snackBar.open(errorMsg, 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error']
-          });
-        }
-      });
-    }
-  });
-}
-
-blockAccount(accountId: number): void {
-  // Prevent blocking back if the user has already been blocked
-  if (this.chatterBlockedMsg === "You have been blocked by this user") {
-    this.snackBar.open('You cannot block a user who has already blocked you.', 'Close', {
-      duration: 3000,
-      panelClass: ['snackbar-error']
-    });
-    return;
-  }
-
-  const isCurrentlyBlockedByYou = this.chatterBlockedMsg === "You have blocked this user";
-  const dialogMsg = isCurrentlyBlockedByYou
-    ? "Are you sure you want to unblock this account?"
-    : "Are you sure you want to block this account?";
-
-  this.dialog.open(ConfirmDialogComponent, {
-    data: {
-      message: dialogMsg
-    }
-  }).afterClosed().subscribe(result => {
-    if (result) {
-      if (isCurrentlyBlockedByYou) {
-        // Unblock flow
-        this.accountService.unblockAccount(accountId).subscribe({
+    this.dialog.open(ReportFormComponent, {
+      data: {
+        reporterId: this.loggedInUserId,
+        reporteeId: accountId
+      }
+    }).afterClosed().subscribe((result: CreateAccountReportDTO) => {
+      if (result) {
+        this.reportService.sendReport(result).subscribe({
           next: () => {
-            this.snackBar.open('User unblocked successfully.', 'Close', {
+            this.snackBar.open('User reported successfully.', 'Close', {
               duration: 3000,
               panelClass: ['snackbar-success']
             });
-            if (this.loggedInUserId && this.selectedContactId) {
-              this.checkBlockedStatus(this.loggedInUserId, this.selectedContactId);
-            }
           },
           error: (err) => {
-            const errorMsg = err?.error ?? 'Failed to unblock user.';
-            this.snackBar.open(errorMsg, 'Close', {
-              duration: 3000,
-              panelClass: ['snackbar-error']
-            });
-          }
-        });
-      } else {
-        // Block flow
-        this.accountService.blockAccount(accountId).subscribe({
-          next: () => {
-            this.snackBar.open('User blocked successfully.', 'Close', {
-              duration: 3000,
-              panelClass: ['snackbar-success']
-            });
-            if (this.loggedInUserId && this.selectedContactId) {
-              this.checkBlockedStatus(this.loggedInUserId, this.selectedContactId);
-            }
-          },
-          error: (err) => {
-            const errorMsg = err?.error ?? 'Failed to block user.';
+            const errorMsg = err?.error ?? 'Failed to report user.';
             this.snackBar.open(errorMsg, 'Close', {
               duration: 3000,
               panelClass: ['snackbar-error']
@@ -364,33 +268,73 @@ blockAccount(accountId: number): void {
           }
         });
       }
+    });
+  }
+
+  blockAccount(accountId: number): void {
+    if (this.chatterBlockedMsg === "You have been blocked by this user") {
+      this.snackBar.open('You cannot block a user who has already blocked you.', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-error']
+      });
+      return;
     }
-  });
-}
 
-  checkBlockedStatus(senderId: number, receiverId: number): void {
-  const blockedByYou$ = this.accountService.isAccountBlocked(senderId, receiverId);
-  const blockedByOther$ = this.accountService.isAccountBlocked(receiverId, senderId);
+    const isCurrentlyBlockedByYou = this.chatterBlockedMsg === "You have blocked this user";
+    const dialogMsg = isCurrentlyBlockedByYou
+      ? "Are you sure you want to unblock this account?"
+      : "Are you sure you want to block this account?";
 
-  Promise.all([
-    firstValueFrom(blockedByYou$),
-    firstValueFrom(blockedByOther$)
-  ]).then(([youBlocked, theyBlocked]) => {
-    if (youBlocked.blocked) {
-      this.chatterBlockedMsg = "You have blocked this user";
-      this.isChatterBlocked = true;
-    } else if (theyBlocked.blocked) {
-      this.chatterBlockedMsg = "You have been blocked by this user";
-      this.isChatterBlocked = true;
-    } else {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: { message: dialogMsg }
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        const operation = isCurrentlyBlockedByYou 
+          ? this.accountService.unblockAccount(accountId)
+          : this.accountService.blockAccount(accountId);
+
+        operation.subscribe({
+          next: () => {
+            const successMsg = isCurrentlyBlockedByYou ? 'User unblocked successfully.' : 'User blocked successfully.';
+            this.snackBar.open(successMsg, 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-success']
+            });
+            
+            if (this.loggedInUserId && this.selectedContactId) {
+              this.checkBlockedStatus(this.loggedInUserId, this.selectedContactId);
+            }
+          },
+          error: (err) => {
+            const errorMsg = err?.error ?? `Failed to ${isCurrentlyBlockedByYou ? 'unblock' : 'block'} user.`;
+            this.snackBar.open(errorMsg, 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-error']
+            });
+          }
+        });
+      }
+    });
+  }
+
+  private checkBlockedStatus(senderId: number, receiverId: number): void {
+    Promise.all([
+      this.accountService.isAccountBlocked(senderId, receiverId).toPromise(),
+      this.accountService.isAccountBlocked(receiverId, senderId).toPromise()
+    ]).then(([youBlocked, theyBlocked]) => {
+      if (youBlocked?.blocked) {
+        this.chatterBlockedMsg = "You have blocked this user";
+        this.isChatterBlocked = true;
+      } else if (theyBlocked?.blocked) {
+        this.chatterBlockedMsg = "You have been blocked by this user";
+        this.isChatterBlocked = true;
+      } else {
+        this.chatterBlockedMsg = "";
+        this.isChatterBlocked = false;
+      }
+    }).catch(err => {
       this.chatterBlockedMsg = "";
       this.isChatterBlocked = false;
-    }
-  }).catch(err => {
-    console.error('Error checking blocked status:', err);
-    this.chatterBlockedMsg = "";
-    this.isChatterBlocked = false;
-  });
-}
-
+    });
+  }
 }

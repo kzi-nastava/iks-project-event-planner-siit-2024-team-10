@@ -6,7 +6,7 @@ import { OfferingService } from '../offering-service/offering.service';
 import { ServiceService } from '../service-service/service.service';
 import { EditServiceDTO } from '../model/edit-service-dto.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { ImageService } from '../image-service/image.service';
 @Component({
   selector: 'app-edit-service',
   templateUrl: './edit-service.component.html',
@@ -18,7 +18,8 @@ export class EditServiceComponent implements OnInit {
   snackBar: MatSnackBar = inject(MatSnackBar);
   constructor(
     private fb: FormBuilder,
-    private serviceService: ServiceService
+    private serviceService: ServiceService,
+    private imageService:ImageService
   ) {}
 
   ngOnInit(): void {
@@ -45,12 +46,28 @@ export class EditServiceComponent implements OnInit {
       reservationPeriod: [''],
       cancellationPeriod: [''],
       isAvailable: [true],
-      isVisible: [true]
+      isVisible: [true],
     });
   }
 
   prefillForm(data: any): void {
     const timeType = data.fixedTime ? 'fixed' : 'flexible';
+  
+    let photosFilenames: string[] = [];
+    
+    if (data.photos && data.photos.length > 0) {
+      console.log('Before processing photos:', data.photos);
+      
+      photosFilenames = data.photos.map((photo: string) => {
+        if (!photo.includes('/')) {
+          return photo;
+        }
+        return photo.split('/').pop() || photo;
+      });
+      
+      console.log('Processed filenames:', photosFilenames);
+    }
+  
     this.offeringForm.patchValue({
       id: data.id || null,
       name: data.name || '',
@@ -66,24 +83,58 @@ export class EditServiceComponent implements OnInit {
       cancellationPeriod: data.cancellationPeriod || 0, 
       isAvailable: data.isAvailable !== undefined ? data.isAvailable : true,
       isVisible: data.isVisible !== undefined ? data.isVisible : true,
+      photos: photosFilenames 
     });
-  }  
-
-  onPhotoUpload(event: any): void {
-    const files = event.target.files;
-    const photosControl = this.offeringForm.get('photos');
-    if (photosControl) {
-      photosControl.setValue([...files]);
-    }
+    
+    console.log('Final photos in form:', this.offeringForm.get('photos')?.value);
   }
 
+  onPhotoUpload(event: any): void {
+    const files: FileList = event.target.files;
+    if (files.length === 0) return;
+  
+    const currentPhotos = this.offeringForm.get('photos')?.value || [];
+    if (currentPhotos.length + files.length > 5) {
+      this.snackBar.open('Maximum 5 photos allowed', 'OK', { duration: 3000 });
+      return;
+    }
+  
+    this.imageService.uploadFiles(files).subscribe({
+      next: (uploadedFileNames: string[]) => {
+        const updatedPhotos = [...currentPhotos, ...uploadedFileNames];
+        this.offeringForm.patchValue({ photos: updatedPhotos });
+        this.snackBar.open('Photos uploaded successfully', 'OK', { duration: 3000 });
+      },
+      error: () => {
+        this.snackBar.open('Failed to upload photos', 'Dismiss', { duration: 3000 });
+      }
+    });
+  
+    event.target.value = '';
+  }
+  
+  getPhotoUrl(photo: string | File): string {
+    if (photo instanceof File) {
+      return URL.createObjectURL(photo);
+    }
+    return this.imageService.getImageUrl(photo);
+  }
+  removePhoto(index: number): void {
+    const photosControl = this.offeringForm.get('photos');
+    if (!photosControl) return;
+  
+    const currentPhotos = photosControl.value as (string | File)[];
+    currentPhotos.splice(index, 1);
+    photosControl.setValue([...currentPhotos]);
+  }
+  
   onSubmit(): void {
+    console.log('Form submitted with value:', this.offeringForm.value);
     if (this.offeringForm.valid) {
       const formData : EditServiceDTO = {
         ...this.offeringForm.value,
       };
 
-      console.log(formData);
       this.serviceService.edit(formData).subscribe({
         next: (response) => {
           this.snackBar.open('Service edited successfully', 'OK', { 

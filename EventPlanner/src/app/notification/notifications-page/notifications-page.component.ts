@@ -36,7 +36,6 @@ export class NotificationsPageComponent implements OnInit, OnDestroy  {
 
     this.notificationService.isNotificationsSilenced(this.accountId).subscribe({
       next: (silenced) => this.notificationsSilenced = silenced,
-      error: (err) => console.error('Failed to fetch silenced status', err)
     });
   }
 
@@ -71,9 +70,6 @@ export class NotificationsPageComponent implements OnInit, OnDestroy  {
     this.notificationService.toggleNotifications(this.accountId).subscribe({
       next: () => {
         this.notificationsSilenced = !this.notificationsSilenced;
-      },
-      error: (err) => {
-        console.error('Failed to toggle notifications', err);
       }
     });
   }
