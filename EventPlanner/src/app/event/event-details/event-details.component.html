@@ -109,7 +109,7 @@
                 {{ event?.organizer?.phoneNumber }}
               </p>
             </div>
-            <div class="provider-actions" style="width: 200px;">
+            <div *ngIf="!owner && loggedInUserId!==null" class="provider-actions" style="width: 200px;">
               <button class="view-profile-btn" (click)="navigateToChat()">
                 <i class="fas fa-comment"></i>
                 Chat with organizer

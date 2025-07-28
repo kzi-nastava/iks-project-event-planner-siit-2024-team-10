@@ -10,6 +10,7 @@ import { forkJoin, map } from 'rxjs';
 import { Comment } from '../offering/model/comment.model';
 import { OfferingService } from '../offering/offering-service/offering.service';
 import { environment } from '../../env/environment';
+import { ImageService } from '../offering/image-service/image.service';
 
 @Component({
   selector: 'app-provider-profile',
@@ -41,7 +42,8 @@ export class ProviderProfileComponent implements OnInit {
     private snackBar: MatSnackBar,
     private authService: AuthService,
     private router: Router,
-    private offeringService: OfferingService
+    private offeringService: OfferingService,
+    private imageService:ImageService
   ) {}
 
   ngOnInit() {
@@ -64,16 +66,7 @@ export class ProviderProfileComponent implements OnInit {
   */
 
   get profilePhoto(): string {
-    try{
-      if (!this.provider) {
-        return '';
-      }
-      const photo = this.provider.profilePhoto;
-      const fileName = photo.split('\\').pop()?.split('/').pop();
-      return `${environment.apiHost}/images/${fileName}`;
-    }catch(e){
-      return `${environment.apiHost}/images/placeholder-image.png`;
-    }
+    return this.imageService.getImageUrl(this.provider?.profilePhoto);
   }
 
   loadOfferingsWithComments(providerId: number) {

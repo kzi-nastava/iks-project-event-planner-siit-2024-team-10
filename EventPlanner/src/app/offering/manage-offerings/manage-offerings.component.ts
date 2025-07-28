@@ -111,7 +111,7 @@ export class ManageOfferingsComponent implements OnInit {
         : OfferingWarningDialogComponent;
 
     const dialogWidth = dialogComponent === OfferingWarningDialogComponent ? '400px' : '600px';
-    const dialogRef = this.dialog.open(dialogComponent, { width: dialogWidth });
+    const dialogRef = this.dialog.open(dialogComponent, { width: dialogWidth , data: true });
 
     dialogRef.afterClosed().subscribe((newFilters) => {
       if (newFilters) {

@@ -22,7 +22,6 @@ export class ImageService {
   }
   
 
-  // Vraća jedan URL (ili placeholder ako je undefined/null)
   getImageUrl(name: string | undefined | null): string {
     if (!name) {
       return `${environment.apiHost}/images/placeholder-image.png`;

@@ -55,9 +55,7 @@ export class EditServiceComponent implements OnInit {
   
     let photosFilenames: string[] = [];
     
-    if (data.photos && data.photos.length > 0) {
-      console.log('Before processing photos:', data.photos);
-      
+    if (data.photos && data.photos.length > 0)  {     
       photosFilenames = data.photos.map((photo: string) => {
         if (!photo.includes('/')) {
           return photo;
@@ -65,7 +63,6 @@ export class EditServiceComponent implements OnInit {
         return photo.split('/').pop() || photo;
       });
       
-      console.log('Processed filenames:', photosFilenames);
     }
   
     this.offeringForm.patchValue({
@@ -86,7 +83,6 @@ export class EditServiceComponent implements OnInit {
       photos: photosFilenames 
     });
     
-    console.log('Final photos in form:', this.offeringForm.get('photos')?.value);
   }
 
   onPhotoUpload(event: any): void {
@@ -129,7 +125,6 @@ export class EditServiceComponent implements OnInit {
   }
   
   onSubmit(): void {
-    console.log('Form submitted with value:', this.offeringForm.value);
     if (this.offeringForm.valid) {
       const formData : EditServiceDTO = {
         ...this.offeringForm.value,

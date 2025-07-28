@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog.component';
 import {UpdateProfilePhotoComponent} from '../update-profile-photo/update-profile-photo.component';
 import {UpdateCompanyPhotosComponent} from '../update-company-photos/update-company-photos.component';
+import { ImageService } from '../../offering/image-service/image.service';
 
 @Component({
   selector: 'app-user-details',
@@ -26,6 +27,7 @@ export class UserDetailsComponent implements OnInit {
 
   constructor(private authService:AuthService,
               private userService: UserService,
+              private imageService:ImageService,
               private dialog: MatDialog,
               private router: Router,){
 
@@ -53,10 +55,9 @@ export class UserDetailsComponent implements OnInit {
 
   getProfilePhoto():string{
     if(this.user?.profilePhoto==null)
-      return "profile_photo.png"
+      return this.imageService.getImageUrl(undefined);
     else{
-      const fileName = this.user?.profilePhoto.split('\\').pop()?.split('/').pop();
-      return `${environment.apiHost}/images/${fileName}`
+      return this.imageService.getImageUrl(this.user?.profilePhoto);
     }
   }
 
@@ -69,10 +70,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   loadImages():void{
-    this.images=this.user?.company?.photos.map(photo => {
-      const fileName = photo.split('\\').pop()?.split('/').pop();
-      return `${environment.apiHost}/images/${fileName}`;
-    });
+    this.images = this.imageService.getImageUrls(this.images=this.user?.company?.photos);
   }
 
   setActiveImage(index: number): void {

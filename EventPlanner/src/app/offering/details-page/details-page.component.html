@@ -99,9 +99,13 @@
         <div class="spec-item">
           <span class="spec-label">Duration:</span>
           <span class="spec-value">
-            {{ offering?.fixedTime || (offering?.minDuration + ' - ' + offering?.maxDuration) || 'N/A' }} hours
+            {{ offering?.fixedTime 
+                || (offering?.minDuration === offering?.maxDuration 
+                    ? offering?.minDuration 
+                    : offering?.minDuration + ' - ' + offering?.maxDuration) 
+                || 'N/A' }} hours
           </span>
-        </div>
+        </div>        
         <div class="spec-item">
           <span class="spec-label">Reservation Period:</span>
           <span class="spec-value">{{offering?.reservationPeriod || 'N/A'}} hours in advance</span>
@@ -128,10 +132,7 @@
           <img [src]="profilePhoto" alt="Provider" class="provider-avatar">
           <div class="provider-details">
             <h3>{{offering?.provider?.company?.name || 'Unknown Company'}}</h3>
-            <div class="rating">
-              <span class="stars">★★★★☆</span>
-              <span class="rating-number">({{offering?.averageRating || 0}})</span>
-            </div>
+          
             <p class="provider-location">
               <i class="fas fa-location">📍</i>
               {{ offering?.provider?.company?.location?.city || '-' }},
