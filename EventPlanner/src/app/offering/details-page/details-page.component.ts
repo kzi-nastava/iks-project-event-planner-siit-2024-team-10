@@ -86,7 +86,9 @@ export class DetailsPageComponent implements OnInit {
   ngOnInit(): void {
     this.authService.userState.subscribe((result) => {
       this.role = result;
-    })
+      this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
+    });
+    
 
     this.loggedInAccountId = this.authService.getAccountId();
 
@@ -96,6 +98,7 @@ export class DetailsPageComponent implements OnInit {
 
   if (passedOffering && passedOffering.id) {
     this.offering = passedOffering;
+    this.checkIfUserPurchasedOffering(this.offering.id);
     this.setupOffering(this.offering);
   }
   else{
@@ -142,11 +145,11 @@ export class DetailsPageComponent implements OnInit {
 setupOffering(offering: Product | Service): void {
   if (!offering) return;
 
+  this.checkIfUserPurchasedOffering(offering.id);
+
   if (offering.photos) {
     offering.photos = this.imageService.getImageUrls(offering.photos);
-    console.log('Offering photos:', offering.photos);
   }
-  
 
   this.offering = offering;
   this.images = offering.photos || [];
@@ -154,16 +157,8 @@ setupOffering(offering: Product | Service): void {
   this.loadComments();
 
   this.accountService.getFavouriteOffering(offering.id).subscribe({
-    next: (offering:Offering) => {
-      this.isFavourite = true;
-    },
-    error: (err) => {
-      if(err.status===404)
-        this.isFavourite = false;
-      else{
-        this.snackBar.open('Error fetching favourite offering','OK',{duration:5000});
-      }
-    }
+    next: () => this.isFavourite = true,
+    error: (err) => this.isFavourite = err.status === 404 ? false : this.isFavourite
   });
 }
 
@@ -173,6 +168,8 @@ setupOffering(offering: Product | Service): void {
   }
 
   loadComments(): void {
+    this.checkIfUserPurchasedOffering(this.offering.id);
+
     if (this.offering) {
       this.offeringService.getComments(this.offering.id)
         .subscribe(comments => {
@@ -448,5 +445,23 @@ setupOffering(offering: Product | Service): void {
           });
         }
       });
+    }
+    checkIfUserPurchasedOffering(offeringId: number): void {
+      console.log('Checking if user has purchased offering:', offeringId);
+      if (!this.isEventOrganizer) {
+        this.isCommentingEnabled = false;
+        return;
+      }
+    
+      this.offeringService.hasUserPurchasedOffering(this.authService.getAccountId(), offeringId)
+        .subscribe({
+          next: (purchased: boolean) => {
+            this.isCommentingEnabled = purchased;
+          },
+          error: () => {
+            this.isCommentingEnabled = false;
+          }
+        });
+        console.log('isCommentingEnabled:', this.isCommentingEnabled);
     }
 }

@@ -29,6 +29,6 @@ export class BudgetItemService {
   }
   delete(eventId: number, budgetItemId: number): Observable<void> {
       return this.httpClient.delete<void>(`${environment.apiHost}/events/${eventId}/budget/${budgetItemId}`);
-  }    
+  }       
 }
 

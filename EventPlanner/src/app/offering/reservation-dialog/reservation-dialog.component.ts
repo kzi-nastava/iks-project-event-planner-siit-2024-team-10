@@ -50,16 +50,22 @@ ngOnInit(): void {
       this.reservationForm.get('endTime')?.disable();
     }
 
-  this.reservationService.findEventsByOrganizer(this.accountId).subscribe(events => {
-    if (events.length === 0) {
-      this.errorMsg = 'No events found, cannot make reservation.';
-      this.snackBar.open('No events found', 'Close', {
-        duration: 3000
-      });
-    } else{
-      this.events = events;
-    }
-  });
+    this.reservationService.findEventsByOrganizer(this.accountId).subscribe({
+      next: (events) => {
+        if (events.length === 0) {
+          this.errorMsg = 'No events found, cannot make reservation.';
+          this.snackBar.open('No events found', 'Close', { duration: 3000 });
+        } else {
+          this.events = events;
+          console.log('Events fetched successfully:', this.events);
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching events:', err);
+        this.snackBar.open('Error fetching your events.', 'Close', { duration: 3000 });
+      }
+    });
+    
 
   this.reservationForm.get('startTime')?.valueChanges.subscribe(startTime => {
     if (offering.minDuration === offering.maxDuration && startTime) {

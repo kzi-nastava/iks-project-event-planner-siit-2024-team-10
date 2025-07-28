@@ -93,4 +93,7 @@ export class OfferingService {
   changeOfferingCategory(offeringId: number, dto: ChangeOfferingCategoryDTO): Observable<any> {
     return this.httpClient.put(environment.apiHost + `/offerings/${offeringId}/category`, dto);
   }  
+  hasUserPurchasedOffering(userId: number, offeringId: number): Observable<boolean> {
+    return this.httpClient.get<boolean>(`${environment.apiHost}/offerings/${userId}/purchased/${offeringId}`);
+} 
 }
