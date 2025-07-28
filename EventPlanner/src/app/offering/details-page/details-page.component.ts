@@ -30,6 +30,7 @@ import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog
 import { ReportFormComponent } from '../../suspension/report-form/report-form.component';
 import { SuspensionService } from '../../suspension/suspension.service';
 import { CreateAccountReportDTO } from '../../suspension/model/create-account-report-dto.model';
+import { ImageService } from '../image-service/image.service';
 
 @Component({
   selector: 'app-details-page',
@@ -79,6 +80,7 @@ export class DetailsPageComponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private reportService: SuspensionService,
+    private imageService:ImageService
   ) {}
 
   ngOnInit(): void {
@@ -109,13 +111,10 @@ export class DetailsPageComponent implements OnInit {
       }),
       map(offering => {
         if (offering && offering.photos) {
-          offering.photos = offering.photos.map(photo => {
-            const fileName = photo.split('\\').pop()?.split('/').pop();
-            return `${environment.apiHost}/images/${fileName}`;
-          });
+          offering.photos = this.imageService.getImageUrls(offering.photos);
         }
         return offering;
-      })
+      })      
     ).subscribe(offering => {
       this.offering = offering;
       if (this.offering && this.offering.photos) {
@@ -144,11 +143,10 @@ setupOffering(offering: Product | Service): void {
   if (!offering) return;
 
   if (offering.photos) {
-    offering.photos = offering.photos.map(photo => {
-      const fileName = photo.split('\\').pop()?.split('/').pop();
-      return `${environment.apiHost}/images/${fileName}`;
-    });
+    offering.photos = this.imageService.getImageUrls(offering.photos);
+    console.log('Offering photos:', offering.photos);
   }
+  
 
   this.offering = offering;
   this.images = offering.photos || [];
@@ -279,7 +277,8 @@ setupOffering(offering: Product | Service): void {
           isAvailable: this.offering.available || false,
           isVisible: this.offering.visible || false,
           autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,
-          eventTypes:this.offering.eventTypes
+          eventTypes:this.offering.eventTypes,
+          photos: this.offering.photos || []
         };
         this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
       }
@@ -351,15 +350,10 @@ setupOffering(offering: Product | Service): void {
   }
 
   get profilePhoto(): string {
-    try{
-      const photo = this.offering.provider?.profilePhoto;
-      const fileName = photo.split('\\').pop()?.split('/').pop();
-      return `${environment.apiHost}/images/${fileName}`;
-      } catch (error) {
-        return `${environment.apiHost}/images/placeholder-image.png`;
-    }
+    return this.imageService.getImageUrl(this.offering.provider?.profilePhoto);
   }
-
+  
+  
   openReservationDialog(): void {
     if (!this.authService.isLoggedIn()) {
       this.snackBar.open('Please log in to make a reservation', 'Close', {

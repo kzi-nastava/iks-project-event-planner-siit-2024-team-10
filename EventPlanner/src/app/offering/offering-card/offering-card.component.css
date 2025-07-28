@@ -14,6 +14,30 @@ mat-card-header {
   justify-content: space-between;
   align-items: center;
 }
+.offering-card {
+  width: 400px;
+  height: 150px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.offering-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+mat-card-content {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.card-footer {
+  margin-top: auto;
+}
+
 
 mat-card-title-group {
   display: flex;

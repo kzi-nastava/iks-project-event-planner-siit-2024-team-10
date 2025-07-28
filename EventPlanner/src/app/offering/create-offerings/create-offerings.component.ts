@@ -9,7 +9,7 @@ import { CreateServiceDTO } from '../model/create-service-dto.model';
 import { environment } from '../../../env/environment';
 import { CategoryService } from '../../offering/category-service/category.service';
 import {AuthService} from '../../infrastructure/auth/auth.service';
-
+import { ImageService } from '../image-service/image.service';
 @Component({
   selector: 'app-create-offerings',
   templateUrl: './create-offerings.component.html',
@@ -29,6 +29,7 @@ export class CreateOfferingsComponent implements OnInit {
     private authService: AuthService,
     private serviceService: ServiceService,
     private categoryService: CategoryService,
+    private imageService:ImageService,
     private http: HttpClient
   ) {}
 
@@ -97,26 +98,17 @@ export class CreateOfferingsComponent implements OnInit {
   }
 
   uploadFiles(files: FileList) {
-    const formData = new FormData();
-    const fakeId = 1;
-
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
-    }
-
-    formData.append('productId', fakeId.toString());
-
-    this.http.post(environment.apiHost + "/upload", formData).subscribe({
-      next: (response: any) => {
+    this.imageService.uploadFiles(files).subscribe({
+      next: (response: string[]) => {
         this.snackBar.open('Files uploaded successfully', 'OK', { duration: 3000 });
         this.photoPaths = response;
         this.createForm.patchValue({ photos: response });
       },
-      error: (error) => {
+      error: (_) => {
         this.snackBar.open('Failed to upload files', 'Dismiss', { duration: 3000 });
       }
     });
-  }
+  }  
 
   toggleSelection(type: string): void {
     if (this.selectedEventTypes.has(type)) {
