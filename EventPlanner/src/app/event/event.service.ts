@@ -1,238 +1,133 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Event } from './model/event.model';
-
-const TOP_EVENTS: Event[] = [
-  {
-    id: 1,
-    name: 'Tech Innovation Summit',
-    eventType: 'Conference',
-    organizer: 'TechWorld Inc.',
-    description: 'An annual gathering of industry leaders discussing the latest in technology, innovation, and startups.',
-    maxParticipants: 500,
-    isOpen: true,
-    date: new Date('2024-12-10T09:00:00'),
-    location: 'San Francisco, CA',
-    rating: 4.8
-  },
-  {
-    id: 2,
-    name: 'Global Health Conference',
-    eventType: 'Seminar',
-    organizer: 'World Health Organization',
-    description: 'A global seminar bringing together experts to discuss new health strategies and medical breakthroughs.',
-    maxParticipants: 300,
-    isOpen: true,
-    date: new Date('2024-11-15T08:00:00'),
-    location: 'Geneva, Switzerland',
-    rating: 4.7
-  },
-  {
-    id: 3,
-    name: 'Summer Music Festival',
-    eventType: 'Festival',
-    organizer: 'LiveNation',
-    description: 'A weekend of live performances featuring top artists from around the world in various music genres.',
-    maxParticipants: 10000,
-    isOpen: true,
-    date: new Date('2025-06-20T12:00:00'),
-    location: 'Los Angeles, CA',
-    rating: 4.9
-  },
-  {
-    id: 4,
-    name: 'Foodie Expo 2024',
-    eventType: 'Exhibition',
-    organizer: 'Food Network',
-    description: 'A food lover’s paradise with the best chefs, restaurants, and food brands showcasing their latest offerings.',
-    maxParticipants: 2000,
-    isOpen: true,
-    date: new Date('2024-12-05T10:00:00'),
-    location: 'New York, NY',
-    rating: 4.5
-  },
-  {
-    id: 5,
-    name: 'Space Exploration Symposium',
-    eventType: 'Conference',
-    organizer: 'NASA',
-    description: 'A symposium discussing the latest advancements in space exploration and research.',
-    maxParticipants: 500,
-    isOpen: true,
-    date: new Date('2025-01-10T09:00:00'),
-    location: 'Houston, TX',
-    rating: 4.8
-  }
-];
-
-const EVENTS: Event[] = [
-  {
-    id: 1,
-    name: 'Tech Innovation Summit',
-    eventType: 'Conference',
-    organizer: 'TechWorld Inc.',
-    description: 'An annual gathering of industry leaders discussing the latest in technology, innovation, and startups.',
-    maxParticipants: 500,
-    isOpen: true,
-    date: new Date('2024-12-10T09:00:00'),
-    location: 'San Francisco, CA',
-    rating: 4.8
-  },
-  {
-    id: 2,
-    name: 'Global Health Conference',
-    eventType: 'Seminar',
-    organizer: 'World Health Organization',
-    description: 'A global seminar bringing together experts to discuss new health strategies and medical breakthroughs.',
-    maxParticipants: 300,
-    isOpen: true,
-    date: new Date('2024-11-15T08:00:00'),
-    location: 'Geneva, Switzerland',
-    rating: 4.7
-  },
-  {
-    id: 3,
-    name: 'Summer Music Festival',
-    eventType: 'Festival',
-    organizer: 'LiveNation',
-    description: 'A weekend of live performances featuring top artists from around the world in various music genres.',
-    maxParticipants: 10000,
-    isOpen: true,
-    date: new Date('2025-06-20T12:00:00'),
-    location: 'Los Angeles, CA',
-    rating: 4.9
-  },
-  {
-    id: 4,
-    name: 'Foodie Expo 2024',
-    eventType: 'Exhibition',
-    organizer: 'Food Network',
-    description: 'A food lover’s paradise with the best chefs, restaurants, and food brands showcasing their latest offerings.',
-    maxParticipants: 2000,
-    isOpen: true,
-    date: new Date('2024-12-05T10:00:00'),
-    location: 'New York, NY',
-    rating: 4.5
-  },
-  {
-    id: 5,
-    name: 'Space Exploration Symposium',
-    eventType: 'Conference',
-    organizer: 'NASA',
-    description: 'A symposium discussing the latest advancements in space exploration and research.',
-    maxParticipants: 500,
-    isOpen: true,
-    date: new Date('2025-01-10T09:00:00'),
-    location: 'Houston, TX',
-    rating: 4.8
-  },
-  {
-    id: 6,
-    name: 'Fashion Week Paris',
-    eventType: 'Runway Show',
-    organizer: 'Paris Fashion Week',
-    description: 'A world-renowned fashion event showcasing the newest collections from top designers.',
-    maxParticipants: 1000,
-    isOpen: false,
-    date: new Date('2024-10-01T14:00:00'),
-    location: 'Paris, France',
-    rating: 5.0
-  },
-  {
-    id: 7,
-    name: 'Blockchain Revolution Summit',
-    eventType: 'Conference',
-    organizer: 'CryptoInnovate',
-    description: 'A summit focused on the future of blockchain technology and its applications in various industries.',
-    maxParticipants: 700,
-    isOpen: true,
-    date: new Date('2024-11-22T09:00:00'),
-    location: 'London, UK',
-    rating: 4.6
-  },
-  {
-    id: 8,
-    name: 'International Film Festival',
-    eventType: 'Festival',
-    organizer: 'Cannes Film Festival',
-    description: 'An international film festival showcasing groundbreaking films and performances.',
-    maxParticipants: 2000,
-    isOpen: false,
-    date: new Date('2024-05-15T18:00:00'),
-    location: 'Cannes, France',
-    rating: 4.9
-  },
-  {
-    id: 9,
-    name: 'Entrepreneurship Expo 2024',
-    eventType: 'Expo',
-    organizer: 'StartupNation',
-    description: 'An expo where entrepreneurs can showcase their startups and find investment opportunities.',
-    maxParticipants: 1000,
-    isOpen: true,
-    date: new Date('2024-12-01T10:00:00'),
-    location: 'Austin, TX',
-    rating: 4.7
-  },
-  {
-    id: 10,
-    name: 'Environmental Sustainability Conference',
-    eventType: 'Conference',
-    organizer: 'GreenEarth',
-    description: 'A conference dedicated to discussions about climate change, sustainability, and green technologies.',
-    maxParticipants: 600,
-    isOpen: true,
-    date: new Date('2025-02-20T09:00:00'),
-    location: 'Berlin, Germany',
-    rating: 4.6
-  }
-];
+import {environment} from '../../env/environment';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {CreateEventDTO} from './model/create-event-dto.model';
+import { PagedResponse } from './model/paged-response.model';
+import {AgendaItem} from './model/agenda-item.model';
+import {CreateEventRatingDTO} from './model/create-event-rating-dto.model';
+import {CreatedEventRatingDTO} from './model/created-event-rating-dto.model';
+import {CreateAgendaItemDTO} from './model/create-agenda-item-dto.model';
+import {UpdateAgendaItemDTO} from './model/update-agenda-item-dto.model';
+import {EventStats} from './model/event.stats.model';
+import {UpdateEventDTO} from './model/update-event-dto.model';
+import {UpdatedEventDTO} from './model/updated-event-dto.model';
+import { GuestList } from './model/guest-list.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
-  private eventList: Event[] = [];
-  private topEventList: Event[] = [];
-
-  constructor() {
-    for (let eventObj of EVENTS){
-      const event: Event = {
-        id: eventObj.id,
-        name: eventObj.name,
-        eventType: eventObj.eventType,
-        organizer: eventObj.organizer,
-        description: eventObj.description,
-        maxParticipants: eventObj.maxParticipants,
-        isOpen: eventObj.isOpen,
-        date: eventObj.date,
-        location: eventObj.location,
-        rating: eventObj.rating
-      };
-      this.eventList.push(event);
-    }
-    for (let eventObj of TOP_EVENTS){
-      const event: Event = {
-        id: eventObj.id,
-        name: eventObj.name,
-        eventType: eventObj.eventType,
-        organizer: eventObj.organizer,
-        description: eventObj.description,
-        maxParticipants: eventObj.maxParticipants,
-        isOpen: eventObj.isOpen,
-        date: eventObj.date,
-        location: eventObj.location,
-        rating: eventObj.rating
-      };
-      this.topEventList.push(event);
-    }
-  }
+  constructor(private httpClient: HttpClient) {}
 
   getAll(): Observable<Event[]> {
-    return of(this.eventList);
+    return this.httpClient.get<Event[]>(environment.apiHost+'/events/all');
   }
 
-  getTop(): Observable<Event[]> {
-    return of(this.topEventList);
+  getTop(accountId: number | null): Observable<Event[]> {
+    const params: any = {};
+
+    if (accountId !== null) {
+      params.accountId = accountId.toString();
+    }
+
+    return this.httpClient.get<Event[]>(environment.apiHost + '/events/top', { params: params });
+  }
+
+  getEvent(id:number): Observable<Event> {
+    return this.httpClient.get<Event>(environment.apiHost+'/events/'+id);
+  }
+
+  getMyEvents(id: number): Observable<Event[]> {
+    const params = new HttpParams().set('accountId', id.toString());
+    return this.httpClient.get<Event[]>(`${environment.apiHost}/events/organizers`, { params });
+  }
+
+  getEventAgenda(eventId:number): Observable<AgendaItem[]> {
+    return this.httpClient.get<AgendaItem[]>(environment.apiHost+'/events/'+eventId+'/agenda');
+  }
+
+  getEventStats(eventId:number): Observable<EventStats> {
+    return this.httpClient.get<EventStats>(environment.apiHost+'/events/'+eventId+'/stats');
+  }
+
+  getGuestList(eventId: number): Observable<GuestList>{
+    return this.httpClient.get<GuestList>(environment.apiHost + '/events/' + eventId + '/guests');
+  }
+
+  addParticipant(eventId:number):Observable<EventStats> {
+    return this.httpClient.post<EventStats>(environment.apiHost+'/events/'+eventId+'/stats/participants',null);
+  }
+
+  add(event:CreateEventDTO) : Observable<Event> {
+    return this.httpClient.post<Event>(environment.apiHost + "/events", event);
+  }
+
+  update(event:UpdateEventDTO, eventId:number):Observable<UpdatedEventDTO>{
+    return this.httpClient.put<UpdatedEventDTO>(environment.apiHost + "/events/"+eventId, event);
+  }
+
+  delete(eventId:number):Observable<void>{
+    return this.httpClient.delete<void>(environment.apiHost + "/events/"+eventId);
+  }
+
+  addRating(eventId:number,rating:CreateEventRatingDTO) : Observable<CreatedEventRatingDTO> {
+    return this.httpClient.post<CreatedEventRatingDTO>(environment.apiHost + "/events/"+eventId+"/ratings", rating);
+  }
+
+  addAgendaItem(eventId:number,agendaItem:CreateAgendaItemDTO) : Observable<AgendaItem> {
+    return this.httpClient.post<AgendaItem>(environment.apiHost + "/events/"+eventId+"/agenda", agendaItem);
+  }
+
+  updateAgendaItem(eventId:number,agendaItemId:number,agendaItem:UpdateAgendaItemDTO) : Observable<AgendaItem> {
+    return this.httpClient.put<AgendaItem>(environment.apiHost + "/events/"+eventId+"/agenda/"+agendaItemId, agendaItem);
+  }
+
+  deleteAgendaItem(eventId:number, agendaItemId:number) : Observable<void> {
+    return this.httpClient.delete<void>(environment.apiHost + "/events/"+eventId+"/agenda/"+agendaItemId);
+  }
+
+  generateOpenEventReport(eventId:number): Observable<Blob> {
+    return this.httpClient.get(environment.apiHost + '/events/'+eventId+'/reports/open-event',{
+      responseType: 'blob'
+    });
+  }
+
+  generateEventInfoReport(eventId:number): Observable<Blob> {
+    return this.httpClient.get(environment.apiHost + '/events/'+eventId+'/reports/info',{
+      responseType: 'blob'
+    });
+  }
+
+  generateGuestlistReport(eventId:number): Observable<Blob> {
+    return this.httpClient.get(environment.apiHost + '/events/'+eventId+'/reports/guestlist',{
+      responseType: 'blob'
+    });
+  }
+
+  sendGuestInvites(eventId: number, guests: string[]) {
+    return this.httpClient.post(environment.apiHost + '/events/' + eventId + '/invite', { guests });
+  }
+
+  processInvitation(token: string, email: string) {
+  return this.httpClient.post<void>(environment.apiHost + '/events/process-invitation?invitation-token=' + token, { email });
+}
+
+  getPaginatedEvents(
+    page: number,
+    pageSize: number,
+    filters: any = {}
+  ): Observable<PagedResponse<Event>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', pageSize.toString());
+
+    Object.keys(filters).forEach((key) => {
+      if (filters[key] !== null && filters[key] !== undefined && filters[key] !== '') {
+        params = params.set(key, filters[key]);
+      }
+    });
+    return this.httpClient.get<PagedResponse<Event>>(environment.apiHost+"/events", { params });
   }
 }

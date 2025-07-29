@@ -4,26 +4,32 @@ mat-toolbar {
   z-index: 1;
 }
 
-mat-icon{
-  color: #252629;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  color:#3a2d30;
+mat-icon {
+  color: #3a2d30;
 }
 
-.navigation-container{
+.navigation-container {
   display: flex;
   justify-content: right;
   width: 100%;
-}
-.navigation-item{
-  margin: 10px;
-  font-size: larger;
+  align-items: center;
 }
 
-button {
-    margin-right: 10px;
+.navigation-item {
+  font-size: larger;
+}
+.notification-badge {
+  position: absolute;
+  top: 8px;  
+  right: 8px;
+
+  width: 8px;
+  height: 8px;
+
+  background-color: rgb(221, 48, 48);
+  border-radius: 50%; 
 }
 
 span {
-  font-family: 'Fira Sans Condensed', serif
+  font-family: 'Fira Sans Condensed', serif;
 }

@@ -1,0 +1,37 @@
+<div class="guest-list-container" *ngIf="guestForm">
+  <h1>Guest List</h1>
+  <p class="subheading">Manage your guest list</p>
+
+  <p>Current guest list: {{ currentGuestList.join(', ') || 'None yet' }}</p>
+
+  <button mat-button class="dropdown" (click)="showGuestForm = !showGuestForm">
+    {{ showGuestForm ? 'Hide guest form' : 'Add guests' }}
+    <mat-icon>{{ showGuestForm ? 'expand_less' : 'expand_more' }}</mat-icon>
+  </button>
+
+  <form *ngIf="showGuestForm" [formGroup]="guestForm" (ngSubmit)="onSubmit()">
+    <div formArrayName="guests">
+      <div *ngFor="let guest of guestControls.controls; let i = index" [formGroupName]="i" class="guest-row">
+        <mat-form-field appearance="outline" class="email-input">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="guest@example.com">
+          <mat-error *ngIf="guest.get('email')?.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="guest.get('email')?.hasError('email')">Invalid email format</mat-error>
+        </mat-form-field>
+
+        <button class="remove-btn" mat-icon-button color="warn" type="button" (click)="removeGuest(i)" *ngIf="guestControls.length > 1">
+          <mat-icon>remove_circle</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button mat-raised-button type="button" class="add-btn" (click)="addGuest()">Add Guest</button>
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+    </div>
+  </form>
+</div>
+
+<button class="fab" (click)="exportToPdf()">
+  <i class="fas fa-file-pdf"></i>
+</button>

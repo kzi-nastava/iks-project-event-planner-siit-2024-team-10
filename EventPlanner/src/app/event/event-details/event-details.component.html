@@ -1,0 +1,159 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<div class="main-container">
+  <!-- Carousel Section -->
+  <div class="map-section">
+    <div class="map-container">
+      <p *ngIf="!mapAvailable">Location cannot be displayed for this event</p>
+      <div id="eventMap" style="height: 400px;"></div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content-section">
+    <!-- Header Info -->
+    <div class="header-info">
+      <div class="header-title">
+        <h1 class="title">{{ event?.name }}</h1>
+        <button mat-button (click)="toggleFavourite()" *ngIf="loggedInUserId!=null">
+          <mat-icon>{{ isFavourite ? 'favorite' : 'favorite_border' }}</mat-icon>
+        </button>
+      </div>
+      <div class="meta-info">
+        <span class="meta-item" *ngIf="event?.eventType!=null"> {{ event?.eventType?.name }}</span>
+        <span class="meta-item">★ {{ event?.averageRating }}</span>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h2>Description</h2>
+      <p class="info-item">{{ event?.description }}</p>
+      <h2>Location</h2>
+      <p class="info-item">{{ event?.location?.street }} {{ event?.location?.houseNumber}}, {{ event?.location?.city}}, {{ event?.location?.country }}</p>
+      <h2>Date</h2>
+      <p class="info-item">{{ event?.date | date: 'dd.MM.yyyy.'}}</p>
+      <div class="participants-section" *ngIf="event?.open">
+        <div>
+          <h2>Participants</h2>
+          <span class="info-it+em">{{event?.participantsCount}} people going</span>
+        </div>
+        <button class="submit-btn" mat-flat-button color (click)="addParticipant()" [disabled]="participating">
+          {{participating?"You're going!":"I Want to Attend"}}
+        </button>
+      </div>
+    </div>
+
+    <!-- Specifications for Services -->
+    <div class="agenda-section">
+      <div class="agenda-header">
+        <h2>Agenda</h2>
+        <button mat-button (click)="openAddAgendaItemDialog()" *ngIf="owner">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="agenda-grid" >
+        <div class="agenda-item"*ngFor="let agendaItem of agenda">
+          <div class="agenda-item-body">
+            <div>
+              <div>
+                <span class="agenda-label">Name: </span>
+                <span class="agenda-value">{{ agendaItem.name }}</span>
+              </div>
+              <div>
+                <span class="agenda-label">Description: </span>
+                <span class="agenda-value">{{ agendaItem.description }}</span>
+              </div>
+              <div>
+                <span class="agenda-label">Start: </span>
+                <span class="agenda-value">{{ agendaItem.startTime }}</span>
+              </div>
+              <div>
+                <span class="agenda-label">End: </span>
+                <span class="agenda-value">{{ agendaItem.endTime }}</span>
+              </div>
+              <div>
+                <span class="agenda-label">Location: </span>
+                <span class="agenda-value">{{ agendaItem.location }}</span>
+              </div>
+            </div>
+            <div>
+              <button mat-button (click)="openEditAgendaItemDialog(agendaItem)" *ngIf="owner">
+                <mat-icon>create</mat-icon>
+              </button>
+              <button mat-button (click)="deleteAgendaItem(agendaItem.id)" *ngIf="owner">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="organizer-section">
+      <div class="organizer-card">
+        <div class="organizer-info">
+          <img [src]=getProfilePhoto() alt="organizer" class="organizer-avatar">
+          <div class="organizer-details">
+            <h3>{{ event?.organizer?.firstName}} {{ event?.organizer?.lastName}}</h3>
+            <p class="organizer-location">
+              <i class="fas fa-location">📍</i>
+              {{ event?.organizer?.location?.city }}, {{ event?.organizer?.location?.country }}
+            </p>
+            <div class="organizer-contact">
+              <p class="contact-item">
+                <i class="fas fa-email">📧</i>
+                {{ event?.organizer?.email }}
+              </p>
+              <p class="contact-item">
+                <i class="fas fa-phone"></i>
+                {{ event?.organizer?.phoneNumber }}
+              </p>
+            </div>
+            <div *ngIf="!owner && loggedInUserId!==null" class="provider-actions" style="width: 200px;">
+              <button class="view-profile-btn" (click)="navigateToChat()">
+                <i class="fas fa-comment"></i>
+                Chat with organizer
+              </button>
+            </div>
+          </div>
+          <div *ngIf="!owner && loggedInUserId">
+            <button class="icon-btn report" (click)="reportAccount(event?.organizer?.id)" >
+                <mat-icon>flag</mat-icon>
+            </button>
+          </div>
+        </div>
+    </div>
+</div>
+    <div class="comments-section">
+      <h2>Leave rating</h2>
+      <div class="stars-input">
+            <span
+              *ngFor="let star of getStarArray(5); let i = index"
+              (click)="setRating(i + 1)"
+              [class.filled]="i < userRating"
+              class="star-icon"
+            >★</span>
+        <button class="submit-btn" mat-flat-button color (click)="addReview()">
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <button class="fab" (click)="exportToPdf()">
+      <i class="fas fa-file-pdf"></i>
+    </button>
+    <button class="fab secondary" *ngIf="(owner||admin)&&event?.open" [routerLink]="['/open-event-report',event.id]">
+      <i class="fas fa-chart-line"></i>
+    </button>
+    <button class="fab secondary" *ngIf="owner&&!event?.open" [routerLink]="['/guest-list',event.id]">
+      <mat-icon>group</mat-icon>
+    </button>
+
+    <button class="fab left" *ngIf="owner" [routerLink]="['/edit-event',event.id]">
+      <mat-icon>create</mat-icon>
+    </button>
+    <button class="fab left secondary" *ngIf="owner" (click)="deleteEvent()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</div>

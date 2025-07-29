@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { map, Observable } from 'rxjs';
+import { Category } from '../model/category.model';
+import { CategoryService } from '../category-service/category.service';
+import { OfferingService } from '../offering-service/offering.service';
 
 @Component({
   selector: 'app-filter-service-dialog',
@@ -9,53 +14,78 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class FilterServiceDialogComponent {
   filterForm: FormGroup;
-
-  eventTypes = ['Any', 'Conferention','Wedding','Meetup','Concert'];
-  serviceCategories = ['Any', 'Decoration', 'Catering', 'Band'];
-
-  selectedEventType: string = 'Any';
+  categories: Observable<Category[]>;
   selectedServiceCategory: string = 'Any';
+  maxPrice: number = 100000;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public isOfferingManagement:boolean,
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<FilterServiceDialogComponent>
+    private dialogRef: MatDialogRef<FilterServiceDialogComponent>,
+    private categoryService: CategoryService,
+    private offeringService: OfferingService
   ) {
+    this.categories = this.categoryService.getAll().pipe(
+      map(categories => [{ id: -1, name: 'Any', creatorId: -1 }, ...categories])
+    );
+
     this.filterForm = this.fb.group({
-      category: [''],
-      type: [''],
+      categoryId: [-1],
       location: [''],
       priceRange: this.fb.group({
         startPrice: [0],
-        endPrice: [1000],
+        endPrice: [100000],
       }),
       checkAviailability:[false],
       minRating: [1.0],
       minDiscount: [0],
-      dateRange: this.fb.group({
-        start: [null],
-        end: [null],
-      }),
-      duration:[0],
+      serviceDuration:[0],
     });
   }
-  get dateRangeGroup(): FormGroup {
-    return this.filterForm.get('dateRange') as FormGroup;
+
+  ngOnInit(): void {
+    this.offeringService.getHighestPrice(true).subscribe({
+      next: (price) => {
+        this.maxPrice = price || 10000;
+        this.filterForm.get('priceRange.endPrice')?.setValue(this.maxPrice);
+      }
+    });
   }
+
   get priceRangeGroup(): FormGroup {
     return this.filterForm.get('priceRange') as FormGroup;
   }
 
   applyFilters() {
-    const filters = this.filterForm.value;
+    const filters = { ...this.filterForm.value };
 
-    const startDate = filters.dateRange.start;
-    const endDate = filters.dateRange.end;
+    if (this.filterForm.value.categoryId === -1) {
+      filters.categoryId = null;
+    }
 
-    const startPrice = filters.priceRange.startPrice;
-    const endPrice = filters.priceRange.endPrice;
+    if (this.filterForm.value.serviceDuration === 0) {
+      filters.serviceDuration = null;
+    }
 
-    console.log('Filters:', filters);
+    const { startPrice, endPrice } = filters.priceRange;
 
+    filters.startPrice = startPrice;
+    if (endPrice === 0){
+      filters.endPrice = null;
+    } else {
+      filters.endPrice = endPrice;
+    }
+
+    delete filters.priceRange;
+
+    if(!filters.checkAviailability){
+      filters.isAvailable = null;
+    }else{
+      filters.isAvailable = true;
+    }
+    delete filters.checkAviailability;
+    filters.isServiceFilter = true;
+  
     this.dialogRef.close(filters);
   }
 

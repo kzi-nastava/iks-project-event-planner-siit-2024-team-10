@@ -8,40 +8,31 @@
     <!-- Service Category -->
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Service Category</mat-label>
-      <mat-select matInput formControlName="category">
-        <mat-option matInput *ngFor="let serviceCategory of serviceCategories" [value]="serviceCategory">
-            {{ serviceCategory }}
+      <mat-select matInput formControlName="categoryId">
+        <mat-option matInput *ngFor="let category of categories | async" [value]="category.id">
+            {{ category.name }}
           </mat-option>
       </mat-select>
     </mat-form-field>
 
     <!-- Location -->
-    <mat-form-field appearance="outline" class="form-field">
+    <mat-form-field *ngIf="!isOfferingManagement" appearance="outline" class="form-field">
       <mat-label>Location</mat-label>
       <input matInput formControlName="location" placeholder="City">
-    </mat-form-field>
-
-    <!-- Event Type -->
-    <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Event Type</mat-label>
-      <mat-select matInput formControlName="type">
-        <mat-option matInput *ngFor="let eventType of eventTypes" [value]="eventType">
-            {{ eventType }}
-          </mat-option>
-      </mat-select>
     </mat-form-field>
 
     <!-- Price Range -->
     <mat-label class="rating-label">Price Range (€)</mat-label>
     <div class="rating-section">
       <p>
-        {{ filterForm.get('priceRange.startPrice')?.value || 0 }} -  {{ filterForm.get('priceRange.endPrice')?.value || 1000 }}€
+        {{ filterForm.get('priceRange.startPrice')?.value || 0 }} -  {{ filterForm.get('priceRange.endPrice')?.value || maxPrice }}€
       </p>
-      <mat-slider min="0" max="1000" step="10" discrete [displayWith]="formatLabel" [formGroup]="priceRangeGroup">
+      <mat-slider min="0" [max]="maxPrice" step="100" discrete [displayWith]="formatLabel" [formGroup]="priceRangeGroup">
         <input matSliderStartThumb formControlName="startPrice" aria-label="Minimum Price" />
         <input matSliderEndThumb formControlName="endPrice" aria-label="Maximum Price" />
       </mat-slider>
     </div>
+
 
     <!-- Minimum Discount -->
     <mat-label class="rating-label">Minimum Discount</mat-label>
@@ -64,29 +55,10 @@
     <!-- Duration -->
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Duration (in minutes)</mat-label>
-      <input matInput type="number" formControlName="duration">
+      <input matInput type="number" formControlName="serviceDuration">
     </mat-form-field>
 
-    <!-- Date Range -->
-    <mat-form-field class="form-field">
-      <mat-label>Enter a date range</mat-label>
-      <mat-date-range-input [formGroup]="dateRangeGroup" [rangePicker]="picker">
-        <input matStartDate formControlName="start" placeholder="Start date">
-        <input matEndDate formControlName="end" placeholder="End date">
-      </mat-date-range-input>
-      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-      
-      <ng-container *ngIf="dateRangeGroup">
-        <mat-error *ngIf="dateRangeGroup.get('start')?.hasError('matStartDateInvalid')">
-          Invalid start date
-        </mat-error>
-        <mat-error *ngIf="dateRangeGroup.get('end')?.hasError('matEndDateInvalid')">
-          Invalid end date
-        </mat-error>
-      </ng-container>
-    </mat-form-field>
+    <!-- Availability -->
     <mat-slide-toggle formControlName="checkAviailability">
       Show Only Available Services
     </mat-slide-toggle>

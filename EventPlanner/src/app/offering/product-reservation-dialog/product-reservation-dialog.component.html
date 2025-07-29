@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Select Event</h2>
+<mat-dialog-content [formGroup]="reservationForm">
+  <mat-form-field appearance="fill" style="width: 100%;">
+    <mat-label>Event</mat-label>
+    <mat-select formControlName="event">
+      <mat-option *ngFor="let event of events" [value]="event">
+        {{ event.name }} - {{ event.date }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()">Confirm</button>
+</mat-dialog-actions>

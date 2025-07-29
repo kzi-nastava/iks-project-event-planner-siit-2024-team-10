@@ -1,38 +1,33 @@
 <div class="fab-container">
   <a [routerLink]="['/create-offering']">
-    <button class="fab">+</button>
+    <button class="fab offering-fab" mat-fab>
+      <mat-icon>add</mat-icon><mat-icon>handshake</mat-icon>
+    </button>
+  </a>
+
+  <a [routerLink]="['/create-product']">
+    <button style="margin-bottom:70px;" class="fab product-fab" mat-fab>
+      <mat-icon>add</mat-icon> <mat-icon>shopping_bag</mat-icon>
+    </button>
   </a>
 </div>
+
 
 <div class="all-events">
   <div class="offering-bg">
     <div class="event-filter">
-      
-      <div class="offering-toggle" style="padding-bottom: 20px;">
-        <mat-button-toggle-group 
-          [(ngModel)]="selectedOfferingType" 
-          (change)="filterOfferings()"
-        >
-          <mat-button-toggle value="services" (click)="toggleOfferingType('services')">
-            Services
-          </mat-button-toggle>
-          <mat-button-toggle value="products" (click)="toggleOfferingType('products')">
-            Products
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-
-      <h2>Your Services And Products</h2>
-
+      <h2>Your offerings</h2>
+      <mat-radio-group>
+        <mat-radio-button value="1" (click)="toggleOfferingType('services')">Services</mat-radio-button>
+        <mat-radio-button value="2" (click)="toggleOfferingType('products')">Products</mat-radio-button>
+      </mat-radio-group>
       <div class="event-filter-components">
         <div class="name-search-section">
-          <mat-form-field class="search-field">
+          <mat-form-field  class="search-field">
             <mat-label>Service/Product Name</mat-label>
-            <input matInput />
+            <input matInput [(ngModel)]="searchOfferingQuery">
           </mat-form-field>
-          <button mat-stroked-button class="search-button">
-            <mat-icon>search</mat-icon> Search
-          </button>
+          <button mat-stroked-button class="search-button" (click)="searchOffering()" [disabled]="!selectedOfferingType"><mat-icon>search</mat-icon> Search</button>
         </div>
         <div class="sort-filter">
           <div class="sort-section">
@@ -44,6 +39,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
+
             <mat-form-field appearance="outline">
               <mat-label>Sorting Direction</mat-label>
               <mat-select [(ngModel)]="selectedSortingDirection">
@@ -52,53 +48,54 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <button mat-stroked-button>Sort</button>
+            <button mat-stroked-button (click)="applySorting()" [disabled]="!selectedOfferingType">Sort</button>
           </div>
           <div class="filter-section">
-            <button (click)="openFilterDialog()" mat-stroked-button>
-              <mat-icon>filter_list</mat-icon> Filter
-            </button>
-            <button mat-stroked-button class="reset-button">Reset Filters</button>
+            <button mat-stroked-button (click)="openFilterDialog()"><mat-icon>filter_list</mat-icon> Filter</button>
+            <button mat-stroked-button class="reset-button" (click)="resetOfferingFilter()" [disabled]="!selectedOfferingType">Reset Filters</button>
           </div>
         </div>
       </div>
     </div>
   </div>
   <div class="all-events-section">
-    <div class="all-event-cards">
-      <app-offering-card 
-        *ngFor="let offering of displayedOfferings" 
-        [offering]="offering"
-      ></app-offering-card>
+    <div class="no-events-message" *ngIf="noOfferingsMessage">
+      <p>{{ noOfferingsMessage }}</p>
     </div>
-    <div class="pagination">
-      <button mat-stroked-button>&lt; Back</button>
-      <p>Page 1 of 10</p>
-      <button mat-stroked-button>Next &gt;</button>
+    <div class="all-event-cards">
+      <app-offering-card *ngFor="let offering of allOfferings" [offering]="offering"></app-offering-card>
+    </div>
+    <p class="total-elements">Total elements: {{ offeringPageProperties.totalElements }}</p>
+    <div class="pagination" *ngIf="!noOfferingsMessage">
+      <button mat-stroked-button (click)="previousOfferingPage()" [disabled]="offeringPageProperties.page === 0">
+        &lt;
+      </button>
+      <p>
+        Page {{ offeringPageProperties.page + 1 }} of {{ offeringPageProperties.totalPages }}
+      </p>
+      <button mat-stroked-button (click)="nextOfferingPage()" [disabled]="offeringPageProperties.page === offeringPageProperties.totalPages - 1">
+        &gt;
+      </button>
     </div>
   </div>
 </div>
-  
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-info">
-        <h1>Event Planner</h1>
-        <p><mat-icon>phone_in_talk</mat-icon> +381 65 123 4567</p>
-        <p><mat-icon>mail</mat-icon> eventplanner&#64;gmail.com</p>
-        <p>
-          <mat-icon>location_on</mat-icon> 123 Maple Street<br />
-          Springfield, USA 12345
-        </p>
-      </div>
-      <div class="footer-social">
-        <h1>Find us on:</h1>
-        <div class="social-icons">
-          <mat-icon>facebook</mat-icon>
-          <img src="icons8-instagram.svg" alt="Instagram" class="custom-icon" />
-          <img src="icons8-twitter.svg" alt="Twitter" class="custom-icon" />
-          <img src="icons8-youtube.svg" alt="YouTube" class="custom-icon" />
-        </div>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-info">
+      <h1>Event Planner</h1>
+      <p><mat-icon>phone_in_talk</mat-icon> +381 65 123 4567</p>
+      <p><mat-icon>mail</mat-icon> eventplanner&#64;gmail.com</p>
+      <p><mat-icon>location_on</mat-icon> 123 Maple Street<br>Springfield, USA 12345</p>
+    </div>
+    <div class="footer-social">
+      <h1>Find us on:</h1>
+      <div class="social-icons">
+        <mat-icon>facebook</mat-icon>
+        <img src="icons8-instagram.svg" alt="Instagram" class="custom-icon" />
+        <img src="icons8-twitter.svg" alt="Twitter" class="custom-icon" />
+        <img src="icons8-youtube.svg" alt="YouTube" class="custom-icon" />
       </div>
     </div>
-  </footer>
-  
+  </div>
+</footer>

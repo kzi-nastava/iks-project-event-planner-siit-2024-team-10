@@ -1,11 +1,54 @@
 <mat-toolbar color="primary">
-    <span [routerLink]="['home']">Event Planner</span>
-    <div class="navigation-container">
-      <div class="navigation-item">
-        <mat-icon [routerLink]="['login']">account_circle</mat-icon>
-      </div>
-      <div class="navigation-item">
-        <mat-icon [routerLink]="['manage-offerings']">shopping_cart</mat-icon>
-      </div>
+  <span [routerLink]="['home']">Event Planner</span>
+  <div class="navigation-container">
+    <div class="navigation-item" *ngIf="role==undefined">
+      <button mat-icon-button [routerLink]="['login']">
+        <mat-icon>account_circle</mat-icon>
+      </button>
     </div>
+    <div class="navigation-item" *ngIf="role!=undefined">
+      <button mat-icon-button [matMenuTriggerFor]="account">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #account="matMenu">
+        <button mat-menu-item [routerLink]="['user-details']">
+          <mat-icon>account_circle</mat-icon>
+          <span>Account details</span>
+        </button>
+        <button mat-menu-item [routerLink]="['favourites']">
+          <mat-icon>favorite</mat-icon>
+          <span>Favourites</span>
+        </button>
+        <button mat-menu-item [routerLink]="['calendar']">
+          <mat-icon>calendar_today</mat-icon>
+          <span>Calendar</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Log out</span>
+        </button>
+        <button mat-menu-item *ngIf="role=='AUTHENTICATED_USER'" [routerLink]="['register']">
+          <mat-icon>person_add</mat-icon>
+          <span>Upgrade role</span>
+        </button>
+      </mat-menu>
+    </div>
+    <div class="navigation-item" *ngIf="role!=undefined">
+      <button mat-icon-button [routerLink]="['notification-panel']" (click)="onNotificationClick()">
+        <mat-icon>notifications</mat-icon>
+        <span *ngIf="hasUnreadNotifications" class="notification-badge"></span>
+      </button>
+    </div>
+    <div class="navigation-item">
+      <button *ngIf="role!=undefined" mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <app-admin-nav-bar-menu *ngIf="role=='ADMIN'"></app-admin-nav-bar-menu>
+        <app-organizer-nav-bar-menu *ngIf="role=='EVENT_ORGANIZER'"></app-organizer-nav-bar-menu>
+        <app-provider-nav-bar-menu *ngIf="role=='PROVIDER'"></app-provider-nav-bar-menu>
+        <app-authenticated-user-nav-bar-menu *ngIf="role=='AUTHENTICATED_USER'"></app-authenticated-user-nav-bar-menu>
+      </mat-menu>
+    </div>
+  </div>
 </mat-toolbar>

@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Offering } from '../model/offering.model';
-import { Product } from '../model/product.model';
-import { Service } from '../model/service.model';
 import { Router } from '@angular/router';
+import { ImageService } from '../image-service/image.service';
 
 @Component({
   selector: 'app-offering-card',
@@ -13,19 +12,18 @@ export class OfferingCardComponent {
   @Input() offering: Offering;
   @Output() clicked: EventEmitter<Offering> = new EventEmitter<Offering>();
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private imageService: ImageService
+  ) {}
+
+  get offeringImage(): string {
+    const photos = this.offering.photos || [];
+    return this.imageService.getImageUrl(photos[0]);
+  }
 
   onOfferingClicked(): void {
     this.router.navigate(['/offering', this.offering.id]);
     this.clicked.emit(this.offering);
-    console.log(this.offering.id)
-  }
-
-  isProduct(offering: Offering): boolean {
-    return offering.isProduct;
-  }
-
-  isService(offering: Offering): boolean {
-    return !offering.isProduct;
   }
 }

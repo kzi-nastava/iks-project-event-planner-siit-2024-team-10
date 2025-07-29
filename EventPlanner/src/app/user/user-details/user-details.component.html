@@ -1,0 +1,118 @@
+<div class="outer-container">
+  <div class="user-container">
+    <h1 *ngIf="!hasPersonalDetails()">Your email: {{ user?.email }}</h1>
+    <button *ngIf="!hasPersonalDetails()" mat-flat-button (click)="changePassword()" class="primary-button">
+      Change password
+    </button>
+    <button *ngIf="!hasPersonalDetails()" mat-flat-button (click)="deactivateAccount()" class="primary-button">
+      Deactivate account
+    </button>
+    <div class="header-info" *ngIf="hasPersonalDetails()">
+      <div class="header-left">
+        <div class="header-title">
+          <h1 class="title">{{ user?.firstName }} {{ user?.lastName }}</h1>
+        </div>
+        <div class="meta-info">
+          <span class="meta-item">{{ getRole() }}</span>
+        </div>
+        <div>
+          <button mat-flat-button (click)="changePassword()" class="primary-button">
+            Change password
+          </button>
+          <button  mat-flat-button (click)="deactivateAccount()" class="primary-button">
+            Deactivate account
+          </button>
+        </div>
+      </div>
+      <div class="header-right">
+        <img src='{{ getProfilePhoto() }}' alt="organizer" class="profile-photo">
+        <button mat-flat-button (click)="updateProfilePhoto()" class="primary-button">
+          Change profile photo
+        </button>
+      </div>
+    </div>
+    <div class="info-section" *ngIf="hasPersonalDetails()">
+        <div class="editable-section">
+            <div>
+                <h2>Personal info</h2>
+                <div class="info-item">
+                    <h2>Email: </h2>
+                    <p class="info-content">{{ user?.email }}</p>
+                </div>
+                <div class="info-item">
+                    <h2>Phone: </h2>
+                    <p class="info-content">{{ user?.phoneNumber }}</p>
+                </div>
+                <div class="info-item">
+                    <h2>Location: </h2>
+                    <p class="info-content">{{ user?.location?.street }} {{ user?.location?.houseNumber }}, {{ user?.location?.city }}, {{ user?.location?.country }}</p>
+                </div>
+            </div>
+            <div>
+                <button mat-button [routerLink]="['/edit-personal']">
+                    <mat-icon>create</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="info-section" *ngIf="hasCompanyDetails()">
+        <div class="editable-section">
+            <div>
+                <h2>Company info</h2>
+                <div class="info-item">
+                    <h2>Name: </h2>
+                    <p class="info-content">{{ user?.company?.name }}</p>
+                </div>
+                <div class="info-item">
+                    <h2>Description: </h2>
+                    <p class="info-content">{{ user?.company?.description }}</p>
+                </div>
+                <div class="info-item">
+                    <h2>Phone: </h2>
+                    <p class="info-content">{{ user?.company?.phoneNumber }}</p>
+                </div>
+                <div class="info-item">
+                    <h2>Location: </h2>
+                    <p class="info-content">{{ user?.company?.location?.street }} {{ user?.company?.location?.houseNumber }}, {{ user?.company?.location?.city }}, {{ user?.company?.location?.country }}</p>
+                </div>
+            </div>
+            <div>
+                <button mat-button [routerLink]="['/edit-company']">
+                    <mat-icon>create</mat-icon>
+                </button>
+            </div>
+        </div>
+      <div class="carousel-container" *ngIf="hasCompanyDetails()">
+        <button mat-flat-button (click)="updateCompanyPhotos()" class="primary-button">
+          Update company photos
+        </button>
+        <div class="main-image-wrapper">
+          <img
+            src="{{images[activeImage] || 'placeholder-image.png'}}"
+            [alt]="images[activeImage] ? 'Image description' : 'Placeholder image'"
+            class="main-image">
+
+          <!-- Navigation Arrows -->
+          <button class="carousel-nav prev" (click)="setActiveImage((activeImage - 1 + images.length) % images.length)"
+                  *ngIf="images.length > 1">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="carousel-nav next" (click)="setActiveImage((activeImage + 1) % images.length)"
+                  *ngIf="images.length > 1">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="thumbnails" *ngIf="images.length > 1">
+          <div class="thumbnail-container">
+            <div class="thumbnail-wrapper" *ngFor="let image of images; let i = index"
+                 [class.active]="i === activeImage"
+                 (click)="setActiveImage(i)">
+              <img [src]="image" class="thumbnail-image">
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+</div>

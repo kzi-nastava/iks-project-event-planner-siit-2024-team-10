@@ -1,0 +1,72 @@
+<div class="chat-page-container">
+  <!-- Contacts list -->
+  <div class="contacts-container">
+    <div class="contacts-header">
+      <h2>Messages</h2>
+    </div>
+    <div class="contacts-list">
+      <div *ngFor="let contact of contacts" 
+           class="contact-item"
+           [class.active]="contact.user === selectedContactId"
+           (click)="selectContact(contact)">
+        <div class="contact-info">
+          <div class="contact-name">{{ contact.name }}</div>
+          <div class="contact-last-message">
+            <span *ngIf="contact.content; else noMessage">{{ contact.content }}</span>
+            <ng-template #noMessage>No messages yet</ng-template>
+          </div>
+        </div>
+        <div class="contact-time" *ngIf="contact.timestamp">
+          {{ contact.timestamp | date:'shortTime' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat container -->
+  <div class="chat-container" *ngIf="selectedContactId">
+    <div class="chat-header">
+      <h3>{{ getSelectedContactName() }}</h3>
+      <div *ngIf="getSelectedContactName()" class="action-buttons">
+            <button class="report-btn report" (click)="reportAccount(selectedContactId)" >
+                <mat-icon>flag</mat-icon>
+            </button>
+            <button class="block-btn" (click)="blockAccount(selectedContactId)" >
+                <mat-icon>block</mat-icon>
+            </button>
+      </div>
+    </div>
+    
+    <div class="block-overlay" *ngIf="isChatterBlocked">
+      {{chatterBlockedMsg}}
+    </div>
+    <div class="chat-messages" #scrollMe [class.blurred]="isChatterBlocked">
+      <ng-container *ngFor="let message of messages">
+        <div class="message-row"
+             [class.sent]="isSentByCurrentUser(message.senderId)"
+             [class.received]="!isSentByCurrentUser(message.senderId)">
+          <div class="message-bubble">
+            <div class="message-content">{{ message.content }}</div>
+            <div class="message-time">
+              {{ message.timestamp | date:'shortDate' }} {{ message.timestamp | date:'shortTime' }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    
+    <div class="chat-input">
+      <form [formGroup]="form" (ngSubmit)="sendMessageUsingSocket()">
+        <input type="text" formControlName="message" placeholder="Type a message..." [disabled]="isChatterBlocked">
+        <button type="submit" [disabled]="!form.valid || isChatterBlocked">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Empty state when no contact is selected -->
+  <div class="empty-chat-container" *ngIf="!selectedContactId">
+    <div class="empty-chat-message">
+      Select a conversation to start chatting
+    </div>
+  </div>
+</div>

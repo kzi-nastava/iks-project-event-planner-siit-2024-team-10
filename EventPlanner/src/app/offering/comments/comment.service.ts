@@ -1,67 +1,43 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-
-export interface Comment {
-  id: number;
-  offeringId: number;
-  userName: string;
-  rating: number;
-  text: string;
-  date: Date;
-}
-
-const COMMENTS: Comment[] = [
-  {
-    id: 1,
-    offeringId: 1,
-    userName: 'Sarah Johnson',
-    rating: 5,
-    text: 'Amazing service! Very professional setup.',
-    date: new Date('2024-02-15')
-  },
-  {
-    id: 2,
-    offeringId: 1,
-    userName: 'Emma Wilson',
-    rating: 4,
-    text: 'Great experience overall.',
-    date: new Date('2024-02-10')
-  }
-];
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Comment } from '../model/comment.model';
+import { CreateCommentDTO } from '../model/create-comment-dto.model';
+import { environment } from '../../../env/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
-  private comments: Comment[] = COMMENTS;
+  private readonly baseUrl = `${environment.apiHost}`;
 
-  constructor(){
-    for(let commentObj of COMMENTS){
-      const comment: Comment = {
-        id:commentObj.id,
-        offeringId:commentObj.offeringId,
-        userName:commentObj.userName,
-        rating:commentObj.rating,
-        text:commentObj.text,
-        date:commentObj.date
-      }
-    }
+  constructor(private http: HttpClient) {}
+
+  // Add a new comment
+  add(comment: CreateCommentDTO, id:number): Observable<Comment> {
+    return this.http.post<Comment>(this.baseUrl + '/offerings/' + id + '/comments', comment);
   }
 
-  getCommentsByOfferingId(offeringId: number): Observable<Comment[]> {
-    return of(this.comments.filter(comment => comment.offeringId === offeringId));
+  // Get comments for an offering
+  getComments(offeringId: number): Observable<Comment[]> {
+    return this.http.get<Comment[]>(`${this.baseUrl}/offering/${offeringId}/comments`);
   }
 
-  addComment(comment: Omit<Comment, 'id'>): Observable<Comment> {
-    const newComment: Comment = {
-      ...comment,
-      id: this.comments.length + 1
-    };
-    this.comments.push(newComment);
-    return of(newComment);
+  getPendingComments(): Observable<Comment[]> {
+    return this.http.get<Comment[]>(this.baseUrl + '/offerings/comments/pending');
   }
 
-  getComments():Observable<Comment[]>{
-    return of(this.comments);
+  approve(commentId: number): Observable<void>{
+    return this.http.put<void>(this.baseUrl + '/offerings/comments/' + commentId +'/approve', null);
+  }
+
+  // Delete a comment
+  delete(commentId: number): Observable<void> {
+    return this.http.put<void>(this.baseUrl + '/offerings/comments/' + commentId +'/reject', null);
+  }
+
+  // Update a comment
+  update(commentId: number, comment: Partial<CreateCommentDTO>): Observable<Comment> {
+    return this.http.put<Comment>(`${this.baseUrl}/${commentId}`, comment);
   }
 }

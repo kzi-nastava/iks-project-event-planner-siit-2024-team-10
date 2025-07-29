@@ -1,118 +1,162 @@
 import { Component, OnInit } from '@angular/core';
-import { Event } from '../../event/model/event.model';
-import { EventService } from '../../event/event.service';
-import { OfferingService } from '../../offering/offering.service';
 import { Offering } from '../../offering/model/offering.model';
 import { MatDialog } from '@angular/material/dialog';
-import { FilterProvidersOfferingsDialogComponent } from '../filter-providers-offerings-dialog/filter-providers-offerings-dialog.component';
+import { FilterServiceDialogComponent } from '../filter-service-dialog/filter-service-dialog.component';
+import { FilterProductDialogComponent } from '../filter-product-dialog/filter-product-dialog.component';
+import { OfferingWarningDialogComponent } from '../../layout/offering-warning-dialog/offering-warning-dialog.component';
+import { ServiceService } from '../service-service/service.service';
+import {AuthService} from '../../infrastructure/auth/auth.service';
+import {OfferingService} from '../offering-service/offering.service';
+import {ComponentType} from '@angular/cdk/overlay';
 @Component({
   selector: 'app-manage-offerings',
   templateUrl: './manage-offerings.component.html',
   styleUrls: ['./manage-offerings.component.css', '../../layout/home/home.component.css']
 })
 export class ManageOfferingsComponent implements OnInit {
-  allEvents: Event[] = [];
-  topEvents: Event[] = [];
-  topOfferings: Offering[] = [];
   allOfferings: Offering[] = [];
-  displayedOfferings: Offering[] = [];
-
-  selectedOfferingType: 'services' | 'products' = 'services';
+  noOfferingsMessage: string = '';
+  userId: number = null;
+  accountId: number = null;
+  initialLoad: boolean = true;
 
   sortingDirections = ['Ascending', 'Descending'];
-  offeringSortingCriteria = ['None', 'Name', 'Rating', 'City', 'Price', 'Category'];
+  offeringSortingCriteria = ['None', 'Name', 'Rating', 'City', 'Price'];
+  offeringSortingCriteriaMapping: { [key: string]: string } = {
+    'None': '',
+    'Name': 'name',
+    'Price': 'price',
+    'Rating': 'averageRating',
+    'City': 'location.city'
+  };
 
   selectedSortingDirection: string = 'Ascending';
   selectedOfferingSortingCriteria: string = 'None';
+  selectedOfferingType: 'services' | 'products' | null = null;
 
-  // New filter properties
-  selectedCategory: string = '';
-  categories: string[] = ['Technology', 'Health', 'Education', 'Entertainment']; // Example categories
+  offeringFilters: any = {};
+  searchOfferingQuery: string = '';
 
-  selectedEventType: string = '';
-  eventTypes: string[] = ['Workshop', 'Seminar', 'Webinar', 'Conference']; // Example event types
-
-  selectedPriceRange: string = '';
-  priceRanges: string[] = ['Free', 'Under $50', '$50 - $100', 'Above $100']; // Example price ranges
-
-  isAvailable: boolean = false; // Availability filter
+  offeringPageProperties = {
+    page: 0,
+    pageSize: 6,
+    totalPages: 0,
+    totalElements: 0,
+  };
 
   constructor(
     private offeringService: OfferingService,
-    private dialog : MatDialog
-  ) {}
+    private authService: AuthService,
+    private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
-    this.offeringService.getAll().subscribe({
-      next: (offerings: Offering[]) => {
-        this.allOfferings = offerings;
-        this.filterOfferings();
+    this.userId = this.authService.getUserId();
+    this.accountId = this.authService.getAccountId();
+    this.fetchPaginatedOfferings();
+    this.initialLoad = false;
+  }
+
+  fetchPaginatedOfferings(): void {
+    const {page, pageSize} = this.offeringPageProperties;
+    if (this.initialLoad) {
+      this.offeringFilters = {...this.offeringFilters, ...{accountId: this.accountId}};
+    } else {
+      delete this.offeringFilters.accountId;
+    }
+    if (this.selectedOfferingType !== null) {
+      this.offeringFilters.isServiceFilter = this.selectedOfferingType === 'services';
+    }
+
+    this.offeringFilters = {...this.offeringFilters, ...{providerId: this.userId}};
+
+    this.offeringService.getPaginatedOfferings(page, pageSize, this.offeringFilters).subscribe({
+      next: (response) => {
+        this.allOfferings = response.content;
+        this.offeringPageProperties.totalPages = response.totalPages;
+        this.offeringPageProperties.totalElements = response.totalElements;
+        this.noOfferingsMessage = this.allOfferings.length ? '' : 'No offerings found.';
       },
-      error: (err) => {
-        console.error('Error fetching offerings:', err);
+      error: () => {
+        this.noOfferingsMessage = 'An error occurred while fetching offerings.';
       }
     });
-
-    this.topOfferings = this.allOfferings.slice(0, 5);
   }
 
-  filterOfferings() {
-    this.displayedOfferings = this.allOfferings.filter(offering => {
-      // Filtering by offering type (services/products)
-      const isOfferingTypeValid = this.selectedOfferingType === 'services'
-        ? !offering.isProduct
-        : offering.isProduct;
+  applySorting(): void {
+    const backendSortBy = this.offeringSortingCriteriaMapping[this.selectedOfferingSortingCriteria];
+    if (backendSortBy) {
+      this.offeringFilters.sortBy = backendSortBy;
+      this.offeringFilters.sortDirection = this.selectedSortingDirection.toUpperCase() === 'ASCENDING' ? 'ASC' : 'DESC';
+    } else {
+      delete this.offeringFilters.sortBy;
+      delete this.offeringFilters.sortDirection;
+    }
 
-      // Filtering by category
-      const isCategoryValid = this.selectedCategory ? offering.category === this.selectedCategory : true;
+    this.offeringPageProperties.page = 0;
+    this.fetchPaginatedOfferings();
+  }
 
-      // Filtering by event type
-      const isEventTypeValid = true;
-      // this.selectedEventType ? offering.eventType === this.selectedEventType : true;
+  applyOfferingFilters(newFilters: any): void {
+    this.offeringFilters = { ...this.offeringFilters, ...newFilters };
+    this.offeringPageProperties.page = 0;
+    this.fetchPaginatedOfferings();
+  }
 
-      // Filtering by price range
-      const isPriceRangeValid = this.selectedPriceRange
-        ? this.isPriceInRange(offering.price, this.selectedPriceRange)
-        : true;
+  openFilterDialog(): void {
+    const dialogComponent: ComponentType<any> = this.selectedOfferingType === 'services'
+      ? FilterServiceDialogComponent
+      : this.selectedOfferingType === 'products'
+        ? FilterProductDialogComponent
+        : OfferingWarningDialogComponent;
 
-      // Filtering by availability
-      const isAvailabilityValid = this.isAvailable ? offering.isAvailable : true;
+    const dialogWidth = dialogComponent === OfferingWarningDialogComponent ? '400px' : '600px';
+    const dialogRef = this.dialog.open(dialogComponent, { width: dialogWidth , data: true });
 
-      return isOfferingTypeValid && isCategoryValid && isEventTypeValid && isPriceRangeValid && isAvailabilityValid;
+    dialogRef.afterClosed().subscribe((newFilters) => {
+      if (newFilters) {
+        this.applyOfferingFilters(newFilters);
+      }
     });
   }
 
-  // Helper function to check if the price is within the selected price range
-  isPriceInRange(price: number, selectedPriceRange: string): boolean {
-    switch (selectedPriceRange) {
-      case 'Free':
-        return price === 0;
-      case 'Under $50':
-        return price < 50;
-      case '$50 - $100':
-        return price >= 50 && price <= 100;
-      case 'Above $100':
-        return price > 100;
-      default:
-        return true;
+  resetOfferingFilter(): void{
+    this.searchOfferingQuery = '';
+    this.offeringFilters = {};
+    this.offeringPageProperties.page = 0;
+    this.fetchPaginatedOfferings();
+  }
+
+  toggleOfferingType(type: 'services' | 'products'): void {
+    this.selectedOfferingType = type;
+    if (type === 'services') {
+      this.offeringFilters.isServiceFilter = true;
+    } else if (type === 'products') {
+      this.offeringFilters.isServiceFilter = false;
+    } else{
+      delete this.offeringFilters.isServiceFilter;
+      this.selectedOfferingType = null;
+    }
+    this.resetOfferingFilter();
+  }
+
+  searchOffering(): void {
+    this.offeringPageProperties.page = 0;
+    this.offeringFilters.name = this.searchOfferingQuery;
+    this.fetchPaginatedOfferings();
+  }
+
+  nextOfferingPage(): void {
+    if (this.offeringPageProperties.page < this.offeringPageProperties.totalPages - 1) {
+      this.offeringPageProperties.page++;
+      this.fetchPaginatedOfferings();
     }
   }
 
-  // Toggle between services and products
-  toggleOfferingType(type: 'services' | 'products') {
-    this.selectedOfferingType = type;
-    this.filterOfferings();
-  }
-
-  openFilterDialog():void{
-    const dialogRef = this.dialog.open(FilterProvidersOfferingsDialogComponent, {
-      width: '600px',
-    });
-
-    dialogRef.afterClosed().subscribe((filters) => {
-      if (filters) {
-        console.log('Applied Filters:', filters);
-      }
-    });
+  previousOfferingPage(): void {
+    if (this.offeringPageProperties.page > 0) {
+      this.offeringPageProperties.page--;
+      this.fetchPaginatedOfferings();
+    }
   }
 }

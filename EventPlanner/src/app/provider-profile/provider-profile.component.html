@@ -1,0 +1,127 @@
+<div class="profile-container">
+    <div *ngIf="!provider" class="debug-info">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        Loading provider data...
+      </div>
+    </div>
+  
+    <div class="profile-content" *ngIf="provider">
+      <section class="hero-section">
+        <div class="company-header">
+          <div class="photo-container">
+            <img
+              [src]="provider.company?.photos[0] || 'image2.png'"
+              [alt]="provider.company?.name"
+              class="company-logo"
+            >
+            <div class="profile-photo-overlay">
+              <img mat-card-image
+                [src]="profilePhoto || 'profile_photo.png'"
+                [alt]="provider.firstName"
+                class="provider-photo"
+              >
+            </div>
+          </div>
+          
+          <div class="company-info">
+            <div class="provider-details">
+              <h1>{{ provider.company?.name }}</h1>
+              <h2>{{ provider.firstName }} {{ provider.lastName }}</h2>
+              <div class="contact-info">
+                <p><i class="fas fa-envelope"></i> {{ provider.email }}</p>
+                <p><i class="fas fa-phone"></i> {{ provider.phoneNumber }}</p>
+              </div>
+            </div>
+            <p class="company-description">{{ provider.company?.description }}</p>
+          </div>
+        </div>
+  
+        <div class="stats-container">
+            <div class="stat-card">
+              <i class="fas fa-star"></i>
+              <h3>{{ averageRating || '0' }}</h3> <!-- Display average rating -->
+              <p>Average Rating</p>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-calendar-check"></i>
+              <h3>{{ totalOfferings || '0' }}</h3> <!-- Display total offerings -->
+              <p>Offerings</p>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-comments"></i>
+              <h3>{{ totalComments || '0' }}</h3> <!-- Display total comments -->
+              <p>Comments</p>
+            </div>
+          </div>
+          
+      </section>
+  
+      <div class="content-grid">
+        <div class="main-content">
+          <!-- Services Section -->
+          <section class="offerings-section">
+            <h2><i class="fas fa-briefcase"></i> Our Services</h2>
+            <div class="offerings-grid">
+              <div class="offering-card" *ngFor="let offering of offerings">
+                <div class="offering-header">
+                  <h3>{{ offering.name }}</h3>
+                  <span class="price">${{ offering.price }}</span>
+                </div>
+                <p class="category">
+                  <i class="fas fa-tag"></i> {{ offering.category?.name }}
+                </p>
+                <p class="description">{{ offering.description }}</p>
+                <div class="rating">
+                  <!-- <span class="stars" [innerHTML]="getStarRating(offering.averageRating)"></span> -->
+                  <span class="rating-number">{{ offering.averageRating }}/5</span>
+                </div>
+  
+                <div class="comments-section" *ngIf="offering.comments?.length">
+                  <h4><i class="fas fa-comments"></i> Recent Reviews</h4>
+                  <div class="comment-card" *ngFor="let comment of offering.comments">
+                    <div class="comment-header">
+                      <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="username">{{ comment.user }}</span>
+                      </div>
+                      <span class="stars" [innerHTML]="getStarRating(comment.rating)"></span>
+                    </div>
+                    <p class="comment-content">{{ comment.content }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+  
+        <aside class="sidebar">
+          <!-- Company Info Card -->
+          <div class="company-contact-card">
+            <h2><i class="fas fa-building"></i> Company Details</h2>
+            <div class="contact-info">
+              <p><i class="fas fa-phone"></i> {{ provider.company?.phoneNumber }}</p>
+              <p><i class="fas fa-envelope"></i> {{ provider.company?.email }}</p>
+              <p><i class="fas fa-map-marker-alt"></i> 
+                {{ provider.company?.location?.street }} {{ provider.company?.location?.houseNumber }},
+                {{ provider.company?.location?.city }}, {{ provider.company?.location?.country }}
+              </p>
+            </div>
+          </div>
+  
+          <!-- Business Hours -->
+          <div class="business-hours">
+            <h2><i class="far fa-clock"></i> Business Hours</h2>
+            <div class="hours-grid">
+              <div class="hours-row" 
+                   *ngFor="let hours of businessHours"
+                   [class.active-day]="isCurrentDay(hours.day)">
+                <span><i class="fas fa-calendar-day"></i> {{ hours.day }}</span>
+                <span>{{ hours.hours }}</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>

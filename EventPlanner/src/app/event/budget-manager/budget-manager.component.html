@@ -1,0 +1,157 @@
+<!-- Enhanced Budget Table Template -->
+<div class="budget-container">
+    <!-- Header Section -->
+    <div class="header-section">
+      <h2 class="page-title">Budget Management</h2>
+    </div>
+  
+    <!-- Event Selection Card -->
+    <mat-form-field appearance="outline" class="event-selector">
+    <mat-label>
+        <mat-icon class="label-icon">event</mat-icon>
+        Select Event
+    </mat-label>
+    <mat-select [(value)]="selectedEventId" (selectionChange)="onEventChange()" class="custom-select">
+        <mat-option *ngFor="let event of events" [value]="event.id" class="custom-option">
+        <div class="option-content">
+            <span class="option-text">{{ event.name }}</span>
+        </div>
+        </mat-option>
+    </mat-select>
+    </mat-form-field>
+
+    <!-- Recommended Categories Display -->
+    <div class="recommended-categories" *ngIf="getRecommendedCategories()?.length">
+      <mat-icon class="recommend-icon">tips_and_updates</mat-icon>
+      <span class="recommend-label">Recommended Categories for this Event Type:</span>
+      <div class="category-badges">
+        <span *ngFor="let cat of getRecommendedCategories()" class="category-badge">
+          {{ cat.name }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Total Budget Display -->
+    <div class="total-budget-display">
+      <mat-icon color="primary">account_balance_wallet</mat-icon>
+      <span class="total-budget-text">Total Budget: <strong>{{ totalBudget | currency:'USD' }}</strong></span>
+    </div>
+
+  
+    <!-- Budget Table Card -->
+    <div class="table-card">
+      <div class="table-header">
+        <h3 class="table-title">Budget Items</h3>
+        <div class="table-actions">
+          <button mat-raised-button color="primary" (click)="openAddBudgetItemDialog()" class="add-button">
+            <mat-icon>add_circle</mat-icon>
+            Add Budget Item
+          </button>
+        </div>
+      </div>
+  
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="budgetItems" class="budget-table">
+          
+          <!-- Category Column -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">category</mat-icon>
+                Category
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let item" class="data-cell category-cell">
+              <div class="category-badge">
+                <mat-icon class="category-icon">folder</mat-icon>
+                {{ item.category?.name }}
+              </div>
+            </td>
+          </ng-container>
+          
+          <!-- Amount Column -->
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">attach_money</mat-icon>
+                Amount
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let item" class="data-cell amount-cell">
+              <mat-form-field appearance="outline" class="amount-input">
+                <mat-label>Amount</mat-label>
+                <input matInput 
+                       type="number" 
+                       [(ngModel)]="item.amount" 
+                       (blur)="updateAmount(item)"
+                       class="currency-input"
+                       placeholder="0.00">
+                       <span style="padding-left: 10px;" matPrefix>$&nbsp;</span>
+                       <mat-icon matSuffix class="input-icon">money</mat-icon>
+              </mat-form-field>
+            </td>
+          </ng-container>
+          
+          <!-- Offerings Column -->
+          <ng-container matColumnDef="offerings">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">list</mat-icon>
+                Offerings
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let item" class="data-cell offerings-cell">
+              <div class="offerings-container">
+                <div class="offerings-chips" *ngIf="getAllOfferings(item)?.length > 0; else noOfferings">
+                  <span *ngFor="let offering of getAllOfferings(item)" class="offering-chip" (click)="openOfferingDetail(offering)">
+                    <mat-icon class="chip-icon">local_offer</mat-icon>
+                    {{ offering.name }} 
+                    <span class="price-text">({{ getFinalPrice(offering) | currency:'USD' }})</span>
+                  </span>                                   
+                </div>
+                <ng-template #noOfferings>
+                  <span class="no-offerings">No offerings</span>
+                </ng-template>
+              </div>
+            </td>
+          </ng-container>
+
+          
+          <!-- Delete Column -->
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">delete</mat-icon>
+                Delete
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let item" class="data-cell actions-cell">
+              <button mat-icon-button 
+                      color="warn" 
+                      (click)="delete(item)" 
+                      class="action-btn delete-btn"
+                      matTooltip="Delete item">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
+          
+        </table>
+        
+        <!-- Empty State -->
+        <div *ngIf="budgetItems?.length === 0" class="empty-state">
+          <mat-icon class="empty-icon">receipt_long</mat-icon>
+          <h3 class="empty-title">No Budget Items</h3>
+          <p class="empty-message">Add your first budget item to get started</p>
+          <button mat-raised-button color="primary" (click)="openAddBudgetItemDialog()" class="empty-action-btn">
+            <mat-icon>add</mat-icon>
+            Add Budget Item
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

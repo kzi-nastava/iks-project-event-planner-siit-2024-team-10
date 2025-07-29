@@ -1,0 +1,304 @@
+:root {
+    --primary-color: #4a4a6a;
+    --secondary-color: #6b6b8a;
+    --background-light: #f5f5f9;
+    --text-color: #2c3e50;
+    --border-color: #e0e4e7;
+    --transition-speed: 0.3s;
+}
+
+.pricelist-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: var(--background-light);
+}
+
+.pricelist-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.pricelist-header h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    font-weight: 300;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+}
+
+.pricelist-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.pricelist-item {
+    position: relative;
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: all var(--transition-speed) ease;
+    border: 1px solid transparent;
+    overflow: hidden;
+}
+
+.pricelist-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+    transform: translateX(5px);
+}
+
+.serial-number {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    border-bottom-right-radius: 12px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.item-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-name {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.price-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.original-price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.original-price .price-value.original {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.discount-badge {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+
+.discounted-price .price-value.highlight {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.edit-trigger {
+    background: none;
+    border: none;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: color var(--transition-speed) ease;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.edit-trigger:hover {
+    color: var(--primary-color);
+    background-color: rgba(106, 90, 205, 0.1);
+}
+
+/* Edit Mode Styling */
+.pricelist-item.editing {
+    background-color: var(--background-light);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all var(--transition-speed) ease;
+}
+
+.edit-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 74, 106, 0.1);
+}
+
+.name-input {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.price-edit-row {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.price-input-group, 
+.discount-input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.price-input-group label, 
+.discount-input-group label {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.edit-preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-top: 10px;
+}
+
+.edit-preview strong {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.edit-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.save-btn, .cancel-btn {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+}
+
+.save-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #d0cfe1;
+}
+
+.cancel-btn {
+    background-color: #f0f0f5;
+    color: var(--text-color);
+}
+
+.cancel-btn:hover {
+    background-color: #e0e0e5;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .pricelist-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pricelist-wrapper {
+        padding: 20px 15px;
+    }
+
+    .item-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .price-details {
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .price-edit-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .edit-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .save-btn, .cancel-btn {
+        width: 100%;
+    }
+}
+
+/* Prevent text overflow */
+.edit-input {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.generate-report-btn {
+    margin-bottom: 20px;
+    background-color: #d0cfe1;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 10px rgba(74, 74, 106, 0.2);
+}
+
+.generate-report-btn:hover {
+    background-color: #5d5d82;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(74, 74, 106, 0.3);
+}
+
+.generate-report-btn i {
+    font-size: 1.2rem;
+}

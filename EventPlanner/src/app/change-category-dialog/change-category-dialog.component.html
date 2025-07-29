@@ -1,0 +1,33 @@
+<div class="dialog-container">
+    <h2 mat-dialog-title>Change Category</h2>
+    
+    <mat-dialog-content>
+      <div class="current-category">
+        <p><strong>Current Category:</strong> {{ currentCategory.name }}</p>
+      </div>
+      
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Select New Category</mat-label>
+        <mat-select [(value)]="selectedCategoryId" placeholder="Choose a category">
+          <mat-option 
+            *ngFor="let category of categories" 
+            [value]="category.id"
+            [disabled]="category.id === currentCategory.id">
+            {{ category.name }}
+            <span *ngIf="category.id === currentCategory.id" class="current-label"> (Current)</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="onCancel()">Cancel</button>
+      <button 
+        mat-raised-button 
+        color="primary" 
+        (click)="onConfirm()"
+        [disabled]="isConfirmDisabled()">
+        Change Category
+      </button>
+    </mat-dialog-actions>
+  </div>

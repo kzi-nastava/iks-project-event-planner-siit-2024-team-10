@@ -1,0 +1,84 @@
+.dialog-container {
+    background: #f6f6f6;
+    border-radius: 8px;
+    padding: 20px;
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  h1{
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 30px;
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+    width:100%;
+  }
+  .mat-mdc-form-field{
+    width:100%;
+  }
+  
+  
+  .time-fields {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+  
+  .time-field {
+    flex: 1;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  button[mat-raised-button] {
+    background-color: #9575cd;
+    color: white;
+    font-weight: 500;
+    text-transform: none;
+    padding: 10px;
+  }
+  
+  button[mat-raised-button]:hover {
+    background-color: #7e57c2;
+  }
+  .closeBtn{
+    background-color: grey !important;
+    margin-left: 10px;
+  }
+  .error-msg{
+    color: red;
+  }
+  p{
+    margin:0;
+  }
+  
+  ::ng-deep .mat-mdc-button:not(:disabled){
+    background-color: white !important ;
+    color: #000000 !important;
+  }
+  ::ng-deep .mat-mdc-button:not(:disabled):hover{
+    background-color: #bebce6 !important ;
+    color: white !important;
+  }
+  ::ng-deep .mat-mdc-snack-bar-container .mat-mdc-snackbar-surface{
+    background-color: #fff !important; 
+    color: #000000 !important;
+  }

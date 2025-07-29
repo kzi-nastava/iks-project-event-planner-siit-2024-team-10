@@ -1,45 +1,74 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
-import { OfferingService } from '../offering.service';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpClient } from '@angular/common/http'; 
+import { Category } from '../../offering/model/category.model';
+import { ServiceService } from '../service-service/service.service';
+import { CreateServiceDTO } from '../model/create-service-dto.model';
+import { environment } from '../../../env/environment';
+import { CategoryService } from '../../offering/category-service/category.service';
+import {AuthService} from '../../infrastructure/auth/auth.service';
+import { ImageService } from '../image-service/image.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-offerings',
   templateUrl: './create-offerings.component.html',
   styleUrls: ['./create-offerings.component.css']
 })
 export class CreateOfferingsComponent implements OnInit {
-  offeringForm: FormGroup;
-  serviceCategories = [
-    'Photography', 
-    'Catering', 
-    'DJ Services', 
-    'Event Planning'
-  ];
-  eventTypes = [
-    'Wedding', 
-    'Birthday', 
-    'Corporate', 
-    'Anniversary'
-  ];
+  @ViewChild('fileInput') fileInput: ElementRef;
+  createForm: FormGroup;
   selectedEventTypes: Set<string> = new Set();
   timeOptions = [1, 2, 3, 4, 5];
+  photoPaths: string[] = [];
+  allCategories: Category[] = [];
+  snackBar: MatSnackBar = inject(MatSnackBar);
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog, private offeringService: OfferingService) {}
-
-  openDialog(){
-    this.dialog.open(CreateCategoryDialogComponent,{
-      width:"350px"
-    })
-  }
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private serviceService: ServiceService,
+    private categoryService: CategoryService,
+    private imageService:ImageService,
+    private http: HttpClient,
+    private router:Router){}  
 
   ngOnInit(): void {
     this.initForm();
+
+    this.categoryService.getAll().subscribe({
+      next: (categories: Category[]) => {
+        this.allCategories = categories.filter(c => !c.deleted && !c.pending);
+      }
+    });
+
+    this.createForm.get('createCategory')?.valueChanges.subscribe((createCategoryValue) => {
+      const nameCtrl = this.createForm.get('categoryName');
+      const descCtrl = this.createForm.get('categoryDescription');
+      const selectionCtrl = this.createForm.get('serviceCategory');
+
+      if (createCategoryValue) {
+        nameCtrl?.setValidators([Validators.required]);
+        descCtrl?.setValidators([Validators.required]);
+        selectionCtrl?.clearValidators();
+      } else {
+        nameCtrl?.clearValidators();
+        descCtrl?.clearValidators();
+        selectionCtrl?.setValidators([Validators.required]);
+      }
+
+      nameCtrl?.updateValueAndValidity();
+      descCtrl?.updateValueAndValidity();
+      selectionCtrl?.updateValueAndValidity();
+    });
   }
 
   initForm(): void {
-    this.offeringForm = this.fb.group({
+    this.createForm = this.fb.group({
+      createCategory: [false],
+      categoryName: [''],
+      categoryDescription: [''],
       serviceCategory: ['', Validators.required],
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -53,18 +82,34 @@ export class CreateOfferingsComponent implements OnInit {
       maxTime: [''],
       reservationDeadline: [''],
       cancellationDeadline: [''],
-      isAvailable: [true],
-      isVisible: [true]
+      isAvailable: [false],
+      isVisible: [false]
     });
   }
 
-  onPhotoUpload(event: any): void {
-    const files = event.target.files;
-    const photosControl = this.offeringForm.get('photos');
-    if (photosControl) {
-      photosControl.setValue([...files]);
+  creatingCategory(): boolean {
+    return this.createForm.value.createCategory;
+  }
+
+  onPhotoUpload() {
+    const files = this.fileInput.nativeElement.files;
+    if (files.length > 0) {
+      this.uploadFiles(files);
     }
   }
+
+  uploadFiles(files: FileList) {
+    this.imageService.uploadFiles(files).subscribe({
+      next: (response: string[]) => {
+        this.snackBar.open('Files uploaded successfully', 'OK', { duration: 3000 });
+        this.photoPaths = response;
+        this.createForm.patchValue({ photos: response });
+      },
+      error: (_) => {
+        this.snackBar.open('Failed to upload files', 'Dismiss', { duration: 3000 });
+      }
+    });
+  }  
 
   toggleSelection(type: string): void {
     if (this.selectedEventTypes.has(type)) {
@@ -79,20 +124,57 @@ export class CreateOfferingsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.offeringForm.valid) {
-      const formData = {
-        ...this.offeringForm.value,
-        eventTypes: Array.from(this.selectedEventTypes), 
+    if (this.createForm.valid) {
+      const formValue = this.createForm.value;
+      const isFixedTime = formValue.timeType === 'fixed';
+
+      const service: CreateServiceDTO = {
+        categoryId:this.creatingCategory()?null:this.createForm.value.serviceCategory.id,
+        creatorId: this.creatingCategory() ? this.authService.getAccountId() : null, 
+        categoryProposalName:this.creatingCategory()?this.createForm.value.categoryName:null,
+        categoryProposalDescription:this.creatingCategory()?this.createForm.value.categoryDescription:null,
+        pending: false,
+        provider: this.authService.getUserId(),
+        name: formValue.name,
+        description: formValue.description,
+        specification: formValue.specification || '',
+        price: parseFloat(formValue.price),
+        discount: parseFloat(formValue.discount) || 0,
+        photos: this.photoPaths || [],
+        isVisible: !!formValue.isVisible,
+        isAvailable: !!formValue.isAvailable,
+        maxDuration: isFixedTime ? +formValue.fixedTime || 0 : +formValue.maxTime || 0,
+        minDuration: isFixedTime ? +formValue.fixedTime || 0 : +formValue.minTime || 0,
+        cancellationPeriod: +formValue.cancellationDeadline || 0,
+        reservationPeriod: +formValue.reservationDeadline || 0,
+        autoConfirm: isFixedTime
       };
-  
-      this.offeringService.createService(formData);
-  
-      this.offeringForm.reset();
-      this.selectedEventTypes.clear();
-      alert('Form data logged successfully!');
+
+      this.serviceService.add(service).subscribe({
+        next: () => {
+          this.snackBar.open('Service created successfully', 'OK', { duration: 3000 });
+          this.router.navigate(['home']);
+        },
+        error: (error) => {
+          this.snackBar.open('Failed to create service. Please try again.', 'Dismiss', {
+            duration: 3000
+          });
+        }
+      });
     } else {
-      alert('Please fill in all required fields correctly.');
+      this.markFormGroupTouched(this.createForm);
+      this.snackBar.open('Please fill in all required fields correctly', 'Dismiss', {
+        duration: 3000
+      });
     }
   }
-  
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
 }

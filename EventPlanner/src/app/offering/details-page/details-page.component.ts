@@ -5,13 +5,32 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
-import { OfferingService } from '../offering.service';
-import { CommentService, Comment } from '../comment.service';
-import { Offering } from '../model/offering.model';
-import { switchMap } from 'rxjs/operators';
+import { CommentService } from '../comments/comment.service';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { Service } from '../model/service.model';
 import { Product } from '../model/product.model';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ReservationDialogComponent } from '../reservation-dialog/reservation-dialog.component';
+import { ServiceService } from '../service-service/service.service';
+import { OfferingService } from '../offering-service/offering.service';
+import { Comment } from '../model/comment.model';
+import { CreateCommentDTO } from '../model/create-comment-dto.model';
+import { AuthService } from '../../infrastructure/auth/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../../env/environment';
+import { MatIconModule } from "@angular/material/icon";
+import { AccountService } from '../../account/account.service';
+import { MatButtonModule } from '@angular/material/button';
+import { BudgetItemService } from '../../event/budget-item.service';
+import { ProductReservationDialogComponent } from '../product-reservation-dialog/product-reservation-dialog.component';
+import {Offering} from '../model/offering.model';
+import {ProductService} from '../../product/product.service';
+import {ConfirmDialogComponent} from '../../layout/confirm-dialog/confirm-dialog.component';
+import { ReportFormComponent } from '../../suspension/report-form/report-form.component';
+import { SuspensionService } from '../../suspension/suspension.service';
+import { CreateAccountReportDTO } from '../../suspension/model/create-account-report-dto.model';
+import { ImageService } from '../image-service/image.service';
 
 @Component({
   selector: 'app-details-page',
@@ -23,7 +42,10 @@ import { Router } from '@angular/router';
     CommonModule,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatIconModule,
   ]
 })
 
@@ -33,48 +55,123 @@ export class DetailsPageComponent implements OnInit {
   activeImage = 0;
   userRating = 0;
   comments: Comment[] = [];
-  
+  isCommentingEnabled = false;
+  isEventOrganizer = false;
+  role: string = '';
+  isFavourite:boolean=false;
+  loggedInUserId:number;
+  loggedInAccountId: number;
+  canEditOffering: boolean = false;
   newComment = {
-    userName: '',
     rating: 0,
     text: ''
   };
 
   constructor(
     private route: ActivatedRoute,
-    private offeringService: OfferingService,
+    private serviceService: ServiceService,
+    private productService: ProductService,
     private commentService: CommentService,
-    private router: Router
+    private offeringService: OfferingService,
+    private accountService: AccountService,
+    private authService: AuthService,
+    private budgetItemService: BudgetItemService,
+    private router: Router,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private reportService: SuspensionService,
+    private imageService:ImageService
   ) {}
 
   ngOnInit(): void {
+    this.authService.userState.subscribe((result) => {
+      this.role = result;
+      this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
+    });
+    
+
+    this.loggedInAccountId = this.authService.getAccountId();
+
+    this.isEventOrganizer = this.role === 'EVENT_ORGANIZER';
+
+    const passedOffering = history.state.offering as Product | Service;
+
+  if (passedOffering && passedOffering.id) {
+    this.offering = passedOffering;
+    this.checkIfUserPurchasedOffering(this.offering.id);
+    this.setupOffering(this.offering);
+  }
+  else{
     this.route.params.pipe(
       switchMap(params => {
         const id = +params['id'];
-        return this.offeringService.getOfferingById(id);
-      })
+
+        return this.serviceService.getById(id).pipe(
+          catchError(error => {
+            return this.productService.get(id);
+          })
+        );
+      }),
+      map(offering => {
+        if (offering && offering.photos) {
+          offering.photos = this.imageService.getImageUrls(offering.photos);
+        }
+        return offering;
+      })      
     ).subscribe(offering => {
       this.offering = offering;
-      console.log('Offering:', this.offering); 
+      if (this.offering && this.offering.photos) {
+        this.images = this.offering.photos;
+      }
+      this.loadComments();
+
+      this.canEditOffering = this.offering?.provider?.accountId === this.authService.getAccountId();
+
       if (this.offering) {
-        // da li je niz slika
-        this.images = Array.isArray(this.offering.picture) ? this.offering.picture : [this.offering.picture];
-        this.loadComments();
+        this.accountService.getFavouriteOffering(this.offering.id).subscribe({
+          next: (offering:Offering) => {
+            this.isFavourite = true;
+          },
+          error: (err) => {
+            if(err.status===404)
+              this.isFavourite = false;
+          }
+        });
       }
     });
-  }  
-  
-  // za prikaz podataka koje ima usluga a nema proizvod
+  }
+}
+
+setupOffering(offering: Product | Service): void {
+  if (!offering) return;
+
+  this.checkIfUserPurchasedOffering(offering.id);
+
+  if (offering.photos) {
+    offering.photos = this.imageService.getImageUrls(offering.photos);
+  }
+
+  this.offering = offering;
+  this.images = offering.photos || [];
+
+  this.loadComments();
+
+  this.accountService.getFavouriteOffering(offering.id).subscribe({
+    next: () => this.isFavourite = true,
+    error: (err) => this.isFavourite = err.status === 404 ? false : this.isFavourite
+  });
+}
+
   isService(offering: Product | Service): offering is Service {
     const isService = (offering as Service).specification !== undefined;
-    console.log('Is service:', isService);  
     return isService;
   }
 
-  // ucitavanje komentara iz servisa
-  private loadComments(): void {
+  loadComments(): void {
+    this.checkIfUserPurchasedOffering(this.offering.id);
+
     if (this.offering) {
-      this.commentService.getCommentsByOfferingId(this.offering.id)
+      this.offeringService.getComments(this.offering.id)
         .subscribe(comments => {
           this.comments = comments;
         });
@@ -91,24 +188,41 @@ export class DetailsPageComponent implements OnInit {
   }
 
   submitComment(): void {
-    if (this.offering && this.newComment.userName && this.newComment.text && this.newComment.rating) {
-      const newComment = {
-        offeringId: this.offering.id,
-        userName: this.newComment.userName,
+    if (!this.isCommentingEnabled) {
+      return;
+    }
+
+    if (this.offering && this.newComment.text && this.newComment.rating) {
+      const newComment: CreateCommentDTO = {
         rating: this.newComment.rating,
-        text: this.newComment.text,
-        date: new Date()
+        content: this.newComment.text,
+        account: this.authService.getUserId()
       };
 
-      this.commentService.addComment(newComment)
-        .subscribe(() => {
-          this.loadComments();
-          this.newComment = {
-            userName: '',
-            rating: 0,
-            text: ''
-          };
-          this.userRating = 0;
+      this.commentService.add(newComment, this.offering.id)
+        .subscribe({
+          next: () => {
+            this.loadComments();
+            this.newComment = {
+              rating: 0,
+              text: ''
+            };
+            this.userRating = 0;
+            this.snackBar.open('Comment submitted successfully! Waiting for admin approval.', 'Close', {
+              duration: 5000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              panelClass: ['success-snackbar']
+            });
+          },
+          error: (error) => {
+            this.snackBar.open('Error submitting comment. Please try again.', 'Close', {
+              duration: 5000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              panelClass: ['error-snackbar']
+            });
+          }
         });
     }
   }
@@ -118,42 +232,234 @@ export class DetailsPageComponent implements OnInit {
   }
   isFavorite: boolean = false;
 
-  toggleFavorite() {
-    this.isFavorite = !this.isFavorite;
-}
-
-// prefill podatke za edit
-navigateToEdit(): void {
-  if (this.offering) {
-    const prefilledData = {
-      serviceCategory: this.offering.category || 'Default Category',
-      name: this.offering.name || '',
-      description: this.offering.description || '',
-      specification: this.isService(this.offering) ? this.offering.specification || '' : '',
-      price: this.offering.price || 0,
-      discount: this.offering.discount || 0,
-      fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
-      minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
-      maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
-      reservationPeriod: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
-      cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
-      isAvailable: this.offering.isAvailable || false,
-      isVisible: this.offering.isVisible || false,
-      autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,    
-      eventTypes:this.offering.eventTypes
-    };
-
-    this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+  toggleFavorite(): void {
+    if(this.isFavourite){
+      this.accountService.removeOfferingFromFavourites(this.offering.id).subscribe({
+        next: () => {
+          this.isFavourite = !this.isFavourite;
+        },
+        error: (err) => {
+          this.snackBar.open('Error adding offering to favourites','OK',{duration:5000});
+        }
+      });
+    }
+    else {
+      this.accountService.addOfferingToFavourites(this.offering.id).subscribe({
+        next: () => {
+          this.isFavourite = !this.isFavourite;
+        },
+        error: (err) => {
+          this.snackBar.open('Error removing offering from favourites','OK',{duration:5000});
+        }
+      });
     }
   }
-  deleteOffering():void{
-    console.log('Pop up for deleting...');
-  }
+
+  navigateToEdit(): void {
+    if (this.offering) {
+      if(this.isService(this.offering)) {
+        const prefilledData = {
+          id: this.offering.id,
+          serviceCategory: this.offering.category || 'Default Category',
+          name: this.offering.name || '',
+          description: this.offering.description || '',
+          specification: this.isService(this.offering) ? this.offering.specification || '' : '',
+          price: this.offering.price || 0,
+          discount: this.offering.discount || 0,
+          fixedTime: this.isService(this.offering) ? this.offering.fixedTime || 0 : '',
+          minTime: this.isService(this.offering) ? this.offering.minDuration || '' : '',
+          maxTime: this.isService(this.offering) ? this.offering.maxDuration || '' : '',
+          reservationPeriod: this.isService(this.offering) ? this.offering.reservationPeriod || '' : '',
+          cancellationPeriod: this.isService(this.offering) ? this.offering.cancellationPeriod || '' : '',
+          isAvailable: this.offering.available || false,
+          isVisible: this.offering.visible || false,
+          autoConfirm: this.isService(this.offering) ? this.offering.autoConfirm || false : false,
+          eventTypes:this.offering.eventTypes,
+          photos: this.offering.photos || []
+        };
+        this.router.navigate(['/edit-service'], { state: { data: prefilledData } });
+      }
+      else {
+        this.router.navigate(['/edit-product',this.offering.id]);
+      }
+      }
+    }
+    deleteOffering(): void {
+      if (!this.offering)
+        return;
+
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '400px',
+        data:{message:"Are you sure you want to delete this offering?"}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          if(this.isService(this.offering)) {
+            this.serviceService.delete(this.offering.id).subscribe({
+              next: () => {
+                this.snackBar.open('Offering deleted successfully.', 'OK', {
+                  duration: 3000
+                });
+                this.router.navigate(['/manage-offerings']);
+              },
+              error: (error) => {
+                if (error.status === 404) {
+                  this.snackBar.open('Service not found.', 'Dismiss', { duration: 3000 });
+                } else if (error.status === 409) {
+                  this.snackBar.open('Service cannot be deleted because it has reservations.', 'Dismiss', {
+                    duration: 4000
+                  });
+                } else {
+                  this.snackBar.open('Failed to delete offering.', 'Dismiss', {
+                    duration: 3000
+                  });
+                }
+              }
+            });
+          }
+          else {
+            this.productService.delete(this.offering.id).subscribe({
+              next: () => {
+                this.snackBar.open('Offering deleted successfully.', 'OK', {
+                  duration: 3000
+                });
+                this.router.navigate(['/manage-offerings']);
+              },
+              error: (error) => {
+                this.snackBar.open('Failed to delete offering.', 'Dismiss', {
+                  duration: 3000
+                });
+              }
+            });
+          }
+        }
+      });
+    }
+
+
   viewProviderProfile() {
-    console.log('Viewing provider profile...');
+    if (this.offering && this.offering.provider) {
+      this.router.navigate(['/provider', this.offering.provider.id], {
+        state: { provider: this.offering.provider }
+      });
+    }
   }
 
-  reportProvider() {
-    console.log('Reporting provider...');
+  get profilePhoto(): string {
+    return this.imageService.getImageUrl(this.offering.provider?.profilePhoto);
   }
+  
+  
+  openReservationDialog(): void {
+    if (!this.authService.isLoggedIn()) {
+      this.snackBar.open('Please log in to make a reservation', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['warning-snackbar']
+      });
+      return;
+    }
+
+    if (!this.isService(this.offering)) {
+      const dialogRef = this.dialog.open(ProductReservationDialogComponent, {
+        width: '600px',
+        data: { offering: this.offering }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.snackBar.open('Product reserved successfully!', 'Close', { duration: 3000 });
+          this.isCommentingEnabled = true;
+        } 
+      });
+      return;
+    }
+
+    if (!this.authService.isLoggedIn()) {
+      this.snackBar.open('Please log in to make a reservation', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['warning-snackbar']
+      });
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ReservationDialogComponent, {
+      width: '700px',
+      data: { offering: this.offering }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.isCommentingEnabled = true;
+      }
+    });
+  }
+
+  chat() {
+    if (!this.authService.isLoggedIn()) {
+      this.snackBar.open('Please log in to chat with the provider', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['warning-snackbar']
+      });
+      return;
+    }
+
+    const sender = this.authService.getAccountId();
+    const recipient = this.offering.provider.accountId;
+    this.router.navigate(['/chat'], {
+      state: {
+        loggedInUserId: sender,
+        organizerId: recipient
+      }
+    });
+  }
+
+  reportAccount(accountId: number): void {
+      this.dialog.open(ReportFormComponent, {
+        data: {
+          reporterId: this.authService.getAccountId(),
+          reporteeId: accountId
+        }
+      }).afterClosed().subscribe((result: CreateAccountReportDTO) => {
+        if (result) {
+          this.reportService.sendReport(result).subscribe({
+            next: () => {
+              this.snackBar.open('User reported successfully.', 'Close', {
+                duration: 3000,
+                panelClass: ['snackbar-success']
+              });
+            },
+            error: (err) => {
+              const errorMsg = err?.error ?? 'Failed to report user.';
+              this.snackBar.open(errorMsg, 'Close', {
+                duration: 3000,
+                panelClass: ['snackbar-error']
+              });
+            }
+          });
+        }
+      });
+    }
+    checkIfUserPurchasedOffering(offeringId: number): void {
+      if (!this.isEventOrganizer) {
+        this.isCommentingEnabled = false;
+        return;
+      }
+    
+      this.offeringService.hasUserPurchasedOffering(this.authService.getUserId(), offeringId)
+        .subscribe({
+          next: (purchased: boolean) => {
+            this.isCommentingEnabled = purchased;
+          },
+          error: () => {
+            this.isCommentingEnabled = false;
+          }
+        });
+    }
 }

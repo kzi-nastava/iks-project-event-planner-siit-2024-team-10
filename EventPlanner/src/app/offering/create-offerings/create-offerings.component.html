@@ -1,24 +1,29 @@
-<div style="background-color: #f6f6f6;">
 <div class="offering-container">
-  <form [formGroup]="offeringForm" (ngSubmit)="onSubmit()" class="elegant-form">
+  <form [formGroup]="createForm" class="elegant-form">
     <div class="form-header">
-      <h1>Create Your Service</h1>
-      <p>Craft a compelling service that stands out in the market</p>
+      <h1>Create Service</h1>
     </div>
-
     <div class="form-section category-section">
-      <div class="category-selector">
+      <mat-checkbox formControlName="createCategory" color="primary">Create new category</mat-checkbox>
+      <mat-form-field appearance="outline" *ngIf="creatingCategory()">
+        <mat-label>Category Name</mat-label>
+        <input matInput formControlName="categoryName">
+      </mat-form-field>
+      <mat-form-field appearance="outline" *ngIf="creatingCategory()">
+        <mat-label>Category Description</mat-label>
+        <textarea matInput formControlName="categoryDescription" rows="4"></textarea>
+      </mat-form-field>
+      <div class="category-selector" *ngIf="!creatingCategory()">
         <mat-form-field appearance="outline" class="category-dropdown">
           <mat-label>Service Category</mat-label>
           <mat-select formControlName="serviceCategory" class="category-select">
-            <mat-option *ngFor="let category of serviceCategories" [value]="category">
-              {{category}}
+            <mat-option *ngFor="let category of allCategories" [value]="category">
+              {{category?.name}}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-      <p class="subtle-text">Can't find the perfect category? <a id="openDialog" (click)="openDialog()">Create new</a> now!</p>
-      </div>
+    </div>
 
     <div class="form-section details-grid">
       <mat-form-field appearance="outline">
@@ -53,24 +58,14 @@
 
     <div class="form-section photo-upload">
       <div class="upload-container">
-        <input type="file" #fileInput multiple (change)="onPhotoUpload($event)" accept="image/*" class="file-input">
+        <input type="file" #fileInput multiple (change)="onPhotoUpload()" accept="image/*" class="file-input">
         <div class="upload-area" (click)="fileInput.click()">
           <mat-icon class="upload-icon">cloud_upload</mat-icon>
           <p>Drag & Drop or Click to Upload Photos</p>
           <small>Maximum 5 images, PNG or JPEG</small>
         </div>
       </div>
-    </div>
-
-    <div class="form-section event-types">
-      <h3 class="small-subtitle">Select Applicable Event Types</h3>
-      <div class="selected-labels">
-        <span *ngFor="let type of eventTypes" 
-              [ngClass]="{'selected-label': isSelected(type)}" 
-              (click)="toggleSelection(type)"
-              class="clickable-label">{{type}}</span>
-      </div>
-    </div>
+    </div>      
 
     <div class="form-section time-selection">
       <h3 class="small-subtitle">Service Duration</h3>
@@ -79,18 +74,14 @@
         <mat-radio-button value="flexible">Flexible Time</mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="offeringForm.get('timeType')?.value === 'fixed'" class="fixed-duration">
+      <div *ngIf="createForm.get('timeType')?.value === 'fixed'" class="fixed-duration">
         <mat-form-field appearance="outline">
-          <mat-label>Select Duration</mat-label>
-          <mat-select formControlName="fixedTime">
-            <mat-option *ngFor="let time of timeOptions" [value]="time">
-              {{time}} Hour{{time > 1 ? 's' : ''}}
-            </mat-option>
-          </mat-select>
+          <mat-label>Duration (hours)</mat-label>
+          <input matInput type="number" formControlName="fixedTime" min="1" placeholder="Enter hours">
         </mat-form-field>
       </div>
 
-      <div *ngIf="offeringForm.get('timeType')?.value === 'flexible'" class="price-section">
+      <div *ngIf="createForm.get('timeType')?.value === 'flexible'" class="price-section">
         <mat-form-field style="padding-right: 20px;" appearance="outline">
           <mat-label>Minimum Hours</mat-label>
           <input matInput type="number" formControlName="minTime">
@@ -112,7 +103,7 @@
 
       <mat-form-field style="padding-left: 10px;" appearance="outline">
         <mat-label>Cancellation deadline</mat-label>
-        <input matInput type="number" formControlName="cancelldationDeadline" placeholder="0">
+        <input matInput type="number" formControlName="cancellationDeadline" placeholder="0">
       </mat-form-field>
       </div>
     </div>
@@ -126,10 +117,9 @@
     </div>
 
     <div class="form-section submit-section">
-      <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="!offeringForm.valid">
+      <button (click)="onSubmit()" mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="!createForm.valid">
         Create Service
       </button>
     </div>
   </form>
-</div>
 </div>
