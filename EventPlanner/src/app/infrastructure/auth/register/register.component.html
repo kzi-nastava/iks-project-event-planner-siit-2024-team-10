@@ -50,16 +50,6 @@
         <mat-label>Phone</mat-label>
         <input matInput formControlName="phone" name="phone">
       </mat-form-field>
-      <div class="form-section photo-upload">
-        <mat-label>Profile photo</mat-label>
-        <div class="upload-container">
-          <input type="file" #profilePhotoInput (change)="onProfilePhotoUpload()" accept="image/*" class="file-input">
-          <div class="upload-area" (click)="profilePhotoInput.click()">
-            <mat-icon class="upload-icon">cloud_upload</mat-icon>
-            <p>Click to Upload Photo</p>
-          </div>
-        </div>
-      </div>
       <p>Select role:</p>
       <mat-radio-group color="primary" aria-label="Select role" formControlName="role" name="role">
         <mat-radio-button color="primary" value="organizer">Event organizer</mat-radio-button>
@@ -101,18 +91,8 @@
           <mat-label>Description</mat-label>
           <textarea matInput rows="4" placeholder="Enter description" formControlName="companyDescription" name="companyDescription"></textarea>
         </mat-form-field>
-        <div class="form-section photo-upload">
-          <mat-label>Company photos (optional)</mat-label>
-          <div class="upload-container">
-            <input type="file" #companyPhotosInput multiple (change)="onCompanyPhotosUpload()" accept="image/*" class="file-input">
-            <div class="upload-area" (click)="companyPhotosInput.click()">
-              <mat-icon class="upload-icon">cloud_upload</mat-icon>
-              <p>Click to Upload Photos</p>
-            </div>
-          </div>
-        </div>
       </div>
-      <button mat-flat-button class="submit-btn"  (click)="register()">
+      <button mat-flat-button class="submit-btn"  (click)="register()" [disabled]="(companyInfoRequired() && !registerForm.valid) || (!companyInfoRequired() && !isOrganizerFormValid())">
         Register
       </button>
     </form>

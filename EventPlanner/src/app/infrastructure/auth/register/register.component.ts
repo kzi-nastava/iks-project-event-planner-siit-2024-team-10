@@ -48,14 +48,9 @@ export class RegisterComponent implements OnInit{
     { validators: MatchValidator('password', 'confirmPassword') });
   snackBar:MatSnackBar = inject(MatSnackBar);
   roleUpgrade:boolean;
-  profilePhoto:string;
-  companyPhotos:string[];
-  @ViewChild('profilePhotoInput') profilePhotoInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('companyPhotosInput') companyPhotosInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     private authService:AuthService,
-    private fileService:FileService,
     private router:Router) {}
 
   ngOnInit():void{
@@ -87,8 +82,7 @@ export class RegisterComponent implements OnInit{
           houseNumber: this.registerForm.value.companyHouseNumber
           },
         phoneNumber: this.registerForm.value.companyPhone,
-        description: this.registerForm.value.companyDescription,
-        photos: this.companyPhotos
+        description: this.registerForm.value.companyDescription
       }
     }
     if(!this.isOrganizerFormValid())
@@ -98,7 +92,6 @@ export class RegisterComponent implements OnInit{
       password: this.roleUpgrade? null : this.registerForm.value.password,
       firstName: this.registerForm.value.firstName,
       lastName: this.registerForm.value.lastName,
-      profilePhoto: this.profilePhoto,
       location:{
         country: this.registerForm.value.country,
         city: this.registerForm.value.city,
@@ -137,54 +130,6 @@ export class RegisterComponent implements OnInit{
         return false;
     }
     return true;
-  }
-
-  onProfilePhotoUpload() {
-    const files = this.profilePhotoInput.nativeElement.files;
-    if (files.length > 0) {
-      this.uploadProfilePhoto(files);
-    }
-  }
-
-  uploadProfilePhoto(files: FileList) {
-    const formData = new FormData();
-
-    formData.append('files', files[0]);
-
-    this.fileService.uploadPhotos(formData).subscribe({
-      next: (response: string[]) => {
-        this.snackBar.open('File uploaded successfully', 'OK', {duration: 3000});
-        this.profilePhoto = response[0];
-      },
-      error: (error) => {
-        this.snackBar.open('Failed to upload file', 'Dismiss', {duration: 3000});
-      }
-    });
-  }
-
-  onCompanyPhotosUpload() {
-    const files = this.companyPhotosInput.nativeElement.files;
-    if (files.length > 0) {
-      this.uploadFiles(files);
-    }
-  }
-
-  uploadFiles(files: FileList) {
-    const formData = new FormData();
-
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
-    }
-
-    this.fileService.uploadPhotos(formData).subscribe({
-      next: (response: string[]) => {
-        this.snackBar.open('Files uploaded successfully', 'OK', {duration: 3000});
-        this.companyPhotos = response;
-      },
-      error: (error) => {
-        this.snackBar.open('Failed to upload files', 'Dismiss', {duration: 3000});
-      }
-    });
   }
 }
 
