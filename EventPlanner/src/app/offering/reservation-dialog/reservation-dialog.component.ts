@@ -49,7 +49,7 @@ ngOnInit(): void {
     if (offering.minDuration === offering.maxDuration) {
       this.reservationForm.get('endTime')?.disable();
     } else {
-      this.reservationForm.get('endTime')?.enable();  // <--- DODAJ OVO
+      this.reservationForm.get('endTime')?.enable();
     }
 
     this.reservationService.findEventsByOrganizer(this.accountId).subscribe({
