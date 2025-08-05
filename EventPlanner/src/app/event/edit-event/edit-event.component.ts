@@ -79,7 +79,6 @@ export class EditEventComponent implements OnInit{
         },
         error: (err) => {
           this.snackBar.open('Error fetching event','OK',{duration:5000});
-          console.error('Error fetching event:', err);
         }
       });
     })
@@ -120,7 +119,6 @@ export class EditEventComponent implements OnInit{
           this.router.navigate(['/event',this.event.id]);
         },
         error: (err) => {
-          console.log(err);
           this.snackBar.open(err.error,'OK',{duration:3000});
         }
       });

@@ -38,8 +38,6 @@ export class FilterProvidersOfferingsDialogComponent {
 
   applyFilters() {
     const filters = this.filterForm.value;
-    console.log('Filters:', filters);
-
     this.dialogRef.close(filters);
   }
 

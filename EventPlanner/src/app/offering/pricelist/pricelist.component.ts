@@ -23,7 +23,6 @@ export class PricelistComponent implements OnInit {
         this.sortItems();
       },
       error: (err) => {
-        console.error('Error fetching pricelist:', err);
         this.openSnackbar('Error fetching pricelist');
       }
     });
@@ -37,7 +36,6 @@ export class PricelistComponent implements OnInit {
   calculateDiscountedPrice() {
     if (this.editedItem.price && this.editedItem.discount !== undefined) {
       if (this.editedItem.discount < 0 || this.editedItem.discount > 100) {
-        console.error('Discount must be between 0 and 100');
         this.openSnackbar('Discount must be between 0 and 100');
         return;
       }
@@ -64,7 +62,6 @@ export class PricelistComponent implements OnInit {
               this.sortItems();
             },
             error: (err) => {
-              console.error('Error fetching pricelist after save:', err);
               this.openSnackbar('Error fetching pricelist after save');
             }
           });
@@ -72,7 +69,6 @@ export class PricelistComponent implements OnInit {
           this.cancelEditing();
         },
         error: (err) => {
-          console.error('Error saving changes:', err);
           this.openSnackbar('Error saving changes');
         }
       });
@@ -112,7 +108,6 @@ export class PricelistComponent implements OnInit {
         window.open(fileURL);
       },
       error: (err) => {
-        console.error('Error generating report:', err);
         this.openSnackbar('Error generating report');
       }
     });

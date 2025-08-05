@@ -10,9 +10,10 @@ import { MatOptionModule } from '@angular/material/core'; // For mat-option
 
 import { CreateProductComponent } from './create-product/create-product.component';
 import {MatCheckbox} from '@angular/material/checkbox';
+import { EditProductComponent } from './edit-product/edit-product.component';
 
 @NgModule({
-  declarations: [CreateProductComponent],
+  declarations: [CreateProductComponent, EditProductComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

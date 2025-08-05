@@ -3,7 +3,8 @@
   <!-- Carousel Section -->
   <div class="map-section">
     <div class="map-container">
-      <img src="map.png" class="map">
+      <p *ngIf="!mapAvailable">Location cannot be displayed for this event</p>
+      <div id="eventMap" style="height: 400px;"></div>
     </div>
   </div>
 
@@ -91,7 +92,7 @@
     <div class="organizer-section">
       <div class="organizer-card">
         <div class="organizer-info">
-          <img [src]="event?.organizer?.profilePhoto?event?.organizer?.profilePhoto:'profile_photo.png'" alt="organizer" class="organizer-avatar">
+          <img [src]=getProfilePhoto() alt="organizer" class="organizer-avatar">
           <div class="organizer-details">
             <h3>{{ event?.organizer?.firstName}} {{ event?.organizer?.lastName}}</h3>
             <p class="organizer-location">
@@ -108,12 +109,17 @@
                 {{ event?.organizer?.phoneNumber }}
               </p>
             </div>
-            <div class="provider-actions" style="width: 200px;">
+            <div *ngIf="!owner && loggedInUserId!==null" class="provider-actions" style="width: 200px;">
               <button class="view-profile-btn" (click)="navigateToChat()">
                 <i class="fas fa-comment"></i>
                 Chat with organizer
               </button>
             </div>
+          </div>
+          <div *ngIf="!owner && loggedInUserId">
+            <button class="icon-btn report" (click)="reportAccount(event?.organizer?.id)" >
+                <mat-icon>flag</mat-icon>
+            </button>
           </div>
         </div>
     </div>

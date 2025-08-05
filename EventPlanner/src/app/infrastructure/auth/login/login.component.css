@@ -75,6 +75,14 @@ a{
   font-weight: 500;
 }
 
+.suspension-error {
+  margin-top: 0 !important;
+  padding: 0 !important;
+  text-align: center;
+  white-space: pre-line;
+}
+
+
 ::ng-deep .mat-mdc-button:not(:disabled){
   background-color: white !important ;
   color: #000000 !important;

@@ -42,7 +42,6 @@ export class NotificationService {
   disconnectSocket(): void {
     if (this.stompClient && this.stompClient.connected) {
       this.stompClient.disconnect(() => {
-        console.log('WebSocket disconnected');
       });
     }
   }

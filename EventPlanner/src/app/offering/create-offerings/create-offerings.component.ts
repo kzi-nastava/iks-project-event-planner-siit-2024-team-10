@@ -8,7 +8,8 @@ import { CreateServiceDTO } from '../model/create-service-dto.model';
 import { environment } from '../../../env/environment';
 import { CategoryService } from '../../offering/category-service/category.service';
 import {AuthService} from '../../infrastructure/auth/auth.service';
-
+import { ImageService } from '../image-service/image.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-offerings',
   templateUrl: './create-offerings.component.html',
@@ -28,8 +29,9 @@ export class CreateOfferingsComponent implements OnInit {
     private authService: AuthService,
     private serviceService: ServiceService,
     private categoryService: CategoryService,
-    private http: HttpClient
-  ) {}
+    private imageService:ImageService,
+    private http: HttpClient,
+    private router:Router){}  
 
   ngOnInit(): void {
     this.initForm();
@@ -37,9 +39,6 @@ export class CreateOfferingsComponent implements OnInit {
     this.categoryService.getAll().subscribe({
       next: (categories: Category[]) => {
         this.allCategories = categories.filter(c => !c.deleted && !c.pending);
-      },
-      error: () => {
-        console.error("Failed to load categories");
       }
     });
 
@@ -99,27 +98,17 @@ export class CreateOfferingsComponent implements OnInit {
   }
 
   uploadFiles(files: FileList) {
-    const formData = new FormData();
-    const fakeId = 1;
-
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
-    }
-
-    formData.append('productId', fakeId.toString());
-
-    this.http.post(environment.apiHost + "/upload", formData).subscribe({
-      next: (response: any) => {
+    this.imageService.uploadFiles(files).subscribe({
+      next: (response: string[]) => {
         this.snackBar.open('Files uploaded successfully', 'OK', { duration: 3000 });
         this.photoPaths = response;
         this.createForm.patchValue({ photos: response });
       },
-      error: (error) => {
-        console.error('Error uploading files:', error);
+      error: (_) => {
         this.snackBar.open('Failed to upload files', 'Dismiss', { duration: 3000 });
       }
     });
-  }
+  }  
 
   toggleSelection(type: string): void {
     if (this.selectedEventTypes.has(type)) {
@@ -134,7 +123,6 @@ export class CreateOfferingsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log("submit")
     if (this.createForm.valid) {
       const formValue = this.createForm.value;
       const isFixedTime = formValue.timeType === 'fixed';
@@ -161,15 +149,12 @@ export class CreateOfferingsComponent implements OnInit {
         autoConfirm: isFixedTime
       };
 
-      console.log(service);
-
       this.serviceService.add(service).subscribe({
         next: () => {
           this.snackBar.open('Service created successfully', 'OK', { duration: 3000 });
-          this.createForm.reset();
+          this.router.navigate(['home']);
         },
         error: (error) => {
-          console.error('Error creating service:', error);
           this.snackBar.open('Failed to create service. Please try again.', 'Dismiss', {
             duration: 3000
           });

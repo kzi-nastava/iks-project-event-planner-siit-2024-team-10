@@ -9,6 +9,7 @@ import {MatSort} from '@angular/material/sort';
 import { ChangeCategoryDialogComponent } from '../../change-category-dialog/change-category-dialog.component';
 import { Offering } from '../model/offering.model';
 import { OfferingService } from '../offering-service/offering.service';
+import { ChangeOfferingCategoryDTO } from '../model/change-category-dto.model';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 
 @Component({
@@ -43,9 +44,6 @@ export class OfferingCategoryComponent implements OnInit {
         const activeCategories = categories.filter(category => !category.deleted);
         activeCategories.sort((a, b) => a.name.localeCompare(b.name));
         this.dataSource = new MatTableDataSource<Category>(activeCategories);
-      },
-      error: (_) => {
-        console.error("Error loading categories");
       }
     });
   }
@@ -69,7 +67,6 @@ export class OfferingCategoryComponent implements OnInit {
             this.refreshDataSource();
             this.snackBar.open('Category added successfully','OK',{duration:3000});
           },
-          error: (err) => console.error('Error adding category:', err),
         });
       }
     });
@@ -88,7 +85,6 @@ export class OfferingCategoryComponent implements OnInit {
             this.refreshDataSource();
             this.snackBar.open('Category updated successfully','OK',{duration:3000});
           },
-          error: (err) => console.error('Error updating category:', err),
         });
       }
     });  
@@ -110,21 +106,20 @@ export class OfferingCategoryComponent implements OnInit {
         this.snackBar.open('Category approved successfully', 'OK', { duration: 3000 });
       },
       error: (err) => {
-        console.error('Error approving category:', err);
         this.snackBar.open('Error approving category', 'OK', { duration: 3000 });
       }
     });
   }  
 
-  openChangeCategoryDialog(category: Category) {
+  openChangeCategoryDialog(offering: Offering) {
     const dialogRef = this.dialog.open(ChangeCategoryDialogComponent, {
       width: '400px',
-      data: { currentCategory: category }
+      data: { currentCategory: offering.category }
     });
   
     dialogRef.afterClosed().subscribe(newCategory => {
-      if (newCategory && newCategory.id !== category.id) {
-        this.offeringService.changeOfferingCategory(category.id, newCategory.id).subscribe({
+      if (newCategory && newCategory.id !== offering.category.id) {
+        this.offeringService.changeOfferingCategory(offering.id, { categoryId: newCategory.id }).subscribe({
           next: () => {
             this.snackBar.open('Category changed successfully.', 'OK', { duration: 3000 });
             this.refreshDataSource();
@@ -135,13 +130,12 @@ export class OfferingCategoryComponent implements OnInit {
           }
         });
       }
-    });
+    });    
   }
   private loadOfferingsGroupedByCategory() {
     this.offeringService.getAllNonPaged().subscribe({
       next: (offerings) => {
         if (!Array.isArray(offerings)) {
-          console.error('Offerings is not an array!');
           return;
         }
       

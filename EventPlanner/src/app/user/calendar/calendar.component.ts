@@ -51,7 +51,6 @@ export class CalendarComponent implements OnInit {
       },
       error: (err) => {
         this.snackBar.open('Error fetching calendar','OK',{duration:5000});
-        console.error('Error fetching calendar:', err);
       }
     });
   }

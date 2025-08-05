@@ -28,12 +28,12 @@ export class ReservationConfirmationComponent implements OnInit{
   private refreshDataSource() {
     this.service.getPendingReservations(this.accountId).subscribe({
       next: (reservations: Reservation[]) => {
-        reservations.sort((a, b) => a.service.localeCompare(b.service));
+        reservations.sort((a, b) => a.service.name.localeCompare(b.service.name));
         this.dataSource = new MatTableDataSource<Reservation>(reservations);
         this.dataSource.sort = this.sort;
       },
       error: (_) => {
-        console.error("Error loading reservations");
+        this.snackBar.open("There has been an error loading reservations", "Close", { duration: 5000 });
       }
     })
   }

@@ -50,16 +50,20 @@ ngOnInit(): void {
       this.reservationForm.get('endTime')?.disable();
     }
 
-  this.reservationService.findEventsByOrganizer(this.accountId).subscribe(events => {
-    if (events.length === 0) {
-      this.errorMsg = 'No events found, cannot make reservation.';
-      this.snackBar.open('No events found', 'Close', {
-        duration: 3000
-      });
-    } else{
-      this.events = events;
-    }
-  });
+    this.reservationService.findEventsByOrganizer(this.accountId).subscribe({
+      next: (events) => {
+        if (events.length === 0) {
+          this.errorMsg = 'No events found, cannot make reservation.';
+          this.snackBar.open('No events found', 'Close', { duration: 3000 });
+        } else {
+          this.events = events;
+        }
+      },
+      error: (err) => {
+        this.snackBar.open('Error fetching your events.', 'Close', { duration: 3000 });
+      }
+    });
+    
 
   this.reservationForm.get('startTime')?.valueChanges.subscribe(startTime => {
     if (offering.minDuration === offering.maxDuration && startTime) {
@@ -120,23 +124,7 @@ onBook(): void {
               });
             }
             else {
-              const finalAmount = this.data.offering.discount 
-                ? this.data.offering.price * (1 - this.data.offering.discount / 100)
-                : this.data.offering.price;
-
-                this.budgetItemService.buy(reservationData.event.id, this.data.offering.id,true).subscribe({
-                  next: (success: boolean) => {
-                    if (success) {
-                      this.snackBar.open('Reservation successful! Budget updated. Email confirmation has been sent.', 'OK', { duration: 5000 });
-                    } else {
-                      this.snackBar.open('Not enough budget to record the purchase.', 'OK', { duration: 5000 });
-                    }
-                  },
-                  error: (error) => {
-                    console.error('Failed to update budget:', error);
-                    this.snackBar.open('Service not reserved', 'OK', { duration: 5000 });
-                  }
-                });                
+              this.snackBar.open('Reservation successful! Budget updated. Email confirmation has been sent.', 'OK', { duration: 5000 });          
       }
             
             this.dialogRef.close(response);

@@ -20,7 +20,6 @@ export class ReservationService {
     return this.httpClient.post<Reservation>(environment.apiHost+`/reservations`, reservation).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage = error.error || 'An unexpected error occurred';
-        console.log(error)
         return throwError(() => new Error(errorMessage));
       })
     );

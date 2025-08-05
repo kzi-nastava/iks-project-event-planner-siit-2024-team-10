@@ -36,6 +36,16 @@
           </div>
         </div>
     
+        <div class="existing-photos" *ngIf="offeringForm.get('photos')?.value?.length > 0">
+          <h4>Current Photos ({{ offeringForm.get('photos')?.value?.length }}/5)</h4>
+          <div class="photos-grid">
+            <div *ngFor="let photo of offeringForm.get('photos')?.value; let i = index" class="photo-preview">
+              <img [src]="getPhotoUrl(photo)" alt="photo" />
+              <button type="button" class="remove-btn" (click)="removePhoto(i)">×</button>
+            </div>
+          </div>
+        </div>
+        
         <div class="form-section photo-upload">
           <div class="upload-container">
             <input type="file" #fileInput multiple (change)="onPhotoUpload($event)" accept="image/*" class="file-input">

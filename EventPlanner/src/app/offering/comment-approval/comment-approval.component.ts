@@ -33,7 +33,7 @@ dataSource: MatTableDataSource<Comment>;
         this.dataSource.sort = this.sort;
       },
       error: (_) => {
-        console.error("Error loading comments");
+          this.snackBar.open("There has been an error loading comments", "Close", { duration: 5000 });
       }
     })
   }

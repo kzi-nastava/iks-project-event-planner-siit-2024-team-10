@@ -16,7 +16,7 @@
     </mat-form-field>
 
     <!-- Location -->
-    <mat-form-field appearance="outline" class="form-field">
+    <mat-form-field *ngIf="!isOfferingManagement" appearance="outline" class="form-field">
       <mat-label>Location</mat-label>
       <input matInput formControlName="location" placeholder="City">
     </mat-form-field>

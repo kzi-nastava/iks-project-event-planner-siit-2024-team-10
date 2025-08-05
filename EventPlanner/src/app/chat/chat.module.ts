@@ -4,6 +4,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ChatComponent } from './component/chat.component';
 import { ChatService } from './service/chat.service';
 import { FilterPipe } from './filter-pipe';
+import { MatIcon } from '@angular/material/icon';
+import { ReportFormComponent } from '../suspension/report-form/report-form.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SuspensionModule } from '../suspension/suspension.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +16,10 @@ import { FilterPipe } from './filter-pipe';
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIcon,
+    MatDialogModule,
+    SuspensionModule
   ],
   exports: [
     ChatComponent

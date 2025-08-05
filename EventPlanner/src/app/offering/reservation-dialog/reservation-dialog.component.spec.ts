@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { ReservationDialogComponent } from './reservation-dialog.component';
 
-
-describe('ReservationDialogComponent', () => {
+describe('ReservationComponent', () => {
   let component: ReservationDialogComponent;
   let fixture: ComponentFixture<ReservationDialogComponent>;
 

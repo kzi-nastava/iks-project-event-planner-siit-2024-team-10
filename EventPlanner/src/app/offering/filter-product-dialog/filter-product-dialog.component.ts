@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { map, Observable } from 'rxjs';
 import { Category } from '../model/category.model';
@@ -18,6 +18,7 @@ export class FilterProductDialogComponent implements OnInit {
   maxPrice: number = 10000;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public isOfferingManagement:boolean,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<FilterProductDialogComponent>,
     private categoryService: CategoryService,
@@ -45,10 +46,7 @@ export class FilterProductDialogComponent implements OnInit {
       next: (price) => {
         this.maxPrice = price || 10000;
         this.filterForm.get('priceRange.endPrice')?.setValue(this.maxPrice);
-      },
-      error: (err) => {
-        console.error('Failed to fetch max price:', err);
-      },
+      }
     });
   }
 

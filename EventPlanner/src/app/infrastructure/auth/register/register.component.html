@@ -31,10 +31,6 @@
         <input matInput formControlName="lastName" name="lastName">
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Profile photo</mat-label>
-        <input matInput formControlName="profilePhoto" name="profilePhoto">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
         <mat-label>Country</mat-label>
         <input matInput formControlName="country" name="country">
       </mat-form-field>
@@ -54,6 +50,16 @@
         <mat-label>Phone</mat-label>
         <input matInput formControlName="phone" name="phone">
       </mat-form-field>
+      <div class="form-section photo-upload">
+        <mat-label>Profile photo</mat-label>
+        <div class="upload-container">
+          <input type="file" #profilePhotoInput (change)="onProfilePhotoUpload()" accept="image/*" class="file-input">
+          <div class="upload-area" (click)="profilePhotoInput.click()">
+            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+            <p>Click to Upload Photo</p>
+          </div>
+        </div>
+      </div>
       <p>Select role:</p>
       <mat-radio-group color="primary" aria-label="Select role" formControlName="role" name="role">
         <mat-radio-button color="primary" value="organizer">Event organizer</mat-radio-button>
@@ -95,10 +101,16 @@
           <mat-label>Description</mat-label>
           <textarea matInput rows="4" placeholder="Enter description" formControlName="companyDescription" name="companyDescription"></textarea>
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Photos (optional)</mat-label>
-          <input matInput formControlName="companyPhotos" name="companyPhotos">
-        </mat-form-field>
+        <div class="form-section photo-upload">
+          <mat-label>Company photos (optional)</mat-label>
+          <div class="upload-container">
+            <input type="file" #companyPhotosInput multiple (change)="onCompanyPhotosUpload()" accept="image/*" class="file-input">
+            <div class="upload-area" (click)="companyPhotosInput.click()">
+              <mat-icon class="upload-icon">cloud_upload</mat-icon>
+              <p>Click to Upload Photos</p>
+            </div>
+          </div>
+        </div>
       </div>
       <button mat-flat-button class="submit-btn"  (click)="register()">
         Register

@@ -260,10 +260,11 @@ export class HomeComponent implements OnInit {
   fetchPaginatedEvents(): void {
     const { page, pageSize } = this.eventPageProperties;
     if (this.initialLoadEvents){
-      this.eventFilters = { ...this.eventFilters, ...{accountId: this.accountId} };
+      this.eventFilters = { ...this.eventFilters, ...{initLoad: true} };
     }else{
-      delete this.eventFilters.accountId;
+      delete this.eventFilters.initLoad;
     }
+    this.eventFilters = { ...this.eventFilters, ...{accountId: this.accountId} };
     this.eventService.getPaginatedEvents(page, pageSize, this.eventFilters).subscribe({
       next: (response) => {
         this.allEvents = response.content;
@@ -285,10 +286,11 @@ export class HomeComponent implements OnInit {
   fetchPaginatedOfferings(): void {
     const { page, pageSize } = this.offeringPageProperties;
     if (this.initialLoadOfferings){
-      this.offeringFilters = { ...this.offeringFilters, ...{accountId: this.accountId} };
+      this.offeringFilters = { ...this.offeringFilters, ...{initLoad: this.initialLoadOfferings} };
     }else{
-      delete this.offeringFilters.accountId;
+      delete this.offeringFilters.initLoad;
     }
+    this.offeringFilters = { ...this.offeringFilters, ...{accountId: this.accountId} };
     if (this.selectedOfferingType!==null){
       this.offeringFilters.isServiceFilter = this.selectedOfferingType === 'services';
     }

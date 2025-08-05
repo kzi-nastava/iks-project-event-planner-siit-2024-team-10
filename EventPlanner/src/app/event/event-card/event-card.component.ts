@@ -12,8 +12,4 @@ export class EventCardComponent {
 
   @Output()
   clicked: EventEmitter<Event> = new EventEmitter<Event>();
-
-  onEventClicked(): void{
-    console.log(this.event)
-  }
 }

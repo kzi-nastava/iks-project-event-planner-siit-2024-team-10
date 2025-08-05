@@ -31,9 +31,6 @@ export class ChangeCategoryDialogComponent implements OnInit {
         this.categories = categories
           .filter(category => !category.deleted && !category.pending)
           .sort((a, b) => a.name.localeCompare(b.name));
-      },
-      error: (err) => {
-        console.error('Error loading categories:', err);
       }
     });
   }

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Offering } from '../model/offering.model';
 import { Router } from '@angular/router';
-import { environment } from '../../../env/environment';
+import { ImageService } from '../image-service/image.service';
 
 @Component({
   selector: 'app-offering-card',
@@ -12,15 +12,14 @@ export class OfferingCardComponent {
   @Input() offering: Offering;
   @Output() clicked: EventEmitter<Offering> = new EventEmitter<Offering>();
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private imageService: ImageService
+  ) {}
 
   get offeringImage(): string {
     const photos = this.offering.photos || [];
-    if (photos.length > 0) {
-      const fileName = photos[0].split('\\').pop()?.split('/').pop();
-      return `${environment.apiHost}/images/${fileName}`;
-    }
-    return 'placeholder-image.png';
+    return this.imageService.getImageUrl(photos[0]);
   }
 
   onOfferingClicked(): void {

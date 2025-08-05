@@ -66,7 +66,6 @@ export class BudgetManagerComponent implements OnInit {
   
     this.budgetItemService.getByEvent(this.selectedEventId).subscribe({
       next: (items) => {
-        console.log('Vraćene budžetske stavke:', items);
         this.budgetItems = items;
         this.totalBudget = items.reduce((sum, item) => sum + item.amount, 0);
       },
@@ -80,20 +79,23 @@ export class BudgetManagerComponent implements OnInit {
     this.loadBudgetItems();
   }  
 
-delete(item: BudgetItem): void {
-  console.log(this.budgetItems);
-  this.budgetItemService.delete(this.selectedEventId, item.id).subscribe({
-    next: () => {
-      this.snackBar.open("Budget item deleted", "Close", { duration: 2000 });
-      this.loadBudgetItems();
-    },
-    error: err => {
-      console.error("Error deleting budget item:", err);
-      this.snackBar.open(err.error, "Close", { duration: 3000 });
-    }
-  });
-}
-
+  delete(item: BudgetItem): void {
+    this.budgetItemService.delete(this.selectedEventId, item.id).subscribe({
+      next: () => {
+        this.snackBar.open("Budget item deleted", "Close", { duration: 2000 });
+        this.loadBudgetItems();
+      },
+      error: (err) => {
+        this.snackBar.open(
+          err.error?.message || "Failed to delete budget item",
+          "Close",
+          { duration: 2000 }
+        );
+      }
+    });
+    
+    
+  }
 
   updateAmount(item: BudgetItem): void {
     if (!this.selectedEventId || !item.id) {
@@ -101,7 +103,7 @@ delete(item: BudgetItem): void {
       return;
     }
   
-    this.budgetItemService.updateAmount(this.selectedEventId, item.id, item.amount).subscribe({
+    this.budgetItemService.updateAmount(this.selectedEventId, item.id, { amount: item.amount } as UpdateBudgetItemDTO).subscribe({
       next: () => {
         this.snackBar.open('Amount updated', 'Close', { duration: 2000 });
         
@@ -158,11 +160,9 @@ delete(item: BudgetItem): void {
   }  
   getAllOfferings(item: BudgetItem): (Product | Service)[] {
     const offerings = [...(item.services || []),...(item.products || [])];
-    console.log('All offerings for budget item:', item.id, offerings);
     return offerings;
   }  
   openOfferingDetail(offering: Product | Service): void {
-    console.log('Opening offering detail for:', offering);
     this.router.navigate(['/offering', offering.id], {
       state: { offering }
     });

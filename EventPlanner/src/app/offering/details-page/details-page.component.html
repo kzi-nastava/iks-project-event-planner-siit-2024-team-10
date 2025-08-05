@@ -75,10 +75,14 @@
         </div>
       </div>
       <div class="action-buttons">
-        <button class="book-now-btn" [disabled]="!offering?.available" (click)="openReservationDialog()">
-          <i class="fas fa-calendar-check"></i>
-          Book Now
-        </button>
+        <button 
+  class="book-now-btn"
+  [disabled]="!offering?.available || !isEventOrganizer"
+  (click)="openReservationDialog()">
+  <i class="fas fa-calendar-check"></i>
+  Buy
+</button>
+
       </div>
     </div>
 
@@ -95,9 +99,13 @@
         <div class="spec-item">
           <span class="spec-label">Duration:</span>
           <span class="spec-value">
-            {{ offering?.fixedTime || (offering?.minDuration + ' - ' + offering?.maxDuration) || 'N/A' }} hours
+            {{ offering?.fixedTime 
+                || (offering?.minDuration === offering?.maxDuration 
+                    ? offering?.minDuration 
+                    : offering?.minDuration + ' - ' + offering?.maxDuration) 
+                || 'N/A' }} hours
           </span>
-        </div>
+        </div>        
         <div class="spec-item">
           <span class="spec-label">Reservation Period:</span>
           <span class="spec-value">{{offering?.reservationPeriod || 'N/A'}} hours in advance</span>
@@ -124,10 +132,7 @@
           <img [src]="profilePhoto" alt="Provider" class="provider-avatar">
           <div class="provider-details">
             <h3>{{offering?.provider?.company?.name || 'Unknown Company'}}</h3>
-            <div class="rating">
-              <span class="stars">★★★★☆</span>
-              <span class="rating-number">({{offering?.averageRating || 0}})</span>
-            </div>
+          
             <p class="provider-location">
               <i class="fas fa-location">📍</i>
               {{ offering?.provider?.company?.location?.city || '-' }},
@@ -144,16 +149,21 @@
               </p>
             </div>
           </div>
+          <div *ngIf="loggedInAccountId != offering?.provider?.accountId && loggedInAccountId">
+            <button class="icon-btn report" (click)="reportAccount(offering?.provider?.accountId)" >
+                <mat-icon>flag</mat-icon>
+            </button>
+          </div>    
         </div>
         <div class="provider-actions">
           <button class="view-profile-btn" (click)="viewProviderProfile()">
             <i class="fas fa-user"></i>
             View Profile
           </button>
-          <button class="report-btn" (click)="chat()">
+          <button *ngIf="isEventOrganizer" class="report-btn" (click)="chat()">
             <i class="fas fa-comment"></i>
             You need more info? Chat with us
-          </button>
+          </button>          
         </div>
       </div>
     </div>
@@ -165,7 +175,7 @@
       <!-- Comments list -->
       <div class="comments-list">
         <ng-container *ngIf="comments.length > 0; else noReviews">
-          <div *ngFor="let comment of comments" class="comment-card">
+          <div *ngFor="let comment of comments; let i = index" class="comment-card">
             <div class="comment-header">
               <span class="user-name">{{ comment.user }}</span>
               <div class="stars">
@@ -174,7 +184,13 @@
                 </span>
               </div>
             </div>
-            <p class="comment-text">{{ comment.content }}</p>
+            <div class="content-and-report">
+              <p class="comment-text">{{ comment.content }}</p>
+
+              <button *ngIf="loggedInAccountId != comment.accountId && loggedInAccountId" class="icon-btn report" (click)="reportAccount(comment.accountId)">
+                <mat-icon>flag</mat-icon>
+              </button>
+            </div>            
           </div>
         </ng-container>
         

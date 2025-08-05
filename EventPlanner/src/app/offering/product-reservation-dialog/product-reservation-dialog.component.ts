@@ -66,38 +66,15 @@ export class ProductReservationDialogComponent implements OnInit {
             verticalPosition: 'bottom',
             panelClass: ['warning-snackbar']
           });
-  
-          this.budgetItemService.buy(selectedEvent.id, this.data.offering.id,true).subscribe({
-            next: (success: boolean) => {
-              if (success) {
-                this.snackBar.open('Product successfully added to budget.', 'OK', { duration: 5000 });
-              } else {
-                this.snackBar.open('Product not purchased', 'Close', { duration: 5000 });
-              }
-              this.dialogRef.close(success);
+
+          this.budgetItemService.buy(selectedEvent.id, this.data.offering.id).subscribe({
+            next: () => {
+              this.snackBar.open('Product successfully added to budget.', 'OK', { duration: 5000 });
+              this.dialogRef.close();
             },
-            error: (err) => {
-              let errorMessage = 'Error while updating budget.';
-              
-              if (err.error && typeof err.error === 'string') {
-                if (err.error.includes('Insufficient budget')) {
-                  errorMessage = 'Insufficient budget for this purchase.';
-                } else if (err.error.includes('Product already purchased')) {
-                  errorMessage = 'This product has already been purchased.';
-                }
-              } else if (err.error && err.error.message) {
-                if (err.error.message.includes('Insufficient budget')) {
-                  errorMessage = 'Insufficient budget for this purchase.';
-                } else if (err.error.message.includes('Product already purchased')) {
-                  errorMessage = 'This product has already been purchased.';
-                }
-              }
-              
-              this.snackBar.open(errorMessage, 'Close', { 
-                duration: 5000,
-                panelClass: ['error-snackbar']
-              });
-              console.error(err);
+            error: (error) => {
+              const errorMessage = error?.error || 'An unexpected error occurred.';
+              this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
             }
           });
         }

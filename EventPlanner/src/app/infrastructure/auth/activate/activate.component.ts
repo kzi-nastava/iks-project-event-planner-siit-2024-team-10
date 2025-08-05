@@ -27,7 +27,7 @@ export class ActivateComponent {
         error: (err) => this.snackBar.open(err.error,'OK',{duration:3000})
       });
     });
-    this.router.navigate(['home']);
+    this.router.navigate(['login']);
   }
 
 
