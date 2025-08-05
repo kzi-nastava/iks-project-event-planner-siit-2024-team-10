@@ -52,7 +52,7 @@
         <mat-button-toggle value="open">Open</mat-button-toggle>
         <mat-button-toggle value="closed">Closed</mat-button-toggle>
       </mat-button-toggle-group>
-      <button mat-flat-button class="submit-btn"  (click)="save()">
+      <button mat-flat-button class="submit-btn"  (click)="save()" [disabled]="!createForm.valid">
         Submit
       </button>
     </form>
