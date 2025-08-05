@@ -6,5 +6,5 @@ export interface CreateCompanyDTO {
   location:CreateLocationDTO
   phoneNumber: string;
   description: string;
-  photos: string[];
+  photos?: string[];
 }

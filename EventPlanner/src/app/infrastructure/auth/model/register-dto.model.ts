@@ -6,7 +6,7 @@ export interface RegisterDTO {
   password: string;
   firstName: string;
   lastName: string;
-  profilePhoto: string;
+  profilePhoto?: string;
   location:CreateLocationDTO;
   phoneNumber: string;
   company:CreateCompanyDTO;
