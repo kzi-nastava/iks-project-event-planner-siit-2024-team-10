@@ -131,184 +131,175 @@ describe('ReservationDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy();
-  });
+  describe('Initialization', () => {
+    it('should create the component', () => {
+      expect(component).toBeTruthy();
+    });
 
-  it('should initialize form controls', () => {
-    expect(component.reservationForm.get('event')).toBeTruthy();
-    expect(component.reservationForm.get('startTime')).toBeTruthy();
-    expect(component.reservationForm.get('endTime')).toBeTruthy();
-  });
+    it('should initialize form controls', () => {
+      expect(component.reservationForm.get('event')).toBeTruthy();
+      expect(component.reservationForm.get('startTime')).toBeTruthy();
+      expect(component.reservationForm.get('endTime')).toBeTruthy();
+    });
 
-  it('should set errorMsg if no events found', fakeAsync(() => {
-    mockReservationService.findEventsByOrganizer.and.returnValue(of([]));
-
-    component.ngOnInit(); 
+    it('should set errorMsg if no events found', fakeAsync(() => {
+      mockReservationService.findEventsByOrganizer.and.returnValue(of([]));
+      component.ngOnInit(); 
       tick();
       flush();
-
       fixture.detectChanges();
-
       expect(component.errorMsg).toContain('No events found');
     }));
 
-  it('should submit reservation when form is valid and user confirms', fakeAsync(() => {
-    component.events = [dummyEvent];
-    component.reservationForm.setValue({
-      event: dummyEvent,
-      startTime: '10:00',
-      endTime: '12:00'
+    it('should disable endTime control if minDuration equals maxDuration', () => {
+      component.data.offering.minDuration = 3;
+      component.data.offering.maxDuration = 3;
+      component.ngOnInit();
+      expect(component.reservationForm.get('endTime')?.disabled).toBeTrue();
     });
 
-    mockConfirm(true);
-    mockReservationService.createReservation.and.returnValue(of(dummyReservation));
+    it('should not disable endTime control if minDuration and maxDuration differ', () => {
+      component.data.offering = {
+        ...component.data.offering,
+        minDuration: 1,
+        maxDuration: 2
+      };
+      component.ngOnInit();
+      expect(component.reservationForm.get('endTime')?.disabled).toBeFalse();
+    });
+  });
 
-    component.onBook();
-    tick();
-
-    expect(mockReservationService.createReservation).toHaveBeenCalled();
-    expect(snackBarSpy.calls.argsFor(0)).toEqual([
-      'Processing reservation...',
-      'Close',
-      jasmine.objectContaining({
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-        panelClass: ['warning-snackbar']
-      })
-    ]);
-
-    expect(snackBarSpy.calls.argsFor(1)).toEqual([
-      'Reservation request is pending! Email confirmation will been sent.',
-      'OK',
-      jasmine.objectContaining({ duration: 5000 })
-    ]);
-  }));
-
-  it('should not submit reservation if form is invalid', () => {
-    component.reservationForm.setValue({
-      event: null,
-      startTime: '',
-      endTime: ''
+  describe('Form behavior', () => {
+    it('should calculate endTime correctly when onStartTimeChange is called', () => {
+      component.reservationForm.get('startTime')?.setValue('10:00');
+      component.onStartTimeChange();
+      expect(component.calculatedEndTime).toBe('12:00');
+      expect(component.reservationForm.get('endTime')?.value).toBe('12:00');
     });
 
-    component.onBook();
-
-    expect(mockReservationService.createReservation).not.toHaveBeenCalled();
-    expect(component.errorMsg).toContain('Please fill in all fields');
+    it('should clear errorMsg when form becomes valid', () => {
+      component.errorMsg = 'Error message';
+      mockReservationService.createReservation.and.returnValue(of(dummyReservation));
+      component.reservationForm.setValue({
+        event: dummyEvent,
+        startTime: '10:00',
+        endTime: '12:00'
+      });
+      component.onBook();
+      expect(component.errorMsg).toBe('');
+    });
   });
 
-  it('should not submit reservation if user cancels confirmation', () => {
-    component.events = [dummyEvent];
-    component.reservationForm.setValue({
-      event: dummyEvent,
-      startTime: '10:00',
-      endTime: '12:00'
+  describe('Reservation submission', () => {
+    it('should submit reservation when form is valid and user confirms', fakeAsync(() => {
+      component.events = [dummyEvent];
+      component.reservationForm.setValue({
+        event: dummyEvent,
+        startTime: '10:00',
+        endTime: '12:00'
+      });
+
+      mockConfirm(true);
+      mockReservationService.createReservation.and.returnValue(of(dummyReservation));
+
+      component.onBook();
+      tick();
+
+      expect(mockReservationService.createReservation).toHaveBeenCalled();
+      expect(snackBarSpy.calls.argsFor(0)).toEqual([
+        'Processing reservation...',
+        'Close',
+        jasmine.objectContaining({
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          panelClass: ['warning-snackbar']
+        })
+      ]);
+      expect(snackBarSpy.calls.argsFor(1)).toEqual([
+        'Reservation request is pending! Email confirmation will been sent.',
+        'OK',
+        jasmine.objectContaining({ duration: 5000 })
+      ]);
+    }));
+
+    it('should not submit reservation if form is invalid', () => {
+      component.reservationForm.setValue({
+        event: null,
+        startTime: '',
+        endTime: ''
+      });
+
+      component.onBook();
+
+      expect(mockReservationService.createReservation).not.toHaveBeenCalled();
+      expect(component.errorMsg).toContain('Please fill in all fields');
     });
 
-    dialogOpenSpy.and.returnValue({ afterClosed: () => of(false) } as any);
+    it('should not submit reservation if user cancels confirmation', () => {
+      component.events = [dummyEvent];
+      component.reservationForm.setValue({
+        event: dummyEvent,
+        startTime: '10:00',
+        endTime: '12:00'
+      });
 
-    component.onBook();
+      dialogOpenSpy.and.returnValue({ afterClosed: () => of(false) } as any);
 
-    expect(mockReservationService.createReservation).not.toHaveBeenCalled();
-  });
+      component.onBook();
 
-  it('should show error message on reservation creation failure', fakeAsync(() => {
-    component.events = [dummyEvent];
-    component.reservationForm.setValue({
-      event: dummyEvent,
-      startTime: '10:00',
-      endTime: '12:00'
+      expect(mockReservationService.createReservation).not.toHaveBeenCalled();
     });
 
-    mockConfirm(true);
-    mockReservationService.createReservation.and.returnValue(throwError(() => new Error('Failed')));
+    it('should show error message on reservation creation failure', fakeAsync(() => {
+      component.events = [dummyEvent];
+      component.reservationForm.setValue({
+        event: dummyEvent,
+        startTime: '10:00',
+        endTime: '12:00'
+      });
 
-    component.onBook();
-    tick();
+      mockConfirm(true);
+      mockReservationService.createReservation.and.returnValue(throwError(() => new Error('Failed')));
 
-    expect(component.errorMsg).toContain('Failed');
-    expect(component.snackBar.open).toHaveBeenCalled();
-  }));
+      component.onBook();
+      tick();
 
-  it('should calculate endTime correctly when onStartTimeChange is called', () => {
-    component.reservationForm.get('startTime')?.setValue('10:00');
-    
-    component.onStartTimeChange();
-    
-    expect(component.calculatedEndTime).toBe('12:00');
-    expect(component.reservationForm.get('endTime')?.value).toBe('12:00');
+      expect(component.errorMsg).toContain('Failed');
+      expect(component.snackBar.open).toHaveBeenCalled();
+    }));
+
+    it('should show error if reservation is outside reservation period', fakeAsync(() => {
+      dummyEvent.date = new Date();
+      component.events = [dummyEvent];
+      component.reservationForm.setValue({
+        event: dummyEvent,
+        startTime: '10:00',
+        endTime: '12:00'
+      });
+
+      mockConfirm(true);
+
+      mockReservationService.createReservation.and.returnValue(
+        throwError(() => ({
+          message: 'Reservation must be made within the reservation period.'
+        }))
+      );
+
+      component.onBook();
+
+      tick(); // for afterClosed()
+      tick(); // for createReservation()
+
+      expect(snackBarSpy).toHaveBeenCalledWith(
+        'Reservation must be made within the reservation period.',
+        'OK',
+        jasmine.objectContaining({ duration: 5000 })
+      );
+    }));
   });
 
-  it('should disable endTime control if minDuration equals maxDuration', () => {
-    component.data.offering.minDuration = 3;
-    component.data.offering.maxDuration = 3;
-
-    component.ngOnInit();
-
-    expect(component.reservationForm.get('endTime')?.disabled).toBeTrue();
-  });
-
-  it('should not disable endTime control if minDuration and maxDuration differ', () => {
-    component.data.offering = {
-      ...component.data.offering,
-      minDuration: 1,
-      maxDuration: 2
-    };
-
-    component.ngOnInit();
-
-    const endTimeControl = component.reservationForm.get('endTime');
-    expect(endTimeControl?.disabled).toBeFalse();
-  });
-
-
-  it('should clear errorMsg when form becomes valid', () => {
-    component.errorMsg = 'Error message';
-
-    mockReservationService.createReservation.and.returnValue(of(dummyReservation));
-
-    component.reservationForm.setValue({
-      event: dummyEvent,
-      startTime: '10:00',
-      endTime: '12:00'
-    });
-
-    component.onBook();
-
-    expect(component.errorMsg).toBe('');
-  });
-
-  it('should show error if reservation is outside reservation period', fakeAsync(() => {
-    dummyEvent.date = new Date();
-    component.events = [dummyEvent];
-    component.reservationForm.setValue({
-      event: dummyEvent,
-      startTime: '10:00',
-      endTime: '12:00'
-    });
-
-    mockConfirm(true);
-
-    mockReservationService.createReservation.and.returnValue(
-      throwError(() => ({
-        message: 'Reservation must be made within the reservation period.'
-      }))
-    );
-
-    component.onBook();
-
-    tick(); // for afterClosed()
-    tick(); // for createReservation()
-
-    expect(snackBarSpy).toHaveBeenCalledWith(
-      'Reservation must be made within the reservation period.',
-      'OK',
-      jasmine.objectContaining({ duration: 5000 })
-    );
-  }));
-
+  // helper for window.confirm mocking
   function mockConfirm(returnValue: boolean) {
     spyOn(window, 'confirm').and.returnValue(returnValue);
   }
