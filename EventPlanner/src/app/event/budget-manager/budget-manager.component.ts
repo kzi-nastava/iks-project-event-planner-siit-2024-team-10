@@ -80,18 +80,20 @@ export class BudgetManagerComponent implements OnInit {
     this.loadBudgetItems();
   }  
 
-  delete(item: BudgetItem): void {
-    console.log(this.budgetItems);
-    this.budgetItemService.delete(this.selectedEventId, item.id).subscribe(success => {
-      if (success) {
-        this.snackBar.open("Budget item deleted", "Close", { duration: 2000 });
-        this.loadBudgetItems();
-      } else {
-        this.snackBar.open("Budget item has not been deleted, you have reserved offerings.", "Close", { duration: 2000 });
-      }
-    });
-    
-  }
+delete(item: BudgetItem): void {
+  console.log(this.budgetItems);
+  this.budgetItemService.delete(this.selectedEventId, item.id).subscribe({
+    next: () => {
+      this.snackBar.open("Budget item deleted", "Close", { duration: 2000 });
+      this.loadBudgetItems();
+    },
+    error: err => {
+      console.error("Error deleting budget item:", err);
+      this.snackBar.open(err.error, "Close", { duration: 3000 });
+    }
+  });
+}
+
 
   updateAmount(item: BudgetItem): void {
     if (!this.selectedEventId || !item.id) {

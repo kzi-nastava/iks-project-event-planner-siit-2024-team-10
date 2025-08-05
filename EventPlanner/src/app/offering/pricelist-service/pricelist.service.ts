@@ -19,7 +19,7 @@ export class PricelistService {
     return this.httpClient.put<PricelistItem>(environment.apiHost + "/pricelists/"+item.offeringId, item);
   }
   generateReport(): Observable<Blob> {
-    return this.httpClient.get(environment.apiHost + '/reports/pricelists', {
+    return this.httpClient.get(environment.apiHost + '/pricelists/report', {
       responseType: 'blob'
     });
   }

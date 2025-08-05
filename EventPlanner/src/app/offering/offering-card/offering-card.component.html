@@ -1,4 +1,4 @@
-<mat-card class="offering-card" appearance="outlined" (click)="onOfferingClicked()">
+<mat-card class="offering-card" [attr.data-id]="offering.id" appearance="outlined" (click)="onOfferingClicked()">
   <mat-card-header>
     <mat-card-title-group>
       <mat-card-title>{{offering.name}}</mat-card-title>
