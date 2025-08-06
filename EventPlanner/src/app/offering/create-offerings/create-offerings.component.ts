@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http'; 
 import { Category } from '../../offering/model/category.model';
@@ -10,6 +10,7 @@ import { CategoryService } from '../../offering/category-service/category.servic
 import {AuthService} from '../../infrastructure/auth/auth.service';
 import { ImageService } from '../image-service/image.service';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-create-offerings',
   templateUrl: './create-offerings.component.html',
@@ -32,6 +33,23 @@ export class CreateOfferingsComponent implements OnInit {
     private imageService:ImageService,
     private http: HttpClient,
     private router:Router){}  
+
+  private timeRangeValidator = (control: AbstractControl): ValidationErrors | null => {
+    const timeType = control.get('timeType')?.value;
+    const minTime = control.get('minTime')?.value;
+    const maxTime = control.get('maxTime')?.value;
+
+    if (timeType === 'flexible' && minTime && maxTime) {
+      const min = parseFloat(minTime);
+      const max = parseFloat(maxTime);
+      
+      if (min > max) {
+        return { timeRangeInvalid: true };
+      }
+    }
+    
+    return null;
+  };
 
   ngOnInit(): void {
     this.initForm();
@@ -61,6 +79,18 @@ export class CreateOfferingsComponent implements OnInit {
       descCtrl?.updateValueAndValidity();
       selectionCtrl?.updateValueAndValidity();
     });
+
+    this.createForm.get('timeType')?.valueChanges.subscribe(() => {
+      this.createForm.updateValueAndValidity();
+    });
+
+    this.createForm.get('minTime')?.valueChanges.subscribe(() => {
+      this.createForm.updateValueAndValidity();
+    });
+
+    this.createForm.get('maxTime')?.valueChanges.subscribe(() => {
+      this.createForm.updateValueAndValidity();
+    });
   }
 
   initForm(): void {
@@ -77,17 +107,29 @@ export class CreateOfferingsComponent implements OnInit {
       photos: [[]],
       timeType: ['fixed'],
       fixedTime: [''],
-      minTime: [''],
-      maxTime: [''],
+      minTime: ['', Validators.min(0)],
+      maxTime: ['', Validators.min(0)],
       reservationDeadline: [''],
       cancellationDeadline: [''],
       isAvailable: [false],
       isVisible: [false]
-    });
+    }, { validators: this.timeRangeValidator });
   }
 
   creatingCategory(): boolean {
     return this.createForm.value.createCategory;
+  }
+
+  hasTimeRangeError(): boolean {
+    return this.createForm.hasError('timeRangeInvalid') && 
+           this.createForm.get('timeType')?.value === 'flexible';
+  }
+
+  getTimeRangeErrorMessage(): string {
+    if (this.hasTimeRangeError()) {
+      return 'Min cannot be higher than max';
+    }
+    return '';
   }
 
   onPhotoUpload() {
@@ -162,9 +204,16 @@ export class CreateOfferingsComponent implements OnInit {
       });
     } else {
       this.markFormGroupTouched(this.createForm);
-      this.snackBar.open('Please fill in all required fields correctly', 'Dismiss', {
-        duration: 3000
-      });
+      
+      if (this.hasTimeRangeError()) {
+        this.snackBar.open('Min cannot be higher than max', 'Dismiss', {
+          duration: 4000
+        });
+      } else {
+        this.snackBar.open('Please fill in all required fields correctly', 'Dismiss', {
+          duration: 3000
+        });
+      }
     }
   }
 
