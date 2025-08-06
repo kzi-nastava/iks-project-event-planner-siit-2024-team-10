@@ -25,7 +25,6 @@ describe('CreateOfferingsComponent', () => {
   let mockAuthService: jasmine.SpyObj<AuthService>;
   let mockCategoryService: jasmine.SpyObj<CategoryService>;
 
-  // Mock Service object that satisfies the Service interface
   const mockService: Service = {
     id: 1,
     name: 'Test Service',
@@ -120,7 +119,6 @@ describe('CreateOfferingsComponent', () => {
     expect(component.createForm.valid).toBeTrue();
   });
 
-  // IMPROVED: More specific toHaveBeenCalledWith usage
   it('should call serviceService.add() with exact CreateServiceDTO structure', () => {
     mockServiceService.add.and.returnValue(of(mockService));
 
@@ -142,7 +140,6 @@ describe('CreateOfferingsComponent', () => {
 
     component.onSubmit();
 
-    // More specific assertion with exact expected values (creatorId is null, not 123)
     expect(mockServiceService.add).toHaveBeenCalledWith({
       categoryId: 1,
       pending: false,
@@ -264,7 +261,6 @@ describe('CreateOfferingsComponent', () => {
   });
 
   it('should validate required fields correctly', () => {
-    // Test praznih obaveznih polja
     component.createForm.patchValue({
       name: '',
       description: '',
