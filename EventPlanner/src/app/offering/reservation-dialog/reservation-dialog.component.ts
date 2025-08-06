@@ -47,6 +47,8 @@ ngOnInit(): void {
     
     if (offering.minDuration === offering.maxDuration) {
       this.reservationForm.get('endTime')?.disable();
+    } else {
+      this.reservationForm.get('endTime')?.enable();
     }
 
     this.reservationService.findEventsByOrganizer(this.accountId).subscribe({
@@ -112,6 +114,7 @@ onBook(): void {
       }
             
             this.dialogRef.close(response);
+            this.errorMsg = "";
           },
           error: (err: Error) => { 
             this.errorMsg = err.message;

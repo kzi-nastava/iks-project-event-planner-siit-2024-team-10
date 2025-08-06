@@ -49,20 +49,21 @@ export function TimeValidator(startTimeControlName: string, endTimeControlName: 
     const endTimeControl = formGroup.get(endTimeControlName);
 
     if (!startTimeControl || !endTimeControl) {
-      return null; // Return null if controls are missing
+      return null; // Controls missing, nothing to validate
     }
 
-    if (startTimeControl.errors && !endTimeControl.errors['time']) {
-      return null; // Skip if another validator has found an error
+    // If other validators found errors on controls, don't override
+    if (startTimeControl.errors || endTimeControl.errors) {
+      return null;
     }
 
-    if (startTimeControl.value >= endTimeControl.value) {
-      endTimeControl.setErrors({ time: true });
-      return { time: true };
-    } else {
-      endTimeControl.setErrors(null);
+    if (startTimeControl.value && endTimeControl.value && startTimeControl.value >= endTimeControl.value) {
+      // Return error object at form group level
+      return { timeInvalid: true };
     }
 
+    // No errors
     return null;
   };
 }
+

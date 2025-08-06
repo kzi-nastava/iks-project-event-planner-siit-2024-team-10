@@ -94,7 +94,7 @@ export class CreateEventComponent implements OnInit{
       this.eventService.add(event).subscribe({
         next: (createdEvent) => {
           this.snackBar.open('Event created successfully','OK',{duration:3000});
-          this.router.navigate(['home']);
+          this.router.navigate(['event',createdEvent.id]);
         },
         error: () => {
           this.snackBar.open('Error creating event','OK',{duration:3000});
