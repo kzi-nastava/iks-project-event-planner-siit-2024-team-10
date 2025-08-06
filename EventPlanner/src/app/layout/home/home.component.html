@@ -100,9 +100,9 @@
         <div class="name-search-section">
           <mat-form-field  class="search-field">
             <mat-label>Service/Product Name</mat-label>
-            <input matInput [(ngModel)]="searchOfferingQuery">
+            <input id="offering-input" matInput [(ngModel)]="searchOfferingQuery">
           </mat-form-field>
-          <button mat-stroked-button class="search-button" (click)="searchOffering()" [disabled]="!selectedOfferingType"><mat-icon>search</mat-icon> Search</button>
+          <button mat-stroked-button class="search-button" id="search-button" (click)="searchOffering()" [disabled]="!selectedOfferingType"><mat-icon>search</mat-icon> Search</button>
         </div>
         <div class="sort-filter">
           <div class="sort-section">
@@ -136,7 +136,7 @@
   <div class="all-events-section">
     <div class="no-events-message" *ngIf="noOfferingsMessage">
       <p>{{ noOfferingsMessage }}</p>
-      <button mat-stroked-button (click)="seeAllOfferings()">
+      <button id="seeAllOfferingsBtn" mat-stroked-button (click)="seeAllOfferings()">
            See All Offerings
         </button>
     </div>
