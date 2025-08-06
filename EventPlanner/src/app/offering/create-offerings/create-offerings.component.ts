@@ -132,7 +132,7 @@ export class CreateOfferingsComponent implements OnInit {
         creatorId: this.creatingCategory() ? this.authService.getAccountId() : null, 
         categoryProposalName:this.creatingCategory()?this.createForm.value.categoryName:null,
         categoryProposalDescription:this.creatingCategory()?this.createForm.value.categoryDescription:null,
-        pending: false,
+        pending: this.creatingCategory() && !!formValue.name && !!formValue.description,
         provider: this.authService.getUserId(),
         name: formValue.name,
         description: formValue.description,

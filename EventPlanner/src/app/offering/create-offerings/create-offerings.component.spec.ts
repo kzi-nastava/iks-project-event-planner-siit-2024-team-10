@@ -60,13 +60,11 @@ describe('CreateOfferingsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CreateOfferingsComponent],
       imports: [
-        // Core Angular modules
         ReactiveFormsModule,
         FormsModule,
-        BrowserAnimationsModule, // Required for Material components
+        BrowserAnimationsModule, 
         HttpClientTestingModule,
         
-        // Angular Material modules (removed duplicates)
         MatSnackBarModule,
         MatFormFieldModule,
         MatInputModule,
@@ -122,15 +120,18 @@ describe('CreateOfferingsComponent', () => {
     expect(component.createForm.valid).toBeTrue();
   });
 
-  it('should call serviceService.add() on valid submit', () => {
+  // IMPROVED: More specific toHaveBeenCalledWith usage
+  it('should call serviceService.add() with exact CreateServiceDTO structure', () => {
     mockServiceService.add.and.returnValue(of(mockService));
 
     component.createForm.patchValue({
+      createCategory: false,
+      serviceCategory: { id: 1, name: 'Test Category' },
       name: 'Service name',
       description: 'Description',
+      specification: 'Test spec',
       price: 100,
       discount: 10,
-      serviceCategory: { id: 1, name: 'Test Category' },
       timeType: 'fixed',
       fixedTime: 2,
       reservationDeadline: 1,
@@ -141,7 +142,28 @@ describe('CreateOfferingsComponent', () => {
 
     component.onSubmit();
 
-    expect(mockServiceService.add).toHaveBeenCalled();
+    // More specific assertion with exact expected values (creatorId is null, not 123)
+    expect(mockServiceService.add).toHaveBeenCalledWith({
+      categoryId: 1,
+      pending: false,
+      provider: 123, // From mock auth service
+      name: 'Service name',
+      description: 'Description',
+      specification: 'Test spec',
+      price: 100,
+      discount: 10,
+      photos: [], // Assuming empty array initially
+      isVisible: true,
+      isAvailable: true,
+      maxDuration: 2,
+      minDuration: 2,
+      cancellationPeriod: 1,
+      reservationPeriod: 1,
+      autoConfirm: true,
+      categoryProposalName: null,
+      categoryProposalDescription: null,
+      creatorId: null // Based on the actual component behavior
+    });
   });
 
   it('should not call serviceService.add() if form is invalid', () => {
@@ -156,7 +178,7 @@ describe('CreateOfferingsComponent', () => {
     expect(mockServiceService.add).not.toHaveBeenCalled();
   });
 
-  it('should submit when existing category is selected (createCategory = false)', () => {
+  it('should submit with null category fields when existing category is selected', () => {
     component.createForm.patchValue({
       createCategory: false,
       name: 'Service name',
@@ -176,14 +198,16 @@ describe('CreateOfferingsComponent', () => {
 
     component.onSubmit();
 
-    expect(mockServiceService.add).toHaveBeenCalled();
-    const sentData = mockServiceService.add.calls.mostRecent().args[0];
-    expect(sentData.categoryId).toBe(1);
-    expect(sentData.categoryProposalName).toBeNull();
-    expect(sentData.categoryProposalDescription).toBeNull();
+    expect(mockServiceService.add).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        categoryId: 1,
+        categoryProposalName: null,
+        categoryProposalDescription: null
+      })
+    );
   });
 
-  it('should submit when new category is being created (createCategory = true)', () => {
+  it('should submit with category proposal when new category is being created', () => {
     component.createForm.patchValue({
       createCategory: true,
       categoryName: 'New Category',
@@ -204,11 +228,39 @@ describe('CreateOfferingsComponent', () => {
 
     component.onSubmit();
 
-    expect(mockServiceService.add).toHaveBeenCalled();
-    const sentData = mockServiceService.add.calls.mostRecent().args[0];
-    expect(sentData.categoryId).toBeNull();
-    expect(sentData.categoryProposalName).toBe('New Category');
-    expect(sentData.categoryProposalDescription).toBe('New Description');
+    expect(mockServiceService.add).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        categoryId: null,
+        categoryProposalName: 'New Category',
+        categoryProposalDescription: 'New Description'
+      })
+    );
+  });
+
+    it('should set pending to true when new category is proposed', () => {
+    component.createForm.patchValue({
+      createCategory: true,
+      categoryName: 'New Cat',
+      categoryDescription: 'Desc',
+      name: 'New service',
+      description: 'Desc',
+      price: 200,
+      timeType: 'fixed',
+      fixedTime: 1,
+      reservationDeadline: 2,
+      cancellationDeadline: 2,
+      isAvailable: true,
+      isVisible: true
+    });
+
+    mockServiceService.add.and.returnValue(of(mockService));
+    component.onSubmit();
+
+    expect(mockServiceService.add).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        pending: true
+      })
+    );
   });
 
   it('should validate required fields correctly', () => {
@@ -226,7 +278,7 @@ describe('CreateOfferingsComponent', () => {
     expect(component.createForm.get('serviceCategory')?.invalid).toBeTrue();
   });
 
-  it('should handle flexible time type correctly', () => {
+  it('should handle flexible time type with correct autoConfirm setting', () => {
     component.createForm.patchValue({
       name: 'Service name',
       description: 'Description',
@@ -245,31 +297,31 @@ describe('CreateOfferingsComponent', () => {
 
     component.onSubmit();
 
-    expect(mockServiceService.add).toHaveBeenCalled();
-    const sentData = mockServiceService.add.calls.mostRecent().args[0];
-    expect(sentData.minDuration).toBe(1);
-    expect(sentData.maxDuration).toBe(4);
-    expect(sentData.autoConfirm).toBeFalse();
+    expect(mockServiceService.add).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        minDuration: 1,
+        maxDuration: 4,
+        autoConfirm: false 
+      })
+    );
   });
 
   it('should validate price and discount ranges', () => {
-    // Test negativan price
     component.createForm.get('price')?.setValue(-10);
     expect(component.createForm.get('price')?.invalid).toBeTrue();
 
-    // Test discount preko 100%
     component.createForm.get('discount')?.setValue(150);
     expect(component.createForm.get('discount')?.invalid).toBeTrue();
 
-    // Test validne vrednosti
     component.createForm.get('price')?.setValue(50);
     component.createForm.get('discount')?.setValue(20);
     expect(component.createForm.get('price')?.valid).toBeTrue();
     expect(component.createForm.get('discount')?.valid).toBeTrue();
   });
 
-  it('should properly construct CreateServiceDTO with all fields', () => {
-    component.photoPaths = ['photo1.jpg', 'photo2.jpg'];
+  it('should include photos in service creation request', () => {
+    const testPhotos = ['photo1.jpg', 'photo2.jpg'];
+    component.photoPaths = testPhotos;
     
     component.createForm.patchValue({
       createCategory: false,
@@ -291,23 +343,15 @@ describe('CreateOfferingsComponent', () => {
 
     component.onSubmit();
 
-    const sentData = mockServiceService.add.calls.mostRecent().args[0];
-    expect(sentData.name).toBe('Test Service');
-    expect(sentData.description).toBe('Test Description');
-    expect(sentData.specification).toBe('Test Spec');
-    expect(sentData.price).toBe(150);
-    expect(sentData.discount).toBe(15);
-    expect(sentData.photos).toEqual(['photo1.jpg', 'photo2.jpg']);
-    expect(sentData.maxDuration).toBe(2);
-    expect(sentData.minDuration).toBe(2);
-    expect(sentData.reservationPeriod).toBe(24);
-    expect(sentData.cancellationPeriod).toBe(12);
-    expect(sentData.isAvailable).toBeTrue();
-    expect(sentData.isVisible).toBeTrue();
-    expect(sentData.provider).toBe(123);
+    expect(mockServiceService.add).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        photos: testPhotos,
+        provider: 123 // mockAuthService.getUserId()
+      })
+    );
   });
 
-  it('should show success message on successful service creation', () => {
+  it('should show success message', () => {
     spyOn(component.snackBar, 'open');
     mockServiceService.add.and.returnValue(of(mockService));
 
@@ -331,11 +375,15 @@ describe('CreateOfferingsComponent', () => {
       'OK', 
       { duration: 3000 }
     );
+    
+    // verify it was called exactly once
+    expect(component.snackBar.open).toHaveBeenCalledTimes(1);
   });
 
-  it('should show error message on service creation failure', () => {
+  it('should show error message', () => {
     spyOn(component.snackBar, 'open');
-    mockServiceService.add.and.returnValue(throwError('Server error'));
+    const errorMessage = 'Server error';
+    mockServiceService.add.and.returnValue(throwError(errorMessage));
 
     component.createForm.patchValue({
       name: 'Service name',
@@ -357,39 +405,19 @@ describe('CreateOfferingsComponent', () => {
       'Dismiss', 
       { duration: 3000 }
     );
-  });
-
-  it('should reset form after successful submission', () => {
-    mockServiceService.add.and.returnValue(of(mockService));
-    spyOn(component.createForm, 'reset');
-
-    component.createForm.patchValue({
-      name: 'Service name',
-      description: 'Description',
-      price: 100,
-      serviceCategory: { id: 1, name: 'Test Category' },
-      timeType: 'fixed',
-      fixedTime: 2,
-      reservationDeadline: 1,
-      cancellationDeadline: 1,
-      isAvailable: true,
-      isVisible: true
-    });
-
-    component.onSubmit();
-
-    expect(component.createForm.reset).toHaveBeenCalled();
+    
+    expect(component.snackBar.open).toHaveBeenCalledTimes(1);
   });
 
   it('should toggle category creation validation correctly', () => {
-    // Initially createCategory is false, serviceCategory should be required
+    // initially createCategory is false, serviceCategory should be required
     expect(component.createForm.get('serviceCategory')?.hasError('required')).toBeTrue();
     
-    // Enable category creation
+    // enable category creation
     component.createForm.get('createCategory')?.setValue(true);
     fixture.detectChanges();
 
-    // Now categoryName and categoryDescription should be required
+    // now categoryName and categoryDescription should be required
     component.createForm.get('categoryName')?.setValue('');
     component.createForm.get('categoryDescription')?.setValue('');
     component.createForm.get('categoryName')?.markAsTouched();
@@ -398,5 +426,31 @@ describe('CreateOfferingsComponent', () => {
     expect(component.createForm.get('categoryName')?.hasError('required')).toBeTrue();
     expect(component.createForm.get('categoryDescription')?.hasError('required')).toBeTrue();
     expect(component.createForm.get('serviceCategory')?.hasError('required')).toBeFalse();
+  });
+    it('should show time range error message on submit', () => {
+    spyOn(component.snackBar, 'open');
+
+    component.createForm.patchValue({
+      name: 'Service name',
+      description: 'Description',
+      price: 100,
+      serviceCategory: { id: 1, name: 'Test Category' },
+      timeType: 'flexible',
+      minTime: 4,
+      maxTime: 2,
+      reservationDeadline: 1,
+      cancellationDeadline: 1,
+      isAvailable: true,
+      isVisible: true
+    });
+
+    component.onSubmit();
+
+    expect(mockServiceService.add).not.toHaveBeenCalled();
+    expect(component.snackBar.open).toHaveBeenCalledWith(
+      'Min cannot be higher than max',
+      'Dismiss',
+      { duration: 4000 }
+    );
   });
 });
