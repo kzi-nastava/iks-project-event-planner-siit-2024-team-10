@@ -20,7 +20,7 @@ export class BudgetItemService {
       `${environment.apiHost}/events/${eventId}/budget/buy/${offeringId}`, null
     );
   }
-  
+    
   getByEvent(eventId: number): Observable<BudgetItem[]> {
     return this.httpClient.get<BudgetItem[]>(environment.apiHost + "/events/budget/" + eventId);
   }  

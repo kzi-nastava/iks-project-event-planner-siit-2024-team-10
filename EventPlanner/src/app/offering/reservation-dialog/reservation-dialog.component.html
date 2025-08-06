@@ -57,7 +57,7 @@
         </div>
         <p *ngIf="errorMsg" class="error-msg">{{errorMsg}}</p>
         <div class="actions">
-          <button mat-raised-button color="primary" [disabled]="!reservationForm.valid" (click)="onBook()">Book</button>
+          <button mat-raised-button id="book-button" color="primary" [disabled]="!reservationForm.valid" (click)="onBook()">Book</button>
           <button mat-raised-button color="warn" type="button" (click)="onClose()" class="closeBtn">Close</button>
         </div>    
     </div>

@@ -87,7 +87,7 @@ export class BudgetManagerComponent implements OnInit {
       },
       error: (err) => {
         this.snackBar.open(
-          err.error?.message || "Failed to delete budget item",
+          err.error || "Failed to delete budget item",
           "Close",
           { duration: 2000 }
         );

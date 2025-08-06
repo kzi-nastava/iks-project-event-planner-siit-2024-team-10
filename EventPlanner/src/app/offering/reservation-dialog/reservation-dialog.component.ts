@@ -11,7 +11,6 @@ import { ConfirmDialogComponent } from '../../layout/confirm-dialog/confirm-dial
 import { CreateReservationDTO } from '../model/create-reservation-dto.model';
 import { Reservation } from '../model/reservation.model';
 import { BudgetItemService } from '../../event/budget-item.service';
-import { UpdateBudgetItemDTO } from '../model/edit-budget-item-dto.model';
 
 @Component({
   selector: 'app-reservation-dialog',

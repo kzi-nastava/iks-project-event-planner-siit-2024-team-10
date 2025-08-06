@@ -57,7 +57,7 @@ export class ProductReservationDialogComponent implements OnInit {
           message: `Add product "${this.data.offering.name}" to event "${selectedEvent.name}"?`
         }
       });
-
+  
       dialogRef.afterClosed().subscribe((confirmed: boolean) => {
         if (confirmed) {
           this.snackBar.open('Processing...', 'Close', {
@@ -76,7 +76,7 @@ export class ProductReservationDialogComponent implements OnInit {
               const errorMessage = error?.error || 'An unexpected error occurred.';
               this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
             }
-          });          
+          });
         }
       });
     } else {
