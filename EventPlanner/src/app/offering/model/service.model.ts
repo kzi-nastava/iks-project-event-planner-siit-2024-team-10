@@ -7,5 +7,6 @@ export interface Service extends Offering{
     cancellationPeriod: number;
     reservationPeriod: number;
     autoConfirm: boolean;
-    fixedTime:boolean
+    fixedTime:boolean;
+    pending: boolean;
 }

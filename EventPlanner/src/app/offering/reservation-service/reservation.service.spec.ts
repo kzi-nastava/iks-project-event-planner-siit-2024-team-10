@@ -64,7 +64,8 @@ describe('ReservationService', () => {
         location: undefined,
         averageRating: '',
         isProduct: false,
-        deleted: false
+        deleted: false,
+        pending: false,
       }
     };
 
