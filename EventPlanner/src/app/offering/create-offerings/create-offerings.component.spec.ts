@@ -48,7 +48,8 @@ describe('CreateOfferingsComponent', () => {
     cancellationPeriod: 24,
     reservationPeriod: 48,
     autoConfirm: true,
-    fixedTime: true
+    fixedTime: true,
+    pending: false,
   };
 
   beforeEach(async () => {

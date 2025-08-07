@@ -74,7 +74,8 @@ describe('ReservationDialogComponent', () => {
       price: 100,
       averageRating: '',
       isProduct: false,
-      deleted: false
+      deleted: false,
+      pending: false,
     }
   };
 
